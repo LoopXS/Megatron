@@ -842,10 +842,10 @@ async def _admin_tools(event):
 async def _talk(e):
     from_user = (await e.get_sender()).id
     if from_user == OWNER_ID:
-        text1 = "Master, you don't need to use this."
+        text1 = "Master, You Don't Need To Use This."
         await e.answer(text1, alert=True)
     else:
-        text2 = "☣️ You Have Chosen a Prohibited Option ☣️\n\nTherefore, You Have Been Blocked and Reported to Telegram Agency.\n\n⚜️ (C) CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ ⚜️"
+        text2 = "• Your Choice Not Accepted ✗\n• You've Been Blocked & Reported!\n• Please Wait Until My Master,\n• Approves You To PM."
         await e.answer(text2, alert=True)
         await ultroid_bot(BlockRequest(from_user))
         await asst.send_message(int(udB.get("LOG_CHANNEL")), f"[This dump](tg://user?id={from_user}) Selected the spam button and blocked", buttons=[Button.inline("UnBlock", data=f"unblock_{from_user}"),],) 
@@ -855,20 +855,20 @@ async def _talk(e):
 async def _talk(e):
     from_user = (await e.get_sender()).id
     if from_user == OWNER_ID:
-        text1 = "Master, you don't need to use this."
+        text1 = "Master, You Don't Need To Use This."
         await e.answer(text1, alert=True)
     else:
-        text2 = "• Choice Accepted ✓\n\nPlease Wait until CɪᴘʜᴇʀX Approves you\n\nDon't Spam or Try Anything Stupid!\n\nThanks for Contacting me...\n\n⚜️ (C) CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ ⚜️"
+        text2 = "• Your Choice Accepted ✓\n• Please Wait Until My Master,\n• Approves You To PM.\n• Don't Spam or Try Anything Stupid!"
         await e.answer(text2, alert=True)
     
 @callback(re.compile(b"askme"))
 async def _ask(e):
     from_user = (await e.get_sender()).id
     if from_user == OWNER_ID:
-        text1 = "Master, you don't need to use this."
+        text1 = "Master, You Don't Need To Use This."
         await e.answer(text1, alert=True)
     else:
-        text2 = "• Choice Accepted ✓\n\nOk, Wait...\n\nYou can Ask after CɪᴘʜᴇʀX Approves you.\n\n⚜️ (C) CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ ⚜️"
+        text2 = "• Your Choice Accepted ✓\n• Please Wait Until My Master,\n• Approves You To PM.\n• Don't Spam or Try Anything Stupid!"
         await e.answer(text2, alert=True)
     
 @callback(re.compile("don_(.*)"))
