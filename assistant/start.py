@@ -65,16 +65,16 @@ async def ultroid(event):
                 file=udB.get("STARTMEDIA"),
                 buttons=[
                     [
-                        Button.inline("✘ ᴄʜᴀᴛ ᴡɪᴛʜ ʜᴇᴀʀᴛʟᴇꜱꜱ ✘", data="chat"),
+                        Button.inline("✗ ᴄʜᴀᴛ ᴡɪᴛʜ ʜᴇᴀʀᴛʟᴇꜱꜱ ✗", data="chat"),
                     ],
                     [
-                        Button.inline("✘ ɢʀᴏᴜᴘ/ᴄʜᴀɴɴᴇʟ ᴍᴀɴᴀɢᴇʀ ʜᴇʟᴘ ✘", data="group"),
+                        Button.inline("✗ ɢʀᴏᴜᴘ/ᴄʜᴀɴɴᴇʟ ᴍᴀɴᴀɢᴇʀ ʜᴇʟᴘ ✗", data="group"),
                     ],
                     [
-                        Button.inline("✘ ꜱᴇʀᴠᴇʀ ᴘɪɴɢ ✘", data="ping"),
+                        Button.inline("✗ ꜱᴇʀᴠᴇʀ ᴘɪɴɢ ✗", data="ping"),
                     ],
                     [
-                        Button.inline("✘ ᴛᴇxᴛ ᴛʀᴀɴꜱʟᴀᴛᴏʀ ✘", data="tlans"),
+                        Button.inline("✗ ᴛᴇxᴛ ᴛʀᴀɴꜱʟᴀᴛᴏʀ ✗", data="tlans"),
                     ],
                 ],
             )
@@ -86,16 +86,16 @@ async def ultroid(event):
                 file=udB.get("STARTMEDIA"),
                 buttons=[
                     [
-                        Button.inline("✘ ᴄʜᴀᴛ ᴡɪᴛʜ ʜᴇᴀʀᴛʟᴇꜱꜱ ✘", data="chat"),
+                        Button.inline("✗ ᴄʜᴀᴛ ᴡɪᴛʜ ʜᴇᴀʀᴛʟᴇꜱꜱ ✗", data="chat"),
                     ],
                     [
-                        Button.inline("✘ ɢʀᴏᴜᴘ/ᴄʜᴀɴɴᴇʟ ᴍᴀɴᴀɢᴇʀ ʜᴇʟᴘ ✘", data="group"),
+                        Button.inline("✗ ɢʀᴏᴜᴘ/ᴄʜᴀɴɴᴇʟ ᴍᴀɴᴀɢᴇʀ ʜᴇʟᴘ ✗", data="group"),
                     ],
                     [
-                        Button.inline("✘ ꜱᴇʀᴠᴇʀ ᴘɪɴɢ ✘", data="ping"),
+                        Button.inline("✗ ꜱᴇʀᴠᴇʀ ᴘɪɴɢ ✗", data="ping"),
                     ],
                     [
-                        Button.inline("✘ ᴛᴇxᴛ ᴛʀᴀɴꜱʟᴀᴛᴏʀ ✘", data="tlans"),
+                        Button.inline("✗ ᴛᴇxᴛ ᴛʀᴀɴꜱʟᴀᴛᴏʀ ✗", data="tlans"),
                     ],
                 ],
             )
@@ -122,14 +122,14 @@ async def ekekdhdb(e):
 @callback("tlans")
 async def tlans(event):
     await event.delete()
-    await asst.send_message(event.chat_id, "✨ How to use:\n✘ `/tr LangaugeCode text` \n✘ `/tr Language Code` as reply to a message \n\nHere is the list of [Language Codes](https://telegra.ph/𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔-06-19)", link_preview=False)
+    await asst.send_message(event.chat_id, "✨ How to use:\n✗ `/tr LangaugeCode text` \n✗ `/tr Language Code` as reply to a message \n\nHere is the list of [Language Codes](https://telegra.ph/𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔-06-19)", link_preview=False)
 
     
     
 @callback("chat")
 async def chat(event):
     await event.delete()
-    await asst.send_message(event.chat_id, "Send your message please. I'll see and answer you whenever get online\n\n✨ CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ✨")
+    await asst.send_message(event.chat_id, "Send your message please. I'll see and answer you whenever get online\n\n✨ Ⲏⲉⲁʀⲧⳑⲉⲋⲋ Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ ✨")
 
 
 @callback("ping")
