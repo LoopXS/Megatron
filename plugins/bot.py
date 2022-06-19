@@ -2,10 +2,10 @@
 ✘ Commands Available
 
 • `{i}alive` | `{i}ialive`
-    Check if CɪᴘʜᴇʀX bot is working.
+    Check if bot is working.
 
 • `{i}ping`
-    Check CɪᴘʜᴇʀX server response time.
+    Check server response time.
 
 • `{i}cmds`
     View all plugin names.
@@ -23,7 +23,7 @@
    Get the latest 100 lines of heroku logs.
 
 • `{i}shutdown`
-    Turn off your CɪᴘʜᴇʀX bot.
+    Turn off your bot.
 """
 import os
 import sys
@@ -71,14 +71,14 @@ from . import (
 
 # Will move to strings
 alive_txt = """
-**CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ**
+**ɦᥱᥲrᴛᥣᥱss ᥱ᥊ᥴᥣᥙsi᥎ᥱ ᥙsᥱrδ᧐ᴛ**
 ✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵
 ╔════❰ Ⲃⲟⲧ Ⲓⲛϝⲟʀⲙⲁⲧⲓⲟⲛ ❱═❍⊱❁۪۪۪
 ║╭━━━━━━━━━━━━━━━➣ 
 ║┣⪼ **Ⲃⲟⲧ Ⳳⲉʀⲋⲓⲟⲛ** - `{}`
 ║┣⪼ **Ⳑⲓⲃʀⲁʀⲩ Ⳳⲉʀⲋⲓⲟⲛ** - `{}`  
 ║┣⪼ **Ⲧⲉⳑⲉⲧⲏⲟⲛ** - `{}` 
-║┣⪼ **✨ CɪᴘʜᴇʀX ⲓⲋ ⲧⲏⲉ ⲃⲉⲋⲧ ✨**
+║┣⪼ **✨ ⲏⲉⲁʀⲧⳑⲉⲋⲋ ⲓⲋ ⲧⲏⲉ ⲃⲉⲋⲧ ✨**
 ║╰━━━━━━━━━━━━━━━➣ ╚══════════════════❍⊱❁۪۪۪
 """
 
@@ -216,13 +216,13 @@ async def _(event):
         await heroku_logs(event)
     elif opt == "carbon" and Carbon:
         event = await eor(event, get_string("com_1"))
-        code = open("cipherx.log", "r").read()[-2500:]
+        code = open("heartless.log", "r").read()[-2500:]
         file = await Carbon(
             base_url="https://carbonara.vercel.app/api/cook",
             code=code,
             background=choice(ATRA_COL),
-        ).memorize("cipherx-logs")
-        await event.reply("**CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ Logs**", file=file)
+        ).memorize("heartless-logs")
+        await event.reply("**~ Logs**", file=file)
     else:
         await def_logs(event)
     await event.delete()
@@ -248,7 +248,7 @@ async def inline_alive(ult):
     buttons = [
         [
             Button.url(get_string("bot_3"), "https://xhamsterlive.com"),
-            Button.url(get_string("bot_4"), "t.me/FutureTechnologyOfficial"),
+            Button.url(get_string("bot_4"), "t.me/DarkPentesterX"),
         ]
     ]
     builder = ult.builder
