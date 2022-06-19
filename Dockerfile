@@ -12,9 +12,9 @@ ENV TZ=Asia/Tehran
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 
     # cloning the repo and installing requirements.
-    && git clone https://github.com/ToxygenX/Megatron.git /root/ToxygenX/ \
-    && pip3 install --no-cache-dir -r root/ToxygenX/requirements.txt \
-    && pip3 install --no-cache-dir -r root/ToxygenX/resources/startup/optional-requirements.txt \
+    && git clone https://github.com/LoopXS/Megatron.git /root/LoopXS/ \
+    && pip3 install --no-cache-dir -r root/LoopXS/requirements.txt \
+    && pip3 install --no-cache-dir -r root/LoopXS/resources/startup/optional-requirements.txt \
     && pip3 uninstall av -y && pip3 install av --no-binary av
 
 # changing workdir
