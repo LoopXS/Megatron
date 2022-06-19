@@ -16,7 +16,7 @@ ippic = "https://telegra.ph/file/807e012dbe2789c0648ee.jpg"
 gugirl = "https://telegra.ph/file/0df54ae4541abca96aa11.jpg"
 yeah = "https://telegra.ph/file/e3c67885e16a194937516.jpg"
 ps = "https://telegra.ph/file/de0b8d9c858c62fae3b6e.jpg"
-ultpic = "https://telegra.ph/file/b2da137de76fc5cd85ffa.jpg"
+ultpic = "https://telegra.ph/file/9098ea976b4e104371522.jpg"
 xkcdpic = "https://telegra.ph/file/040b5ab6e50e438fc215e.jpg"
 
 api1 = base64.b64decode("QUl6YVN5QXlEQnNZM1dSdEI1WVBDNmFCX3c4SkF5NlpkWE5jNkZV").decode(
@@ -39,7 +39,7 @@ async def _(e):
             title="xkcd",
             description="Random Meme",
             thumb=wb(xkcdpic, 0, "image/jpeg", []),
-            text="**CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ ⲃⲟⲧ X𐌺𑀝𑀥**\n\nYou didn't search any query",
+            text="**XKCD Recovery**\n\nYou didn't search any query",
             buttons=Button.switch_inline("Sᴇᴀʀᴄʜ Aɢᴀɪɴ", query="xkcd ", same_peer=True),
         )
         await e.answer([kkkk])
@@ -97,7 +97,7 @@ async def _(e):
             title="Bin Checker",
             description="Give me your bin number",
             thumb=wb(binpic, 0, "image/jpeg", []),
-            text="**CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ ⲃⲟⲧ Ⲃⲓⲛ Ⲥⲏⲉⲥⲕⲉʀ**\n\nYou didn't search any bin number",
+            text="**Ⲃⲓⲛ Ⲥⲏⲉⲥⲕⲉʀ**\n\nYou didn't search any bin number",
             buttons=Button.switch_inline("Sᴇᴀʀᴄʜ Aɢᴀɪɴ", query="bin ", same_peer=True),
         )
         await e.answer([kkkk])
@@ -120,7 +120,6 @@ async def _(e):
 **Ⲧⲩⲣⲉ**:- `{}`
 **Ⲃⲁⲛⲕ**:- `{}`
 **Ⲥⲟυⲛⲧʀⲩ**:- `{}`
-**✨ CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ ✨**
 """.format(
             results,
             messages,
@@ -166,7 +165,7 @@ async def _(e):
             title="Ip Info",
             description="Give me an ip address",
             thumb=wb(ippic, 0, "image/jpeg", []),
-            text="**CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ ⲃⲟⲧ ⲒⲢ Ⲓⲛϝⲟ**\n\nYou didn't search any ip address",
+            text="**ⲒⲢ Ⲓⲛϝⲟ**\n\nYou didn't search any ip address",
             buttons=Button.switch_inline("Sᴇᴀʀᴄʜ Aɢᴀɪɴ", query="ip ", same_peer=True),
         )
         await e.answer([kkkk])
@@ -203,8 +202,6 @@ async def _(e):
 **𐌏RᏵ**:- `{}`
 **A𐍃**:- `{}`
 **𑀉᧐ᥴᥲᴛi᧐ᥒ 𑀉iᥒκ**:- [Link]({})
-
-**✨ CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ ✨**
 """.format(
             que,
             stat,
@@ -353,17 +350,16 @@ async def _(e):
     await e.edit(f"Uploading `{file_name}` on {host}")
     await dloader(e, host, file)
 
-@in_pattern("cipherx", owner=True)
+@in_pattern("heartless", owner=True)
 async def repo(e):
     res = [
         await e.builder.article(
-            title="CɪᴘʜᴇʀX Bᴏᴛ",
-            description="CɪᴘʜᴇʀX Bᴏᴛ | Telethon",
+            title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
+            description="• 𝒖𝒏 𝒂𝒎𝒂𝒏𝒕 𝒔𝒂𝒏𝒔 𝒄𝒐𝒆𝒖𝒓 | 𝒆𝒏𝒔 𝒑𝒂𝒓𝒊𝒔 🎭",
             thumb=wb(ultpic, 0, "image/jpeg", []),
-            text="• **CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ** •",
+            text="ᥴᥣiᥴκ ᴛɦᥱ δᥙᴛᴛ᧐ᥒ δᥱᥣ᧐ᥕ ᴛ᧐ ᥴ᧐ᥒᴛᥲᥴᴛ !",
             buttons=[
-                [Button.url("•CɪᴘʜᴇʀX Bᴏᴛ•", url="t.me/CipherXBot")],
-                [Button.url("•Sᴜᴘᴘᴏʀᴛ Chᴀnnᴇl•", url="t.me/FutureTechnologyOfficial")],
+                [Button.url("• ꜱᴜᴘᴘᴏʀᴛ •", url="t.me/DarkPentesterX")],
             ],
         ),
     ]
@@ -390,7 +386,7 @@ async def gsearch(q_event):
                     title=title,
                     description=desc,
                     thumb=wb(gugirl, 0, "image/jpeg", []),
-                    text=f"**CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ ⲃⲟⲧ Gᴏᴏɢʟᴇ Sᴇᴀʀᴄʜ**\n\n**••Tɪᴛʟᴇ••**\n`{title}`\n\n**••Dᴇsᴄʀɪᴘᴛɪᴏɴ••**\n`{desc}`",
+                    text=f"**Gᴏᴏɢʟᴇ Sᴇᴀʀᴄʜ**\n\n**••Tɪᴛʟᴇ••**\n`{title}`\n\n**••Dᴇsᴄʀɪᴘᴛɪᴏɴ••**\n`{desc}`",
                     link_preview=False,
                     buttons=[
                         [Button.url("Lɪɴᴋ", url=f"{link}")],
@@ -681,7 +677,7 @@ async def clip(e):
                     thumb=file,
                     content=file,
                     include_media=True,
-                    text=f"**• CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ Ebook Search**\n\n->> `{titles[rs]}`",
+                    text=f"**• Ebook Search**\n\n->> `{titles[rs]}`",
                     buttons=Button.inline("Get as Doc", data=f"ebk_{num}"),
                 )
             )
