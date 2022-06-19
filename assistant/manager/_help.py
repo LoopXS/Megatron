@@ -85,7 +85,7 @@ def get_buttons():
             del keys[i]
         BTTS.append(BT)
     url = "https://t.me/" + asst.me.username + "?startgroup=true"
-    BTTS.append([Button.url("✘ ᴀᴅᴅ ᴍᴇ ᴛᴏ ɢʀᴏᴜᴘ ✘", url)])
+    BTTS.append([Button.url("✗ ᴀᴅᴅ ᴍᴇ ᴛᴏ ɢʀᴏᴜᴘ ✗", url)])
     return BTTS
 
 
