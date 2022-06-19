@@ -20,13 +20,13 @@ from ._help import _main_help_menu
 # ================================================#
 notmine = f"This bot is for {OWNER_NAME}"
 
-TLINK = INLINE_PIC or "https://telegra.ph/file/9847d2c66379f4da3b29d.mp4"
+TLINK = INLINE_PIC or "https://telegra.ph/file/9098ea976b4e104371522.jpg"
 helps = get_string("inline_1")
 
 uptime = time_formatter((time.time() - start_time) * 1000)
 
 ALIVEMSG = """
-**• CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ •**
+**• Ⲏⲉⲁʀⲧⳑⲉⲋⲋ Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ •**
 ✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵
 ✵ **Ⲟⲱⲛⲉʀ** - `{}`         
 ✵ **Ⲃⲟⲧ Ⳳⲉʀⲋⲓⲟⲛ** - `{}` 
@@ -35,7 +35,6 @@ ALIVEMSG = """
 ✵ **Ⲣⲩⲧⲏⲟⲛ** - `{}`         
 ✵ **Ⲧⲉⳑⲉⲧⲏⲟⲛ** - `{}`        
 ✵ **Ⲃʀⲁⲛⲥⲏ** - `{}`         
-✵ ✨ CɪᴘʜᴇʀX is ᴛhᴇ Bᴇsᴛ ✨
 """.format(
             OWNER_NAME,
             ultroid_version,
@@ -60,8 +59,7 @@ upage = 0
 
 SUP_BUTTONS = [
     [
-        Button.url("• CɪᴘʜᴇʀX Ⲃⲟⲧ •", url="t.me/CipherXBot"),
-        Button.url("• Ⲋυⲣⲣⲟʀⲧ •", url="t.me/FutureTechnologyOfficial"),
+        Button.url("• ꜱᴜᴘᴘᴏʀᴛ •", url="t.me/DarkPentesterX"),
     ],
 ]
 
@@ -71,7 +69,7 @@ SUP_BUTTONS = [
 @in_pattern(func=lambda x: not x.text)
 async def inline_alive(o):
     WEB0 = InputWebDocument(
-        "https://telegra.ph/file/9847d2c66379f4da3b29d.mp4", 0, "video/mp4", []
+        "https://telegra.ph/file/9098ea976b4e104371522.jpg", 0, "image/jpg", []
     )
     RES = [
         await o.builder.document(
@@ -79,15 +77,14 @@ async def inline_alive(o):
             text=ALIVEMSG,
             include_media=True,
             buttons=SUP_BUTTONS,
-            title="✵ CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ ✵",
-            description="(c) CɪᴘʜᴇʀX",
-            #url=TLINK,
-            #thumb=WEB0,
-            file=INLINE_PIC, 
-            #content=InputWebDocument(TLINK, 0, "gif", []),
+            title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
+            description="• 𝒖𝒏 𝒂𝒎𝒂𝒏𝒕 𝒔𝒂𝒏𝒔 𝒄𝒐𝒆𝒖𝒓 | 𝒆𝒏𝒔 𝒑𝒂𝒓𝒊𝒔 🎭",
+            url="https://t.me/DarkPentesterX",
+            thumb=WEB0,
+            content=InputWebDocument(TLINK, 0, "image/jpg", []),
         )
     ]
-    await o.answer(RES, switch_pm="👥 CɪᴘʜᴇʀX Pᴏrᴛᴀl", switch_pm_param="start")
+    await o.answer(RES, switch_pm="👨🏻‍💻: 𝒂𝒔𝒔𝒊𝒔𝒕𝒂𝒏𝒕 𝒐𝒇 𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔 [🇫🇷]", switch_pm_param="start")
 
 
 @in_pattern("ultd", owner=True)
@@ -115,7 +112,7 @@ async def inline_handler(event):
         )
     else:
         result = await event.builder.article(
-            title="CɪᴘʜᴇʀX Ⲃⲟⲧ Help Menu", text=text, buttons=_main_help_menu
+            title="Help Menu", text=text, buttons=_main_help_menu
         )
     await event.answer([result], gallery=True)
 
@@ -127,7 +124,7 @@ async def _(event):
     raw = f"https://spaceb.in/api/v1/documents/{ok}/raw"
     result = await event.builder.article(
         title="Paste",
-        text="Pasted to Spacebin 🌌",
+        text="Pasted To Spacebin 🌌",
         buttons=[
             [
                 Button.url("✵ʙɪɴ✵", url=link),
@@ -218,14 +215,14 @@ async def _(event):
     start = datetime.now()
     end = datetime.now()
     ms = (end - start).microseconds
-    pin = f"🌋Pɪɴɢ = {ms} microseconds"
+    pin = f"✨ Pɪɴɢ = {ms} microseconds"
     await event.answer(pin, cache_time=0, alert=True)
 
 
 @callback(data="upp", owner=True)
 async def _(event):
     uptime = time_formatter((time.time() - start_time) * 1000)
-    pin = f"✵Uᴘᴛɪᴍᴇ = {uptime}"
+    pin = f"✨ Uᴘᴛɪᴍᴇ = {uptime}"
     await event.answer(pin, cache_time=0, alert=True)
 
 
@@ -271,7 +268,7 @@ async def _(e):
         [
             Button.switch_inline(
                 "Piston Eval",
-                query="run javascript console.log('Hello CipherX')",
+                query="run javascript console.log('Hello Heartless')",
                 same_peer=True,
             ),
             Button.switch_inline(
@@ -465,7 +462,7 @@ async def on_plug_in_callback_query_handler(event):
         reply_pop_up_alert = f"{plugin_name} has no detailed help..."
     else:
         reply_pop_up_alert = help_string
-    reply_pop_up_alert += "\n© CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ"
+    reply_pop_up_alert += "\n✘ @DarkPentesterX"
     buttons = []
     if INLINE_PIC:
         buttons.append(
@@ -512,7 +509,7 @@ async def on_vc_plg_callback_query_handler(event):
         reply_pop_up_alert = f"{plugin_name} has no detailed help..."
     else:
         reply_pop_up_alert = help_string
-    reply_pop_up_alert += "\n© CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ"
+    reply_pop_up_alert += "\n✗ @DarkPentesterX"
     buttons = []
     if INLINE_PIC:
         buttons.append(
@@ -572,7 +569,7 @@ async def on_plug_in_callback_query_handler(event):
         reply_pop_up_alert = f"{plugin_name} has no detailed help..."
     else:
         reply_pop_up_alert = help_string
-    reply_pop_up_alert += "\n© CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ"
+    reply_pop_up_alert += "\n✗ @DarkPentesterX"
     buttons = []
     if INLINE_PIC:
         buttons.append(
@@ -694,9 +691,9 @@ async def ibuild(e):
                     results = [
                         await builder.document(
                             _pic,
-                            title="✵ CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ ✵",
+                            title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
                             text=txt,
-                            description="(c) CɪᴘʜᴇʀX",
+                            description="✗ @DarkPentesterX",
                             buttons=btn,
                             link_preview=False,
                         )
@@ -709,10 +706,10 @@ async def ibuild(e):
                     cont = InputWebDocument(pic, 0, mime_type, [])
                 results = [
                     await builder.article(
-                        title="✵ CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ ✵",
+                        title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
                         type=_type,
                         text=txt,
-                        description="(c) CɪᴘʜᴇʀX",
+                        description="✗ @DarkPentesterX",
                         include_media=include_media,
                         buttons=btn,
                         thumb=cont,
@@ -724,7 +721,7 @@ async def ibuild(e):
         except Exception as er:
             LOGS.exception(er)
     result = [
-        await builder.article("✵ CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ ✵", text=txt, link_preview=False, buttons=btn)
+        await builder.article("𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔", text=txt, link_preview=False, buttons=btn)
     ]
     await e.answer(result)
 
