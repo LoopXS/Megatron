@@ -1,18 +1,18 @@
 from . import *
 
 REPOMSG = """
-• **CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ** • 
+• **Ⲏⲉⲁʀⲧⳑⲉⲋⲋ Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ** • 
 """
 
 RP_BUTTONS = [
     [Button.url(get_string("bot_3"), "https://xhamsterlive.com")],
-    [Button.url("Ⲋυⲣⲣⲟʀⲧ", "t.me/FutureTechnologyOfficial")],
+    [Button.url("Ⲋυⲣⲣⲟʀⲧ", "t.me/DarkPentesterX")],
 ]
 
 BTS =[
     [
         Button.url("• Rⲉⲣⲟ •­", "https://xhamsterlive.com"), 
-        Button.url("• Ⲋυⲣⲣⲟʀⲧ •­", "t.me/FutureTechnologyOfficial"),
+        Button.url("• Ⲋυⲣⲣⲟʀⲧ •­", "t.me/DarkPentesterX"),
     ], 
 ]
  
@@ -30,13 +30,13 @@ async def repify(e):
     await e.reply(REPOMSG, file=udB.get("STARTMEDIA"), buttons=BTS) 
     
 
-@ultroid_cmd(pattern="cipher$")
+@ultroid_cmd(pattern="heartless$")
 async def useUltroid(rs):
     button = Button.inline("Start >>", "initft_2")
     msg = await asst.send_message(
         LOG_CHANNEL,
         ULTSTRING,
-        file="https://telegra.ph/file/167a0b85048b04129bd3b.jpg",
+        file="https://telegra.ph/file/9098ea976b4e104371522.jpg",
         buttons=button,
     )
     await eor(rs, f"**[Click Here]({msg.message_link})**")
