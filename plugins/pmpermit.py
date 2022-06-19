@@ -61,14 +61,12 @@ PMPIC = Redis("PMPIC") or None
 UND = get_string("pmperm_1")
 
 if not Redis("PM_TEXT"):
-    UNAPPROVED_MSG = (
-        "**🏴‍☠Hello, This is {ON} PM Protection Service 🏴‍☠**\n\n{UND}\n\nYou have {warn}/{twarn} warnings!"
-    )
+    UNAPPROVED_MSG = "🎭 This Is {ON} PM-Protection 🎭\n➰ Pls Wait Till I Approve You To PM\n➰ Don't Spam Inbox(3) Cause,\n➰ You'll Get Blocked & Reported !\n➰ You've {warn}/{twarn} Warnings!"
 else:
     UNAPPROVED_MSG = (
-        "**🏴‍☠Hello, This is {ON} PM Protection Service 🏴‍☠**\n\n"
-        + Redis("PM_TEXT")
-        + "\n\nYou have {warn}/{twarn} warnings!"
+        "🎭 This Is {ON} PM-Protection 🎭\n"
+        + udB.get_key("PM_TEXT")
+        + "\nYou've {warn}/{twarn} Warnings !"
     )
 
 UNS = get_string("pmperm_2")
@@ -252,7 +250,7 @@ if sett == "True":
             if user.id in LASTMSG:
                 prevmsg = LASTMSG[user.id]
                 if event.text != prevmsg:
-                    if "🏴‍☠Hello" in event.text or "**🏴‍☠Hello" in event.text:
+                    if "🎭 This" in event.text or "**🎭 This" in event.text:
                         return
                     await delete_pm_warn_msgs(user.id)
                     message_ = UNAPPROVED_MSG.format(
@@ -760,21 +758,21 @@ async def in_pm_ans(event):
     try:
         msg_ = WARN_MSGS[from_user]
     except KeyError:
-        msg_ = "**🏴‍☠ This is {OWNER_NAME} PM Protection Service 🏴‍☠**"
+        msg_ = "🎭 **PMSecurity OF {OWNER_NAME}** 🎭"
     wrns = f"{warns}/{WARNS}"
     buttons = [
         [
-            Button.inline("Warns", data=f"admin_only{from_user}"),
+            Button.inline("ᴡᴀʀɴꜱ", data=f"admin_only{from_user}"),
             Button.inline(wrns, data=f"don_{wrns}"),
         ],
         [
-            Button.inline("✓ I'm Here for Asking Something ✓", data="askme"),
+            Button.inline("✓ ɪ'ᴍ ʜᴇʀᴇ ꜰᴏʀ ᴀꜱᴋɪɴɢ ꜱᴏᴍᴇᴛʜɪɴɢ ✓", data="askme"),
         ],
         [
-            Button.inline("✓ I'm Here for Talking with CɪᴘʜᴇʀX ✓", data="whattalk"),
+            Button.inline("✓ ɪ'ᴍ ʜᴇʀᴇ ꜰᴏʀ ᴛᴀʟᴋɪɴɢ ✓", data="whattalk"),
         ],
         [
-            Button.inline("✘ I'm Here for Spamming ✘", data="dontspamnigga"),
+            Button.inline("✘ ɪ'ᴍ ʜᴇʀᴇ ꜰᴏʀ ꜱᴘᴀᴍᴍɪɴɢ ✘", data="dontspamnigga"),
         ],
     ]
     include_media = True
@@ -800,7 +798,7 @@ async def in_pm_ans(event):
                 await event.builder.document(
                     res,
                     title="Inline PmPermit",
-                    description="(c) CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ",
+                    description="✘ @DarkPentesterX",
                     text=msg_,
                     buttons=buttons,
                     link_preview=False,
@@ -817,14 +815,14 @@ async def in_pm_ans(event):
                 title="Inline PMPermit.",
                 type=_type,
                 text=msg_,
-                description="(c) CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ",
+                description="✘ @DarkPentesterX",
                 include_media=include_media,
                 buttons=buttons,
                 thumb=cont,
                 content=cont,
             )
         ]
-    await event.answer(res, switch_pm="• CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ •", switch_pm_param="start")
+    await event.answer(res, switch_pm="👨🏻‍💻: 𝒂𝒔𝒔𝒊𝒔𝒕𝒂𝒏𝒕 𝒐𝒇 𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔 [🇫🇷]", switch_pm_param="start")
 
 
 @callback(re.compile("admin_only(.*)"), owner=True)
@@ -892,17 +890,16 @@ async def edt(event):
     await event.edit(
         buttons=[
             [
-                Button.inline("Warns", data=f"admin_only{from_user}"),
+                Button.inline("ᴡᴀʀɴꜱ", data=f"admin_only{from_user}"),
                 Button.inline(wrns, data=f"don_{wrns}"),
             ],
             [
-                Button.inline("✓ I'm Here for Asking Something ✓", data="askme"),
+                Button.inline("✓ ɪ'ᴍ ʜᴇʀᴇ ꜰᴏʀ ᴀꜱᴋɪɴɢ ꜱᴏᴍᴇᴛʜɪɴɢ ✓", data="askme"),
             ],
             [
-                Button.inline("✓ I'm Here for Talking with CɪᴘʜᴇʀX ✓", data="whattalk"),
+                Button.inline("✓ ɪ'ᴍ ʜᴇʀᴇ ꜰᴏʀ ᴛᴀʟᴋɪɴɢ ✓", data="whattalk"),
             ],
             [
-                Button.inline("✘ I'm Here for Spamming ✘", data="dontspamnigga"),
+                Button.inline("✘ ɪ'ᴍ ʜᴇʀᴇ ꜰᴏʀ ꜱᴘᴀᴍᴍɪɴɢ ✘", data="dontspamnigga"),
             ],
-        ],
     )
