@@ -32,7 +32,7 @@ def start():
         os.system("rm -rf Megatron")
     except BaseException:
         pass
-    os.system("git clone https://github.com/CipherX1-ops/Megatron")
+    os.system("git clone https://github.com/LoopXS/Megatron")
     print("\n\nDone")
     os.chdir("Megatron")
     clear_screen()
