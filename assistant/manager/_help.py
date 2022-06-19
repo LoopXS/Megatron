@@ -3,8 +3,8 @@ from . import *
 START = """
 ✨ **Help Menu** ✨
 
-✘  /start : Start The Bot
-✘  /help : Get This Message
+✗  /start : Start The Bot
+✗  /help : Get This Message
 
 👨🏻‍💻 **T.me/DarkPentesterX**
 """
