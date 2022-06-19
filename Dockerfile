@@ -18,7 +18,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
     && pip3 uninstall av -y && pip3 install av --no-binary av
 
 # changing workdir
-WORKDIR /root/ToxygenX/
+WORKDIR /root/LoopXS/
 
 # start the bot
 CMD ["bash", "resources/startup/startup.sh"]
