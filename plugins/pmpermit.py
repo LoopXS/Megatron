@@ -902,4 +902,5 @@ async def edt(event):
             [
                 Button.inline("✘ ɪ'ᴍ ʜᴇʀᴇ ꜰᴏʀ ꜱᴘᴀᴍᴍɪɴɢ ✘", data="dontspamnigga"),
             ],
+        ]
     )
