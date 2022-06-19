@@ -115,7 +115,7 @@ async def update(eve):
             await eve.edit(f"`Here is the error log:\n{error}`")
             repo.__del__()
             return
-        await eve.edit("`Suᴄᴄᴇssfully Uᴩdᴀᴛᴇd\nRestarting CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ...`")
+        await eve.edit("`Suᴄᴄᴇssfully Updated\nRestarting...`")
     else:
         await eve.edit(get_string("clst_1"))
         call_back()
@@ -142,7 +142,7 @@ async def changes(okk):
             )
             img = await carbon.memorize("changelog")
             return await okk.edit(
-                f"**• CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ •**{cli}", file=img, buttons=button
+                f"**• Heartless UserBot •**{cli}", file=img, buttons=button
             )
         except Exception as er:
             LOGS.exception(er)
@@ -150,14 +150,14 @@ async def changes(okk):
     if len(changelog_str) > 1024:
         await okk.edit(get_string("upd_4"))
         await asyncio.sleep(2)
-        with open("cipherx_updates.txt", "w+") as file:
+        with open("heartless_updates.txt", "w+") as file:
             file.write(tl_chnglog)
         await okk.edit(
             get_string("upd_5"),
-            file="cipherx_updates.txt",
+            file="heartless_updates.txt",
             buttons=Button.inline("Update Now", data="updatenow"),
         )
-        remove("cipherx_updates.txt")
+        remove("heartless_updates.txt")
         return
     await okk.edit(
         changelog_str,
@@ -204,7 +204,7 @@ async def _(e):
     token_file_data = f.read()
     udB.set("GDRIVE_TOKEN", token_file_data)
     await e.reply(
-        "`Success!\nYou are all set to use Google Drive with CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ.`",
+        "`Success!\nYou are all set to use Google Drive`",
         buttons=Button.inline("Main Menu", data="setter"),
     )
 
@@ -288,7 +288,7 @@ async def _(e):
 @callback("otvars", owner=True)
 async def otvaar(event):
     await event.edit(
-        "Other Variables to set for CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ:",
+        "Other Variables to set for @PentesterX_Bot:",
         buttons=[
             [
                 Button.inline("Tᴀɢ Lᴏɢɢᴇʀ", data="taglog"),
@@ -642,7 +642,7 @@ async def sfgrp(event):
     pru = event.sender_id
     async with asst.conversation(pru) as conv:
         await conv.send_message(
-            f"Make a group, add @CipherXBot, send `{HNDLR}id`, copy that and send it here.\nUse /cancel to go back.",
+            f"Make a group, add @PentesterX_Bot, send `{HNDLR}id`, copy that and send it here.\nUse /cancel to go back.",
         )
         response = conv.wait_event(events.NewMessage(chats=pru))
         response = await response
