@@ -1,3 +1,3 @@
-git+https://github.com/ToxygenX/CythonX.git
+git+https://github.com/LoopXS/CythonX.git
 https://github.com/New-dev0/Telethon/archive/PlayTime.zip
 pytgcalls==3.0.0.dev21
