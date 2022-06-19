@@ -1,13 +1,12 @@
 from . import *
 
 START = """
-🪅 **Help Menu** 🪅
+✨ **Help Menu** ✨
 
-✘  /start : Start the bot 
-✘  /help : Get This Message.
-✘  /repo : Get Repo.
+✘  /start : Start The Bot
+✘  /help : Get This Message
 
-🧑‍💻 Join **@FutureTechnologyOfficial**
+👨🏻‍💻 **T.me/DarkPentesterX**
 """
 
 ADMINTOOLS = """✘ **AdminTools** ✘
@@ -70,7 +69,7 @@ MISC = """
 • /decide : Decide Something.
 """
 
-STRINGS = {"Admintools": ADMINTOOLS, "locks": LOCKS, "Utils": UTILITIES, "Misc": MISC}
+STRINGS = {"ᴀᴅᴍɪɴᴛᴏᴏʟꜱ": ADMINTOOLS, "ʟᴏᴄᴋꜱ": LOCKS, "ᴜᴛɪʟꜱ": UTILITIES, "ᴍɪꜱᴄ": MISC}
 
 MNGE = udB.get("MNGR_EMOJI") or "•"
 
@@ -86,16 +85,16 @@ def get_buttons():
             del keys[i]
         BTTS.append(BT)
     url = "https://t.me/" + asst.me.username + "?startgroup=true"
-    BTTS.append([Button.url("Add me to Group", url)])
+    BTTS.append([Button.url("✘ ᴀᴅᴅ ᴍᴇ ᴛᴏ ɢʀᴏᴜᴘ ✘", url)])
     return BTTS
 
 
 @asst_cmd(pattern="help")
 async def helpish(event):
     if not event.is_private:
-        url = "https://t.me/CipherXBot?start=help"
+        url = "https://t.me/PentesterX_Bot?start=help"
         return await event.reply(
-            "Contact me in PM for help!", buttons=Button.url("Click me for Help", url)
+            "Do You Wanna Help?", buttons=Button.url("✗ ᴄʟɪᴄᴋ ᴍᴇ ꜰᴏʀ ʜᴇʟᴘ ✗", url)
         )
     if str(event.sender_id) in owner_and_sudos() and (
         udB.get("DUAL_MODE") and (udB.get("DUAL_HNDLR") == "/")
@@ -108,7 +107,7 @@ async def helpish(event):
 @callback("mngbtn", owner=True)
 async def ehwhshd(e):
     buttons = get_buttons()
-    buttons.append([Button.inline("<< Back", "open")])
+    buttons.append([Button.inline("≼", "open")])
     await e.edit(buttons=buttons)
 
 
@@ -120,4 +119,4 @@ async def home_aja(e):
 @callback(re.compile("hlp_(.*)"))
 async def do_something(event):
     match = event.pattern_match.group(1).decode("utf-8")
-    await event.edit(STRINGS[match], buttons=Button.inline("<< Back", "mnghome"))
+    await event.edit(STRINGS[match], buttons=Button.inline("≼", "mnghome"))
