@@ -47,7 +47,7 @@ async def ultroid(event):
         add_user(event.sender_id)
         kak_uiw = udB.get("OFF_START_LOG")
         if not kak_uiw or kak_uiw != "True":
-            msg = f"{inline_mention(event.sender)} `[{event.sender_id}]` started [Bot](@{asst.me.username})."
+            msg = f"{inline_mention(event.sender)} `[{event.sender_id}]` Started Your [Assistant Bot](@{asst.me.username})."
             buttons = [[Button.inline("Info", "itkkstyo")]]
             if event.sender.username:
                 buttons[0].append(Button.url("User", "t.me/" + event.sender.username))
@@ -61,26 +61,20 @@ async def ultroid(event):
             if udB.get("PMBOT") == "True":
                 ok = "✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵"
             await event.reply(
-                f"Ⲏⲉⲩ [{get_display_name(u)}](tg://user?id={u.id}), ⲧⲏⲓⲋ ⲓⲋ Ⲋυⲣⲉʀ Ⲧⲉⲥⲏⲛⲟⳑⲟⳋⲩ Ⲁⲋⲋⲓⲋⲧⲁⲛⲧ ⲟϝ {ultroid_bot.me.first_name}!\n\n{ok}",
+                f"Ⲏⲉⲩ [{get_display_name(u)}](tg://user?id={u.id}), Ⲓ'ⲙ Ⲁⲋⲋⲓⲋⲧⲁⲛⲧ ⲟϝ {ultroid_bot.me.first_name}!\n\n",
                 file=udB.get("STARTMEDIA"),
                 buttons=[
                     [
-                        Button.url("✵Jᴏin Chᴀnnᴇl✵", url="https://t.me/FutureTechnologyOfficial"),
+                        Button.inline("✘ ᴄʜᴀᴛ ᴡɪᴛʜ ʜᴇᴀʀᴛʟᴇꜱꜱ ✘", data="chat"),
                     ],
                     [
-                        Button.inline("✵Chᴀᴛ wiᴛh CɪᴘʜᴇʀX✵", data="chat"),
+                        Button.inline("✘ ɢʀᴏᴜᴘ/ᴄʜᴀɴɴᴇʟ ᴍᴀɴᴀɢᴇʀ ʜᴇʟᴘ ✘", data="group"),
                     ],
                     [
-                        Button.inline("✵Grᴏuᴩ/Chᴀnnᴇl ʍᴀnᴀgᴇr Hᴇlᴩ✵", data="group"),
+                        Button.inline("✘ ꜱᴇʀᴠᴇʀ ᴘɪɴɢ ✘", data="ping"),
                     ],
                     [
-                        Button.inline("✵CɪᴘʜᴇʀX Sᴇrvᴇr Ping✵", data="ping"),
-                    ],
-                    [
-                        Button.inline("✵Tᴇxᴛ Trᴀnslᴀᴛᴏr✵", data="tlans"),
-                    ],
-                    [
-                        Button.inline("✵CɪᴘʜᴇʀX Bᴏᴛs Lisᴛ✵", data="list"),
+                        Button.inline("✘ ᴛᴇxᴛ ᴛʀᴀɴꜱʟᴀᴛᴏʀ ✘", data="tlans"),
                     ],
                 ],
             )
@@ -92,22 +86,16 @@ async def ultroid(event):
                 file=udB.get("STARTMEDIA"),
                 buttons=[
                     [
-                        Button.url("✵Jᴏin Chᴀnnᴇl✵", url="https://t.me/FutureTechnologyOfficial"),
+                        Button.inline("✘ ᴄʜᴀᴛ ᴡɪᴛʜ ʜᴇᴀʀᴛʟᴇꜱꜱ ✘", data="chat"),
                     ],
                     [
-                        Button.inline("✵Chᴀᴛ wiᴛh CɪᴘʜᴇʀX✵", data="chat"),
+                        Button.inline("✘ ɢʀᴏᴜᴘ/ᴄʜᴀɴɴᴇʟ ᴍᴀɴᴀɢᴇʀ ʜᴇʟᴘ ✘", data="group"),
                     ],
                     [
-                        Button.inline("✵Grᴏuᴩ/Chᴀnnᴇl ʍᴀnᴀgᴇr Hᴇlᴩ✵", data="group"),
+                        Button.inline("✘ ꜱᴇʀᴠᴇʀ ᴘɪɴɢ ✘", data="ping"),
                     ],
                     [
-                        Button.inline("✵CɪᴘʜᴇʀX Sᴇrvᴇr Ping✵", data="ping"),
-                    ],
-                    [
-                        Button.inline("✵Tᴇxᴛ Trᴀnslᴀᴛᴏr✵", data="tlans"),
-                    ],
-                    [
-                        Button.inline("✵CɪᴘʜᴇʀX Bᴏᴛs Lisᴛ✵", data="list"),
+                        Button.inline("✘ ᴛᴇxᴛ ᴛʀᴀɴꜱʟᴀᴛᴏʀ ✘", data="tlans"),
                     ],
                 ],
             )
@@ -134,37 +122,9 @@ async def ekekdhdb(e):
 @callback("tlans")
 async def tlans(event):
     await event.delete()
-    await asst.send_message(event.chat_id, "✨ How to use:\n1⃣ `/tr LangaugeCode text` \n2⃣ `/tr Language Code` as reply to a message \n\nHere is the list of [Language Codes](https://telegra.ph/CɪᴘʜᴇʀX-03-10)", link_preview=False)
+    await asst.send_message(event.chat_id, "✨ How to use:\n✘ `/tr LangaugeCode text` \n✘ `/tr Language Code` as reply to a message \n\nHere is the list of [Language Codes](https://telegra.ph/𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔-06-19)", link_preview=False)
 
     
-@callback("list")
-async def list(event):
-    await event.delete()
-    await asst.send_file(
-        event.chat_id,
-        caption="⚜️ Here is the list of public bots made by CɪᴘʜᴇʀX ⚜️", 
-        file=udB.get("intro"),
-        buttons=[
-            [
-                Button.url("࿋ Assistant ࿋", url="https://t.me/CipherXBot"),
-            ],
-            [
-                Button.url("࿋ File to Link ࿋", url="https://t.me/FiletoLinkTelegramBot"),
-            ],
-            [
-                Button.url("࿋ Rename Bot ࿋", url="https://t.me/RenameTelegramBot"),
-            ],
-            [
-                Button.url("࿋ LynX Group Manager ࿋", url="https://t.me/LynXGroupManagerRobot"),
-            ],
-            [
-                Button.url("࿋ Chat Bot ࿋", url="https://t.me/FutureTechnologyChatBot"),
-            ],
-            [
-                Button.url("࿋ Number Finder ࿋", url="https://t.me/HunterDBBot"),
-            ],
-        ],
-    ) 
     
 @callback("chat")
 async def chat(event):
@@ -200,7 +160,7 @@ async def ultroid(event):
 @callback("stat", owner=True)
 async def botstat(event):
     ok = len(get_all_users())
-    msg = """CɪᴘʜᴇʀX Assistant - Stats
+    msg = """Assistant - Stats
 Total Users - {}""".format(
         ok,
     )
