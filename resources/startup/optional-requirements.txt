@@ -9,7 +9,7 @@ cairosvg
 gdown
 gingerit
 googletrans==4.0.0-rc1
-git+https://github.com/ToxygenX/SafetyX.git
+git+https://github.com/LoopXS/SafetyX.git
 git+https://github.com/buddhhu/img2html.git
 git+https://github.com/New-dev0/instagrapi.git
 git+https://github.com/1danish-00/carbon-now-sh-api-wrapper.git
