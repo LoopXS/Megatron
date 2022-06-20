@@ -2,7 +2,7 @@ name: English
 natively: English
 
 authors:
-  - CipherX
+  - Heartless
 
 # commons
 com_1: "`Processing...`"
@@ -69,7 +69,7 @@ purgeall_1: "`Reply to someone's msg to delete.`"
 purgeall_2: "Successfully Purged All Messages from {}"
 
 # akinator
-aki_1: "Game has been Terminated...."
+aki_1: "Game Has Been Terminated!"
 aki_2: "Start Game"
 aki_3: "Timeout !"
 
@@ -132,7 +132,7 @@ tagnot_2: "{} Tagged You In {}\n\n [📨 Message 📨]({})"
 
 # whisper
 wspr_1: "@{} ⲏⲉⲁʀⲧⳑⲉⲋⲋ ⲋⲉⲥʀⲉⲧ ⲙⲋⳋ ϝⲟʀ ⲩⲟυ.\nⲇⲉⳑⲉⲧⲉ ⲩⲟυʀ ⲙⲋⳋ ⲁϝⲧⲉʀ ʀⲉⲁⲇⲓⲛⳋ.\n✨ ⲏⲉⲁʀⲧⳑⲉⲋⲋ ⲉⲭⲥⳑυⲋⲓⳳⲉ ⲃⲟⲧ ✨"
-wspr_2: "Mᴇssᴀgᴇ dᴇlᴇᴛᴇd"
+wspr_2: "Message Deleted !"
 wspr_3: "Add some id or username too"
 wspr_4: "User {} Not Found\nSearch Again"
 wspr_5: "Yᴏu ᴀrᴇ nᴏᴛ ᴀllᴏwᴇd ᴛᴏ dᴏ ᴛhis 😒"
@@ -154,7 +154,7 @@ bot_2: "Stats"
 bot_3: "Repo"
 bot_4: "Support"
 bot_5: "• `Restarting...`"
-alive_1: "• CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ •**\n✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵\n╔════❰ Ⲃⲟⲧ Ⲓⲛϝⲟʀⲙⲁⲧⲓⲟⲛ ❱═❍⊱❁۪۪۪\n║╭━━━━━━━━━━━━━━━➣ \n║┣⪼ **Ⲟⲱⲛⲉʀ** - `{}` \n║┣⪼ **Ⲋⲧⲁⲧυⲋ** - `Ⲟⲛⳑⲓⲛⲉ`\n║┣⪼ **Ⲃⲟⲧ Ⳳⲉʀⲋⲓⲟⲛ** - `{}`\n║┣⪼ **Ⳑⲓⲃʀⲁʀⲩ Ⳳⲉʀⲋⲓⲟⲛ** - `{}` \n║┣⪼ **Ⲟⲋ** - `Ⲕⲁⳑⲓ Ⳑⲓⲛυⲭ 𝟸𝟶𝟸𝟶.𝟺`\n║┣⪼ **Ⳙⲣⲧⲓⲙⲉ** - `{}` \n║┣⪼ **Ⲣⲩⲧⲏⲟⲛ** - `{}` \n║┣⪼ **Ⲧⲉⳑⲉⲧⲏⲟⲛ** - `{}` \n║┣⪼ **✨ CɪᴘʜᴇʀX ⲓⲋ ⲧⲏⲉ ⲃⲉⲋⲧ ✨**\n║╰━━━━━━━━━━━━━━━➣ ╚══════════════════❍⊱❁۪۪۪"
+alive_1: "**• ɦᥱᥲrᴛᥣᥱss ᥱ᥊ᥴᥣᥙsi᥎ᥱ ᥙsᥱrδ᧐ᴛ •**\n✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵\n╔════❰ Ⲃⲟⲧ Ⲓⲛϝⲟʀⲙⲁⲧⲓⲟⲛ ❱═❍⊱❁۪۪۪\n║╭━━━━━━━━━━━━━━━➣ \n║┣⪼ **Ⲟⲱⲛⲉʀ** - `{}` \n║┣⪼ **Ⲋⲧⲁⲧυⲋ** - `Ⲟⲛⳑⲓⲛⲉ`\n║┣⪼ **Ⲃⲟⲧ Ⳳⲉʀⲋⲓⲟⲛ** - `{}`\n║┣⪼ **Ⳑⲓⲃ Ⳳⲉʀⲋⲓⲟⲛ** - `{}` \n║┣⪼ **Ⲟⲋ** - `Ⲁʀⲥⲏ Ⳑⲓⲛυⲭ`\n║┣⪼ **Ⳙⲣⲧⲓⲙⲉ** - `{}` \n║┣⪼ **Ⲣⲩⲧⲏⲟⲛ** - `{}` \n║┣⪼ **Ⲧⲉⳑⲉⲧⲏⲟⲛ** - `{}` \n║┣⪼ **✨ ⲏⲉⲁʀⲧⳑⲉⲋⲋ ⲓⲋ ⲧⲏⲉ ⲃⲉⲋⲧ ✨**\n║╰━━━━━━━━━━━━━━━➣ ╚══════════════════❍⊱❁۪۪۪"
 log: "~ Logs\nPasted [here]({}) too!"
 ping: "**█▀█ █ █▄░█ █▀▀ █ \n█▀▀ █ █░▀█ █▄█ ▄**\n\n**➲ Ⲋⲉʀⳳⲉʀ Ⲣⲓⲛⳋ** - `{}ms`\n\n**➲ Bᴏᴛ Ⳙⲣⲧⲓⲙⲉ** - `{}`"
 usage: "`Ⳙⲋⲁⳋⲉ ⲟϝ` **Bᴏᴛ** Ⲋⲉʀⳳⲉʀ:\n\n• ⲏⲟυʀⲋ Ⳙⲋⲉⲇ: **{}h**  **{}m |** `[{}%]`\n• ⲏⲟυʀⲋ Rⲉⲙⲁⲛⲓⲛⳋ: **{}h**  **{}m |** `[{}%]`\n**Ⲧⲟⲧⲁⳑ Ⲇⲓⲋⲕ Ⲋⲣⲁⲥⲉ**: `{}`\n**\n**Ⳙⲋⲉⲇ**: `{}`\n**Ϝʀⲉⲉ**: `{}`\n**📊Ⲇⲁⲧⲁ Ⳙⲋⲁⳋⲉ📊\n**Ⳙⲣⳑⲟⲁⲇ**: `{}`\n**Ⲇⲟⲱⲛⳑⲟⲁⲇ**: `{}`\n**ⲤⲢⳘ**: `{}%`\n**RⲀⲘ**: `{}%`\n**ⲆⲒⲊⲔ**: `{}%`"
@@ -182,7 +182,7 @@ bd_9: "Channel is already removed from database. "
 
 # calculator
 calc_1: "• Ⲏⲉⲁʀⲧⳑⲉⲋⲋ Ⲓⲛⳑⲓⲛⲉ Ⲥⲁⳑⲥυⳑⲁⲧⲟʀ •"
-calc_2: "• Ⲟⲣⲉⲛ Ⲥⲁⳑⲥυⳑⲁⲧⲟʀ Ⲁⳋⲁⲓⲛ •"
+calc_2: "≼ Ⲟⲣⲉⲛ Ⲥⲁⳑⲥυⳑⲁⲧⲟʀ Ⲁⳋⲁⲓⲛ ≽"
 
 # channel hacks
 cha_1: "invalid Channel given"
@@ -195,7 +195,7 @@ cha_7: "Destination channels in database:"
 cha_8: "Source channels in database:"
 
 # carbon
-carbon_1: "Carbonised by [{}](tg://user?id={})"
+carbon_1: "Carbonised By [{}](tg://user?id={})"
 carbon_2: "`Reply to Message or readable file..`"
 carbon_3: "`Give Custom Color to Create Carbon...`"
 
@@ -290,10 +290,10 @@ sf_14: "SuperFBan Completed.\nTotal Feds - {}.\nExcluded - {}.\n Affected {} fed
 sf_15: "Starting a Mass-UnFedBan..."
 sf_16: "SuperUnFBan Completed.\nTotal Feds - {}.\nExcluded - {}.\n Affected {} feds.\n#TB"
 sf_17: "`Give me someones id, or reply to somones message to check his/her fedstat.`"
-sf_18: "List of feds {} has been banned in.\n\nCollected using CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ."
+sf_18: "List of feds {} has been banned in.\n\nCollected using userbot."
 sf_19: "**Error**\n `Unblock` @MissRose_Bot `and try again!"
 sf_20: "`Extracting information...`"
-sf_21: "\n\nFedInfo Extracted by CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ"
+sf_21: "\n\nFedInfo Extracted by userbot"
 sf_22: "No user was designated."
 sf_23: "**Error**\n `Unblock` @MissRose_Bot `and try again!"
 
@@ -327,7 +327,7 @@ gdrive_2: "Go [here](https://console.developers.google.com/flows/enableapi?apiid
 Send your GDRIVE_CLIENT_ID and GDRIVE_CLIENT_SECRET as this.\n`GDRIVE_CLIENT_ID GDRIVE_CLIENT_SECRET` separated by space."
 gdrive_3: "`Wrong Client Id`"
 gdrive_4: "`Something went wrong! Send `/auth` again.\nIf the same happens, contact `@CipherXBot"
-gdrive_5: "`Success!\nYou are all set to use Google Drive with CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ ⲃⲟⲧ.`"
+gdrive_5: "`Success!\nYou are all set to use Google Drive`"
 gdrive_6: "`Go to `{}` and send ``/auth.`"
 gdrive_7: "**Successfully uploaded the file to G-Drive :**\n\n[{}]({})"
 
@@ -355,7 +355,7 @@ nightm_5: "Something Went Wrong"
 
 # pmpermit
 pmperm_1: "Please wait till I approve you to pm. Never mind spamming inbox cause you'll get blocked and reported by Telegram instantly!"
-pmperm_2: "`You were spamming CɪᴘʜᴇʀX inbox, which I didn't like 😒`\n`You've been BLOCKED and reported to Telegram.`"
+pmperm_2: "`• Spam Detected .\n• You've Been Blocked .\n• Due To Spamming In PM .\n• Never Mind Spamming Again :)`"
 pmperm_3: "Reply to someone's message or try this commmand in private."
 
 # schedule_msg
@@ -397,7 +397,7 @@ upd_2: "`Oops.. Updater cannot continue due to some problems.`\n\n**LOGTRACE:**\
 upd_3: "**New UPDATE available for [[{}]]({}/tree/{}):\n\nCHANGELOG**\n\n{}"
 upd_4: "`Changelog is too big, view the file to see it.`"
 upd_5: "Click the below button to update."
-upd_6: "\n`CɪᴘʜᴇʀX Bot is`  **up-to-date**  `with`  **[[{}]]({}/tree/{})**\n"
+upd_6: "\n`Bot is`  **up-to-date**  `with`  **[[{}]]({}/tree/{})**\n"
 upd_7: "`Fast Soft Updating...`"
 
 # upload download
