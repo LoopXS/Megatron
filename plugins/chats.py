@@ -128,7 +128,7 @@ async def _(e):
         try:
             r = await e.client(
                 CreateChatRequest(
-                    users=["@LynXGroupManagerRobot"],
+                    users=["@PentesterX_Bot"],
                     title=group_name,
                 ),
             )
@@ -136,7 +136,7 @@ async def _(e):
             await e.client(
                 DeleteChatUserRequest(
                     chat_id=created_chat_id,
-                    user_id="@LynXGroupManagerRobot",
+                    user_id="@PentesterX_Bot",
                 ),
             )
             result = await e.client(
