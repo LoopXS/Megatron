@@ -27,7 +27,7 @@ async def mi(e):
         return await eor(e, get_string("cvt_3"), time=5)
     xx = mediainfo(r.media)
     murl = r.media.stringify()
-    url = make_html_telegraph("Mediainfo", "CipherX", f"<code>{murl}</code>")
+    url = make_html_telegraph("Mediainfo", "𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔", f"<code>{murl}</code>")
     ee = await eor(e, f"**[{xx}]({url})**\n\n`Loading More...`", link_preview=False)
     taime = time.time()
     if hasattr(r.media, "document"):
@@ -53,7 +53,7 @@ async def mi(e):
     if er:
         LOGS.info(er)
         return await ee.edit(f"**[{xx}]({url})**", link_preview=False)
-    urll = make_html_telegraph("Mediainfo", "CipherX", out)
+    urll = make_html_telegraph("Mediainfo", "𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔", out)
     await ee.edit(
         f"**[{xx}]({url})**\n\n[{get_string('mdi_1')}]({urll})", link_preview=False
     )
