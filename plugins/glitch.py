@@ -27,9 +27,9 @@ async def _(e):
         return await eor(e, get_string("com_4"))
     xx = await eor(e, "`Gliching...`")
     ok = await e.client.download_media(reply.media)
-    cmd = f"glitch_me gif --line_count 200 -f 10 -d 50 '{ok}' cipherx.gif"
+    cmd = f"glitch_me gif --line_count 200 -f 10 -d 50 '{ok}' heartless.gif"
     stdout, stderr = await bash(cmd)
-    await e.reply(file="cipherx.gif", force_document=False)
+    await e.reply(file="heartless.gif", force_document=False)
     await xx.delete()
     os.remove(ok)
-    os.remove("cipherx.gif")
+    os.remove("heartless.gif")
