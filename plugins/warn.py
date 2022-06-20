@@ -93,7 +93,7 @@ async def warn(e):
     user = inline_mention(ok)
     await eor(
         e,
-        f"**WARNING :-** {count+1}/{number}\n**To :- **{user}\n\n**Reason :-**\n✵ {reason}\n\n**⚜️ CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ ⚜️**",
+        f"**➰ Warning ~** {count+1}/{number}\n**➰ User ~** {user}\n\n**✨ Reason ~** {reason}",
     )
 
 
@@ -120,7 +120,7 @@ async def rwarn(e):
     reset_warn(e.chat_id, user)
     ok = await e.client.get_entity(user)
     user = inline_mention(ok)
-    await eor(e, f"Cleared All Warns of {user}.")
+    await eor(e, f"Cleared All Warns Of {user}.")
 
 
 @ultroid_cmd(
