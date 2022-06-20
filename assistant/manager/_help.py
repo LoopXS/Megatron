@@ -101,7 +101,7 @@ async def helpish(event):
     ):
         return
     BTTS = get_buttons()
-    await event.reply(START, buttons=BTTS)
+    await event.reply(START, buttons=BTTS, link_preview=False)
 
 
 @callback("mngbtn", owner=True)
