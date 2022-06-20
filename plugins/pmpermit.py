@@ -874,8 +874,8 @@ async def _ask(e):
 @callback(re.compile("don_(.*)"))
 async def _mejik(e):
     data = e.pattern_match.group(1).decode("utf-8").split("/")
-    text = "👮‍♂ Warn Count : " + data[0]
-    text += "\n🤖 Total Warn Count : " + data[1]
+    text = "✗ Warn Count : " + data[0]
+    text += "\n✗ Total Warn Count : " + data[1]
     await e.answer(text, alert=True)
     
 @callback(re.compile("pmbk_(.*)"))
