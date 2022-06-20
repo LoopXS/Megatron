@@ -66,7 +66,7 @@ async def _(event):
     try:
         tt = translator.translate(text, lang_tgt=lan)
         fr = translator.detect(text)
-        output_str = f"**Ⲧʀⲁⲛⲋⳑⲁⲧⲉⲇ ⲃⲩ CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ**\n\n**Ⲋⲟυʀⲥⲉ ({fr})**:\n`{text}`\n\n**Ⲧʀⲁⲛⲋⳑⲁⲧⲓⲟⲛ ({lan})**:\n`{tt}`"
+        output_str = f"**Ⲧʀⲁⲛⲋⳑⲁⲧⲉⲇ ⲃⲩ ⲏⲉⲁʀⲧⳑⲉⲋⲋ Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ**\n\n**Ⲋⲟυʀⲥⲉ ({fr})**:\n`{text}`\n\n**Ⲧʀⲁⲛⲋⳑⲁⲧⲓⲟⲛ ({lan})**:\n`{tt}`"
         if len(output_str) >= 4096:
             url = "https://del.dog/documents"
             r = requests.post(url, data=output_str.encode("UTF-8")).json()
@@ -91,7 +91,7 @@ async def _(event):
             bot_api_file_id = pack_bot_file_id(r_msg.media)
             await eor(
                 event,
-                "**Current Chat ID:**  `{}`\n**From User ID:**  `{}`\n**Bot API File ID:**  `{}`\n**Msg ID:**  `{}`".format(
+                "**Current Chat ID ~**  `{}`\n**From User ID ~**  `{}`\n**Bot API File ID:**  `{}`\n**Msg ID:**  `{}`".format(
                     str(event.chat_id),
                     str(r_msg.sender_id),
                     bot_api_file_id,
