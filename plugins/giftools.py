@@ -33,10 +33,10 @@ async def igif(e):
     xx = await eor(e, get_string("com_1"))
     z = await a.download_media()
     try:
-        await bash(f'ffmpeg -i "{z}" -vf format=gray cipherx.gif -y')
-        await e.client.send_file(e.chat_id, "cipherx.gif", support_stream=True)
+        await bash(f'ffmpeg -i "{z}" -vf format=gray heartless.gif -y')
+        await e.client.send_file(e.chat_id, "heartless.gif", support_stream=True)
         os.remove(z)
-        os.remove("cipherx.gif")
+        os.remove("heartless.gif")
         await xx.delete()
     except Exception as er:
         LOGS.info(er)
@@ -54,11 +54,11 @@ async def igif(e):
     z = await a.download_media()
     try:
         await bash(
-            f'ffmpeg -i "{z}" -vf lutyuv="y=negval:u=negval:v=negval" cipherx.gif -y'
+            f'ffmpeg -i "{z}" -vf lutyuv="y=negval:u=negval:v=negval" heartless.gif -y'
         )
-        await e.client.send_file(e.chat_id, "cipherx.gif", support_stream=True)
+        await e.client.send_file(e.chat_id, "heartless.gif", support_stream=True)
         os.remove(z)
-        os.remove("cipherx.gif")
+        os.remove("heartless.gif")
         await xx.delete()
     except Exception as er:
         LOGS.info(er)
@@ -104,7 +104,7 @@ async def vtogif(e):
     if int(dur) < 120:
         z = await a.download_media()
         await bash(
-            f'ffmpeg -i {z} -vf "fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 cipherx.gif -y'
+            f'ffmpeg -i {z} -vf "fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 heartless.gif -y'
         )
     else:
         filename = a.file.name
@@ -113,10 +113,10 @@ async def vtogif(e):
         vid = await downloader(filename, a.media.document, xx, tt, get_string("com_5"))
         z = vid.name
         await bash(
-            f'ffmpeg -ss 3 -t 100 -i {z} -vf "fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 cipherx.gif'
+            f'ffmpeg -ss 3 -t 100 -i {z} -vf "fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 heartless.gif'
         )
 
-    await e.client.send_file(e.chat_id, "cipherx.gif", support_stream=True)
+    await e.client.send_file(e.chat_id, "heartless.gif", support_stream=True)
     os.remove(z)
-    os.remove("cipherx.gif")
+    os.remove("heartless.gif")
     await xx.delete()
