@@ -126,7 +126,7 @@ async def _(event):
     else:
         evaluation = get_string("instu_4")
     final_output = (
-        "__►__ **Ⲉⳳⲁⳑ**\n```{}``` \n\n __►__ **Ⲟυⲧⲣυⲧ**: \n```{}``` \n".format(
+        "__►__ **Ⲉⳳⲁⳑ**\n```{}``` \n\n__►__ **Ⲟυⲧⲣυⲧ**\n```{}``` \n".format(
             cmd,
             evaluation,
         )
