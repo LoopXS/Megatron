@@ -80,7 +80,7 @@ async def inline_alive(o):
             title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
             description="• 𝒖𝒏 𝒂𝒎𝒂𝒏𝒕 𝒔𝒂𝒏𝒔 𝒄𝒐𝒆𝒖𝒓 | 𝒆𝒏𝒔 𝒑𝒂𝒓𝒊𝒔 🎭",
             #url="https://t.me/DarkPentesterX",
-            thumb=WEB0,
+            #thumb=WEB0,
             content=InputWebDocument(TLINK, 0, "image/jpg", []),
         )
     ]
