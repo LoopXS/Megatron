@@ -73,7 +73,7 @@ async def inline_alive(o):
     )
     RES = [
         await o.builder.document(
-            type="image/jpg",
+            type="image/jpeg",
             text=ALIVEMSG,
             include_media=True,
             buttons=SUP_BUTTONS,
