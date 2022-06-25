@@ -79,12 +79,12 @@ async def inline_alive(o):
             buttons=SUP_BUTTONS,
             title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
             description="• 𝒖𝒏 𝒂𝒎𝒂𝒏𝒕 𝒔𝒂𝒏𝒔 𝒄𝒐𝒆𝒖𝒓 | 𝒆𝒏𝒔 𝒑𝒂𝒓𝒊𝒔 🎭",
-            url="https://t.me/DarkPentesterX",
+            #url="https://t.me/DarkPentesterX",
             thumb=WEB0,
             content=InputWebDocument(TLINK, 0, "image/jpg", []),
         )
     ]
-    await o.answer(RES, switch_pm="👨🏻‍💻: Assistant Of Heartless", switch_pm_param="start")
+    await o.answer(RES, switch_pm="👨🏻‍💻: 𝒂𝒔𝒔𝒊𝒔𝒕𝒂𝒏𝒕 𝒐𝒇 𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔 [🇫🇷]", switch_pm_param="start")
 
 
 @in_pattern("ultd", owner=True)
