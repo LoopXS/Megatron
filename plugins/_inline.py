@@ -82,6 +82,7 @@ async def inline_alive(o):
             #url="https://t.me/DarkPentesterX",
             #thumb=WEB0,
             #content=InputWebDocument(TLINK, 0, "image/jpg", []),
+            file=INLINE_PIC,
         )
     ]
     await o.answer(RES, switch_pm="👨🏻‍💻: 𝒂𝒔𝒔𝒊𝒔𝒕𝒂𝒏𝒕 𝒐𝒇 𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔 [🇫🇷]", switch_pm_param="start")
