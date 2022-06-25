@@ -69,11 +69,11 @@ SUP_BUTTONS = [
 @in_pattern(func=lambda x: not x.text)
 async def inline_alive(o):
     WEB0 = InputWebDocument(
-        "https://telegra.ph/file/9098ea976b4e104371522.jpg", 0, "image/jpeg", []
+        "https://telegra.ph/file/446b7f2b89d5fffede2f2.mp4", 0, "video/mp4", []
     )
     RES = [
         await o.builder.document(
-            type="image/jpeg",
+            type="gif",
             text=ALIVEMSG,
             include_media=True,
             buttons=SUP_BUTTONS,
@@ -103,7 +103,7 @@ async def inline_handler(event):
     )
     if INLINE_PIC:
         result = await event.builder.document(
-            type="image/jpeg",
+            type="gif",
             include_media=True,
             file=INLINE_PIC,
             link_preview=False,
