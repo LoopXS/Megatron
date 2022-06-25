@@ -18,7 +18,7 @@ from . import HNDLR, INLINE_PIC, LOGS, OWNER_NAME, asst, get_string, start_time,
 from ._help import _main_help_menu
 
 # ================================================#
-notmine = f"This bot is for {OWNER_NAME}"
+notmine = f"This Is {OWNER_NAME} Bot!"
 
 TLINK = INLINE_PIC or "https://telegra.ph/file/9098ea976b4e104371522.jpg"
 helps = get_string("inline_1")
@@ -69,7 +69,7 @@ SUP_BUTTONS = [
 @in_pattern(func=lambda x: not x.text)
 async def inline_alive(o):
     WEB0 = InputWebDocument(
-        "https://telegra.ph/file/9098ea976b4e104371522.jpg", 0, "image/jpg", []
+        "https://telegra.ph/file/9098ea976b4e104371522.jpg", 0, "image/jpeg", []
     )
     RES = [
         await o.builder.document(
@@ -103,7 +103,7 @@ async def inline_handler(event):
     )
     if INLINE_PIC:
         result = await event.builder.document(
-            type="image/jpg",
+            type="image/jpeg",
             include_media=True,
             file=INLINE_PIC,
             link_preview=False,
