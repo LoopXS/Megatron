@@ -73,7 +73,7 @@ async def inline_alive(o):
     )
     RES = [
         await o.builder.document(
-            type="gif",
+            type="image/jpg",
             text=ALIVEMSG,
             include_media=True,
             buttons=SUP_BUTTONS,
@@ -84,7 +84,7 @@ async def inline_alive(o):
             content=InputWebDocument(TLINK, 0, "image/jpg", []),
         )
     ]
-    await o.answer(RES, switch_pm="👨🏻‍💻: 𝒂𝒔𝒔𝒊𝒔𝒕𝒂𝒏𝒕 𝒐𝒇 𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔 [🇫🇷]", switch_pm_param="start")
+    await o.answer(RES, switch_pm="👨🏻‍💻: Assistant Of Heartless", switch_pm_param="start")
 
 
 @in_pattern("ultd", owner=True)
@@ -103,7 +103,7 @@ async def inline_handler(event):
     )
     if INLINE_PIC:
         result = await event.builder.document(
-            type="gif",
+            type="image/jpg",
             include_media=True,
             file=INLINE_PIC,
             link_preview=False,
