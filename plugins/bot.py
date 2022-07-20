@@ -267,7 +267,7 @@ async def inline_alive(ult):
                     await builder.document(
                         pic,
                         title="Inline Alive",
-                        description="(c) CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ",
+                        description="• 𝒍𝒂 𝒔𝒆𝒖𝒍𝒆 𝒓𝒂𝒊𝒔𝒐𝒏 𝒑𝒐𝒖𝒓 𝒍𝒂𝒒𝒖𝒆𝒍𝒍𝒆 𝒋𝒆 𝒓𝒆𝒔𝒑𝒊𝒓𝒆 | 𝒂 ♡",
                         buttons=buttons,
                     )
                 ]
