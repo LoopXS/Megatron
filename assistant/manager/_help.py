@@ -6,7 +6,7 @@ START = """
 ✗  /start : Start The Bot
 ✗  /help : Get This Message
 
-👨🏻‍💻 **T.me/DarkPentesterX**
+👨🏻‍💻 **T.me/DarkPentester**
 """
 
 ADMINTOOLS = """✘ **AdminTools** ✘
