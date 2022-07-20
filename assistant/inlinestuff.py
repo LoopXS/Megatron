@@ -363,7 +363,7 @@ async def repo(e):
             ],
         ),
     ]
-    await e.answer(res, switch_pm="CɪᴘʜᴇʀX Suᴩᴇr Tᴇᴄhnᴏlᴏgy Bᴏᴛ", switch_pm_param="start")
+    await e.answer(res, switch_pm="👨🏻‍💻: 𝒂𝒔𝒔𝒊𝒔𝒕𝒂𝒏𝒕 𝒐𝒇 𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔 [🇫🇷]", switch_pm_param="start")
     
     
 @in_pattern("go", owner=True)
