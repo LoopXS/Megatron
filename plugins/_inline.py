@@ -61,7 +61,7 @@ upage = 0
 
 SUP_BUTTONS = [
     [
-        Button.url("✗ ᴅᴇᴠ ✗", url="t.me/DarkPentesterX"),
+        Button.url("✗ ᴅᴇᴠ ✗", url="t.me/DarkPentester"),
     ],
 ]
 
