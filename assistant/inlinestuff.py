@@ -359,7 +359,7 @@ async def repo(e):
             thumb=wb(ultpic, 0, "image/jpeg", []),
             text="ᥴᥣiᥴκ ᴛɦᥱ δᥙᴛᴛ᧐ᥒ δᥱᥣ᧐ᥕ ᴛ᧐ ᥴ᧐ᥒᴛᥲᥴᴛ !",
             buttons=[
-                [Button.url("• ꜱᴜᴘᴘᴏʀᴛ •", url="t.me/DarkPentesterX")],
+                [Button.url("• ꜱᴜᴘᴘᴏʀᴛ •", url="t.me/DarkPentester")],
             ],
         ),
     ]
