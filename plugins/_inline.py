@@ -81,7 +81,7 @@ async def inline_alive(o):
             buttons=SUP_BUTTONS,
             title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
             description="• 𝒖𝒏 𝒂𝒎𝒂𝒏𝒕 𝒔𝒂𝒏𝒔 𝒄𝒐𝒆𝒖𝒓 | 𝒆𝒏𝒔 𝒑𝒂𝒓𝒊𝒔 🎭",
-            #url="https://t.me/DarkPentesterX",
+            #url="https://t.me/DarkPentester",
             #thumb=WEB0,
             #content=InputWebDocument(TLINK, 0, "image/jpg", []),
             file=INLINE_PIC,
@@ -465,7 +465,7 @@ async def on_plug_in_callback_query_handler(event):
         reply_pop_up_alert = f"{plugin_name} has no detailed help..."
     else:
         reply_pop_up_alert = help_string
-    reply_pop_up_alert += "\n✘ @DarkPentesterX"
+    reply_pop_up_alert += "\n✘ @DarkPentester"
     buttons = []
     if INLINE_PIC:
         buttons.append(
@@ -512,7 +512,7 @@ async def on_vc_plg_callback_query_handler(event):
         reply_pop_up_alert = f"{plugin_name} has no detailed help..."
     else:
         reply_pop_up_alert = help_string
-    reply_pop_up_alert += "\n✗ @DarkPentesterX"
+    reply_pop_up_alert += "\n✗ @DarkPentester"
     buttons = []
     if INLINE_PIC:
         buttons.append(
@@ -572,7 +572,7 @@ async def on_plug_in_callback_query_handler(event):
         reply_pop_up_alert = f"{plugin_name} has no detailed help..."
     else:
         reply_pop_up_alert = help_string
-    reply_pop_up_alert += "\n✗ @DarkPentesterX"
+    reply_pop_up_alert += "\n✗ @DarkPentester"
     buttons = []
     if INLINE_PIC:
         buttons.append(
@@ -696,7 +696,7 @@ async def ibuild(e):
                             _pic,
                             title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
                             text=txt,
-                            description="✗ @DarkPentesterX",
+                            description="✗ @DarkPentester",
                             buttons=btn,
                             link_preview=False,
                         )
