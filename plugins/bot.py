@@ -248,7 +248,7 @@ async def inline_alive(ult):
     buttons = [
         [
             Button.url(get_string("bot_3"), "https://xhamsterlive.com"),
-            Button.url(get_string("bot_4"), "t.me/DarkPentesterX"),
+            Button.url(get_string("bot_4"), "t.me/DarkPentester"),
         ]
     ]
     builder = ult.builder
