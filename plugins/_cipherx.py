@@ -6,13 +6,13 @@ REPOMSG = """
 
 RP_BUTTONS = [
     [Button.url(get_string("bot_3"), "https://xhamsterlive.com")],
-    [Button.url("Ⲋυⲣⲣⲟʀⲧ", "t.me/DarkPentesterX")],
+    [Button.url("Ⲋυⲣⲣⲟʀⲧ", "t.me/DarkPentester")],
 ]
 
 BTS =[
     [
         Button.url("• Rⲉⲣⲟ •­", "https://xhamsterlive.com"), 
-        Button.url("• Ⲋυⲣⲣⲟʀⲧ •­", "t.me/DarkPentesterX"),
+        Button.url("• Ⲋυⲣⲣⲟʀⲧ •­", "t.me/DarkPentester"),
     ], 
 ]
  
