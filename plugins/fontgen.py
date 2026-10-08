@@ -27,7 +27,7 @@ import unicodedata
 from functools import lru_cache
 from html import escape
 
-from . import Button, asst, callback, eod, eor, in_pattern, cipherx_cmd
+from . import Button, asst, callback, eod, eor, in_pattern, heartless_cmd
 
 
 # ---------------------------------------------------------------------------
