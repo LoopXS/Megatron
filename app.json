@@ -1,0 +1,52 @@
+{
+    "name": "Mᴇgᴀᴛrᴏn Bot",
+    "description": "Pluggable telegram userbot, made in python using Telethon.",
+    "logo": "https://telegra.ph/file/167a0b85048b04129bd3b.jpg",
+    "keywords": ["Telethon", "telegram", "Megatronbot", "python"],
+    "repository": "https://github.com/LoopXS/Megatron/",
+    "success_url": "https://t.me/DarkPentester",
+    "stack": "container",
+    "env": {
+        "API_ID": {
+            "description": "You api id, from my.telegram.org or @ScrapperRoBot.",
+            "value": "",
+            "required": false
+        },
+        "API_HASH": {
+            "description": "You api hash, from my.telegram.org or @ScrapperRoBot.",
+            "value": "",
+            "required": false
+        },
+        "SESSION": {
+            "description": "Your session string. Can be added now, or after deploy. (The bot will NOT work without a session string!!)",
+            "value": ""
+        },
+        "VC_SESSION": {
+            "description": "Your session string. Can be added now, or after deploy. (The bot will NOT work without a session string!!)",
+            "value": "", 
+            "required": false 
+        },
+        "BOT_TOKEN": {
+            "description": "Your bot token",
+            "value": ""
+        },
+        "LOG_CHANNEL": {
+            "description": "Your Log Chanel ID",
+            "value": ""
+        },
+        "REDIS_URI": {
+            "description": "Redis endpoint URL, from redislabs.com",
+            "value": ""
+        },
+        "REDIS_PASSWORD": {
+            "description": "Redis endpoint password, from redislabs.com",
+            "value": ""
+        }
+    },
+    "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
+}

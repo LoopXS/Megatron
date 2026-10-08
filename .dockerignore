@@ -1,0 +1,17 @@
+.git
+.git/**
+.github
+__pycache__
+**/__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.log
+.env
+.venv
+venv
+env
+*.session-journal
+Dockerfile*
+docker-compose.yml
+README.md

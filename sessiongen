@@ -1,0 +1,7 @@
+# Mᴇgᴀᴛrᴏn Bot
+# Copyright (C) 2020 Mᴇgᴀᴛrᴏn Team
+#
+# This file is a part of < https://github.com/LoopXS/Megatron/ >
+# PLease read the GNU Affero General Public License in <https://www.github.com/LoopXS/Megatron/blob/main/LICENSE/>.
+
+bash resources/session/session.sh

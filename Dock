@@ -1,0 +1,19 @@
+FROM python:3.10-slim
+
+RUN apt -qq update && \
+    apt -qq install -y --no-install-recommends \
+      ffmpeg curl git gnupg2 unzip wget \
+      python3-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/
+
+ENV TZ=Asia/Tehran 
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+COPY installer.sh .
+
+RUN bash installer.sh
+
+EXPOSE 8000
+
+CMD ["python3", "-m", "CythonX"]
