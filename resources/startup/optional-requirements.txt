@@ -1,0 +1,46 @@
+# Required only for Local Deploys
+# ------------------------------------------------------ #
+
+akinator
+apscheduler
+aiohttp
+aiofiles>=24.1.0,<25.0.0
+bs4
+cairosvg
+google-search-results
+#git+https://github.com/New-dev0/instagrapi.git
+git+https://github.com/buddhhu/img2html.git@c44170d#egg=img2html
+git+https://github.com/LoopXS/SafetyX.git
+git+https://github.com/ufoptg/AsyncNestADV.git
+git+https://github.com/ToxygenX/youtube-search-python
+google-trans-new
+glitch_this
+emoji
+gitpython
+google-api-python-client
+htmlwebshot
+jdatetime
+langdetect
+lottie
+lxml
+Markdown
+mediainfo
+numpy>=1.21.2
+openai==0.28.0
+oauth2client
+opencv-python-headless
+Pillow>=10.0.0,<12.0.0
+moviepy
+profanitydetector
+psutil
+pypdf2>=1.26.0
+pytz
+qrcode
+requests
+tabulate
+telegraph
+tgcrypto
+twikit
+yt-dlp
+spotdl==4.5.2
+# -------------------------------------------------------#

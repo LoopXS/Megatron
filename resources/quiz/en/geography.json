@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "geography",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "geography_quality_001",
+      "question": "Which country has the largest total area in the world?",
+      "options": [
+        "Russia",
+        "Canada",
+        "China",
+        "Brazil"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "world geography",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_002",
+      "question": "Which ocean lies between Africa, Asia, and Australia?",
+      "options": [
+        "Arctic Ocean",
+        "Indian Ocean",
+        "Pacific Ocean",
+        "Atlantic Ocean"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "physical geography",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_003",
+      "question": "The Nile flows primarily northward before reaching which sea?",
+      "options": [
+        "Arabian Sea",
+        "Black Sea",
+        "Mediterranean Sea",
+        "Red Sea"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "rivers",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_004",
+      "question": "Which line of latitude passes through Ecuador?",
+      "options": [
+        "Prime Meridian",
+        "Tropic of Cancer",
+        "Arctic Circle",
+        "Equator"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "coordinates",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_005",
+      "question": "A city is located at about 35°N and 139°E. Which country is it in?",
+      "options": [
+        "Japan",
+        "South Korea",
+        "Philippines",
+        "China"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "coordinates",
+      "type": "application"
+    },
+    {
+      "id": "geography_quality_006",
+      "question": "Why do many major cities develop near rivers?",
+      "options": [
+        "Rivers always have the world's coldest climates",
+        "Rivers can provide water, transport routes, and fertile land",
+        "Rivers prevent all flooding",
+        "Rivers eliminate the need for roads"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "human geography",
+      "type": "cause/effect"
+    },
+    {
+      "id": "geography_quality_007",
+      "question": "A mountain range blocks moist air from reaching the land beyond it. Which effect is most likely on the downwind side?",
+      "options": [
+        "Permanent snowfall everywhere",
+        "Stronger ocean tides",
+        "A rain shadow and drier conditions",
+        "Higher sea level"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "climate",
+      "type": "inference"
+    },
+    {
+      "id": "geography_quality_008",
+      "question": "Two places share the same latitude, but one is much cooler because it is thousands of meters higher. Which factor explains the difference?",
+      "options": [
+        "Longitude",
+        "Political boundaries",
+        "Ocean salinity",
+        "Elevation"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "physical geography",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_009",
+      "question": "A ship travels east from the Atlantic through the Mediterranean and then enters a sea connected to the Indian Ocean through the Suez Canal. Which sea is it most likely entering?",
+      "options": [
+        "Red Sea",
+        "Baltic Sea",
+        "Caribbean Sea",
+        "Bering Sea"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "routes",
+      "type": "multi-step"
+    },
+    {
+      "id": "geography_quality_010",
+      "question": "A coastal city has mild winters compared with an inland city at the same latitude. Which factor most directly helps explain this?",
+      "options": [
+        "Sea water always makes land hotter than inland regions",
+        "The nearby ocean moderates temperature",
+        "The coast receives no sunlight in winter",
+        "Latitude stops affecting coastal areas"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "climate",
+      "type": "reasoning"
+    },
+    {
+      "id": "geography_quality_011",
+      "question": "A river carries large amounts of sediment and slows as it enters a shallow sea. What landform is likely to develop near its mouth?",
+      "options": [
+        "A coral atoll",
+        "A drumlin",
+        "A delta",
+        "A fjord"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "landforms",
+      "type": "application"
+    },
+    {
+      "id": "geography_quality_012",
+      "question": "A country stretches from a humid tropical coast to a high mountain interior. Why can it contain several distinct climate zones within a relatively short distance?",
+      "options": [
+        "Political borders create climate automatically",
+        "Mountains have no effect on air movement",
+        "Longitude alone determines every local climate",
+        "Climate varies with latitude, elevation, and terrain"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "climate",
+      "type": "analysis"
+    },
+    {
+      "id": "geography_quality_013",
+      "question": "Which mountain has the highest summit above sea level on Earth?",
+      "options": [
+        "K2",
+        "Kilimanjaro",
+        "Mount Everest",
+        "Mont Blanc"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "mountains",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_014",
+      "question": "Which is the largest continent by area?",
+      "options": [
+        "Africa",
+        "North America",
+        "Europe",
+        "Asia"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "continents",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_015",
+      "question": "Which continent is home to the Sahara Desert?",
+      "options": [
+        "Asia",
+        "South America",
+        "Africa",
+        "Australia (Oceania)"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "continents",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_016",
+      "question": "Which continent is almost entirely covered by ice and lies around the South Pole?",
+      "options": [
+        "Greenland",
+        "Australia",
+        "Africa",
+        "Antarctica"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "polar regions",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_017",
+      "question": "Which river flows through the city of London?",
+      "options": [
+        "Seine",
+        "Danube",
+        "Thames",
+        "Rhine"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_018",
+      "question": "Which is the largest coral reef system in the world?",
+      "options": [
+        "Great Barrier Reef",
+        "Belize Barrier Reef",
+        "Red Sea Coral Reef",
+        "Maldives Reef"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "islands",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_019",
+      "question": "What is the capital of Iran?",
+      "options": [
+        "Isfahan",
+        "Shiraz",
+        "Tabriz",
+        "Tehran"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "capitals",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_020",
+      "question": "Which European country is shaped like a boot?",
+      "options": [
+        "Italy",
+        "Greece",
+        "Spain",
+        "Portugal"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "countries",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_021",
+      "question": "Which is the longest river in South America?",
+      "options": [
+        "Orinoco",
+        "Paraná",
+        "Magdalena",
+        "Amazon"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "rivers",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_022",
+      "question": "Which country has a red maple leaf on its national flag?",
+      "options": [
+        "Norway",
+        "Switzerland",
+        "Canada",
+        "New Zealand"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "countries",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_023",
+      "question": "In which half of the Earth, north or south of the Equator, is Australia located?",
+      "options": [
+        "Northern Hemisphere",
+        "Eastern Hemisphere only",
+        "Southern Hemisphere",
+        "Arctic Hemisphere"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "hemispheres",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_024",
+      "question": "Lines of longitude, also called meridians, run between which two points?",
+      "options": [
+        "The North Pole and the South Pole",
+        "The Equator and the Tropic of Cancer",
+        "East and West poles",
+        "The Arctic and Antarctic circles only"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "coordinates",
+      "type": "concept"
+    },
+    {
+      "id": "geography_quality_025",
+      "question": "Which instrument shows the direction of magnetic north?",
+      "options": [
+        "Barometer",
+        "Altimeter",
+        "Thermometer",
+        "Compass"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "maps",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_026",
+      "question": "Which country is nicknamed the Land of the Rising Sun?",
+      "options": [
+        "Japan",
+        "China",
+        "South Korea",
+        "Thailand"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "countries",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_027",
+      "question": "Which is the largest country in South America by area?",
+      "options": [
+        "Brazil",
+        "Argentina",
+        "Peru",
+        "Colombia"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "countries",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_028",
+      "question": "On which continent is the Amazon rainforest mainly located?",
+      "options": [
+        "Africa",
+        "South America",
+        "Asia",
+        "North America"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "biomes",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_029",
+      "question": "What do we call a piece of land completely surrounded by water?",
+      "options": [
+        "Peninsula",
+        "Plateau",
+        "Valley",
+        "Island"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_030",
+      "question": "Which man-made canal connects the Atlantic and Pacific oceans in Central America?",
+      "options": [
+        "Panama Canal",
+        "Suez Canal",
+        "Kiel Canal",
+        "Corinth Canal"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_031",
+      "question": "Which long mountain range runs along the western edge of South America?",
+      "options": [
+        "Andes",
+        "Alps",
+        "Rockies",
+        "Himalayas"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mountains",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_032",
+      "question": "Mont Blanc is part of which European mountain range?",
+      "options": [
+        "Pyrenees",
+        "Alps",
+        "Carpathians",
+        "Urals"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "mountains",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_033",
+      "question": "What is a mountain called that can erupt lava, ash, and gas?",
+      "options": [
+        "Plateau",
+        "Volcano",
+        "Canyon",
+        "Glacier"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_034",
+      "question": "What do we call a very dry region that receives little rainfall?",
+      "options": [
+        "Desert",
+        "Tundra",
+        "Rainforest",
+        "Delta"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "biomes",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_035",
+      "question": "What is the starting point of a river called?",
+      "options": [
+        "Source",
+        "Mouth",
+        "Delta",
+        "Estuary"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "rivers",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_036",
+      "question": "Which US city is nicknamed the Big Apple?",
+      "options": [
+        "Los Angeles",
+        "Chicago",
+        "New York City",
+        "Boston"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "cities",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_037",
+      "question": "Which type of map uses contour lines to show elevation?",
+      "options": [
+        "Political map",
+        "Topographic map",
+        "Road map",
+        "Population map"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "maps",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_038",
+      "question": "How many oceans are commonly recognized on Earth today?",
+      "options": [
+        "Three",
+        "Four",
+        "Five",
+        "Seven"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "oceans and seas",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_039",
+      "question": "Which large inland sea lies to the north of Iran?",
+      "options": [
+        "Red Sea",
+        "Caspian Sea",
+        "Aral Sea",
+        "Mediterranean Sea"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "oceans and seas",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_040",
+      "question": "Which gulf lies along Iran's southern coast?",
+      "options": [
+        "Gulf of Mexico",
+        "Persian Gulf",
+        "Gulf of Aden",
+        "Bay of Bengal"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "oceans and seas",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_041",
+      "question": "Which US state is the largest by area?",
+      "options": [
+        "Texas",
+        "California",
+        "Montana",
+        "Alaska"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "states and regions",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_042",
+      "question": "Which is the smallest of the world's oceans?",
+      "options": [
+        "Indian Ocean",
+        "Arctic Ocean",
+        "Southern Ocean",
+        "Atlantic Ocean"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "oceans and seas",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_043",
+      "question": "In which country is the Taj Mahal located?",
+      "options": [
+        "Pakistan",
+        "Bangladesh",
+        "Nepal",
+        "India"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "countries",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_044",
+      "question": "Which continent has the largest number of countries?",
+      "options": [
+        "Asia",
+        "Europe",
+        "South America",
+        "Africa"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "continents",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_045",
+      "question": "Which US state consists entirely of islands?",
+      "options": [
+        "Florida",
+        "Hawaii",
+        "Maine",
+        "Delaware"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "states and regions",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_046",
+      "question": "Which ocean separates North America from Europe and Africa?",
+      "options": [
+        "Indian Ocean",
+        "Pacific Ocean",
+        "Atlantic Ocean",
+        "Arctic Ocean"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "oceans and seas",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_047",
+      "question": "Which island country lies just off the southern tip of India?",
+      "options": [
+        "Maldives",
+        "Sri Lanka",
+        "Madagascar",
+        "Cyprus"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "islands",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_048",
+      "question": "What is a group of islands called?",
+      "options": [
+        "Archipelago",
+        "Isthmus",
+        "Peninsula",
+        "Lagoon"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_049",
+      "question": "Which pole does a compass needle point toward?",
+      "options": [
+        "Geographic south",
+        "Magnetic east",
+        "Magnetic north",
+        "The Equator"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "maps",
+      "type": "concept"
+    },
+    {
+      "id": "geography_quality_050",
+      "question": "What is a piece of land almost surrounded by water but connected to the mainland called?",
+      "options": [
+        "Archipelago",
+        "Island",
+        "Lake",
+        "Peninsula"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_051",
+      "question": "What is a low area of land between two mountains or hills called?",
+      "options": [
+        "Plateau",
+        "Cape",
+        "Valley",
+        "Dune"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_052",
+      "question": "What is a large mass of ice that slowly moves over land called?",
+      "options": [
+        "Iceberg",
+        "Geyser",
+        "Glacier",
+        "Dune"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_053",
+      "question": "Which sea lies between northeastern Africa and the Arabian Peninsula?",
+      "options": [
+        "Red Sea",
+        "Black Sea",
+        "Baltic Sea",
+        "Caspian Sea"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "seas",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_054",
+      "question": "What do we call the line that separates one country from another?",
+      "options": [
+        "Contour",
+        "Equator",
+        "Meridian",
+        "Border"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "borders",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_055",
+      "question": "On which continent is Germany located?",
+      "options": [
+        "Asia",
+        "Europe",
+        "Africa",
+        "North America"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "continents",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_056",
+      "question": "Istanbul, the largest city in Turkey, is a city of which country?",
+      "options": [
+        "Greece",
+        "Turkey",
+        "Bulgaria",
+        "Iran"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "countries",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_057",
+      "question": "Which climate type is hot and rainy all year near the Equator?",
+      "options": [
+        "Polar climate",
+        "Tropical rainforest climate",
+        "Desert climate",
+        "Mediterranean climate"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "climate",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_058",
+      "question": "Which of these countries is part of Scandinavia?",
+      "options": [
+        "Norway",
+        "Spain",
+        "Poland",
+        "Austria"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "countries",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_059",
+      "question": "Which country has the largest area in Africa?",
+      "options": [
+        "Sudan",
+        "Democratic Republic of the Congo",
+        "Algeria",
+        "Libya"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "countries",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_060",
+      "question": "Which strait separates Spain from Morocco and links the Atlantic Ocean to the Mediterranean Sea?",
+      "options": [
+        "Strait of Gibraltar",
+        "Bosphorus",
+        "Strait of Hormuz",
+        "Bering Strait"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_061",
+      "question": "The deepest known point in the world's oceans lies in which trench?",
+      "options": [
+        "Puerto Rico Trench",
+        "Mariana Trench",
+        "Java Trench",
+        "Peru–Chile Trench"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "oceans and seas",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_062",
+      "question": "In which country is Angel Falls, the world's tallest uninterrupted waterfall, located?",
+      "options": [
+        "Brazil",
+        "Venezuela",
+        "Argentina",
+        "Colombia"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "waterfalls",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_063",
+      "question": "Which is the largest lake in Africa by area?",
+      "options": [
+        "Lake Tanganyika",
+        "Lake Malawi",
+        "Lake Victoria",
+        "Lake Chad"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "lakes",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_064",
+      "question": "What is the highest mountain in Iran?",
+      "options": [
+        "Mount Sabalan",
+        "Mount Alvand",
+        "Mount Damavand",
+        "Mount Zard Kuh"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "mountains",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_065",
+      "question": "Which strait connects the Persian Gulf to the Gulf of Oman?",
+      "options": [
+        "Strait of Hormuz",
+        "Strait of Malacca",
+        "Bab-el-Mandeb",
+        "Strait of Gibraltar"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_066",
+      "question": "Which is the largest island in the Caribbean?",
+      "options": [
+        "Cuba",
+        "Hispaniola",
+        "Jamaica",
+        "Puerto Rico"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "islands",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_067",
+      "question": "Which river flows through the Iraqi capital, Baghdad?",
+      "options": [
+        "Tigris",
+        "Euphrates",
+        "Jordan",
+        "Karun"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_068",
+      "question": "The Gobi Desert lies mainly in which two countries?",
+      "options": [
+        "Kazakhstan and Russia",
+        "India and Pakistan",
+        "Iran and Afghanistan",
+        "Mongolia and China"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "deserts",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_069",
+      "question": "Which two countries share the longest international land border in the world?",
+      "options": [
+        "Russia and China",
+        "Argentina and Chile",
+        "India and Pakistan",
+        "Canada and the United States"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "borders",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_070",
+      "question": "Geographically, Greenland is considered part of which continent?",
+      "options": [
+        "Europe",
+        "Asia",
+        "Oceania",
+        "North America"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "continents",
+      "type": "classification"
+    },
+    {
+      "id": "geography_quality_071",
+      "question": "Which river flows through Vienna, Budapest, and Belgrade?",
+      "options": [
+        "Danube",
+        "Rhine",
+        "Elbe",
+        "Vistula"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_072",
+      "question": "What is the highest mountain in North America?",
+      "options": [
+        "Denali",
+        "Mount Whitney",
+        "Mount Logan",
+        "Mount Rainier"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "mountains",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_073",
+      "question": "Which peak is the tallest in South America?",
+      "options": [
+        "Chimborazo",
+        "Aconcagua",
+        "Huascarán",
+        "Ojos del Salado"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "mountains",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_074",
+      "question": "Which sea lies between the Italian Peninsula and the Balkan Peninsula?",
+      "options": [
+        "Aegean Sea",
+        "Adriatic Sea",
+        "Tyrrhenian Sea",
+        "Baltic Sea"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "oceans and seas",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_075",
+      "question": "Which country is the largest in Europe by area when Russia is excluded?",
+      "options": [
+        "France",
+        "Ukraine",
+        "Spain",
+        "Germany"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "countries",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_076",
+      "question": "Which of these countries is landlocked?",
+      "options": [
+        "Portugal",
+        "Norway",
+        "Switzerland",
+        "Greece"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "countries",
+      "type": "classification"
+    },
+    {
+      "id": "geography_quality_077",
+      "question": "Which strait separates Alaska from the far east of Russia?",
+      "options": [
+        "Strait of Magellan",
+        "Davis Strait",
+        "Bering Strait",
+        "Denmark Strait"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_078",
+      "question": "Which large city lies on both sides of the Bosphorus and therefore spans two continents?",
+      "options": [
+        "Cairo",
+        "Moscow",
+        "Athens",
+        "Istanbul"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "cities",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_079",
+      "question": "Which desert covers much of Botswana?",
+      "options": [
+        "Kalahari",
+        "Namib",
+        "Sahara",
+        "Karoo"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "deserts",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_080",
+      "question": "Which river carved the Grand Canyon?",
+      "options": [
+        "Columbia River",
+        "Missouri River",
+        "Colorado River",
+        "Rio Grande"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_081",
+      "question": "Which mountain range forms much of the border between France and Spain?",
+      "options": [
+        "Alps",
+        "Apennines",
+        "Pyrenees",
+        "Carpathians"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "mountains",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_082",
+      "question": "In which country is the historic city of Timbuktu located?",
+      "options": [
+        "Niger",
+        "Senegal",
+        "Mali",
+        "Morocco"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "cities",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_083",
+      "question": "Which imaginary line, roughly following 180° longitude, marks where the calendar date changes?",
+      "options": [
+        "International Date Line",
+        "Prime Meridian",
+        "Tropic of Capricorn",
+        "Equator"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "coordinates",
+      "type": "concept"
+    },
+    {
+      "id": "geography_quality_084",
+      "question": "Which London district's observatory marks the Prime Meridian, 0° longitude?",
+      "options": [
+        "Greenwich",
+        "Westminster",
+        "Kensington",
+        "Camden"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "coordinates",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_085",
+      "question": "What is the main cause of Earth's seasons?",
+      "options": [
+        "Earth's distance from the Sun changing greatly",
+        "The Moon's gravity",
+        "The tilt of Earth's axis",
+        "Ocean currents"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "climate",
+      "type": "cause/effect"
+    },
+    {
+      "id": "geography_quality_086",
+      "question": "Which warm ocean current helps give northwestern Europe a milder climate?",
+      "options": [
+        "Humboldt Current",
+        "Gulf Stream",
+        "Canary Current",
+        "Labrador Current"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "climate",
+      "type": "cause/effect"
+    },
+    {
+      "id": "geography_quality_087",
+      "question": "What type of plate boundary is formed where two tectonic plates move apart?",
+      "options": [
+        "Convergent boundary",
+        "Divergent boundary",
+        "Transform boundary",
+        "Subduction boundary"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "plate tectonics",
+      "type": "concept"
+    },
+    {
+      "id": "geography_quality_088",
+      "question": "The Ring of Fire, with many volcanoes and earthquakes, surrounds which ocean?",
+      "options": [
+        "Atlantic Ocean",
+        "Indian Ocean",
+        "Arctic Ocean",
+        "Pacific Ocean"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "plate tectonics",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_089",
+      "question": "Kabul is the capital of which country?",
+      "options": [
+        "Pakistan",
+        "Afghanistan",
+        "Tajikistan",
+        "Turkmenistan"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "capitals",
+      "type": "recognition"
+    },
+    {
+      "id": "geography_quality_090",
+      "question": "Which river forms much of the border between Texas and Mexico?",
+      "options": [
+        "Colorado River",
+        "Rio Grande",
+        "Mississippi River",
+        "Columbia River"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_091",
+      "question": "Which lake is the deepest in the world?",
+      "options": [
+        "Lake Superior",
+        "Lake Baikal",
+        "Lake Victoria",
+        "Lake Titicaca"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "lakes",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_092",
+      "question": "In which country is Serengeti National Park located?",
+      "options": [
+        "Uganda",
+        "Tanzania",
+        "Zambia",
+        "Mozambique"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "national parks",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_093",
+      "question": "The Suez Canal lies between which two continents?",
+      "options": [
+        "Africa and Asia",
+        "Europe and Africa",
+        "Asia and Europe",
+        "Africa and South America"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_094",
+      "question": "The Huang He, a major river of China, is known in English by which name?",
+      "options": [
+        "Yangtze River",
+        "Mekong River",
+        "Pearl River",
+        "Yellow River"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_095",
+      "question": "What is a long, narrow sea inlet with steep sides carved by glaciers called?",
+      "options": [
+        "Delta",
+        "Atoll",
+        "Fjord",
+        "Mesa"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_096",
+      "question": "What is a dry riverbed in desert regions, which fills only after rain, commonly called?",
+      "options": [
+        "Fjord",
+        "Moraine",
+        "Lagoon",
+        "Wadi"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_097",
+      "question": "Which sea is bordered by Turkey, Russia, Ukraine, Romania, Bulgaria, and Georgia?",
+      "options": [
+        "Baltic Sea",
+        "Black Sea",
+        "Adriatic Sea",
+        "Aegean Sea"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "oceans and seas",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_098",
+      "question": "The Mercator map projection is best known for exaggerating the size of which areas?",
+      "options": [
+        "Areas near the Equator",
+        "Areas in the oceans only",
+        "Areas near the Prime Meridian",
+        "Areas near the poles"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "maps",
+      "type": "concept"
+    },
+    {
+      "id": "geography_quality_099",
+      "question": "Which country is often called the world's largest archipelago nation?",
+      "options": [
+        "Philippines",
+        "Japan",
+        "Maldives",
+        "Indonesia"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "countries",
+      "type": "classification"
+    },
+    {
+      "id": "geography_quality_100",
+      "question": "Which line of latitude lies at about 23.5° north of the Equator?",
+      "options": [
+        "Tropic of Cancer",
+        "Tropic of Capricorn",
+        "Arctic Circle",
+        "Prime Meridian"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "coordinates",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_101",
+      "question": "Which country has the longest coastline in the world?",
+      "options": [
+        "Canada",
+        "Russia",
+        "Australia",
+        "Indonesia"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "countries",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_102",
+      "question": "Spain and Portugal together occupy which peninsula?",
+      "options": [
+        "Balkan Peninsula",
+        "Scandinavian Peninsula",
+        "Italian Peninsula",
+        "Iberian Peninsula"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_103",
+      "question": "Which strait connects the Black Sea to the Sea of Marmara?",
+      "options": [
+        "Dardanelles",
+        "Strait of Messina",
+        "Bosphorus",
+        "Kerch Strait"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_104",
+      "question": "Which line of latitude lies at about 66.5° north?",
+      "options": [
+        "Tropic of Cancer",
+        "Equator",
+        "Antarctic Circle",
+        "Arctic Circle"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "coordinates",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_105",
+      "question": "Which city is the constitutional capital of Bolivia?",
+      "options": [
+        "La Paz",
+        "Santa Cruz",
+        "Cochabamba",
+        "Sucre"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "capitals",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_106",
+      "question": "Which strait separates Tasmania from mainland Australia?",
+      "options": [
+        "Torres Strait",
+        "Bass Strait",
+        "Cook Strait",
+        "Palk Strait"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_107",
+      "question": "Which of these countries is doubly landlocked, meaning every neighbor is also landlocked?",
+      "options": [
+        "Kazakhstan",
+        "Uzbekistan",
+        "Mongolia",
+        "Bolivia"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "countries",
+      "type": "classification"
+    },
+    {
+      "id": "geography_quality_108",
+      "question": "Mount Elbrus, often cited as Europe's highest peak, belongs to which mountain range?",
+      "options": [
+        "Alps",
+        "Urals",
+        "Caucasus",
+        "Carpathians"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "mountains",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_109",
+      "question": "Which river is regarded as the longest river wholly in Australia?",
+      "options": [
+        "Darling River",
+        "Murray River",
+        "Yarra River",
+        "Swan River"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_110",
+      "question": "The Danube Delta lies mainly in which country?",
+      "options": [
+        "Hungary",
+        "Romania",
+        "Bulgaria",
+        "Serbia"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_111",
+      "question": "The Atacama Desert lies mainly in which country?",
+      "options": [
+        "Peru",
+        "Argentina",
+        "Bolivia",
+        "Chile"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "deserts",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_112",
+      "question": "Which country contains the largest number of lakes in the world?",
+      "options": [
+        "Russia",
+        "Finland",
+        "Canada",
+        "United States"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "lakes",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_113",
+      "question": "The Great Rift Valley stretches through which part of the world?",
+      "options": [
+        "Central Asia",
+        "Western Europe",
+        "Southern Australia",
+        "East Africa"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_114",
+      "question": "The Kerch Strait connects the Black Sea with which other sea?",
+      "options": [
+        "Caspian Sea",
+        "Aegean Sea",
+        "Sea of Azov",
+        "Sea of Marmara"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_115",
+      "question": "Which island is shared by Haiti and the Dominican Republic?",
+      "options": [
+        "Hispaniola",
+        "Cuba",
+        "Jamaica",
+        "Puerto Rico"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "islands",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_116",
+      "question": "Which country has coastlines on both the Caspian Sea and the Persian Gulf?",
+      "options": [
+        "Iran",
+        "Iraq",
+        "Turkmenistan",
+        "Azerbaijan"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "countries",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_117",
+      "question": "Which of the Great Lakes lies entirely within the United States?",
+      "options": [
+        "Lake Michigan",
+        "Lake Superior",
+        "Lake Huron",
+        "Lake Ontario"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "lakes",
+      "type": "classification"
+    },
+    {
+      "id": "geography_quality_118",
+      "question": "Salar de Uyuni, the world's largest salt flat, is found in which country?",
+      "options": [
+        "Chile",
+        "Peru",
+        "Bolivia",
+        "Argentina"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "landforms",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_119",
+      "question": "Which cold ocean current flows north along the western coast of South America?",
+      "options": [
+        "Humboldt Current",
+        "Gulf Stream",
+        "Kuroshio Current",
+        "Agulhas Current"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "oceans and seas",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_120",
+      "question": "In the Köppen climate classification, which climate group is represented by the letter A?",
+      "options": [
+        "Dry climates",
+        "Polar climates",
+        "Tropical climates",
+        "Continental climates"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "climate",
+      "type": "classification"
+    },
+    {
+      "id": "geography_quality_121",
+      "question": "Which country is crossed by both the Equator and the Tropic of Capricorn?",
+      "options": [
+        "Brazil",
+        "Indonesia",
+        "Kenya",
+        "Colombia"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "coordinates",
+      "type": "multi-step"
+    },
+    {
+      "id": "geography_quality_122",
+      "question": "Through which of these countries does the Mekong River not flow?",
+      "options": [
+        "Laos",
+        "Indonesia",
+        "Cambodia",
+        "Thailand"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "rivers",
+      "type": "classification"
+    },
+    {
+      "id": "geography_quality_123",
+      "question": "What is the capital of the Australian state of Tasmania?",
+      "options": [
+        "Hobart",
+        "Launceston",
+        "Darwin",
+        "Adelaide"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "capitals",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_124",
+      "question": "Which sea is unusual because it has no coastline and is defined by ocean currents?",
+      "options": [
+        "Coral Sea",
+        "Sea of Japan",
+        "Timor Sea",
+        "Sargasso Sea"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "oceans and seas",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_125",
+      "question": "Which is the largest bay in the world by area?",
+      "options": [
+        "Hudson Bay",
+        "Bay of Biscay",
+        "Gulf of Mexico",
+        "Bay of Bengal"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "oceans and seas",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_126",
+      "question": "Which US state has the longest border with Canada?",
+      "options": [
+        "Montana",
+        "Alaska",
+        "Washington",
+        "Maine"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "borders",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_127",
+      "question": "Which is the northernmost capital city of a sovereign state?",
+      "options": [
+        "Oslo",
+        "Helsinki",
+        "Reykjavik",
+        "Tórshavn"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "capitals",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_128",
+      "question": "Which is the largest country located entirely in the Southern Hemisphere?",
+      "options": [
+        "Brazil",
+        "Australia",
+        "Indonesia",
+        "Argentina"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "countries",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_129",
+      "question": "In which country is Mount Ararat located?",
+      "options": [
+        "Armenia",
+        "Iran",
+        "Georgia",
+        "Turkey"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "mountains",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_130",
+      "question": "The Strait of Magellan lies near the southern end of which continent?",
+      "options": [
+        "South America",
+        "Africa",
+        "Australia",
+        "Antarctica"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_131",
+      "question": "Zanzibar is a semi-autonomous archipelago that belongs to which country?",
+      "options": [
+        "Kenya",
+        "Mozambique",
+        "Somalia",
+        "Tanzania"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "islands",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_132",
+      "question": "Which is the longest river in Italy?",
+      "options": [
+        "Po",
+        "Tiber",
+        "Arno",
+        "Adige"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_133",
+      "question": "Lake Titicaca is shared between Peru and which other country?",
+      "options": [
+        "Chile",
+        "Ecuador",
+        "Argentina",
+        "Bolivia"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "lakes",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_134",
+      "question": "Which river joins the White Nile at Khartoum?",
+      "options": [
+        "Atbara",
+        "Congo",
+        "Blue Nile",
+        "Niger"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_135",
+      "question": "The Okavango Delta, a large inland delta, is located in which country?",
+      "options": [
+        "Botswana",
+        "Namibia",
+        "Zambia",
+        "Angola"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "wetlands",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_136",
+      "question": "The Dolomites are a famous mountain group in which country?",
+      "options": [
+        "Austria",
+        "Slovenia",
+        "Italy",
+        "Switzerland"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "mountains",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_137",
+      "question": "Which Central American country has English as its sole official language?",
+      "options": [
+        "Belize",
+        "Costa Rica",
+        "Honduras",
+        "El Salvador"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "countries",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_138",
+      "question": "The Strait of Messina separates Sicily from which landmass?",
+      "options": [
+        "Sardinia",
+        "Malta",
+        "Italian mainland",
+        "Corsica"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_139",
+      "question": "Which US state has the highest average elevation?",
+      "options": [
+        "Colorado",
+        "Wyoming",
+        "Utah",
+        "Nevada"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "states and regions",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_140",
+      "question": "Which peak ranks second in height above sea level on Earth?",
+      "options": [
+        "Kangchenjunga",
+        "Lhotse",
+        "Makalu",
+        "K2"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "mountains",
+      "type": "comparison"
+    },
+    {
+      "id": "geography_quality_141",
+      "question": "Cape Agulhas, the southernmost point of mainland Africa, is in which country?",
+      "options": [
+        "Namibia",
+        "Mozambique",
+        "Madagascar",
+        "South Africa"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "capes",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_142",
+      "question": "Which is the most populous island in Indonesia?",
+      "options": [
+        "Sumatra",
+        "Java",
+        "Borneo",
+        "Sulawesi"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "islands",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_143",
+      "question": "Which Central Asian sea has shrunk dramatically since the 1960s, largely due to irrigation diversion?",
+      "options": [
+        "Caspian Sea",
+        "Lake Balkhash",
+        "Aral Sea",
+        "Issyk-Kul"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "lakes",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_144",
+      "question": "The Pantanal, the world's largest tropical wetland, lies mostly in which country?",
+      "options": [
+        "Argentina",
+        "Brazil",
+        "Paraguay",
+        "Bolivia"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "wetlands",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_145",
+      "question": "Which river forms much of the border between Zambia and Zimbabwe and features Victoria Falls?",
+      "options": [
+        "Limpopo",
+        "Zambezi",
+        "Orange",
+        "Congo"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "rivers",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_146",
+      "question": "What is the capital city of the Canadian province of Quebec?",
+      "options": [
+        "Quebec City",
+        "Montreal",
+        "Ottawa",
+        "Toronto"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "capitals",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_147",
+      "question": "What is the name of the large temperate grassland region in southern South America?",
+      "options": [
+        "Savanna",
+        "Pampas",
+        "Taiga",
+        "Steppe of Siberia"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "biomes",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_148",
+      "question": "Which strait separates Denmark from Sweden?",
+      "options": [
+        "Skagerrak",
+        "Øresund",
+        "Kattegat",
+        "Little Belt"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "waterways",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_149",
+      "question": "The Karakum Desert covers most of which country?",
+      "options": [
+        "Uzbekistan",
+        "Kazakhstan",
+        "Mongolia",
+        "Turkmenistan"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "deserts",
+      "type": "identification"
+    },
+    {
+      "id": "geography_quality_150",
+      "question": "Which of these countries is crossed by the Equator?",
+      "options": [
+        "Cameroon",
+        "Nigeria",
+        "Gabon",
+        "Angola"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "coordinates",
+      "type": "multi-step"
+    }
+  ]
+}

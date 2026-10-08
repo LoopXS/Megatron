@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "psychology",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "psychology_quality_001",
+      "question": "Which part of the brain is strongly associated with forming new long-term memories?",
+      "options": [
+        "Hippocampus",
+        "Cerebellum",
+        "Medulla",
+        "Occipital lobe"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "memory",
+      "type": "recognition"
+    },
+    {
+      "id": "psychology_quality_002",
+      "question": "What is classical conditioning most closely associated with?",
+      "options": [
+        "Physical growth",
+        "Learning through associations between stimuli",
+        "Random behavior with no experience",
+        "Learning only through reading"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "learning",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_003",
+      "question": "Which term describes a relatively stable pattern of thoughts, feelings, and behavior?",
+      "options": [
+        "Circadian rhythm",
+        "Reflex",
+        "Personality",
+        "Digestion"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "personality",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_004",
+      "question": "What does selective attention mean?",
+      "options": [
+        "Avoiding all sensory information",
+        "Remembering every detail equally",
+        "Sleeping during a task",
+        "Focusing mental resources on some information while filtering other input"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "cognition",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_005",
+      "question": "A student studies in short sessions across several days rather than one long session. Which learning principle is being used?",
+      "options": [
+        "Spaced practice",
+        "Priming only",
+        "Conditioned suppression",
+        "Sensory adaptation"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "learning",
+      "type": "application"
+    },
+    {
+      "id": "psychology_quality_006",
+      "question": "Why can eyewitness memory become less accurate after people discuss an event together?",
+      "options": [
+        "Only visual memories can be altered",
+        "Later information can influence or reshape memory for the original event",
+        "Discussion permanently improves every memory",
+        "Memory cannot change after an event"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "memory",
+      "type": "cause/effect"
+    },
+    {
+      "id": "psychology_quality_007",
+      "question": "A person expects a treatment to help and reports improvement even though the treatment has no active ingredient. What effect may be involved?",
+      "options": [
+        "Reflex arc",
+        "Sensory threshold",
+        "Placebo effect",
+        "Habituation only"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "health psychology",
+      "type": "recognition"
+    },
+    {
+      "id": "psychology_quality_008",
+      "question": "A researcher finds that two variables are correlated. What can be concluded without further evidence?",
+      "options": [
+        "One definitely causes the other",
+        "Neither variable exists",
+        "The relationship must be accidental",
+        "They are associated, but correlation alone does not establish causation"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "research methods",
+      "type": "reasoning"
+    },
+    {
+      "id": "psychology_quality_009",
+      "question": "A person remembers a list better when the items are grouped into meaningful categories. Which cognitive strategy is this?",
+      "options": [
+        "Chunking",
+        "Projection",
+        "Flooding",
+        "Extinction"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "memory",
+      "type": "application"
+    },
+    {
+      "id": "psychology_quality_010",
+      "question": "A study finds an effect in a carefully selected sample of volunteers. Why should researchers be cautious about generalizing the result?",
+      "options": [
+        "Selection never affects research",
+        "The sample may not represent the broader population",
+        "Generalization is impossible in every study",
+        "Volunteer samples are always larger than populations"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "research methods",
+      "type": "analysis"
+    },
+    {
+      "id": "psychology_quality_011",
+      "question": "A person interprets an ambiguous event in a way that matches an existing belief and ignores conflicting details. Which cognitive process is most relevant?",
+      "options": [
+        "Classical conditioning",
+        "Habituation",
+        "Confirmation bias",
+        "Motor learning"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "cognition",
+      "type": "inference"
+    },
+    {
+      "id": "psychology_quality_012",
+      "question": "A researcher changes one variable while holding other relevant conditions constant and compares outcomes with a control group. What is the major strength of this design?",
+      "options": [
+        "It proves the result applies to every population",
+        "It eliminates the need for measurement",
+        "It guarantees every result is correct",
+        "It can provide stronger evidence about causal effects"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "research methods",
+      "type": "analysis"
+    },
+    {
+      "id": "psychology_quality_013",
+      "question": "Who is considered the founder of psychoanalysis?",
+      "options": [
+        "Carl Rogers",
+        "B. F. Skinner",
+        "Sigmund Freud",
+        "William James"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "history of psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_014",
+      "question": "Which scientist is famous for conditioning experiments with dogs and the sound of a bell?",
+      "options": [
+        "John Watson",
+        "Albert Bandura",
+        "Jean Piaget",
+        "Ivan Pavlov"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "learning",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_015",
+      "question": "What does the abbreviation IQ stand for?",
+      "options": [
+        "Inner quality",
+        "Intellectual query",
+        "Intelligence quotient",
+        "Instinct quantity"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "intelligence",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_016",
+      "question": "Which brain structure is mainly involved in balance and coordination of movement?",
+      "options": [
+        "Hippocampus",
+        "Amygdala",
+        "Thalamus",
+        "Cerebellum"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_017",
+      "question": "What do we call a medical doctor who specializes in mental health and can prescribe medication?",
+      "options": [
+        "Psychologist",
+        "Sociologist",
+        "Psychiatrist",
+        "Neurosurgeon only"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "professions",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_018",
+      "question": "What is psychology the scientific study of?",
+      "options": [
+        "Behavior and mental processes",
+        "Only dreams",
+        "Only the brain's anatomy",
+        "Only social groups"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "introduction",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_019",
+      "question": "Which psychologist proposed the hierarchy of needs?",
+      "options": [
+        "Sigmund Freud",
+        "Erik Erikson",
+        "Ivan Pavlov",
+        "Abraham Maslow"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "motivation",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_020",
+      "question": "Which almond-shaped brain structure is strongly linked to fear responses?",
+      "options": [
+        "Amygdala",
+        "Cerebellum",
+        "Corpus callosum",
+        "Pons"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_021",
+      "question": "During which stage of sleep do most vivid dreams occur?",
+      "options": [
+        "Stage 1 sleep",
+        "Deep slow-wave sleep",
+        "Stage 2 sleep",
+        "REM sleep"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "sleep",
+      "type": "recognition"
+    },
+    {
+      "id": "psychology_quality_022",
+      "question": "The fight-or-flight response is a reaction to what?",
+      "options": [
+        "Hunger only",
+        "Boredom",
+        "A perceived threat",
+        "A change of season"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "stress",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_023",
+      "question": "Which kind of memory holds information for only a short time unless it is rehearsed?",
+      "options": [
+        "Procedural memory",
+        "Long-term memory",
+        "Short-term memory",
+        "Flashbulb memory"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "memory",
+      "type": "recognition"
+    },
+    {
+      "id": "psychology_quality_024",
+      "question": "What is an intense, irrational fear of a specific object or situation called?",
+      "options": [
+        "Phobia",
+        "Habit",
+        "Reflex",
+        "Instinct"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "emotion",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_025",
+      "question": "Which term describes a person who tends to gain energy from time spent alone rather than in large social groups?",
+      "options": [
+        "Extrovert",
+        "Optimist",
+        "Perfectionist",
+        "Introvert"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "personality",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_026",
+      "question": "Which hormone is commonly associated with the body's stress response?",
+      "options": [
+        "Cortisol",
+        "Insulin",
+        "Melatonin",
+        "Estrogen"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "stress",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_027",
+      "question": "What is empathy?",
+      "options": [
+        "Understanding and sharing another person's feelings",
+        "Feeling superior to others",
+        "Ignoring emotions",
+        "Memorizing facts quickly"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "emotion",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_028",
+      "question": "What is a habit?",
+      "options": [
+        "A one-time decision",
+        "A behavior that becomes automatic through repetition",
+        "A genetic disease",
+        "A type of memory loss"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "behavior",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_029",
+      "question": "What do we call the process of gaining knowledge or skills through experience?",
+      "options": [
+        "Instinct",
+        "Perception",
+        "Adaptation of the eye",
+        "Learning"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "learning",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_030",
+      "question": "How many traditional senses are commonly taught?",
+      "options": [
+        "Five",
+        "Three",
+        "Seven",
+        "Ten"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "sensation",
+      "type": "recognition"
+    },
+    {
+      "id": "psychology_quality_031",
+      "question": "What is the fear of heights called?",
+      "options": [
+        "Acrophobia",
+        "Claustrophobia",
+        "Agoraphobia",
+        "Arachnophobia"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "emotion",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_032",
+      "question": "What is the fear of enclosed spaces called?",
+      "options": [
+        "Acrophobia",
+        "Claustrophobia",
+        "Xenophobia",
+        "Hydrophobia"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "emotion",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_033",
+      "question": "Which Swiss psychologist is famous for his theory of cognitive development in children?",
+      "options": [
+        "Lev Vygotsky",
+        "Jean Piaget",
+        "Erik Erikson",
+        "Alfred Binet"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "developmental psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_034",
+      "question": "Which branch of psychology studies how people change across the lifespan?",
+      "options": [
+        "Developmental psychology",
+        "Forensic psychology",
+        "Industrial psychology",
+        "Sports psychology"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "branches of psychology",
+      "type": "classification"
+    },
+    {
+      "id": "psychology_quality_035",
+      "question": "What is the nature versus nurture debate about?",
+      "options": [
+        "The roles of genetics and environment in development",
+        "Whether animals feel pain",
+        "Whether memory exists",
+        "The differences between sleep stages"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "research debates",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_036",
+      "question": "In learning theory, what does reinforcement do to a behavior?",
+      "options": [
+        "Makes it impossible",
+        "Erases it from memory",
+        "Makes it more likely to happen again",
+        "Changes it into a reflex"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "learning",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_037",
+      "question": "What do we call the internal drive that pushes a person to act toward a goal?",
+      "options": [
+        "Perception",
+        "Motivation",
+        "Attention",
+        "Sensation"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "motivation",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_038",
+      "question": "Which lobe of the brain is most involved in planning and decision-making?",
+      "options": [
+        "Occipital lobe",
+        "Temporal lobe",
+        "Frontal lobe",
+        "Parietal lobe"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_039",
+      "question": "Which of these is one of the basic emotions identified by Paul Ekman?",
+      "options": [
+        "Pride",
+        "Surprise",
+        "Boredom",
+        "Jealousy"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "emotion",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_040",
+      "question": "What is perception?",
+      "options": [
+        "The ability to move muscles",
+        "The process of organizing and interpreting sensory information",
+        "A type of long-term memory",
+        "A hormone released in stress"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "perception",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_041",
+      "question": "What is stress in psychological terms?",
+      "options": [
+        "A type of memory",
+        "A sleep stage",
+        "A personality type",
+        "The body's and mind's response to demands or pressure"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "stress",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_042",
+      "question": "What is a stereotype?",
+      "options": [
+        "A proven scientific fact",
+        "An oversimplified belief about a group of people",
+        "A type of memory",
+        "A form of therapy"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "social psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_043",
+      "question": "What is prejudice?",
+      "options": [
+        "A positive memory",
+        "A reflex",
+        "A form of intelligence",
+        "A negative attitude toward people based on their group membership"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "social psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_044",
+      "question": "What is peer pressure?",
+      "options": [
+        "A type of blood pressure",
+        "A school grading method",
+        "A memory technique",
+        "Influence from people of a similar age or group to behave in certain ways"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "social psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_045",
+      "question": "In psychology, what is an attitude?",
+      "options": [
+        "A short-term sensation",
+        "A lasting evaluation of people, objects, or ideas",
+        "A brain region",
+        "A reflex"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "social psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_046",
+      "question": "What is self-esteem?",
+      "options": [
+        "A fear of being alone",
+        "A skill for memorizing",
+        "A person's overall evaluation of their own worth",
+        "The ability to sleep deeply"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "personality",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_047",
+      "question": "What does emotional intelligence refer to?",
+      "options": [
+        "Memorizing emotions as facts",
+        "The ability to recognize and manage emotions in oneself and others",
+        "A measure of physical strength",
+        "Reading speed"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "emotion",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_048",
+      "question": "What is the partial or total loss of memory called?",
+      "options": [
+        "Amnesia",
+        "Insomnia",
+        "Euphoria",
+        "Paranoia"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "memory",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_049",
+      "question": "What is anxiety?",
+      "options": [
+        "A type of dream",
+        "A reflex",
+        "A feeling of worry or unease, often about future events",
+        "A memory aid"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "emotion",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_050",
+      "question": "Which lobe of the brain is primarily responsible for processing sound?",
+      "options": [
+        "Occipital lobe",
+        "Frontal lobe",
+        "Parietal lobe",
+        "Temporal lobe"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_051",
+      "question": "What is a reflex?",
+      "options": [
+        "A planned decision",
+        "A long-term memory",
+        "An automatic response to a stimulus without conscious thought",
+        "A personality trait"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "behavior",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_052",
+      "question": "What is déjà vu?",
+      "options": [
+        "Inability to recognize faces",
+        "A fear of mirrors",
+        "The feeling of having already experienced the present situation",
+        "A kind of deep sleep"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "memory",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_053",
+      "question": "What does the term cognition refer to?",
+      "options": [
+        "Mental processes such as thinking, knowing, and remembering",
+        "Only physical movement",
+        "Only emotions",
+        "Only sleep"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "cognition",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_054",
+      "question": "What is a mnemonic?",
+      "options": [
+        "A type of fear",
+        "A brain injury",
+        "A sleep disorder",
+        "A device or technique that helps memory"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "memory",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_055",
+      "question": "How many hemispheres does the human brain have?",
+      "options": [
+        "One",
+        "Two",
+        "Three",
+        "Four"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "neuroscience",
+      "type": "recognition"
+    },
+    {
+      "id": "psychology_quality_056",
+      "question": "How many lobes does each cerebral hemisphere traditionally have?",
+      "options": [
+        "Two",
+        "Four",
+        "Three",
+        "Six"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "neuroscience",
+      "type": "recognition"
+    },
+    {
+      "id": "psychology_quality_057",
+      "question": "What is procrastination?",
+      "options": [
+        "Completing tasks early",
+        "Delaying tasks that need to be done",
+        "Forgetting a task",
+        "Doing several tasks at once"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "behavior",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_058",
+      "question": "What do we call the ability to produce ideas that are both new and useful?",
+      "options": [
+        "Creativity",
+        "Working memory",
+        "Depth perception",
+        "Empathy"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "cognition",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_059",
+      "question": "Which psychologist conducted the Little Albert experiment on conditioned fear?",
+      "options": [
+        "B. F. Skinner",
+        "Ivan Pavlov",
+        "John B. Watson",
+        "Edward Thorndike"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "learning",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_060",
+      "question": "Which psychologist's Bobo doll experiment demonstrated learning through observation?",
+      "options": [
+        "Albert Bandura",
+        "Jean Piaget",
+        "Carl Rogers",
+        "Stanley Milgram"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "learning",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_061",
+      "question": "What did Stanley Milgram's famous experiments study?",
+      "options": [
+        "Memory for faces",
+        "Obedience to authority",
+        "Sleep patterns",
+        "Color perception"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "social psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_062",
+      "question": "Which psychologist led the 1971 Stanford prison experiment?",
+      "options": [
+        "Solomon Asch",
+        "Philip Zimbardo",
+        "Stanley Milgram",
+        "Leon Festinger"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "social psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_063",
+      "question": "Solomon Asch's classic experiments examined which phenomenon using line-length judgments?",
+      "options": [
+        "Obedience",
+        "Altruism",
+        "Conformity",
+        "Cognitive dissonance"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "social psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_064",
+      "question": "Which psychologist is most associated with the operant conditioning chamber, often called the Skinner box?",
+      "options": [
+        "John Watson",
+        "Albert Bandura",
+        "B. F. Skinner",
+        "Edward Tolman"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "learning",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_065",
+      "question": "In Pavlov's experiments, what did the bell become after repeated pairing with food?",
+      "options": [
+        "A conditioned stimulus",
+        "An unconditioned response",
+        "A negative reinforcer",
+        "A punishment"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "learning",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_066",
+      "question": "What does the bystander effect describe?",
+      "options": [
+        "People are less likely to help when others are present",
+        "People always help in groups",
+        "Memories fade faster in crowds",
+        "Emotions are shared in groups"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "social psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_067",
+      "question": "Which psychologist developed the theory of cognitive dissonance?",
+      "options": [
+        "Leon Festinger",
+        "Kurt Lewin",
+        "Gordon Allport",
+        "Solomon Asch"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "social psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_068",
+      "question": "Erik Erikson's theory describes development as a series of what?",
+      "options": [
+        "Brain surgeries",
+        "Memory tests",
+        "Sleep cycles",
+        "Psychosocial stages across the lifespan"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "developmental psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_069",
+      "question": "In Piaget's theory, what is the first stage of cognitive development?",
+      "options": [
+        "Preoperational stage",
+        "Concrete operational stage",
+        "Formal operational stage",
+        "Sensorimotor stage"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "developmental psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_070",
+      "question": "Which psychologist is best known for a stage theory of moral development?",
+      "options": [
+        "Jean Piaget",
+        "Erik Erikson",
+        "Mary Ainsworth",
+        "Lawrence Kohlberg"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "developmental psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_071",
+      "question": "In Freud's model of personality, which three structures are described?",
+      "options": [
+        "Id, ego, and superego",
+        "Alpha, beta, and gamma",
+        "Conscious, reflex, and instinct",
+        "Memory, attention, and perception"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "psychoanalysis",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_072",
+      "question": "Which of these is one of the Big Five personality traits?",
+      "options": [
+        "Conscientiousness",
+        "Dominance",
+        "Aggression",
+        "Introspection"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "personality",
+      "type": "classification"
+    },
+    {
+      "id": "psychology_quality_073",
+      "question": "In Maslow's hierarchy of needs, which need sits at the top?",
+      "options": [
+        "Safety",
+        "Self-actualization",
+        "Belonging",
+        "Physiological needs"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "motivation",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_074",
+      "question": "Which researcher first described the forgetting curve through studies on himself?",
+      "options": [
+        "William James",
+        "Hermann Ebbinghaus",
+        "George Miller",
+        "Elizabeth Loftus"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "memory",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_075",
+      "question": "Which psychologist described the 'magical number seven, plus or minus two' for short-term memory?",
+      "options": [
+        "Alan Baddeley",
+        "George Miller",
+        "Endel Tulving",
+        "Hermann Ebbinghaus"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "memory",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_076",
+      "question": "Damage to which brain area is most associated with difficulty producing speech?",
+      "options": [
+        "Wernicke's area",
+        "Occipital cortex",
+        "Broca's area",
+        "Hypothalamus"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_077",
+      "question": "Which brain structure acts as a relay station, passing most sensory information to the cortex?",
+      "options": [
+        "Pons",
+        "Hippocampus",
+        "Thalamus",
+        "Medulla"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_078",
+      "question": "Which brain structure helps regulate hunger, thirst, and body temperature?",
+      "options": [
+        "Occipital lobe",
+        "Hippocampus",
+        "Cerebellum",
+        "Hypothalamus"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_079",
+      "question": "Which neurotransmitter is strongly associated with the brain's reward system?",
+      "options": [
+        "Dopamine",
+        "Insulin",
+        "Cortisol",
+        "Adrenaline only"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_080",
+      "question": "Which thick band of nerve fibers connects the brain's two hemispheres?",
+      "options": [
+        "Pons",
+        "Amygdala",
+        "Corpus callosum",
+        "Thalamus"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_081",
+      "question": "A manager assumes an attractive new employee is also more competent, without any evidence. Which bias is most likely at work?",
+      "options": [
+        "Anchoring",
+        "Sunk cost fallacy",
+        "Halo effect",
+        "Availability heuristic"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "social cognition",
+      "type": "application"
+    },
+    {
+      "id": "psychology_quality_082",
+      "question": "What does the fundamental attribution error describe?",
+      "options": [
+        "Forgetting names of acquaintances",
+        "Fear of making mistakes",
+        "Overemphasizing personality and underestimating situations when explaining others' behavior",
+        "Remembering only success"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "social cognition",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_083",
+      "question": "What is a self-fulfilling prophecy?",
+      "options": [
+        "A belief that leads to behaviors that make it come true",
+        "A prediction that is always accurate",
+        "A memory of a past event",
+        "A habit formed in childhood"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "social cognition",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_084",
+      "question": "What does the Dunning–Kruger effect describe?",
+      "options": [
+        "People with low skill in an area tend to overestimate their ability",
+        "Experts always doubt themselves",
+        "Groups make riskier decisions",
+        "People forget recent events"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "cognitive biases",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_085",
+      "question": "What is anchoring in decision-making?",
+      "options": [
+        "Ignoring all numerical data",
+        "Making choices at random",
+        "Relying too heavily on the first piece of information encountered",
+        "Waiting for others to decide"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "cognitive biases",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_086",
+      "question": "What is the availability heuristic?",
+      "options": [
+        "Choosing the first option offered",
+        "Judging how likely something is by how easily examples come to mind",
+        "Avoiding all risks",
+        "Using only statistics to decide"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "cognitive biases",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_087",
+      "question": "What is the sunk cost fallacy?",
+      "options": [
+        "Ignoring all past outcomes",
+        "Continuing an effort because of past investment, even when it no longer pays off",
+        "Choosing the cheapest option",
+        "Spending money only on needs"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "cognitive biases",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_088",
+      "question": "A teacher removes a disliked chore when a student behaves well. What is this an example of?",
+      "options": [
+        "Positive punishment",
+        "Classical conditioning",
+        "Extinction",
+        "Negative reinforcement"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "learning",
+      "type": "application"
+    },
+    {
+      "id": "psychology_quality_089",
+      "question": "Why do slot machines produce persistent playing behavior according to learning theory?",
+      "options": [
+        "They provide constant rewards",
+        "They use variable-ratio reinforcement",
+        "They punish every loss",
+        "They only reward expert players"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "learning",
+      "type": "application"
+    },
+    {
+      "id": "psychology_quality_090",
+      "question": "Which psychiatrist is considered the founder of cognitive therapy?",
+      "options": [
+        "Carl Jung",
+        "Aaron Beck",
+        "Albert Ellis",
+        "Fritz Perls"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "therapy",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_091",
+      "question": "In psychoanalysis, what technique asks a patient to say whatever comes to mind?",
+      "options": [
+        "Systematic desensitization",
+        "Free association",
+        "Aversion therapy",
+        "Biofeedback"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "therapy",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_092",
+      "question": "Which psychologist developed person-centered (client-centered) therapy?",
+      "options": [
+        "Sigmund Freud",
+        "Carl Rogers",
+        "B. F. Skinner",
+        "Albert Ellis"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "therapy",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_093",
+      "question": "The Rorschach inkblot test is an example of which kind of personality assessment?",
+      "options": [
+        "Projective test",
+        "Intelligence test",
+        "Aptitude test",
+        "Physical exam"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "assessment",
+      "type": "classification"
+    },
+    {
+      "id": "psychology_quality_094",
+      "question": "What is a double-blind study?",
+      "options": [
+        "Participants know everything but researchers don't",
+        "The study uses only two participants",
+        "Only the researchers are unaware",
+        "Neither participants nor researchers know who receives the treatment"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "research methods",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_095",
+      "question": "In an experiment, what is the independent variable?",
+      "options": [
+        "The variable that is measured as the outcome",
+        "A variable that cannot change",
+        "The variable the researcher manipulates",
+        "A variable that is always constant"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "research methods",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_096",
+      "question": "What is the Hawthorne effect?",
+      "options": [
+        "Participants forget instructions",
+        "A treatment works only in the lab",
+        "A placebo reduces pain",
+        "People change their behavior when they know they are being observed"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "research methods",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_097",
+      "question": "What is an operational definition in research?",
+      "options": [
+        "A guess about results",
+        "A precise description of how a concept will be measured",
+        "A summary of conclusions",
+        "A list of participants"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "research methods",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_098",
+      "question": "What does the mere exposure effect suggest?",
+      "options": [
+        "People dislike familiar things",
+        "Memory improves with fear",
+        "Exposure always causes anxiety",
+        "People tend to like things more after repeated exposure to them"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "social psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_099",
+      "question": "Which research by Muzafer Sherif explored intergroup conflict among boys at a summer camp?",
+      "options": [
+        "Stanford prison experiment",
+        "Bobo doll experiment",
+        "Little Albert experiment",
+        "Robbers Cave experiment"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "social psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_100",
+      "question": "Which psychologist is best known for attachment theory?",
+      "options": [
+        "John Bowlby",
+        "Harry Harlow",
+        "Erik Erikson",
+        "Lev Vygotsky"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "developmental psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_101",
+      "question": "Which researcher developed the Strange Situation procedure to study infant attachment?",
+      "options": [
+        "Mary Ainsworth",
+        "John Bowlby",
+        "Jean Piaget",
+        "Carol Gilligan"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "developmental psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_102",
+      "question": "What is theory of mind?",
+      "options": [
+        "Memorizing mental maps",
+        "A theory about brain surgery",
+        "The ability to read quickly",
+        "Understanding that others have beliefs and thoughts different from one's own"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "developmental psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_103",
+      "question": "Which psychologist introduced the concept of flow, a state of deep absorption in an activity?",
+      "options": [
+        "Martin Seligman",
+        "Abraham Maslow",
+        "Mihaly Csikszentmihalyi",
+        "Albert Bandura"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "positive psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_104",
+      "question": "Which psychologist is associated with the concept of learned helplessness?",
+      "options": [
+        "Albert Bandura",
+        "Carl Rogers",
+        "B. F. Skinner",
+        "Martin Seligman"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "learning",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_105",
+      "question": "Which pair of psychologists proposed the multi-store model of memory in 1968?",
+      "options": [
+        "Baddeley and Hitch",
+        "Craik and Lockhart",
+        "Loftus and Palmer",
+        "Atkinson and Shiffrin"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "memory",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_106",
+      "question": "Which pair of researchers proposed the working memory model in 1974?",
+      "options": [
+        "Atkinson and Shiffrin",
+        "Baddeley and Hitch",
+        "Tulving and Schacter",
+        "Miller and Galanter"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "memory",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_107",
+      "question": "The famous patient H.M. lost the ability to form new long-term memories after surgery removed parts of which brain region?",
+      "options": [
+        "Frontal lobes",
+        "Medial temporal lobes",
+        "Occipital lobes",
+        "Cerebellum"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_108",
+      "question": "The injury of Phineas Gage, who survived an iron rod through his skull, is famous for illustrating the role of which brain region in personality and judgment?",
+      "options": [
+        "Occipital lobe",
+        "Cerebellum",
+        "Frontal lobe",
+        "Brainstem"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_109",
+      "question": "Which researcher won a Nobel Prize for work on split-brain patients?",
+      "options": [
+        "Paul Broca",
+        "Roger Sperry",
+        "Wilder Penfield",
+        "Karl Lashley"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "neuroscience",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_110",
+      "question": "Which phenomenon, studied by John Garcia, shows that animals can quickly learn to avoid a food that made them ill?",
+      "options": [
+        "Latent learning",
+        "Conditioned taste aversion",
+        "Observational learning",
+        "Spontaneous recovery"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "learning",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_111",
+      "question": "Which psychologist introduced the concepts of latent learning and cognitive maps through research with rats?",
+      "options": [
+        "Clark Hull",
+        "Edward Thorndike",
+        "B. F. Skinner",
+        "Edward Tolman"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "learning",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_112",
+      "question": "Wolfgang Köhler's studies with chimpanzees are known for demonstrating which kind of learning?",
+      "options": [
+        "Classical conditioning",
+        "Habituation",
+        "Insight learning",
+        "Imprinting"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "learning",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_113",
+      "question": "What does the Zeigarnik effect describe?",
+      "options": [
+        "Recent items are remembered best",
+        "Emotional events are always accurate",
+        "Distinct items are forgotten faster",
+        "Unfinished tasks are remembered better than completed ones"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "memory",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_114",
+      "question": "What does the von Restorff (isolation) effect state?",
+      "options": [
+        "Items at the beginning are forgotten",
+        "Rehearsal always harms memory",
+        "A distinctive item among similar items is more likely to be remembered",
+        "All items are remembered equally"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "memory",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_115",
+      "question": "In free recall of a word list, people tend to remember the first and last items best. What is this called?",
+      "options": [
+        "Serial position effect",
+        "Spacing effect",
+        "Tip-of-the-tongue effect",
+        "Misinformation effect"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "memory",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_116",
+      "question": "What are flashbulb memories?",
+      "options": [
+        "Vivid, detailed memories of emotionally significant events",
+        "Memories lost after a head injury",
+        "Memories formed during sleep",
+        "Memories of skills like riding a bicycle"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "memory",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_117",
+      "question": "Which researcher is best known for studies of the misinformation effect on eyewitness memory?",
+      "options": [
+        "Elizabeth Loftus",
+        "Endel Tulving",
+        "Hermann Ebbinghaus",
+        "Daniel Schacter"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "memory",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_118",
+      "question": "Which psychologist distinguished episodic memory from semantic memory?",
+      "options": [
+        "George Miller",
+        "Alan Baddeley",
+        "Endel Tulving",
+        "Fergus Craik"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "memory",
+      "type": "classification"
+    },
+    {
+      "id": "psychology_quality_119",
+      "question": "Remembering how to ride a bicycle is an example of which type of long-term memory?",
+      "options": [
+        "Procedural memory",
+        "Episodic memory",
+        "Semantic memory",
+        "Sensory memory"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "memory",
+      "type": "classification"
+    },
+    {
+      "id": "psychology_quality_120",
+      "question": "When people must name the ink color of a word that spells a different color, they respond more slowly. What is this called?",
+      "options": [
+        "Flynn effect",
+        "Bystander effect",
+        "Stroop effect",
+        "Halo effect"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "attention",
+      "type": "application"
+    },
+    {
+      "id": "psychology_quality_121",
+      "question": "What does the cocktail party effect refer to?",
+      "options": [
+        "Noticing your own name in a conversation you were not attending to",
+        "Becoming dizzy in crowds",
+        "Forgetting names at parties",
+        "Speaking louder in noisy rooms"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "attention",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_122",
+      "question": "In the famous 'invisible gorilla' study, many people missed an unexpected event while focused on another task. What is this called?",
+      "options": [
+        "Change blindness only",
+        "Inattentional blindness",
+        "Selective amnesia",
+        "Tunnel hearing"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "attention",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_123",
+      "question": "What does the Yerkes–Dodson law propose about arousal and performance?",
+      "options": [
+        "Performance is best at a moderate level of arousal",
+        "Higher arousal always improves performance",
+        "Arousal has no effect on performance",
+        "Performance is best at zero arousal"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "motivation",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_124",
+      "question": "According to the James–Lange theory, how do emotions arise?",
+      "options": [
+        "From thoughts alone",
+        "Independently of the body",
+        "From dreams",
+        "From the perception of bodily responses to a stimulus"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "emotion",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_125",
+      "question": "The Cannon–Bard theory proposes that emotional experience and physiological arousal occur how?",
+      "options": [
+        "Emotion always comes first",
+        "Arousal always comes first",
+        "Only after a delay of minutes",
+        "Simultaneously and independently"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "emotion",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_126",
+      "question": "The Schachter–Singer two-factor theory says emotion depends on physiological arousal and what else?",
+      "options": [
+        "Genetic inheritance only",
+        "A cognitive label for that arousal",
+        "The time of day",
+        "Sleep quality"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "emotion",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_127",
+      "question": "According to self-determination theory, which three basic psychological needs drive motivation?",
+      "options": [
+        "Safety, wealth, and fame",
+        "Pleasure, status, and power",
+        "Autonomy, competence, and relatedness",
+        "Memory, attention, and perception"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "motivation",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_128",
+      "question": "Prospect theory by Kahneman and Tversky suggests that people generally feel what?",
+      "options": [
+        "Gains loom larger than losses",
+        "Losses loom larger than equivalent gains",
+        "Gains and losses feel identical",
+        "Risk is never considered"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "decision making",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_129",
+      "question": "In Daniel Kahneman's terminology, which system of thinking is fast, automatic, and intuitive?",
+      "options": [
+        "System 2",
+        "System 3",
+        "The slow system",
+        "System 1"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "decision making",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_130",
+      "question": "In the 1973 Rosenhan experiment, what did the 'pseudopatients' do?",
+      "options": [
+        "Pretended to hear voices to gain admission to psychiatric hospitals",
+        "Treated patients as doctors",
+        "Took intelligence tests",
+        "Participated in a sleep study"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "research history",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_131",
+      "question": "In Festinger and Carlsmith's 1959 study, which participants later rated a boring task as more enjoyable?",
+      "options": [
+        "Those paid $20",
+        "Those who were not asked to speak",
+        "Those who refused to participate",
+        "Those paid only $1 to say it was enjoyable"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "social psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_132",
+      "question": "What is social loafing?",
+      "options": [
+        "People exert less effort when working in a group than when working alone",
+        "People work harder in groups",
+        "People copy others' opinions",
+        "People avoid joining groups"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "social psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_133",
+      "question": "Which psychologist coined the term groupthink?",
+      "options": [
+        "Solomon Asch",
+        "Kurt Lewin",
+        "Stanley Milgram",
+        "Irving Janis"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "social psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_134",
+      "question": "Which of these is one of Robert Cialdini's principles of persuasion?",
+      "options": [
+        "Projection",
+        "Repression",
+        "Reciprocity",
+        "Extinction"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "social psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_135",
+      "question": "According to Gordon Allport's contact hypothesis, when can contact between groups reduce prejudice?",
+      "options": [
+        "When it occurs under conditions such as equal status and shared goals",
+        "Whenever groups share a room",
+        "Only when groups compete",
+        "Only when contact is brief"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "social psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_136",
+      "question": "What does stereotype threat refer to?",
+      "options": [
+        "A fear of public speaking",
+        "A threat made by a group leader",
+        "Anxiety about confirming a negative stereotype about one's group, which can hurt performance",
+        "Fear of unfamiliar places"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "social psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_137",
+      "question": "Which test, associated with Anthony Greenwald, measures implicit associations through response speed?",
+      "options": [
+        "Implicit Association Test",
+        "Rorschach test",
+        "Thematic Apperception Test",
+        "Stroop test"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "social psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_138",
+      "question": "Which researcher is associated with the marshmallow test of delayed gratification?",
+      "options": [
+        "Albert Bandura",
+        "Harry Harlow",
+        "Walter Mischel",
+        "Philip Zimbardo"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "developmental psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_139",
+      "question": "Harry Harlow's studies with infant monkeys suggested that attachment depends heavily on what?",
+      "options": [
+        "Contact comfort rather than just food",
+        "Food alone",
+        "Noise exposure",
+        "Isolation from caregivers"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "developmental psychology",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_140",
+      "question": "In Piaget's theory, at which stage do children typically master conservation tasks?",
+      "options": [
+        "Sensorimotor stage",
+        "Preoperational stage",
+        "Formal operational stage",
+        "Concrete operational stage"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "developmental psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_141",
+      "question": "According to Erikson, which psychosocial crisis is central during adolescence?",
+      "options": [
+        "Trust versus mistrust",
+        "Integrity versus despair",
+        "Industry versus inferiority",
+        "Identity versus role confusion"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "developmental psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_142",
+      "question": "Which psychologist proposed the idea of a general intelligence factor, called g?",
+      "options": [
+        "Howard Gardner",
+        "Charles Spearman",
+        "Alfred Binet",
+        "Louis Thurstone"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "intelligence",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_143",
+      "question": "Which psychologist proposed the theory of multiple intelligences?",
+      "options": [
+        "Charles Spearman",
+        "Robert Sternberg",
+        "Howard Gardner",
+        "Raymond Cattell"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "intelligence",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_144",
+      "question": "Average IQ test scores have risen across generations in many countries. What is this phenomenon called?",
+      "options": [
+        "Dunning–Kruger effect",
+        "Flynn effect",
+        "Mere exposure effect",
+        "Barnum effect"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "intelligence",
+      "type": "concept"
+    },
+    {
+      "id": "psychology_quality_145",
+      "question": "Which French psychologist, with Théodore Simon, created the first modern intelligence test in the early 1900s?",
+      "options": [
+        "Jean Piaget",
+        "Alfred Binet",
+        "Pierre Janet",
+        "Henri Piéron"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "intelligence",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_146",
+      "question": "Who founded the first experimental psychology laboratory, in Leipzig in 1879?",
+      "options": [
+        "Wilhelm Wundt",
+        "William James",
+        "Sigmund Freud",
+        "G. Stanley Hall"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "history of psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_147",
+      "question": "Which psychologist introduced the concept of the collective unconscious?",
+      "options": [
+        "Sigmund Freud",
+        "Carl Jung",
+        "Alfred Adler",
+        "Erik Erikson"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "psychoanalysis",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_148",
+      "question": "Which psychologist developed the concept of the zone of proximal development?",
+      "options": [
+        "Jean Piaget",
+        "Lev Vygotsky",
+        "Jerome Bruner",
+        "B. F. Skinner"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "developmental psychology",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_149",
+      "question": "Which psychologist introduced the concept of self-efficacy?",
+      "options": [
+        "Julian Rotter",
+        "Carl Rogers",
+        "Abraham Maslow",
+        "Albert Bandura"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "personality",
+      "type": "identification"
+    },
+    {
+      "id": "psychology_quality_150",
+      "question": "Which psychologist introduced the concept of locus of control?",
+      "options": [
+        "Albert Bandura",
+        "Martin Seligman",
+        "Julian Rotter",
+        "Walter Mischel"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "personality",
+      "type": "identification"
+    }
+  ]
+}

@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "science",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "science_quality_001",
+      "question": "Which organelle is chiefly responsible for producing ATP in most eukaryotic cells?",
+      "options": [
+        "Mitochondrion",
+        "Nucleolus",
+        "Golgi apparatus",
+        "Lysosome"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "recognition"
+    },
+    {
+      "id": "science_quality_002",
+      "question": "A book rests on a table without accelerating. Which statement best describes the vertical forces on the book?",
+      "options": [
+        "The weight disappears while the book is at rest",
+        "The upward support force balances the book's weight",
+        "The table pulls the book upward with no opposing force",
+        "The book has no downward force"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_003",
+      "question": "Which particle determines the atomic number of an element?",
+      "options": [
+        "Electrons",
+        "Neutrons",
+        "Protons",
+        "Isotopes"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_004",
+      "question": "Which planet is famous for its prominent ring system?",
+      "options": [
+        "Venus",
+        "Mercury",
+        "Mars",
+        "Saturn"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "astronomy",
+      "type": "recognition"
+    },
+    {
+      "id": "science_quality_005",
+      "question": "A car doubles its speed on a level road. If its mass stays the same, how does its kinetic energy change?",
+      "options": [
+        "It becomes four times as large",
+        "It becomes half as large",
+        "It becomes twice as large",
+        "It stays the same"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "application"
+    },
+    {
+      "id": "science_quality_006",
+      "question": "A solution has a pH of 3. Compared with a solution of pH 5, it has approximately how much greater hydrogen-ion concentration?",
+      "options": [
+        "1000 times",
+        "100 times",
+        "2 times",
+        "10 times"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_007",
+      "question": "Why can a person breathe more rapidly during exercise even before oxygen levels in the blood fall substantially?",
+      "options": [
+        "The lungs begin producing oxygen",
+        "The heart temporarily stops pumping blood",
+        "Carbon dioxide production and related signals increase the drive to breathe",
+        "Muscles stop using oxygen"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "biology",
+      "type": "mechanism"
+    },
+    {
+      "id": "science_quality_008",
+      "question": "A region experiences frequent shallow earthquakes along a long, narrow zone. Which geological setting best explains this pattern?",
+      "options": [
+        "The center of a stable continental interior",
+        "A single isolated sand dune",
+        "A lake shoreline with no crustal movement",
+        "A tectonic plate boundary"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "inference"
+    },
+    {
+      "id": "science_quality_009",
+      "question": "A mutation prevents a membrane protein from changing shape when ATP binds to it. If the protein normally pumps ions against their concentration gradient, which process is most directly affected?",
+      "options": [
+        "Active transport",
+        "Osmosis through the lipid bilayer",
+        "Simple diffusion",
+        "DNA replication"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "biology",
+      "type": "analysis"
+    },
+    {
+      "id": "science_quality_010",
+      "question": "A reversible reaction releases heat. If temperature is increased while other conditions are controlled, which direction does equilibrium tend to favor?",
+      "options": [
+        "No direction because equilibrium disappears",
+        "The endothermic direction",
+        "Both directions equally regardless of temperature",
+        "The exothermic direction"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "reasoning"
+    },
+    {
+      "id": "science_quality_011",
+      "question": "A distant galaxy's spectral lines are shifted toward longer wavelengths. What does this observation most directly indicate?",
+      "options": [
+        "The galaxy has stopped emitting light",
+        "The galaxy is necessarily closer than the Milky Way",
+        "The galaxy is receding relative to the observer",
+        "Its stars have all become cooler than Earth"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "astronomy",
+      "type": "application"
+    },
+    {
+      "id": "science_quality_012",
+      "question": "A sealed system contains two colliding objects and negligible external force. Which quantity is guaranteed to remain constant for the system during the collision?",
+      "options": [
+        "The kinetic energy of each object separately",
+        "The speed of each object",
+        "Kinetic energy in every collision",
+        "Total momentum"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "multi-step"
+    },
+    {
+      "id": "science_quality_013",
+      "question": "Which part of a plant cell contains chlorophyll and carries out photosynthesis?",
+      "options": [
+        "Vacuole",
+        "Cell wall",
+        "Chloroplast",
+        "Ribosome"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_014",
+      "question": "Which gas do humans release when they breathe out?",
+      "options": [
+        "Oxygen",
+        "Nitrogen only",
+        "Hydrogen",
+        "Carbon dioxide"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "recognition"
+    },
+    {
+      "id": "science_quality_015",
+      "question": "What is the dense central part of an atom called?",
+      "options": [
+        "Orbit",
+        "Shell",
+        "Nucleus",
+        "Ion"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_016",
+      "question": "Which state of matter has a definite volume but takes the shape of its container?",
+      "options": [
+        "Solid",
+        "Gas",
+        "Plasma only",
+        "Liquid"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_017",
+      "question": "What is the SI unit of force?",
+      "options": [
+        "Joule",
+        "Watt",
+        "Newton",
+        "Pascal"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_018",
+      "question": "What is the chemical symbol for oxygen?",
+      "options": [
+        "O",
+        "Ox",
+        "Og",
+        "Oy"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_019",
+      "question": "Which soft, silvery metal reacts strongly with water and is found in table salt?",
+      "options": [
+        "Calcium",
+        "Lead",
+        "Mercury",
+        "Sodium"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_020",
+      "question": "What is the common name of the compound with the formula NaCl?",
+      "options": [
+        "Table salt",
+        "Baking soda",
+        "Sugar",
+        "Vinegar"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_021",
+      "question": "What is the process by which plants make food using sunlight?",
+      "options": [
+        "Respiration",
+        "Digestion",
+        "Fermentation",
+        "Photosynthesis"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_022",
+      "question": "Which organ filters blood and produces urine?",
+      "options": [
+        "Liver",
+        "Lung",
+        "Kidney",
+        "Stomach"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_023",
+      "question": "How many chromosomes does a typical human body cell contain?",
+      "options": [
+        "23",
+        "44",
+        "46",
+        "48"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "genetics",
+      "type": "recognition"
+    },
+    {
+      "id": "science_quality_024",
+      "question": "Which molecule carries genetic information in living cells?",
+      "options": [
+        "DNA",
+        "ATP",
+        "Glucose",
+        "Insulin"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "genetics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_025",
+      "question": "Which blood cells carry oxygen around the body?",
+      "options": [
+        "White blood cells",
+        "Platelets",
+        "Plasma proteins",
+        "Red blood cells"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_026",
+      "question": "What kind of celestial object is the Sun?",
+      "options": [
+        "A star",
+        "A planet",
+        "A moon",
+        "A comet"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "astronomy",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_027",
+      "question": "What kind of energy does a moving object have?",
+      "options": [
+        "Kinetic energy",
+        "Potential energy",
+        "Chemical energy",
+        "Nuclear energy"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_028",
+      "question": "What kind of energy is stored in a stretched spring?",
+      "options": [
+        "Kinetic energy",
+        "Elastic potential energy",
+        "Thermal energy",
+        "Sound energy"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_029",
+      "question": "What is the change from liquid to gas at the surface of a liquid called?",
+      "options": [
+        "Condensation",
+        "Freezing",
+        "Melting",
+        "Evaporation"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_030",
+      "question": "What is the pH of pure water at room temperature?",
+      "options": [
+        "7",
+        "1",
+        "10",
+        "14"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "recognition"
+    },
+    {
+      "id": "science_quality_031",
+      "question": "What is the thin outermost layer of the Earth called?",
+      "options": [
+        "Crust",
+        "Mantle",
+        "Outer core",
+        "Inner core"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_032",
+      "question": "Which type of rock forms when magma or lava cools and solidifies?",
+      "options": [
+        "Sedimentary rock",
+        "Igneous rock",
+        "Metamorphic rock",
+        "Fossil rock"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "earth science",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_033",
+      "question": "Which gas makes up about 21 percent of Earth's atmosphere?",
+      "options": [
+        "Nitrogen",
+        "Oxygen",
+        "Argon",
+        "Carbon dioxide"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "earth science",
+      "type": "recognition"
+    },
+    {
+      "id": "science_quality_034",
+      "question": "Which green pigment in leaves absorbs light for photosynthesis?",
+      "options": [
+        "Chlorophyll",
+        "Hemoglobin",
+        "Melanin",
+        "Keratin"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_035",
+      "question": "What do we call all the members of one species living in the same area?",
+      "options": [
+        "Population",
+        "Community",
+        "Ecosystem",
+        "Habitat"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "ecology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_036",
+      "question": "Which color of visible light has the longest wavelength?",
+      "options": [
+        "Violet",
+        "Green",
+        "Red",
+        "Blue"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "recognition"
+    },
+    {
+      "id": "science_quality_037",
+      "question": "What is the SI unit of electric current?",
+      "options": [
+        "Volt",
+        "Ampere",
+        "Watt",
+        "Coulomb"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_038",
+      "question": "Which of these materials is a good conductor of electricity?",
+      "options": [
+        "Rubber",
+        "Glass",
+        "Copper",
+        "Plastic"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_039",
+      "question": "What are the two ends of a magnet, where its force is strongest, called?",
+      "options": [
+        "Nodes",
+        "Poles",
+        "Edges",
+        "Terminals"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_040",
+      "question": "What do we call the bending of light as it passes from air into water?",
+      "options": [
+        "Reflection",
+        "Refraction",
+        "Diffraction only",
+        "Absorption"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_041",
+      "question": "Which force opposes the motion of surfaces sliding against each other?",
+      "options": [
+        "Gravity",
+        "Magnetism",
+        "Buoyancy",
+        "Friction"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_042",
+      "question": "Which gas is produced when baking soda reacts with vinegar?",
+      "options": [
+        "Oxygen",
+        "Carbon dioxide",
+        "Hydrogen",
+        "Chlorine"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "application"
+    },
+    {
+      "id": "science_quality_043",
+      "question": "Which element is the main component of diamond and graphite?",
+      "options": [
+        "Silicon",
+        "Sulfur",
+        "Calcium",
+        "Carbon"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_044",
+      "question": "Which light gas is used to fill party balloons so that they float?",
+      "options": [
+        "Oxygen",
+        "Carbon dioxide",
+        "Nitrogen",
+        "Helium"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "application"
+    },
+    {
+      "id": "science_quality_045",
+      "question": "What do we call animals that have a backbone?",
+      "options": [
+        "Invertebrates",
+        "Vertebrates",
+        "Arthropods",
+        "Mollusks"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_046",
+      "question": "Which body system includes the heart and blood vessels?",
+      "options": [
+        "Digestive system",
+        "Nervous system",
+        "Circulatory system",
+        "Respiratory system"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "human body",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_047",
+      "question": "Which molecules are the building blocks of proteins?",
+      "options": [
+        "Fatty acids",
+        "Amino acids",
+        "Simple sugars",
+        "Nucleotides"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_048",
+      "question": "What do we call a change in which new substances are formed?",
+      "options": [
+        "Chemical change",
+        "Physical change",
+        "Phase change",
+        "Change of shape"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_049",
+      "question": "Sound waves cannot travel through which of these?",
+      "options": [
+        "Water",
+        "Steel",
+        "A vacuum",
+        "Air"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_050",
+      "question": "Which scientist proposed the theory of evolution by natural selection?",
+      "options": [
+        "Gregor Mendel",
+        "Louis Pasteur",
+        "Carl Linnaeus",
+        "Charles Darwin"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_051",
+      "question": "What is the SI unit of temperature?",
+      "options": [
+        "Celsius",
+        "Fahrenheit",
+        "Kelvin",
+        "Joule"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_052",
+      "question": "What do we call the amount of matter in an object?",
+      "options": [
+        "Weight",
+        "Volume",
+        "Mass",
+        "Density"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_053",
+      "question": "What do we call a pure substance made of only one kind of atom?",
+      "options": [
+        "Element",
+        "Compound",
+        "Mixture",
+        "Solution"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_054",
+      "question": "What do we call a scientist who studies rocks and the structure of the Earth?",
+      "options": [
+        "Meteorologist",
+        "Astronomer",
+        "Botanist",
+        "Geologist"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_055",
+      "question": "What are fossils?",
+      "options": [
+        "Man-made tools",
+        "Preserved remains or traces of ancient organisms",
+        "Newly formed crystals",
+        "Volcanic gases"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "earth science",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_056",
+      "question": "What causes a rainbow to appear in the sky?",
+      "options": [
+        "Clouds glowing at night",
+        "Sunlight refracting and reflecting inside water droplets",
+        "Wind mixing paint-like particles",
+        "Lightning heating the air"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_057",
+      "question": "Which organ produces bile to help digest fats?",
+      "options": [
+        "Pancreas",
+        "Liver",
+        "Spleen",
+        "Kidney"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_058",
+      "question": "What do we call the force of gravity acting on an object's mass?",
+      "options": [
+        "Weight",
+        "Density",
+        "Volume",
+        "Pressure"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_059",
+      "question": "Which Russian chemist published an influential periodic table in 1869?",
+      "options": [
+        "Antoine Lavoisier",
+        "John Dalton",
+        "Dmitri Mendeleev",
+        "Marie Curie"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_060",
+      "question": "Which two scientists proposed the double-helix model of DNA in 1953?",
+      "options": [
+        "James Watson and Francis Crick",
+        "Gregor Mendel and Thomas Morgan",
+        "Linus Pauling and Max Perutz",
+        "Rosalind Franklin and Maurice Wilkins"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "genetics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_061",
+      "question": "Which scientist discovered basic laws of inheritance through experiments on pea plants?",
+      "options": [
+        "Charles Darwin",
+        "Gregor Mendel",
+        "Thomas Hunt Morgan",
+        "Francis Galton"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "genetics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_062",
+      "question": "What does a light-year measure?",
+      "options": [
+        "Time",
+        "Distance",
+        "Speed",
+        "Brightness"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "astronomy",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_063",
+      "question": "Newton's first law of motion is often called the law of what?",
+      "options": [
+        "Gravity",
+        "Action and reaction",
+        "Inertia",
+        "Acceleration"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_064",
+      "question": "Which pH values indicate an acidic solution at room temperature?",
+      "options": [
+        "Exactly 7",
+        "Above 7",
+        "Below 7",
+        "Above 10 only"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_065",
+      "question": "Which of these is a noble gas?",
+      "options": [
+        "Argon",
+        "Chlorine",
+        "Nitrogen",
+        "Oxygen"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_066",
+      "question": "What is the electric charge of a neutron?",
+      "options": [
+        "Neutral (no charge)",
+        "Positive",
+        "Negative",
+        "Alternating"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_067",
+      "question": "What are isotopes of an element?",
+      "options": [
+        "Atoms with the same number of protons but different numbers of neutrons",
+        "Atoms with different numbers of protons",
+        "Atoms with no electrons",
+        "Ions with opposite charges"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_068",
+      "question": "What is a covalent bond?",
+      "options": [
+        "A bond formed by transferring electrons",
+        "A bond between two nuclei only",
+        "A bond that exists only in metals",
+        "A bond formed by sharing electrons between atoms"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_069",
+      "question": "What is an ionic bond?",
+      "options": [
+        "A bond formed by sharing electrons equally",
+        "A bond between identical atoms only",
+        "A bond that has no electric charge involved",
+        "A bond formed by the attraction between oppositely charged ions"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_070",
+      "question": "Avogadro's number is approximately what?",
+      "options": [
+        "3.14 × 10⁸",
+        "9.8 × 10²",
+        "1.6 × 10⁻¹⁹",
+        "6.02 × 10²³"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "recognition"
+    },
+    {
+      "id": "science_quality_071",
+      "question": "Which type of cell division produces gametes (sperm and egg cells)?",
+      "options": [
+        "Meiosis",
+        "Mitosis",
+        "Binary fission",
+        "Budding"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "genetics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_072",
+      "question": "What are enzymes?",
+      "options": [
+        "Biological catalysts that speed up chemical reactions",
+        "Cell walls in plants",
+        "Storage forms of fat",
+        "Hormones that carry oxygen"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "biology",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_073",
+      "question": "Which substances are the main products of photosynthesis?",
+      "options": [
+        "Carbon dioxide and water",
+        "Glucose and oxygen",
+        "Nitrogen and methane",
+        "Protein and hydrogen"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "biology",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_074",
+      "question": "Deficiency of which vitamin causes scurvy?",
+      "options": [
+        "Vitamin A",
+        "Vitamin C",
+        "Vitamin D",
+        "Vitamin B12"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "human body",
+      "type": "cause/effect"
+    },
+    {
+      "id": "science_quality_075",
+      "question": "What are the cells that carry electrical signals in the nervous system called?",
+      "options": [
+        "Platelets",
+        "Neurons",
+        "Osteocytes",
+        "Hepatocytes"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_076",
+      "question": "In a simple circuit, which formula expresses Ohm's law?",
+      "options": [
+        "F = m × a",
+        "E = m × c²",
+        "V = I × R",
+        "P = m × v"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "application"
+    },
+    {
+      "id": "science_quality_077",
+      "question": "One hertz is equal to how many cycles per second?",
+      "options": [
+        "Ten",
+        "One hundred",
+        "One",
+        "One thousand"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_078",
+      "question": "In which type of material does sound generally travel fastest?",
+      "options": [
+        "Gases",
+        "Liquids",
+        "A vacuum",
+        "Solids"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "comparison"
+    },
+    {
+      "id": "science_quality_079",
+      "question": "What does the Doppler effect describe?",
+      "options": [
+        "A change in observed frequency due to relative motion of source and observer",
+        "The bending of light in water",
+        "The loss of heat by radiation",
+        "The splitting of white light into colors"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_080",
+      "question": "According to Newton's third law, what happens when one object exerts a force on another?",
+      "options": [
+        "The second object exerts no force",
+        "The force disappears",
+        "The second object exerts an equal and opposite force back",
+        "The first object loses mass"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_081",
+      "question": "What does the law of conservation of energy state?",
+      "options": [
+        "Energy is always lost as heat",
+        "Energy increases over time",
+        "Energy cannot be created or destroyed, only transformed",
+        "Energy exists only in moving objects"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_082",
+      "question": "The San Andreas Fault in California is an example of which type of plate boundary?",
+      "options": [
+        "Divergent boundary",
+        "Convergent boundary",
+        "Transform boundary",
+        "Subduction zone"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_083",
+      "question": "Which layer of the Earth is made of liquid iron and nickel?",
+      "options": [
+        "Outer core",
+        "Crust",
+        "Inner core",
+        "Upper mantle"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_084",
+      "question": "Which scale was originally developed to measure the magnitude of earthquakes?",
+      "options": [
+        "Richter scale",
+        "Beaufort scale",
+        "Mohs scale",
+        "Kelvin scale"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_085",
+      "question": "In which layer of the atmosphere is the ozone layer found?",
+      "options": [
+        "Troposphere",
+        "Mesosphere",
+        "Stratosphere",
+        "Exosphere"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_086",
+      "question": "How do sedimentary rocks typically form?",
+      "options": [
+        "From cooled lava only",
+        "From compacted and cemented sediments",
+        "From heat and pressure on igneous rocks only",
+        "From falling meteorites"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_087",
+      "question": "Coal is mainly formed from the remains of what?",
+      "options": [
+        "Marine fish",
+        "Ancient plants",
+        "Volcanic ash",
+        "Dinosaur bones"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_088",
+      "question": "Marble is formed when which rock is changed by heat and pressure?",
+      "options": [
+        "Granite",
+        "Basalt",
+        "Sandstone",
+        "Limestone"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "application"
+    },
+    {
+      "id": "science_quality_089",
+      "question": "What temperature does absolute zero correspond to on the Kelvin scale?",
+      "options": [
+        "100 K",
+        "0 K",
+        "273 K",
+        "-273 K"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_090",
+      "question": "What does a catalyst do in a chemical reaction?",
+      "options": [
+        "Raises the activation energy",
+        "Lowers the activation energy and speeds up the reaction",
+        "Is always consumed completely",
+        "Changes the final products permanently"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_091",
+      "question": "Sodium and potassium belong to which group of the periodic table?",
+      "options": [
+        "Halogens",
+        "Alkali metals",
+        "Noble gases",
+        "Alkaline earth metals"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_092",
+      "question": "Which cell structures assemble proteins from amino acids?",
+      "options": [
+        "Lysosomes",
+        "Ribosomes",
+        "Centrioles",
+        "Vacuoles"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "cell biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_093",
+      "question": "Which molecule carries the genetic message from DNA to the ribosome?",
+      "options": [
+        "Messenger RNA",
+        "Transfer lipid",
+        "ATP",
+        "Glycogen"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "genetics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_094",
+      "question": "Which organisms form the base of most food chains?",
+      "options": [
+        "Large predators",
+        "Decomposers only",
+        "Herbivores",
+        "Producers such as plants and algae"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "ecology",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_095",
+      "question": "What is mutualism?",
+      "options": [
+        "A relationship in which one species harms another",
+        "A relationship in which one species is unaffected and the other benefits",
+        "A relationship in which both species benefit",
+        "A competition for resources"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "ecology",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_096",
+      "question": "Which scientist developed the system of binomial nomenclature for naming species?",
+      "options": [
+        "Charles Darwin",
+        "Gregor Mendel",
+        "Georges Cuvier",
+        "Carl Linnaeus"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_097",
+      "question": "Which proteins, produced by B cells, bind to specific pathogens?",
+      "options": [
+        "Hormones",
+        "Antibodies",
+        "Enzymes only",
+        "Chromosomes"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "immunology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_098",
+      "question": "Which type of electromagnetic radiation has the shortest wavelength?",
+      "options": [
+        "Radio waves",
+        "Infrared",
+        "Visible light",
+        "Gamma rays"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "comparison"
+    },
+    {
+      "id": "science_quality_099",
+      "question": "What do you get when all colors of visible light are combined?",
+      "options": [
+        "Black",
+        "Infrared light",
+        "Ultraviolet light",
+        "White light"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_100",
+      "question": "Which method of heat transfer does not require a medium?",
+      "options": [
+        "Radiation",
+        "Conduction",
+        "Convection",
+        "Evaporation"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_101",
+      "question": "According to Archimedes' principle, the buoyant force equals what?",
+      "options": [
+        "The weight of the displaced fluid",
+        "The weight of the object",
+        "The volume of the container",
+        "The temperature of the fluid"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_102",
+      "question": "Which scientist discovered radioactivity in 1896?",
+      "options": [
+        "Ernest Rutherford",
+        "Wilhelm Röntgen",
+        "Max Planck",
+        "Henri Becquerel"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_103",
+      "question": "Which particle did J. J. Thomson discover in 1897?",
+      "options": [
+        "Proton",
+        "Neutron",
+        "Electron",
+        "Quark"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_104",
+      "question": "Which physicist's gold-foil experiment led to the discovery of the atomic nucleus?",
+      "options": [
+        "Niels Bohr",
+        "J. J. Thomson",
+        "James Chadwick",
+        "Ernest Rutherford"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_105",
+      "question": "Which physicist proposed in 1913 an atomic model with quantized electron orbits?",
+      "options": [
+        "Ernest Rutherford",
+        "Erwin Schrödinger",
+        "Max Born",
+        "Niels Bohr"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_106",
+      "question": "What does the Pauli exclusion principle state?",
+      "options": [
+        "Electrons cannot have negative charge",
+        "No two electrons in an atom can have identical sets of quantum numbers",
+        "Energy cannot be destroyed",
+        "Two particles cannot collide"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_107",
+      "question": "Schrödinger's cat is a thought experiment designed to illustrate what idea?",
+      "options": [
+        "The speed of light limit",
+        "Quantum superposition applied to everyday objects",
+        "The conservation of mass",
+        "The second law of thermodynamics"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_108",
+      "question": "According to Hess's law, the total enthalpy change of a reaction depends on what?",
+      "options": [
+        "The number of steps taken",
+        "The speed of the reaction",
+        "Only the initial and final states, not the path",
+        "The catalyst used"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_109",
+      "question": "According to the second law of thermodynamics, what happens to the entropy of an isolated system?",
+      "options": [
+        "It always decreases",
+        "It never decreases",
+        "It stays exactly zero",
+        "It equals the temperature"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_110",
+      "question": "At constant temperature and pressure, a negative change in Gibbs free energy indicates what?",
+      "options": [
+        "An impossible reaction",
+        "A spontaneous process",
+        "A reaction at equilibrium only",
+        "A reaction that needs a catalyst"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_111",
+      "question": "In methane (CH₄), what is the approximate H–C–H bond angle?",
+      "options": [
+        "90°",
+        "120°",
+        "180°",
+        "109.5°"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_112",
+      "question": "Which chemist proposed the ring structure of benzene in the 1860s?",
+      "options": [
+        "Justus von Liebig",
+        "Friedrich Wöhler",
+        "August Kekulé",
+        "Dmitri Mendeleev"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "chemistry history",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_113",
+      "question": "How does electronegativity generally change across a period from left to right?",
+      "options": [
+        "It decreases",
+        "It stays constant",
+        "It alternates randomly",
+        "It increases"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_114",
+      "question": "In a redox reaction, oxidation is the process of what?",
+      "options": [
+        "Gaining electrons",
+        "Gaining protons",
+        "Losing electrons",
+        "Losing neutrons"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_115",
+      "question": "What are non-superimposable mirror-image molecules called?",
+      "options": [
+        "Enantiomers",
+        "Isotopes",
+        "Allotropes",
+        "Polymers"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_116",
+      "question": "In the central dogma of molecular biology, in what direction does genetic information usually flow?",
+      "options": [
+        "DNA to RNA to protein",
+        "Protein to RNA to DNA",
+        "RNA to lipid to DNA",
+        "Protein to DNA only"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "genetics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_117",
+      "question": "In eukaryotic cells, where does the Krebs cycle take place?",
+      "options": [
+        "Mitochondrial matrix",
+        "Nucleus",
+        "Cytoplasm",
+        "Golgi apparatus"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "cell biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_118",
+      "question": "In eukaryotic cells, where does glycolysis occur?",
+      "options": [
+        "Mitochondrial matrix",
+        "Nucleus",
+        "Cytoplasm",
+        "Chloroplast"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "cell biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_119",
+      "question": "Where do the light-dependent reactions of photosynthesis take place?",
+      "options": [
+        "Thylakoid membranes",
+        "Stroma only",
+        "Cell wall",
+        "Vacuole"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "plant biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_120",
+      "question": "Which enzyme is central to carbon fixation in the Calvin cycle?",
+      "options": [
+        "Amylase",
+        "Lipase",
+        "RuBisCO",
+        "DNA polymerase"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "plant biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_121",
+      "question": "What does CRISPR-Cas9 allow scientists to do?",
+      "options": [
+        "Edit specific DNA sequences",
+        "Measure star distances",
+        "Create new elements",
+        "Separate gases by weight"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "biotechnology",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_122",
+      "question": "Which technique, developed by Kary Mullis, amplifies specific DNA sequences?",
+      "options": [
+        "Gel electrophoresis",
+        "Polymerase chain reaction (PCR)",
+        "Mass spectrometry",
+        "X-ray diffraction"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "biotechnology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_123",
+      "question": "During DNA replication, which strand is made in short pieces called Okazaki fragments?",
+      "options": [
+        "The lagging strand",
+        "The leading strand",
+        "The template strand only",
+        "Both strands equally"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "genetics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_124",
+      "question": "Which pair of scientists described the lac operon in bacteria?",
+      "options": [
+        "Watson and Crick",
+        "Hershey and Chase",
+        "Meselson and Stahl",
+        "Jacob and Monod"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "genetics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_125",
+      "question": "The Hardy–Weinberg principle describes allele frequencies in a population under what condition?",
+      "options": [
+        "When mutations are rapid",
+        "When selection is strong",
+        "When the population is tiny",
+        "When no evolutionary forces are acting"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "evolution",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_126",
+      "question": "Which biologist championed the endosymbiotic theory of the origin of mitochondria and chloroplasts?",
+      "options": [
+        "Rosalind Franklin",
+        "Lynn Margulis",
+        "Barbara McClintock",
+        "Rachel Carson"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "evolution",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_127",
+      "question": "Which process involves random changes in allele frequencies and is strongest in small populations?",
+      "options": [
+        "Natural selection",
+        "Gene flow",
+        "Genetic drift",
+        "Artificial selection"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "evolution",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_128",
+      "question": "Prions, which cause diseases such as mad cow disease, are made of what?",
+      "options": [
+        "Viral RNA",
+        "Misfolded proteins",
+        "Bacterial DNA",
+        "Fungal spores"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_129",
+      "question": "During which phase of mitosis do chromosomes line up along the cell's equator?",
+      "options": [
+        "Prophase",
+        "Anaphase",
+        "Telophase",
+        "Metaphase"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "cell biology",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_130",
+      "question": "Which hormone, also called vasopressin, helps the kidneys retain water?",
+      "options": [
+        "Antidiuretic hormone (ADH)",
+        "Insulin",
+        "Glucagon",
+        "Thyroxine"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "human body",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_131",
+      "question": "Which ion rushes into a neuron during the depolarization phase of an action potential?",
+      "options": [
+        "Calcium only",
+        "Chloride",
+        "Potassium",
+        "Sodium"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "human body",
+      "type": "mechanism"
+    },
+    {
+      "id": "science_quality_132",
+      "question": "Which phenomenon, explained by Einstein using light quanta, involves electrons being ejected from metal by light?",
+      "options": [
+        "Photoelectric effect",
+        "Compton scattering",
+        "Zeeman effect",
+        "Doppler effect"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_133",
+      "question": "Which particle carries the electromagnetic force?",
+      "options": [
+        "Gluon",
+        "Neutrino",
+        "Electron",
+        "Photon"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_134",
+      "question": "According to special relativity, how do clocks moving relative to an observer appear to run?",
+      "options": [
+        "Faster",
+        "At exactly the same rate",
+        "Slower",
+        "Backward"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_135",
+      "question": "The maximum efficiency of an ideal heat engine, described by Carnot, depends on what?",
+      "options": [
+        "The temperatures of its hot and cold reservoirs",
+        "The color of the fuel",
+        "The mass of the engine only",
+        "The speed of the exhaust only"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_136",
+      "question": "Why is the daytime sky blue?",
+      "options": [
+        "The ocean reflects its color upward",
+        "Ozone glows blue",
+        "Shorter wavelengths of sunlight are scattered more by air molecules (Rayleigh scattering)",
+        "Clouds absorb red light"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "cause/effect"
+    },
+    {
+      "id": "science_quality_137",
+      "question": "According to Bernoulli's principle, what happens to pressure in a fluid where its speed increases?",
+      "options": [
+        "Pressure decreases",
+        "Pressure increases",
+        "Pressure stays constant",
+        "Pressure becomes infinite"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_138",
+      "question": "What is a key property of a superconductor below its critical temperature?",
+      "options": [
+        "Infinite mass",
+        "No magnetic properties at all",
+        "Zero electrical resistance",
+        "Very high resistance"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_139",
+      "question": "Faraday's law of induction relates induced voltage to what?",
+      "options": [
+        "The rate of change of magnetic flux",
+        "The temperature of the wire",
+        "The mass of the magnet",
+        "The color of the light"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_140",
+      "question": "In which year was the Higgs boson discovery announced at CERN?",
+      "options": [
+        "1998",
+        "2005",
+        "2019",
+        "2012"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_141",
+      "question": "Which scientist proposed the theory of continental drift in the early 20th century?",
+      "options": [
+        "Charles Lyell",
+        "James Hutton",
+        "Harry Hess",
+        "Alfred Wegener"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_142",
+      "question": "S-waves from earthquakes cannot pass through the Earth's outer core. What does this suggest?",
+      "options": [
+        "The outer core is solid",
+        "The outer core is liquid",
+        "The outer core is empty",
+        "The outer core is gaseous only"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "earth science",
+      "type": "inference"
+    },
+    {
+      "id": "science_quality_143",
+      "question": "Milankovitch cycles describe variations in what, linked to ice ages?",
+      "options": [
+        "Ocean salt levels",
+        "Volcanic activity only",
+        "Earth's orbit and axial tilt",
+        "Cosmic ray intensity only"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "earth science",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_144",
+      "question": "El Niño is characterized by unusual warming of surface waters in which region?",
+      "options": [
+        "The North Atlantic",
+        "The central and eastern tropical Pacific Ocean",
+        "The Indian Ocean only",
+        "The Arctic Ocean"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "earth science",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_145",
+      "question": "During which geological era did non-avian dinosaurs live?",
+      "options": [
+        "Paleozoic Era",
+        "Mesozoic Era",
+        "Cenozoic Era",
+        "Precambrian"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_146",
+      "question": "The Cambrian explosion, a rapid diversification of animal life, began about how long ago?",
+      "options": [
+        "About 540 million years ago",
+        "About 5 million years ago",
+        "About 65 million years ago",
+        "About 4 billion years ago"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "earth science",
+      "type": "recognition"
+    },
+    {
+      "id": "science_quality_147",
+      "question": "What is the half-life of a radioactive isotope?",
+      "options": [
+        "The time to double in mass",
+        "The time for half of the nuclei in a sample to decay",
+        "The time for all nuclei to decay",
+        "The time for the sample to melt"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "concept"
+    },
+    {
+      "id": "science_quality_148",
+      "question": "Which type of radiation can be stopped by a sheet of paper?",
+      "options": [
+        "Gamma rays",
+        "Alpha particles",
+        "X-rays",
+        "Neutrons"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "classification"
+    },
+    {
+      "id": "science_quality_149",
+      "question": "Which physicist discovered the neutron in 1932?",
+      "options": [
+        "Ernest Rutherford",
+        "Niels Bohr",
+        "J. J. Thomson",
+        "James Chadwick"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "science_quality_150",
+      "question": "Whose equations unified electricity, magnetism, and light into a single theory?",
+      "options": [
+        "Michael Faraday",
+        "Heinrich Hertz",
+        "James Clerk Maxwell",
+        "Hendrik Lorentz"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "identification"
+    }
+  ]
+}

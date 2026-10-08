@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "technology",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "technology_quality_001",
+      "question": "What does CPU stand for?",
+      "options": [
+        "Central Processing Unit",
+        "Core Program User",
+        "Computer Power Utility",
+        "Central Program Upload"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "computing",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_002",
+      "question": "Which device is primarily used to connect multiple devices within a local network?",
+      "options": [
+        "Printer",
+        "Switch",
+        "Monitor",
+        "Scanner"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "networking",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_003",
+      "question": "Which file format is commonly used for a photograph?",
+      "options": [
+        "TXT",
+        "EXE",
+        "JPEG",
+        "CSV"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "digital media",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_004",
+      "question": "What is a strong reason to use multi-factor authentication?",
+      "options": [
+        "It guarantees that malware cannot run",
+        "It makes passwords unnecessary in every system",
+        "It increases internet speed",
+        "It adds another verification step beyond a password"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "security",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_013",
+      "question": "What does RAM stand for?",
+      "options": [
+        "Random Access Memory",
+        "Read Access Module",
+        "Rapid Application Memory",
+        "Remote Access Machine"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "computing",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_014",
+      "question": "What does USB stand for?",
+      "options": [
+        "United System Board",
+        "Universal Serial Bus",
+        "Unified Storage Block",
+        "Universal Signal Bridge"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "hardware",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_015",
+      "question": "Which language is used to structure the content of web pages?",
+      "options": [
+        "Python",
+        "SQL",
+        "HTML",
+        "C++"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "web",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_016",
+      "question": "Which language is mainly used to style the appearance of web pages?",
+      "options": [
+        "SQL",
+        "Java",
+        "Bash",
+        "CSS"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "web",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_017",
+      "question": "What does URL stand for?",
+      "options": [
+        "Uniform Resource Locator",
+        "Universal Remote Link",
+        "Unified Routing Layer",
+        "User Request Language"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "web",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_018",
+      "question": "What does the \"S\" in HTTPS stand for?",
+      "options": [
+        "Server",
+        "Secure",
+        "Standard",
+        "Simple"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "web",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_019",
+      "question": "Which company created the iPhone?",
+      "options": [
+        "Samsung",
+        "Nokia",
+        "Apple",
+        "Microsoft"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "companies",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_020",
+      "question": "Which company created the Windows operating system?",
+      "options": [
+        "Apple",
+        "IBM",
+        "Google",
+        "Microsoft"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "companies",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_021",
+      "question": "Which company develops the Android operating system?",
+      "options": [
+        "Google",
+        "Apple",
+        "Microsoft",
+        "Sony"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "companies",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_022",
+      "question": "Which company makes the PlayStation video game consoles?",
+      "options": [
+        "Nintendo",
+        "Sony",
+        "Microsoft",
+        "Sega"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "companies",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_023",
+      "question": "Who co-founded Microsoft with Paul Allen?",
+      "options": [
+        "Steve Jobs",
+        "Mark Zuckerberg",
+        "Bill Gates",
+        "Larry Page"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "companies",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_024",
+      "question": "What is the smallest unit of data in computing?",
+      "options": [
+        "A byte",
+        "A kilobyte",
+        "A pixel",
+        "A bit"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "data",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_025",
+      "question": "How many bits are in one byte?",
+      "options": [
+        "Eight",
+        "Four",
+        "Sixteen",
+        "Ten"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "data",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_026",
+      "question": "Which unit is commonly used to measure storage capacity?",
+      "options": [
+        "Gigahertz",
+        "Gigabyte",
+        "Megapixel",
+        "Kilowatt"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "data",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_027",
+      "question": "Which unit is commonly used to measure the clock speed of a processor?",
+      "options": [
+        "Gigabyte",
+        "Megapixel",
+        "Gigahertz",
+        "Decibel"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_028",
+      "question": "Which of these is an input device?",
+      "options": [
+        "Monitor",
+        "Speaker",
+        "Printer",
+        "Keyboard"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_029",
+      "question": "Which of these is an output device?",
+      "options": [
+        "Monitor",
+        "Mouse",
+        "Keyboard",
+        "Scanner"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_030",
+      "question": "Which of these is used to store files permanently?",
+      "options": [
+        "RAM",
+        "Hard drive",
+        "Cache",
+        "Register"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_031",
+      "question": "What does SSD stand for?",
+      "options": [
+        "Super Speed Disk",
+        "Secure System Data",
+        "Solid State Drive",
+        "Single Source Device"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_032",
+      "question": "What does LED stand for?",
+      "options": [
+        "Linear Electric Display",
+        "Low Energy Device",
+        "Laser Emission Diode",
+        "Light Emitting Diode"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_033",
+      "question": "Which device connects a home network to the Internet?",
+      "options": [
+        "Router",
+        "Printer",
+        "Monitor",
+        "Scanner"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_034",
+      "question": "Which of these is an operating system?",
+      "options": [
+        "Photoshop",
+        "Linux",
+        "Chrome",
+        "Excel"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_035",
+      "question": "Which of these is a web browser?",
+      "options": [
+        "Photoshop",
+        "Excel",
+        "Firefox",
+        "Notepad"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_036",
+      "question": "Which of these is a programming language?",
+      "options": [
+        "Windows",
+        "Chrome",
+        "Wi-Fi",
+        "Python"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_037",
+      "question": "What is a \"bug\" in software?",
+      "options": [
+        "An error or flaw in a program",
+        "A computer virus",
+        "A type of hardware",
+        "A fast processor"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_038",
+      "question": "What is a \"folder\" used for on a computer?",
+      "options": [
+        "Cooling the processor",
+        "Organizing files",
+        "Connecting to Wi-Fi",
+        "Boosting speed"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_039",
+      "question": "What does it mean to \"download\" a file?",
+      "options": [
+        "Delete it permanently",
+        "Send it to another person",
+        "Copy it from the Internet to your device",
+        "Compress it"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_040",
+      "question": "Which of these is a search engine?",
+      "options": [
+        "Linux",
+        "Python",
+        "Bluetooth",
+        "Google"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "internet",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_041",
+      "question": "What does \"Wi-Fi\" provide?",
+      "options": [
+        "Wireless connection to a local network",
+        "Wired electricity",
+        "Satellite television",
+        "Phone-line calls only"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "internet",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_042",
+      "question": "What is Bluetooth mainly used for?",
+      "options": [
+        "Long-distance satellite links",
+        "Short-range wireless connections between devices",
+        "Charging batteries",
+        "Cooling processors"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "internet",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_043",
+      "question": "What does \"the cloud\" refer to in computing?",
+      "options": [
+        "A weather forecasting tool",
+        "A type of keyboard",
+        "Remote servers accessed over the Internet",
+        "A kind of cable"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "internet",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_044",
+      "question": "What is malware?",
+      "options": [
+        "A fast type of Internet",
+        "A text editor",
+        "A graphics card",
+        "Software designed to harm or exploit a device"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "security",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_045",
+      "question": "What is phishing?",
+      "options": [
+        "Tricking people into revealing sensitive information through fake messages",
+        "Catching fish with a net",
+        "A way to speed up Wi-Fi",
+        "Cleaning a hard drive"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "security",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_046",
+      "question": "Which is the strongest password choice?",
+      "options": [
+        "Your birthday",
+        "A long, unique passphrase with mixed characters",
+        "The word \"password\"",
+        "Your name and 123"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "security",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_047",
+      "question": "What is a pixel?",
+      "options": [
+        "A type of file format",
+        "A kind of cable",
+        "The smallest element of a digital image",
+        "A web address"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "digital media",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_048",
+      "question": "What does PDF stand for?",
+      "options": [
+        "Personal Data File",
+        "Printed Document Form",
+        "Public Digital File",
+        "Portable Document Format"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "digital media",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_049",
+      "question": "What does a QR code stand for?",
+      "options": [
+        "Quick Response",
+        "Quality Rating",
+        "Quiet Request",
+        "Query Reference"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "digital media",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_050",
+      "question": "What does AI stand for?",
+      "options": [
+        "Automatic Internet",
+        "Artificial Intelligence",
+        "Advanced Interface",
+        "Applied Input"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "ai",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_051",
+      "question": "Which of these is an example of a voice assistant?",
+      "options": [
+        "Excel",
+        "Photoshop",
+        "Siri",
+        "Wikipedia"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "ai",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_052",
+      "question": "What does GPS stand for?",
+      "options": [
+        "General Position Signal",
+        "Ground Pointing Service",
+        "Global Processing Software",
+        "Global Positioning System"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "navigation",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_053",
+      "question": "What does 5G refer to?",
+      "options": [
+        "The fifth generation of mobile networks",
+        "A five-gigabyte storage plan",
+        "A five-gigahertz processor",
+        "A fifth graphics card"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mobile",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_054",
+      "question": "What is a drone commonly described as?",
+      "options": [
+        "A type of laptop",
+        "An unmanned aircraft",
+        "A smart speaker",
+        "A camera lens"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "devices",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_055",
+      "question": "What is a touchscreen?",
+      "options": [
+        "A printer",
+        "A type of keyboard",
+        "A display that responds to touch",
+        "A speaker"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "devices",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_056",
+      "question": "What does a USB flash drive do?",
+      "options": [
+        "Charges laptops wirelessly",
+        "Displays images",
+        "Cools processors",
+        "Stores and transfers data portably"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "devices",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_057",
+      "question": "What does a printer produce?",
+      "options": [
+        "Paper copies of documents or images",
+        "Wireless signals",
+        "Digital storage",
+        "Sound"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "devices",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_058",
+      "question": "Which component is often called the \"brain\" of the computer?",
+      "options": [
+        "The monitor",
+        "The CPU",
+        "The mouse",
+        "The speaker"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "computing",
+      "type": "recognition"
+    },
+    {
+      "id": "technology_quality_005",
+      "question": "A website stores a small piece of information in a user's browser to remember preferences. What is it commonly called?",
+      "options": [
+        "Cookie",
+        "Kernel",
+        "Compiler",
+        "Driver"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "web",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_006",
+      "question": "Why is version control useful in software projects?",
+      "options": [
+        "It automatically makes every program bug-free",
+        "It records changes and helps developers collaborate or restore earlier versions",
+        "It prevents all unauthorized access",
+        "It replaces the need for testing"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "software development",
+      "type": "cause/effect"
+    },
+    {
+      "id": "technology_quality_007",
+      "question": "A program uses encryption with a public key and a private key. What broad property does this describe?",
+      "options": [
+        "Lossless compression",
+        "Packet routing",
+        "Asymmetric cryptography",
+        "Database indexing"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "security",
+      "type": "classification"
+    },
+    {
+      "id": "technology_quality_008",
+      "question": "A device sends data over a network in small units that are reassembled at the destination. What are these units commonly called?",
+      "options": [
+        "Threads",
+        "Sectors",
+        "Pixels",
+        "Packets"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "networking",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_059",
+      "question": "Who is often credited with inventing the World Wide Web?",
+      "options": [
+        "Bill Gates",
+        "Tim Berners-Lee",
+        "Steve Jobs",
+        "Vint Cerf"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_060",
+      "question": "Which mathematician proposed the Turing test as a measure of machine intelligence?",
+      "options": [
+        "Charles Babbage",
+        "John von Neumann",
+        "Alan Turing",
+        "Claude Shannon"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_061",
+      "question": "Which English mathematician designed the Analytical Engine, a mechanical general-purpose computer concept?",
+      "options": [
+        "Alan Turing",
+        "George Boole",
+        "Isaac Newton",
+        "Charles Babbage"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_062",
+      "question": "Who created the Linux kernel?",
+      "options": [
+        "Linus Torvalds",
+        "Richard Stallman",
+        "Dennis Ritchie",
+        "Ken Thompson"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_063",
+      "question": "Who created the Python programming language?",
+      "options": [
+        "James Gosling",
+        "Guido van Rossum",
+        "Bjarne Stroustrup",
+        "Dennis Ritchie"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_064",
+      "question": "Which company originally developed the Java programming language?",
+      "options": [
+        "Microsoft",
+        "IBM",
+        "Sun Microsystems",
+        "Oracle"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_065",
+      "question": "Who co-founded Apple with Steve Jobs?",
+      "options": [
+        "Bill Gates",
+        "Paul Allen",
+        "Larry Ellison",
+        "Steve Wozniak"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_066",
+      "question": "Who created the C programming language?",
+      "options": [
+        "Dennis Ritchie",
+        "Linus Torvalds",
+        "Guido van Rossum",
+        "Bjarne Stroustrup"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_067",
+      "question": "In which year was the first iPhone introduced?",
+      "options": [
+        "2001",
+        "2007",
+        "2010",
+        "2004"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_068",
+      "question": "Which pseudonym is attached to the creator of Bitcoin?",
+      "options": [
+        "Vitalik Buterin",
+        "Hal Finney",
+        "Satoshi Nakamoto",
+        "Nick Szabo"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_069",
+      "question": "Bluetooth technology is named after a king of which country?",
+      "options": [
+        "Norway",
+        "Sweden",
+        "Finland",
+        "Denmark"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_070",
+      "question": "Moore's law, an observation about transistor counts, is named after a co-founder of which company?",
+      "options": [
+        "Intel",
+        "Apple",
+        "Microsoft",
+        "IBM"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_071",
+      "question": "What does an IP address identify?",
+      "options": [
+        "A website's design",
+        "A device on a network",
+        "A user's password",
+        "A file's size"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "networking",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_072",
+      "question": "What does DNS do?",
+      "options": [
+        "Encrypts all web traffic",
+        "Stores web pages",
+        "Translates domain names into IP addresses",
+        "Blocks malware"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "networking",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_073",
+      "question": "What does LAN stand for?",
+      "options": [
+        "Large Access Node",
+        "Linked Address Number",
+        "Logical Array Network",
+        "Local Area Network"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "networking",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_074",
+      "question": "What is a firewall mainly used for?",
+      "options": [
+        "Filtering network traffic to block unauthorized access",
+        "Increasing the speed of Wi-Fi",
+        "Cooling a server",
+        "Compressing files"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "networking",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_075",
+      "question": "What does a VPN primarily do?",
+      "options": [
+        "Increases screen resolution",
+        "Creates an encrypted connection over a less secure network",
+        "Stores passwords locally",
+        "Removes viruses from files"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "networking",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_076",
+      "question": "What does \"bandwidth\" describe?",
+      "options": [
+        "The physical size of a cable",
+        "The number of users on a site",
+        "The maximum amount of data that can be transferred in a given time",
+        "The age of a network"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "networking",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_077",
+      "question": "What is Ethernet?",
+      "options": [
+        "A wireless phone standard",
+        "A type of web browser",
+        "A programming language",
+        "A wired technology for local networks"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "networking",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_078",
+      "question": "How many bits does an IPv4 address contain?",
+      "options": [
+        "32",
+        "64",
+        "128",
+        "16"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "networking",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_079",
+      "question": "What is the default port for HTTPS?",
+      "options": [
+        "80",
+        "443",
+        "21",
+        "25"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "networking",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_080",
+      "question": "What does ROM stand for?",
+      "options": [
+        "Random Operating Module",
+        "Remote Output Machine",
+        "Read-Only Memory",
+        "Rapid Online Memory"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_081",
+      "question": "What does GPU stand for, and what is it especially good at?",
+      "options": [
+        "General Power Unit; supplying electricity",
+        "Global Processing Utility; networking",
+        "Graphic Printing Unit; printing images",
+        "Graphics Processing Unit; parallel computation such as graphics"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_082",
+      "question": "What is cache memory?",
+      "options": [
+        "Small, fast memory that stores frequently used data",
+        "A type of permanent storage",
+        "A backup disk",
+        "A network cable"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_083",
+      "question": "What is the main advantage of an SSD over a traditional HDD?",
+      "options": [
+        "It always has a larger capacity",
+        "It has no moving parts and is generally faster",
+        "It is much cheaper per gigabyte",
+        "It does not need a connection to the computer"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "hardware",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_084",
+      "question": "What does open source mean?",
+      "options": [
+        "The software is always free of bugs",
+        "The software works only online",
+        "The source code is available for others to view and modify",
+        "The software cannot be sold"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_085",
+      "question": "What is Git?",
+      "options": [
+        "A programming language",
+        "A web browser",
+        "A database",
+        "A distributed version control system"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_086",
+      "question": "What is an API?",
+      "options": [
+        "An interface that lets software communicate with other software",
+        "A type of malware",
+        "A programming language",
+        "A graphics standard"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_087",
+      "question": "What does a compiler do?",
+      "options": [
+        "Removes bugs automatically",
+        "Translates source code into machine code",
+        "Stores files on the cloud",
+        "Connects computers on a network"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_088",
+      "question": "What is the main role of an operating system?",
+      "options": [
+        "Browsing the web",
+        "Designing images",
+        "Managing hardware and software resources",
+        "Creating spreadsheets only"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_089",
+      "question": "What does GUI stand for?",
+      "options": [
+        "General Utility Index",
+        "Global Unit Input",
+        "Graphic Utility Instruction",
+        "Graphical User Interface"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_090",
+      "question": "What does SQL stand for?",
+      "options": [
+        "Structured Query Language",
+        "Simple Question List",
+        "System Quality Logic",
+        "Sequential Query Loader"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_091",
+      "question": "Which programming language runs natively in web browsers?",
+      "options": [
+        "Python",
+        "JavaScript",
+        "C",
+        "Rust"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_092",
+      "question": "What is JSON mainly used for?",
+      "options": [
+        "Editing photographs",
+        "Encrypting traffic",
+        "Representing structured data in a lightweight text format",
+        "Compressing video"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_093",
+      "question": "What is an algorithm?",
+      "options": [
+        "A type of hardware",
+        "A programming error",
+        "A network protocol",
+        "A step-by-step procedure for solving a problem"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "software",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_094",
+      "question": "What is the decimal value of the binary number 101?",
+      "options": [
+        "5",
+        "3",
+        "6",
+        "7"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "data",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_095",
+      "question": "What does RGB stand for in digital color?",
+      "options": [
+        "Rapid Graphic Buffer",
+        "Red, Green, Blue",
+        "Raster Grid Block",
+        "Real Gamma Balance"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "data",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_096",
+      "question": "What is ransomware?",
+      "options": [
+        "Software that speeds up a PC",
+        "A type of email filter",
+        "Malware that locks files and demands payment",
+        "A secure cloud service"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "security",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_097",
+      "question": "What is a CAPTCHA mainly designed to do?",
+      "options": [
+        "Speed up page loading",
+        "Compress images",
+        "Store passwords",
+        "Distinguish humans from automated bots"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "security",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_098",
+      "question": "Which protocol is used by HTTPS to encrypt web traffic?",
+      "options": [
+        "TLS",
+        "FTP",
+        "SMTP",
+        "DHCP"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "security",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_099",
+      "question": "What is machine learning?",
+      "options": [
+        "Machines that physically assemble cars",
+        "Systems that learn patterns from data",
+        "A type of keyboard",
+        "A programming error"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "ai",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_100",
+      "question": "What does SaaS stand for in cloud computing?",
+      "options": [
+        "System as a Server",
+        "Secure as a Standard",
+        "Software as a Service",
+        "Storage and Application Service"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "cloud",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_101",
+      "question": "What is blockchain in simple terms?",
+      "options": [
+        "A type of fast processor",
+        "A web browser",
+        "A form of video compression",
+        "A shared, tamper-resistant distributed ledger"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "finance",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_102",
+      "question": "What is the purpose of a primary key in a relational database table?",
+      "options": [
+        "To uniquely identify each record",
+        "To encrypt the table",
+        "To speed up the network",
+        "To store backups"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "databases",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_103",
+      "question": "What is the main difference between HTTP and HTTPS?",
+      "options": [
+        "HTTPS is always faster",
+        "HTTPS encrypts the data exchanged",
+        "HTTP uses encryption",
+        "HTTPS works only on mobile"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "web",
+      "type": "concept"
+    },
+    {
+      "id": "technology_quality_104",
+      "question": "Which company developed the Chrome web browser?",
+      "options": [
+        "Mozilla",
+        "Apple",
+        "Google",
+        "Microsoft"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "web",
+      "type": "identification"
+    },
+    {
+      "id": "technology_quality_009",
+      "question": "A web service suddenly receives millions of requests from many distributed machines and becomes unavailable. Which attack best matches this description?",
+      "options": [
+        "Distributed denial-of-service attack",
+        "Phishing email",
+        "Local file corruption",
+        "Password manager export"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "security",
+      "type": "analysis"
+    },
+    {
+      "id": "technology_quality_010",
+      "question": "A database query becomes slow because a frequently searched column lacks an appropriate index. What change can often improve lookup performance?",
+      "options": [
+        "Changing the monitor",
+        "Adding a suitable index",
+        "Deleting all rows",
+        "Increasing image resolution"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "databases",
+      "type": "application"
+    },
+    {
+      "id": "technology_quality_011",
+      "question": "A model performs extremely well on training data but poorly on unseen examples. What problem is most likely?",
+      "options": [
+        "Compilation",
+        "Packet loss",
+        "Overfitting",
+        "Underflow"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "machine learning",
+      "type": "inference"
+    },
+    {
+      "id": "technology_quality_012",
+      "question": "A system has two independent servers and automatically routes users to the healthy one if the other fails. Which design goal is being emphasized?",
+      "options": [
+        "Data compression",
+        "Screen resolution",
+        "Source formatting",
+        "Fault tolerance"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "systems",
+      "type": "analysis"
+    },
+    {
+      "id": "technology_quality_105",
+      "question": "What is the time complexity of binary search on a sorted array of n elements?",
+      "options": [
+        "O(n)",
+        "O(n log n)",
+        "O(log n)",
+        "O(1)"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "algorithms",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_106",
+      "question": "What is the worst-case time complexity of bubble sort?",
+      "options": [
+        "O(n log n)",
+        "O(n)",
+        "O(log n)",
+        "O(n²)"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "algorithms",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_107",
+      "question": "What is the average time complexity of a lookup in a well-designed hash table?",
+      "options": [
+        "O(1)",
+        "O(n)",
+        "O(log n)",
+        "O(n²)"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "algorithms",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_108",
+      "question": "Which data structure follows the last-in, first-out (LIFO) principle?",
+      "options": [
+        "Queue",
+        "Stack",
+        "Array",
+        "Linked list"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "algorithms",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_109",
+      "question": "Which data structure follows the first-in, first-out (FIFO) principle?",
+      "options": [
+        "Stack",
+        "Tree",
+        "Queue",
+        "Hash table"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "algorithms",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_110",
+      "question": "Which sorting algorithm picks a pivot and partitions the data around it?",
+      "options": [
+        "Bubble sort",
+        "Insertion sort",
+        "Counting sort",
+        "Quicksort"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "algorithms",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_111",
+      "question": "What does ACID stand for in database transactions?",
+      "options": [
+        "Atomicity, Consistency, Isolation, Durability",
+        "Accuracy, Control, Integrity, Delivery",
+        "Access, Confidentiality, Integrity, Data",
+        "Atomicity, Concurrency, Indexing, Distribution"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "databases",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_112",
+      "question": "What is the main goal of database normalization?",
+      "options": [
+        "Making queries slower",
+        "Reducing redundancy and improving data integrity",
+        "Encrypting all data",
+        "Duplicating tables for backup"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "databases",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_113",
+      "question": "What does the CAP theorem state about distributed systems?",
+      "options": [
+        "A system can always guarantee all three properties",
+        "Only partition tolerance matters",
+        "A system cannot guarantee consistency, availability, and partition tolerance all at once",
+        "Availability is impossible"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "databases",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_114",
+      "question": "At which layer of the OSI model does IP operate?",
+      "options": [
+        "Transport layer",
+        "Data link layer",
+        "Application layer",
+        "Network layer"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "networking",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_115",
+      "question": "What is a key difference between TCP and UDP?",
+      "options": [
+        "UDP is connectionless and does not guarantee delivery",
+        "TCP is connectionless",
+        "UDP always retransmits lost data",
+        "TCP cannot send large files"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "networking",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_116",
+      "question": "What does DHCP do?",
+      "options": [
+        "Encrypts network traffic",
+        "Automatically assigns IP addresses to devices",
+        "Translates domain names",
+        "Blocks malicious websites"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "networking",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_117",
+      "question": "What does NAT do?",
+      "options": [
+        "Encrypts email",
+        "Compresses network traffic",
+        "Translates between private and public IP addresses",
+        "Assigns domain names"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "networking",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_118",
+      "question": "How many bits does an IPv6 address contain?",
+      "options": [
+        "64",
+        "32",
+        "256",
+        "128"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "networking",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_119",
+      "question": "Which two computer scientists designed the TCP/IP protocols?",
+      "options": [
+        "Vint Cerf and Bob Kahn",
+        "Tim Berners-Lee and Marc Andreessen",
+        "Dennis Ritchie and Ken Thompson",
+        "Larry Page and Sergey Brin"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "networking",
+      "type": "history"
+    },
+    {
+      "id": "technology_quality_120",
+      "question": "Which agency funded the ARPANET, a precursor of the Internet?",
+      "options": [
+        "NASA",
+        "The US Department of Defense (ARPA)",
+        "The European Commission",
+        "The United Nations"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "networking",
+      "type": "history"
+    },
+    {
+      "id": "technology_quality_121",
+      "question": "What is a zero-day vulnerability?",
+      "options": [
+        "A virus that deletes data after zero days",
+        "A flaw that is already fixed",
+        "A flaw unknown to the vendor for which no patch exists yet",
+        "A password that expires immediately"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "security",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_122",
+      "question": "What is SQL injection?",
+      "options": [
+        "Speeding up a database query",
+        "Backing up a database",
+        "Encrypting stored SQL data",
+        "Inserting malicious SQL commands through user input"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "security",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_123",
+      "question": "What is cross-site scripting (XSS)?",
+      "options": [
+        "Injecting malicious scripts into pages viewed by other users",
+        "Linking two websites together",
+        "Copying a website's design",
+        "Encrypting a website's traffic"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "security",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_124",
+      "question": "On which mathematical problem is the security of RSA based?",
+      "options": [
+        "Sorting large lists",
+        "Factoring large integers",
+        "Finding shortest paths",
+        "Solving linear equations"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "security",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_125",
+      "question": "AES is an example of which type of cipher?",
+      "options": [
+        "Asymmetric stream cipher",
+        "Hash function",
+        "Symmetric block cipher",
+        "Public-key signature scheme"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "security",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_126",
+      "question": "What is the output length of the SHA-256 hash function?",
+      "options": [
+        "128 bits",
+        "512 bits",
+        "64 bits",
+        "256 bits"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "security",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_127",
+      "question": "What property makes a cryptographic hash function suitable for storing passwords?",
+      "options": [
+        "It is practically one-way",
+        "It can be easily reversed",
+        "It always produces short output",
+        "It encrypts the password with a public key"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "security",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_128",
+      "question": "What is the purpose of the Diffie–Hellman protocol?",
+      "options": [
+        "To compress messages",
+        "To agree on a shared secret over an insecure channel",
+        "To sign emails",
+        "To store passwords"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "security",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_129",
+      "question": "What is a race condition?",
+      "options": [
+        "A fast network connection",
+        "A type of sorting algorithm",
+        "An outcome that depends on the timing of concurrent operations",
+        "A graphics glitch"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "systems",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_130",
+      "question": "What is a deadlock?",
+      "options": [
+        "A crashed hard drive",
+        "A very slow program",
+        "A locked screen",
+        "Processes waiting on each other indefinitely"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "systems",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_131",
+      "question": "What is the main difference between a container and a virtual machine?",
+      "options": [
+        "Containers share the host operating system kernel",
+        "Containers include a full separate kernel",
+        "Virtual machines share the host kernel",
+        "Containers cannot run on servers"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "systems",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_132",
+      "question": "What is Kubernetes mainly used for?",
+      "options": [
+        "Writing web pages",
+        "Orchestrating containerized applications",
+        "Designing graphics",
+        "Storing passwords"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "systems",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_133",
+      "question": "Which three steps make up the basic CPU instruction cycle?",
+      "options": [
+        "Read, write, delete",
+        "Load, compile, run",
+        "Fetch, decode, execute",
+        "Input, store, output"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "systems",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_134",
+      "question": "What does RISC stand for in processor design?",
+      "options": [
+        "Rapid Integrated System Core",
+        "Remote Input Signal Controller",
+        "Random Instruction Storage Circuit",
+        "Reduced Instruction Set Computer"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "systems",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_135",
+      "question": "What is the key idea of the von Neumann architecture?",
+      "options": [
+        "Programs and data are stored in the same memory",
+        "Programs and data are stored in separate memories only",
+        "Computers have no memory",
+        "Computers run only one program ever"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "systems",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_136",
+      "question": "How many bytes are in a kibibyte?",
+      "options": [
+        "1,000",
+        "1,024",
+        "512",
+        "2,048"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "data",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_137",
+      "question": "What is the decimal value of the hexadecimal number FF?",
+      "options": [
+        "256",
+        "15",
+        "255",
+        "127"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "data",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_138",
+      "question": "Why does 0.1 + 0.2 not equal exactly 0.3 in many programming languages?",
+      "options": [
+        "The computer makes random errors",
+        "Decimal numbers are not supported",
+        "The operating system rounds them",
+        "Binary floating point cannot represent some decimals exactly"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "data",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_139",
+      "question": "What is the key property of UTF-8 related to ASCII?",
+      "options": [
+        "It is backward compatible with ASCII for the first 128 characters",
+        "It uses only one byte for every character",
+        "It cannot represent non-English text",
+        "It is a type of image format"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "data",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_140",
+      "question": "What is the purpose of gradient descent in machine learning?",
+      "options": [
+        "Increasing the size of the dataset",
+        "Minimizing a loss function by adjusting parameters",
+        "Storing training data",
+        "Rendering graphics"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "ai",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_141",
+      "question": "What problem does regularization help reduce in machine learning models?",
+      "options": [
+        "Missing data",
+        "Slow hardware",
+        "Overfitting",
+        "Network latency"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "ai",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_142",
+      "question": "In which year was the Transformer architecture introduced in the paper \"Attention Is All You Need\"?",
+      "options": [
+        "2012",
+        "2009",
+        "2021",
+        "2017"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "ai",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_143",
+      "question": "Convolutional neural networks are especially well suited to which kind of data?",
+      "options": [
+        "Images",
+        "Plain spreadsheets only",
+        "Audio-only waveforms",
+        "Text only"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "ai",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_144",
+      "question": "What is the basic unit of information in quantum computing?",
+      "options": [
+        "The bit",
+        "The qubit",
+        "The byte",
+        "The pixel"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "computing",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_145",
+      "question": "Which individual proposed the abstract computing model called the Turing machine in 1936?",
+      "options": [
+        "John von Neumann",
+        "Claude Shannon",
+        "Alan Turing",
+        "Ada Lovelace"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "computing",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_146",
+      "question": "What is the main purpose of a load balancer?",
+      "options": [
+        "Encrypting stored files",
+        "Compiling source code",
+        "Storing user passwords",
+        "Distributing incoming traffic across multiple servers"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "systems",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_147",
+      "question": "What is the time complexity of merge sort?",
+      "options": [
+        "O(n log n)",
+        "O(n²)",
+        "O(n)",
+        "O(log n)"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "algorithms",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_148",
+      "question": "What distinguishes supervised learning from unsupervised learning?",
+      "options": [
+        "Unsupervised learning uses labeled examples",
+        "Supervised learning uses labeled examples",
+        "Supervised learning needs no data",
+        "Unsupervised learning is always more accurate"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "ai",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_149",
+      "question": "What does endianness describe?",
+      "options": [
+        "The speed of a processor",
+        "The length of a network cable",
+        "The order in which bytes are arranged in memory",
+        "The size of a hard drive"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "data",
+      "type": "reasoning"
+    },
+    {
+      "id": "technology_quality_150",
+      "question": "What is a man-in-the-middle attack?",
+      "options": [
+        "Overloading a server with traffic",
+        "Guessing a password repeatedly",
+        "Installing a hidden backup",
+        "Intercepting communication between two parties without their knowledge"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "security",
+      "type": "reasoning"
+    }
+  ]
+}

@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "history",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "history_quality_001",
+      "question": "Which civilization built Machu Picchu?",
+      "options": [
+        "Inca",
+        "Aztec",
+        "Maya",
+        "Roman"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "ancient civilizations",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_002",
+      "question": "The printing press is most closely associated with which historical figure in Europe?",
+      "options": [
+        "Galileo Galilei",
+        "Johannes Gutenberg",
+        "Marco Polo",
+        "Leonardo da Vinci"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "early modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_003",
+      "question": "Which ancient city was buried by the eruption of Mount Vesuvius in AD 79?",
+      "options": [
+        "Sparta",
+        "Carthage",
+        "Pompeii",
+        "Athens"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "Roman history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_004",
+      "question": "The Magna Carta was first issued in which country?",
+      "options": [
+        "Italy",
+        "Spain",
+        "France",
+        "England"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "medieval history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_005",
+      "question": "Why was the Silk Road historically important?",
+      "options": [
+        "It connected regions through long-distance trade and cultural exchange",
+        "It connected only two cities in China",
+        "It was a single paved Roman highway",
+        "It was used only for military marches"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "trade history",
+      "type": "cause/effect"
+    },
+    {
+      "id": "history_quality_006",
+      "question": "The fall of Constantinople in 1453 is commonly associated with the end of which empire?",
+      "options": [
+        "Mali Empire",
+        "Byzantine Empire",
+        "Mongol Empire",
+        "Ottoman Empire"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_007",
+      "question": "A historian compares two accounts written by people who supported opposing sides of a conflict. What is the most useful first step?",
+      "options": [
+        "Use only the longer account",
+        "Assume both accounts are equally accurate",
+        "Compare their claims with each other and with independent evidence",
+        "Choose the account with the more dramatic language"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "historical method",
+      "type": "reasoning"
+    },
+    {
+      "id": "history_quality_008",
+      "question": "Why did ancient river-valley civilizations often develop near major rivers?",
+      "options": [
+        "Rivers guaranteed mild weather everywhere",
+        "Rivers prevented all warfare",
+        "Rivers eliminated the need for government",
+        "Rivers supported agriculture, transport, and access to water"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "ancient history",
+      "type": "analysis"
+    },
+    {
+      "id": "history_quality_009",
+      "question": "A government gains access to a new sea route and begins taxing ships that use it. Which historical effect is most plausible?",
+      "options": [
+        "Increased revenue and greater strategic influence",
+        "Immediate disappearance of overland trade",
+        "A permanent decline in maritime commerce",
+        "Automatic end of all regional conflicts"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "political history",
+      "type": "inference"
+    },
+    {
+      "id": "history_quality_010",
+      "question": "A primary source was written by a participant immediately after an event. What is one major advantage and limitation?",
+      "options": [
+        "It cannot contain factual information",
+        "It may provide firsthand detail but can reflect the author's perspective",
+        "It is always objective because it is old",
+        "It is automatically more accurate than all later research"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "historical method",
+      "type": "evaluation"
+    },
+    {
+      "id": "history_quality_011",
+      "question": "A historian finds that a reform was announced in one year but implemented gradually over several years. What distinction is important?",
+      "options": [
+        "Announcements and implementation always occur simultaneously",
+        "The reform must have failed",
+        "The date of announcement is not necessarily the date of full implementation",
+        "Implementation dates are irrelevant"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "historical method",
+      "type": "distinction"
+    },
+    {
+      "id": "history_quality_012",
+      "question": "A treaty ends a war but leaves the causes of the conflict largely unresolved. What is the most reasonable historical conclusion?",
+      "options": [
+        "The treaty proves the war had no political causes",
+        "The treaty guarantees permanent peace",
+        "The conflict must restart immediately",
+        "The treaty may end active fighting without eliminating underlying tensions"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "international history",
+      "type": "inference"
+    },
+    {
+      "id": "history_quality_013",
+      "question": "Who was the first president of the United States?",
+      "options": [
+        "Thomas Jefferson",
+        "Abraham Lincoln",
+        "George Washington",
+        "John Adams"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "American history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_014",
+      "question": "Which ancient civilization built the pyramids of Giza?",
+      "options": [
+        "Ancient Greeks",
+        "Babylonians",
+        "Romans",
+        "Ancient Egyptians"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "ancient history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_015",
+      "question": "Which explorer sailed west across the Atlantic in 1492 on behalf of Spain?",
+      "options": [
+        "Ferdinand Magellan",
+        "Vasco da Gama",
+        "Christopher Columbus",
+        "James Cook"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "age of exploration",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_016",
+      "question": "Julius Caesar was a leader of which ancient state?",
+      "options": [
+        "Athens",
+        "Persia",
+        "Carthage",
+        "Rome"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "Roman history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_017",
+      "question": "Who was the first emperor of Rome?",
+      "options": [
+        "Nero",
+        "Julius Caesar",
+        "Augustus",
+        "Constantine"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "Roman history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_018",
+      "question": "Which world conflict took place from 1914 to 1918?",
+      "options": [
+        "World War I",
+        "World War II",
+        "The Cold War",
+        "The Crimean War"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_019",
+      "question": "In which year did World War II begin in Europe?",
+      "options": [
+        "1914",
+        "1936",
+        "1941",
+        "1939"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_020",
+      "question": "Which city was divided by the Berlin Wall during the Cold War?",
+      "options": [
+        "Berlin",
+        "Vienna",
+        "Warsaw",
+        "Moscow"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_021",
+      "question": "Cleopatra was a famous ruler of which country?",
+      "options": [
+        "Greece",
+        "Persia",
+        "Rome",
+        "Egypt"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_022",
+      "question": "Where were the ancient Olympic Games held?",
+      "options": [
+        "Athens",
+        "Sparta",
+        "Olympia",
+        "Delphi"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_023",
+      "question": "Which British queen gave her name to the Victorian era?",
+      "options": [
+        "Queen Elizabeth I",
+        "Queen Anne",
+        "Queen Victoria",
+        "Queen Mary"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_024",
+      "question": "Who painted the ceiling of the Sistine Chapel in the early 1500s?",
+      "options": [
+        "Michelangelo",
+        "Raphael",
+        "Leonardo da Vinci",
+        "Donatello"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "Renaissance",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_025",
+      "question": "Which ocean liner sank in 1912 after striking an iceberg?",
+      "options": [
+        "Lusitania",
+        "Britannic",
+        "Queen Mary",
+        "Titanic"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_026",
+      "question": "Who was the first human to travel into space?",
+      "options": [
+        "Yuri Gagarin",
+        "Neil Armstrong",
+        "Alan Shepard",
+        "Valentina Tereshkova"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "space age",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_027",
+      "question": "Which leader guided India's nonviolent independence movement?",
+      "options": [
+        "Mahatma Gandhi",
+        "Jawaharlal Nehru",
+        "Subhas Chandra Bose",
+        "Muhammad Ali Jinnah"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_028",
+      "question": "Which US president issued the Emancipation Proclamation?",
+      "options": [
+        "George Washington",
+        "Abraham Lincoln",
+        "Ulysses S. Grant",
+        "Theodore Roosevelt"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "American history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_029",
+      "question": "Which ship carried the Pilgrims to North America in 1620?",
+      "options": [
+        "Santa Maria",
+        "Endeavour",
+        "Bounty",
+        "Mayflower"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "American history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_030",
+      "question": "Which ancient people in Mesopotamia invented cuneiform writing?",
+      "options": [
+        "Sumerians",
+        "Phoenicians",
+        "Hittites",
+        "Persians"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_031",
+      "question": "What is the period between ancient and modern Europe commonly called?",
+      "options": [
+        "Middle Ages",
+        "Industrial Age",
+        "Enlightenment",
+        "Bronze Age"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_032",
+      "question": "Who founded the Achaemenid Empire?",
+      "options": [
+        "Darius I",
+        "Cyrus the Great",
+        "Xerxes I",
+        "Artaxerxes I"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "Persian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_033",
+      "question": "Which European cultural movement of rebirth in art and learning began in Italy in the 14th century?",
+      "options": [
+        "Reformation",
+        "Renaissance",
+        "Enlightenment",
+        "Baroque"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "Renaissance",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_034",
+      "question": "Which French leader crowned himself emperor in 1804?",
+      "options": [
+        "Napoleon Bonaparte",
+        "Louis XIV",
+        "Charles de Gaulle",
+        "Maximilien Robespierre"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_035",
+      "question": "In which country did the Industrial Revolution begin in the 18th century?",
+      "options": [
+        "Great Britain",
+        "France",
+        "Germany",
+        "Russia"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_036",
+      "question": "The Cold War was mainly a rivalry between which two superpowers?",
+      "options": [
+        "Britain and France",
+        "China and Japan",
+        "The United States and the Soviet Union",
+        "Germany and Italy"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_037",
+      "question": "The Black Death of the 14th century was a pandemic of which disease?",
+      "options": [
+        "Smallpox",
+        "Plague",
+        "Cholera",
+        "Measles"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_038",
+      "question": "What were the rulers of ancient Egypt commonly called?",
+      "options": [
+        "Sultans",
+        "Emperors",
+        "Pharaohs",
+        "Caliphs"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "ancient history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_039",
+      "question": "Joan of Arc is a national heroine of which country?",
+      "options": [
+        "England",
+        "France",
+        "Spain",
+        "Germany"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_040",
+      "question": "Which US president was assassinated in Dallas in 1963?",
+      "options": [
+        "Abraham Lincoln",
+        "John F. Kennedy",
+        "William McKinley",
+        "Franklin D. Roosevelt"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "American history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_041",
+      "question": "Which machine, greatly improved by James Watt, helped power the Industrial Revolution?",
+      "options": [
+        "Spinning wheel",
+        "Telegraph",
+        "Printing press",
+        "Steam engine"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "industrial history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_042",
+      "question": "In 1994, Nelson Mandela became president of which country?",
+      "options": [
+        "Kenya",
+        "South Africa",
+        "Nigeria",
+        "Zimbabwe"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_043",
+      "question": "Martin Luther King Jr. was a leader of which movement?",
+      "options": [
+        "Suffrage movement",
+        "Labor movement",
+        "Abolitionist movement",
+        "American civil rights movement"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_044",
+      "question": "Which people built the city of Tenochtitlan in central Mexico?",
+      "options": [
+        "Maya",
+        "Inca",
+        "Olmecs",
+        "Aztecs"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "ancient civilizations",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_045",
+      "question": "In which city did revolutionaries storm the Bastille in 1789?",
+      "options": [
+        "Lyon",
+        "Paris",
+        "Versailles",
+        "Marseille"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_046",
+      "question": "Which boy pharaoh's nearly intact tomb was discovered in 1922?",
+      "options": [
+        "Ramses II",
+        "Akhenaten",
+        "Tutankhamun",
+        "Khufu"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_047",
+      "question": "Which conqueror founded the Mongol Empire in 1206?",
+      "options": [
+        "Attila",
+        "Genghis Khan",
+        "Tamerlane",
+        "Kublai Khan"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_048",
+      "question": "Which ancient Greek city-state was famous for the military training of its citizens?",
+      "options": [
+        "Sparta",
+        "Corinth",
+        "Thebes",
+        "Athens"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_049",
+      "question": "In which ancient Greek city-state did democracy first develop?",
+      "options": [
+        "Sparta",
+        "Corinth",
+        "Athens",
+        "Thebes"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_050",
+      "question": "What was the main language of the Roman Empire in the western provinces?",
+      "options": [
+        "Greek",
+        "Aramaic",
+        "Etruscan",
+        "Latin"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "Roman history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_051",
+      "question": "Which city was largely destroyed by a great fire in 1666?",
+      "options": [
+        "Paris",
+        "Rome",
+        "London",
+        "Amsterdam"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "early modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_052",
+      "question": "Which conflict between northern and southern states took place in the United States from 1861 to 1865?",
+      "options": [
+        "Revolutionary War",
+        "War of 1812",
+        "American Civil War",
+        "Spanish–American War"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "American history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_053",
+      "question": "Which writing system, based on pictures and symbols, was used in ancient Egypt?",
+      "options": [
+        "Hieroglyphs",
+        "Cuneiform",
+        "Runes",
+        "Latin script"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_054",
+      "question": "The Vikings came mainly from which region of Europe?",
+      "options": [
+        "Iberia",
+        "The Balkans",
+        "The Caucasus",
+        "Scandinavia"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_055",
+      "question": "Louis XIV, known as the Sun King, ruled which country?",
+      "options": [
+        "Spain",
+        "France",
+        "Austria",
+        "Portugal"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "early modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_056",
+      "question": "Who became the first woman to fly solo across the Atlantic Ocean in 1932?",
+      "options": [
+        "Bessie Coleman",
+        "Amelia Earhart",
+        "Harriet Quimby",
+        "Jacqueline Cochran"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "aviation history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_057",
+      "question": "Which founding document of the United States begins with the words 'We the People'?",
+      "options": [
+        "The Declaration of Independence",
+        "The Constitution",
+        "The Bill of Rights",
+        "The Federalist Papers"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "American history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_058",
+      "question": "Which dictator led Nazi Germany from 1933 to 1945?",
+      "options": [
+        "Adolf Hitler",
+        "Benito Mussolini",
+        "Joseph Stalin",
+        "Francisco Franco"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_059",
+      "question": "Which Portuguese explorer reached India by sea in 1498?",
+      "options": [
+        "Bartolomeu Dias",
+        "Ferdinand Magellan",
+        "Vasco da Gama",
+        "Henry the Navigator"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "age of exploration",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_060",
+      "question": "Who was the principal author of the US Declaration of Independence?",
+      "options": [
+        "Thomas Jefferson",
+        "Benjamin Franklin",
+        "John Hancock",
+        "James Madison"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "American history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_061",
+      "question": "Persepolis was a ceremonial capital of which empire?",
+      "options": [
+        "Sasanian Empire",
+        "Achaemenid Empire",
+        "Parthian Empire",
+        "Seleucid Empire"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "Persian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_062",
+      "question": "Which of the Seven Wonders of the Ancient World still largely survives today?",
+      "options": [
+        "Hanging Gardens of Babylon",
+        "Great Pyramid of Giza",
+        "Colossus of Rhodes",
+        "Temple of Artemis"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_063",
+      "question": "Which ruler unified China in 221 BC and became its first emperor?",
+      "options": [
+        "Emperor Wu of Han",
+        "Kublai Khan",
+        "Qin Shi Huang",
+        "Emperor Taizong"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "Chinese history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_064",
+      "question": "Which Norse explorer is thought to have reached North America around the year 1000?",
+      "options": [
+        "Erik the Red",
+        "Harald Hardrada",
+        "Leif Erikson",
+        "Ragnar Lothbrok"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_065",
+      "question": "What was the first permanent English settlement in North America, founded in 1607?",
+      "options": [
+        "Jamestown",
+        "Plymouth",
+        "Roanoke",
+        "Boston"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "American history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_066",
+      "question": "Who was the father of Alexander the Great?",
+      "options": [
+        "Philip II of Macedon",
+        "Darius III",
+        "Ptolemy I",
+        "Antipater"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_067",
+      "question": "Who became the first female prime minister of the United Kingdom in 1979?",
+      "options": [
+        "Margaret Thatcher",
+        "Theresa May",
+        "Indira Gandhi",
+        "Golda Meir"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_068",
+      "question": "Which 1517 act by Martin Luther is seen as the start of the Protestant Reformation?",
+      "options": [
+        "Translating the Bible into English",
+        "Founding the Jesuit order",
+        "Signing the Edict of Worms",
+        "Posting the Ninety-Five Theses"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "early modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_069",
+      "question": "Which 1815 battle ended Napoleon's rule as emperor?",
+      "options": [
+        "Battle of Austerlitz",
+        "Battle of Trafalgar",
+        "Battle of Leipzig",
+        "Battle of Waterloo"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "Napoleonic era",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_070",
+      "question": "In which year was the United States Declaration of Independence adopted?",
+      "options": [
+        "1765",
+        "1783",
+        "1789",
+        "1776"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "American history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_071",
+      "question": "In which year did the French Revolution begin?",
+      "options": [
+        "1789",
+        "1776",
+        "1799",
+        "1815"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "modern history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_072",
+      "question": "Who led the Soviet Union during most of World War II?",
+      "options": [
+        "Joseph Stalin",
+        "Vladimir Lenin",
+        "Nikita Khrushchev",
+        "Leon Trotsky"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_073",
+      "question": "Which event in 1914 triggered the outbreak of World War I?",
+      "options": [
+        "Sinking of the Lusitania",
+        "Assassination of Archduke Franz Ferdinand",
+        "Invasion of Poland",
+        "Russian Revolution"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "modern history",
+      "type": "cause/effect"
+    },
+    {
+      "id": "history_quality_074",
+      "question": "The Meiji Restoration of 1868 transformed which country?",
+      "options": [
+        "China",
+        "Japan",
+        "Korea",
+        "Thailand"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_075",
+      "question": "What was the code name for the Allied invasion of Normandy on June 6, 1944, commonly called D-Day?",
+      "options": [
+        "Operation Barbarossa",
+        "Operation Overlord",
+        "Operation Torch",
+        "Operation Market Garden"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_076",
+      "question": "Which ancient Greek writer is often called the 'Father of History'?",
+      "options": [
+        "Thucydides",
+        "Homer",
+        "Herodotus",
+        "Plutarch"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_077",
+      "question": "Which Carthaginian general famously crossed the Alps with war elephants?",
+      "options": [
+        "Hamilcar Barca",
+        "Scipio Africanus",
+        "Hannibal",
+        "Hasdrubal"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_078",
+      "question": "Which Roman leader was assassinated on the Ides of March in 44 BC?",
+      "options": [
+        "Augustus",
+        "Mark Antony",
+        "Nero",
+        "Julius Caesar"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "Roman history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_079",
+      "question": "Which Mughal emperor commissioned the Taj Mahal?",
+      "options": [
+        "Shah Jahan",
+        "Akbar",
+        "Aurangzeb",
+        "Babur"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "South Asian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_080",
+      "question": "Which leader founded the Ottoman state around 1299?",
+      "options": [
+        "Mehmed II",
+        "Suleiman I",
+        "Osman I",
+        "Murad I"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_081",
+      "question": "Which Safavid shah moved the capital to Isfahan?",
+      "options": [
+        "Shah Ismail I",
+        "Shah Tahmasp I",
+        "Shah Abbas I",
+        "Shah Abbas II"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "Persian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_082",
+      "question": "Which dynasty did Ismail I found in 1501?",
+      "options": [
+        "Qajar dynasty",
+        "Afsharid dynasty",
+        "Safavid dynasty",
+        "Zand dynasty"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "Persian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_083",
+      "question": "In which battle of 490 BC did the Athenians defeat a Persian invasion force?",
+      "options": [
+        "Battle of Marathon",
+        "Battle of Thermopylae",
+        "Battle of Salamis",
+        "Battle of Plataea"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_084",
+      "question": "Which Persian king led the invasion of Greece that included the Battle of Thermopylae?",
+      "options": [
+        "Xerxes I",
+        "Cyrus the Great",
+        "Darius I",
+        "Artaxerxes II"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_085",
+      "question": "Which Chinese dynasty built most of the Great Wall sections that survive today?",
+      "options": [
+        "Han dynasty",
+        "Tang dynasty",
+        "Ming dynasty",
+        "Song dynasty"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "Chinese history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_086",
+      "question": "What was the main purpose of the Marshall Plan after World War II?",
+      "options": [
+        "Creating a military alliance",
+        "Rebuilding Western European economies",
+        "Dividing Germany",
+        "Funding the space race"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "Cold War",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_087",
+      "question": "In which year did the Cuban Missile Crisis take place?",
+      "options": [
+        "1948",
+        "1962",
+        "1956",
+        "1973"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "Cold War",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_088",
+      "question": "Which Spanish conquistador led the conquest of the Aztec Empire?",
+      "options": [
+        "Francisco Pizarro",
+        "Ponce de León",
+        "Vasco Núñez de Balboa",
+        "Hernán Cortés"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "age of exploration",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_089",
+      "question": "Which ancient Mesopotamian city was the capital of the Babylonian king Hammurabi?",
+      "options": [
+        "Nineveh",
+        "Babylon",
+        "Ur",
+        "Uruk"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_090",
+      "question": "Which Mauryan emperor embraced Buddhism after the bloody Kalinga War?",
+      "options": [
+        "Chandragupta Maurya",
+        "Ashoka",
+        "Bindusara",
+        "Harsha"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "South Asian history",
+      "type": "cause/effect"
+    },
+    {
+      "id": "history_quality_091",
+      "question": "Which Mongol ruler founded the Yuan dynasty in China?",
+      "options": [
+        "Genghis Khan",
+        "Kublai Khan",
+        "Ögedei Khan",
+        "Möngke Khan"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "Chinese history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_092",
+      "question": "The Hundred Years' War was fought between England and which country?",
+      "options": [
+        "Spain",
+        "France",
+        "Scotland",
+        "Burgundy"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_093",
+      "question": "Which 1494 treaty divided newly discovered lands between Spain and Portugal?",
+      "options": [
+        "Treaty of Tordesillas",
+        "Treaty of Utrecht",
+        "Treaty of Paris",
+        "Treaty of Verdun"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "age of exploration",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_094",
+      "question": "Which chancellor oversaw the unification of Germany in 1871?",
+      "options": [
+        "Klemens von Metternich",
+        "Helmuth von Moltke",
+        "Wilhelm II",
+        "Otto von Bismarck"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_095",
+      "question": "Which Soviet leader introduced the policies of glasnost and perestroika?",
+      "options": [
+        "Leonid Brezhnev",
+        "Boris Yeltsin",
+        "Mikhail Gorbachev",
+        "Nikita Khrushchev"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "Cold War",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_096",
+      "question": "What was the name of the first artificial Earth satellite, launched in 1957?",
+      "options": [
+        "Explorer 1",
+        "Vostok 1",
+        "Telstar",
+        "Sputnik 1"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "space age",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_097",
+      "question": "The Boston Tea Party of 1773 was a protest against what?",
+      "options": [
+        "A ban on trade with France",
+        "British taxation policies",
+        "A new state religion",
+        "Forced military service"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "American history",
+      "type": "cause/effect"
+    },
+    {
+      "id": "history_quality_098",
+      "question": "Which Greek city-state defeated Athens in the Peloponnesian War?",
+      "options": [
+        "Thebes",
+        "Corinth",
+        "Argos",
+        "Sparta"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_099",
+      "question": "Which pharaoh was married to Queen Nefertiti?",
+      "options": [
+        "Tutankhamun",
+        "Ramses II",
+        "Thutmose III",
+        "Akhenaten"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_100",
+      "question": "In which country did the Thirty Years' War, ended by the Peace of Westphalia, mostly take place?",
+      "options": [
+        "Holy Roman Empire (Germany)",
+        "England",
+        "Russia",
+        "Ottoman Empire"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "early modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_101",
+      "question": "Which treaty ended World War I between Germany and the Allies in 1919?",
+      "options": [
+        "Treaty of Versailles",
+        "Treaty of Trianon",
+        "Treaty of Sèvres",
+        "Treaty of Brest-Litovsk"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_102",
+      "question": "Which empire ruled Persia from the third to the seventh century AD?",
+      "options": [
+        "Achaemenid Empire",
+        "Safavid Empire",
+        "Seljuk Empire",
+        "Sasanian Empire"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "Persian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_103",
+      "question": "In which year did the Russian Revolution that brought the Bolsheviks to power take place?",
+      "options": [
+        "1905",
+        "1914",
+        "1917",
+        "1921"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_104",
+      "question": "Which Roman emperor ordered a defensive wall to be built across northern Britain in the 2nd century AD?",
+      "options": [
+        "Trajan",
+        "Marcus Aurelius",
+        "Claudius",
+        "Hadrian"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "Roman history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_105",
+      "question": "Who founded the Sasanian Empire in the early third century AD?",
+      "options": [
+        "Shapur I",
+        "Khosrow I",
+        "Bahram II",
+        "Ardashir I"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "Persian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_106",
+      "question": "In which battle of 1757 did forces of the British East India Company defeat the Nawab of Bengal?",
+      "options": [
+        "Battle of Panipat",
+        "Battle of Plassey",
+        "Battle of Buxar",
+        "Battle of Wandiwash"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "colonial history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_107",
+      "question": "What was the main aim of the Congress of Vienna in 1814–1815?",
+      "options": [
+        "Ending the Thirty Years' War",
+        "Reorganizing Europe after Napoleon's defeat",
+        "Creating the League of Nations",
+        "Dividing Africa among colonial powers"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "modern history",
+      "type": "concept"
+    },
+    {
+      "id": "history_quality_108",
+      "question": "Which treaty, mediated in the United States, ended the Russo-Japanese War in 1905?",
+      "options": [
+        "Treaty of Shimonoseki",
+        "Treaty of Versailles",
+        "Treaty of Portsmouth",
+        "Treaty of Paris"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_109",
+      "question": "Which city did Nader Shah's forces sack in 1739?",
+      "options": [
+        "Agra",
+        "Delhi",
+        "Lahore",
+        "Kabul"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "Persian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_110",
+      "question": "Which dynasty ruled Iran immediately before the Pahlavi dynasty?",
+      "options": [
+        "Zand dynasty",
+        "Qajar dynasty",
+        "Afsharid dynasty",
+        "Safavid dynasty"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "Persian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_111",
+      "question": "In which year was the first Iranian constitution signed during the Constitutional Revolution?",
+      "options": [
+        "1896",
+        "1911",
+        "1921",
+        "1906"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "Persian history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_112",
+      "question": "Who won the Battle of Hastings in 1066?",
+      "options": [
+        "Harold Godwinson",
+        "Harald Hardrada",
+        "William of Normandy",
+        "Edward the Confessor"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_113",
+      "question": "Which pope called for the First Crusade in 1095?",
+      "options": [
+        "Gregory VII",
+        "Innocent III",
+        "Alexander III",
+        "Urban II"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_114",
+      "question": "The Peace of Westphalia of 1648 is often cited as an origin of which concept in international relations?",
+      "options": [
+        "Collective security",
+        "Free trade",
+        "State sovereignty",
+        "Universal suffrage"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "early modern history",
+      "type": "concept"
+    },
+    {
+      "id": "history_quality_115",
+      "question": "Which Roman emperor is traditionally associated with the Edict of Milan in 313?",
+      "options": [
+        "Constantine I",
+        "Diocletian",
+        "Julian",
+        "Theodosius I"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "Roman history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_116",
+      "question": "Who founded the Mauryan Empire?",
+      "options": [
+        "Chandragupta Maurya",
+        "Ashoka",
+        "Bindusara",
+        "Samudragupta"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "South Asian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_117",
+      "question": "At which 1071 battle did the Seljuks defeat the Byzantine army?",
+      "options": [
+        "Manzikert",
+        "Yarmouk",
+        "Nicopolis",
+        "Myriokephalon"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_118",
+      "question": "Which Abbasid caliph founded the city of Baghdad in 762?",
+      "options": [
+        "Harun al-Rashid",
+        "Al-Ma'mun",
+        "Al-Mansur",
+        "Al-Mutasim"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "Islamic history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_119",
+      "question": "In which year did Baghdad fall to the Mongols?",
+      "options": [
+        "1258",
+        "1206",
+        "1219",
+        "1368"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "medieval history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_120",
+      "question": "Which Mongol commander led the 1258 siege and capture of Baghdad?",
+      "options": [
+        "Batu Khan",
+        "Subutai",
+        "Hulagu Khan",
+        "Timur"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_121",
+      "question": "Which 1805 battle is considered Napoleon's greatest victory?",
+      "options": [
+        "Battle of Austerlitz",
+        "Battle of Jena",
+        "Battle of Borodino",
+        "Battle of Marengo"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "Napoleonic era",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_122",
+      "question": "Which conference of 1884–1885 set rules for European colonization of Africa?",
+      "options": [
+        "Congress of Vienna",
+        "Berlin Conference",
+        "Paris Peace Conference",
+        "Yalta Conference"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "colonial history",
+      "type": "concept"
+    },
+    {
+      "id": "history_quality_123",
+      "question": "In which year did Mustafa Kemal Atatürk proclaim the Republic of Turkey?",
+      "options": [
+        "1923",
+        "1908",
+        "1918",
+        "1938"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "modern history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_124",
+      "question": "Which 1911 uprising led to the end of China's imperial Qing dynasty?",
+      "options": [
+        "Taiping Rebellion",
+        "Boxer Rebellion",
+        "May Fourth Movement",
+        "Xinhai Revolution"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "Chinese history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_125",
+      "question": "The Treaty of Nanking of 1842 ended which conflict?",
+      "options": [
+        "Taiping Rebellion",
+        "Second Opium War",
+        "Sino-Japanese War",
+        "First Opium War"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "Chinese history",
+      "type": "cause/effect"
+    },
+    {
+      "id": "history_quality_126",
+      "question": "Which female pharaoh of the 18th Dynasty ruled Egypt as king around 1479 BC?",
+      "options": [
+        "Nefertiti",
+        "Hatshepsut",
+        "Cleopatra VII",
+        "Tiye"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_127",
+      "question": "Which civilization built the city of Chichen Itza?",
+      "options": [
+        "Aztec",
+        "Inca",
+        "Maya",
+        "Olmec"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "ancient civilizations",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_128",
+      "question": "Which Greek city-state led the Delian League in the fifth century BC?",
+      "options": [
+        "Sparta",
+        "Athens",
+        "Corinth",
+        "Thebes"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_129",
+      "question": "Under which emperor did the Roman Empire reach its greatest territorial extent in AD 117?",
+      "options": [
+        "Augustus",
+        "Hadrian",
+        "Marcus Aurelius",
+        "Trajan"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "Roman history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_130",
+      "question": "In which year is the fall of the Western Roman Empire traditionally dated?",
+      "options": [
+        "476",
+        "410",
+        "455",
+        "527"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "Roman history",
+      "type": "recognition"
+    },
+    {
+      "id": "history_quality_131",
+      "question": "Which Frankish king was crowned emperor by the pope on Christmas Day in the year 800?",
+      "options": [
+        "Clovis I",
+        "Charles Martel",
+        "Pepin the Short",
+        "Charlemagne"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "medieval history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_132",
+      "question": "Which leader was central to the Haitian Revolution against French colonial rule and slavery?",
+      "options": [
+        "Toussaint Louverture",
+        "Jean-Jacques Dessalines",
+        "Simón Bolívar",
+        "José de San Martín"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "colonial history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_133",
+      "question": "What was the Sykes–Picot Agreement of 1916?",
+      "options": [
+        "A treaty ending World War I",
+        "A trade pact between Britain and Russia",
+        "A peace deal between Austria and Serbia",
+        "A secret British–French plan to divide Ottoman Arab lands"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "modern history",
+      "type": "concept"
+    },
+    {
+      "id": "history_quality_134",
+      "question": "Who founded the Pahlavi dynasty of Iran in 1925?",
+      "options": [
+        "Ahmad Shah",
+        "Mohammad Reza Pahlavi",
+        "Reza Shah",
+        "Mohammad Mosaddegh"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "Persian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_135",
+      "question": "Which Ming admiral led large treasure voyages across the Indian Ocean in the early 15th century?",
+      "options": [
+        "Zheng He",
+        "Koxinga",
+        "Yue Fei",
+        "Hong Taiji"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "Chinese history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_136",
+      "question": "Which 14th-century ruler of the Mali Empire became famous for his pilgrimage to Mecca in 1324?",
+      "options": [
+        "Sundiata Keita",
+        "Askia Muhammad",
+        "Mansa Musa",
+        "Sunni Ali"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "African history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_137",
+      "question": "Which Byzantine emperor commissioned the Hagia Sophia in Constantinople in the sixth century?",
+      "options": [
+        "Justinian I",
+        "Constantine I",
+        "Heraclius",
+        "Basil II"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "Byzantine history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_138",
+      "question": "Which Russian tsar founded the city of Saint Petersburg in 1703?",
+      "options": [
+        "Ivan the Terrible",
+        "Catherine the Great",
+        "Peter the Great",
+        "Nicholas I"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "Russian history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_139",
+      "question": "The Taiping Rebellion of the mid-19th century took place in which country?",
+      "options": [
+        "China",
+        "Japan",
+        "Korea",
+        "Vietnam"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "Chinese history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_140",
+      "question": "Charles Martel's victory at the Battle of Tours in 732 halted the northward advance of which caliphate?",
+      "options": [
+        "Abbasid Caliphate",
+        "Fatimid Caliphate",
+        "Rashidun Caliphate",
+        "Umayyad Caliphate"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "medieval history",
+      "type": "cause/effect"
+    },
+    {
+      "id": "history_quality_141",
+      "question": "Which legendary Sumerian king is the hero of the world's oldest known epic?",
+      "options": [
+        "Hammurabi",
+        "Sargon",
+        "Nebuchadnezzar II",
+        "Gilgamesh"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_142",
+      "question": "Which Babylonian king is associated with a famous law code from around 1754 BC?",
+      "options": [
+        "Nebuchadnezzar II",
+        "Hammurabi",
+        "Sargon of Akkad",
+        "Ashurbanipal"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_143",
+      "question": "Which Greek historian wrote an account of the Peloponnesian War?",
+      "options": [
+        "Herodotus",
+        "Xenophon",
+        "Thucydides",
+        "Polybius"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_144",
+      "question": "Which 479 BC battle effectively ended the Persian invasion of mainland Greece?",
+      "options": [
+        "Battle of Marathon",
+        "Battle of Plataea",
+        "Battle of Thermopylae",
+        "Battle of Issus"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_145",
+      "question": "The Treaty of Brest-Litovsk in 1918 took which country out of World War I?",
+      "options": [
+        "Serbia",
+        "Russia",
+        "Romania",
+        "Italy"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "modern history",
+      "type": "cause/effect"
+    },
+    {
+      "id": "history_quality_146",
+      "question": "Which dynasty ruled Egypt after the death of Alexander the Great, ending with Cleopatra VII?",
+      "options": [
+        "Ptolemaic dynasty",
+        "Ramesside dynasty",
+        "Seleucid dynasty",
+        "Fatimid dynasty"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "ancient history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_147",
+      "question": "Which 1648 settlement ended the Eighty Years' War between Spain and the Dutch Republic?",
+      "options": [
+        "Treaty of Utrecht",
+        "Peace of Münster",
+        "Treaty of Nijmegen",
+        "Peace of Augsburg"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "early modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_148",
+      "question": "Which power was defeated by the Holy League at the naval Battle of Lepanto in 1571?",
+      "options": [
+        "Venetian Republic",
+        "Ottoman Empire",
+        "Kingdom of France",
+        "Mamluk Sultanate"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "early modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_149",
+      "question": "Which British prime minister signed the Munich Agreement in 1938?",
+      "options": [
+        "Winston Churchill",
+        "Stanley Baldwin",
+        "Clement Attlee",
+        "Neville Chamberlain"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "modern history",
+      "type": "identification"
+    },
+    {
+      "id": "history_quality_150",
+      "question": "Which Holy Roman Emperor performed public penance before Pope Gregory VII at Canossa in 1077?",
+      "options": [
+        "Frederick Barbarossa",
+        "Otto I",
+        "Henry IV",
+        "Charles V"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "medieval history",
+      "type": "identification"
+    }
+  ]
+}

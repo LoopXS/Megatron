@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "music",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "music_quality_001",
+      "question": "Which instrument has black and white keys and is commonly used in both classical and popular music?",
+      "options": [
+        "Piano",
+        "Trumpet",
+        "Flute",
+        "Violin"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_002",
+      "question": "How many strings does a standard violin have?",
+      "options": [
+        "Three",
+        "Four",
+        "Six",
+        "Five"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_003",
+      "question": "What term describes the speed of a piece of music?",
+      "options": [
+        "Pitch",
+        "Timbre",
+        "Tempo",
+        "Harmony"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_004",
+      "question": "Which family does the trumpet belong to?",
+      "options": [
+        "String",
+        "Percussion",
+        "Woodwind",
+        "Brass"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "classification"
+    },
+    {
+      "id": "music_quality_013",
+      "question": "Which instrument has six strings and is played by strumming or plucking, common in rock and folk music?",
+      "options": [
+        "Guitar",
+        "Harp",
+        "Cello",
+        "Banjo"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_014",
+      "question": "Which family does the flute belong to?",
+      "options": [
+        "Brass",
+        "Woodwind",
+        "Percussion",
+        "String"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "classification"
+    },
+    {
+      "id": "music_quality_015",
+      "question": "Which family does the drum belong to?",
+      "options": [
+        "Woodwind",
+        "Brass",
+        "Percussion",
+        "String"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "classification"
+    },
+    {
+      "id": "music_quality_016",
+      "question": "Which family does the cello belong to?",
+      "options": [
+        "Brass",
+        "Woodwind",
+        "Percussion",
+        "String"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "classification"
+    },
+    {
+      "id": "music_quality_017",
+      "question": "Which large string instrument is plucked and has a triangular frame and many strings?",
+      "options": [
+        "Harp",
+        "Violin",
+        "Lute",
+        "Banjo"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_018",
+      "question": "Which brass instrument changes pitch by moving a long U-shaped slide?",
+      "options": [
+        "Oboe",
+        "Trombone",
+        "Clarinet",
+        "Flute"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_019",
+      "question": "Which instrument is the largest and lowest-pitched of the standard orchestral string family?",
+      "options": [
+        "Violin",
+        "Viola",
+        "Double bass",
+        "Cello"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_020",
+      "question": "Which instrument has pedals and keys and is played in churches with many pipes?",
+      "options": [
+        "Accordion",
+        "Harpsichord",
+        "Synthesizer",
+        "Organ"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_021",
+      "question": "A major scale spans an octave. How many notes does it contain, counting the repeated note at the top?",
+      "options": [
+        "Eight",
+        "Six",
+        "Ten",
+        "Twelve"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_022",
+      "question": "What do we call a combination of three or more notes sounded together?",
+      "options": [
+        "A scale",
+        "A chord",
+        "A rest",
+        "A tempo"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_023",
+      "question": "What do we call a series of notes in ascending or descending order?",
+      "options": [
+        "A chord",
+        "A beat",
+        "A scale",
+        "A verse"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_024",
+      "question": "What is the regular pulse in music that you can tap your foot to?",
+      "options": [
+        "The melody",
+        "The lyric",
+        "The harmony",
+        "The beat"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_025",
+      "question": "What does \"forte\" mean in music?",
+      "options": [
+        "Loud",
+        "Soft",
+        "Fast",
+        "Slow"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_026",
+      "question": "What does \"piano\" mean as a musical direction?",
+      "options": [
+        "Loud",
+        "Soft",
+        "Fast",
+        "Slow"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_027",
+      "question": "What is a rest in music?",
+      "options": [
+        "A very loud note",
+        "A repeated note",
+        "A silence of a set length",
+        "A change of key"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_028",
+      "question": "What do we call the person who leads an orchestra?",
+      "options": [
+        "The composer",
+        "The soloist",
+        "The producer",
+        "The conductor"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_029",
+      "question": "What do we call the person who writes music?",
+      "options": [
+        "A composer",
+        "A conductor",
+        "A critic",
+        "A pianist"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_030",
+      "question": "How many musicians are in a duet?",
+      "options": [
+        "Three",
+        "Two",
+        "Four",
+        "Five"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "performance",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_031",
+      "question": "How many musicians are in a quartet?",
+      "options": [
+        "Two",
+        "Six",
+        "Four",
+        "Eight"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "performance",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_032",
+      "question": "What do we call a large group of musicians playing together with strings, brass, woodwinds, and percussion?",
+      "options": [
+        "A duet",
+        "A choir",
+        "A band",
+        "An orchestra"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "performance",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_033",
+      "question": "What do we call a group of people who sing together?",
+      "options": [
+        "A choir",
+        "An orchestra",
+        "A quartet",
+        "A trio"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "performance",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_034",
+      "question": "Which genre of music is associated with improvisation and originated in New Orleans?",
+      "options": [
+        "Opera",
+        "Jazz",
+        "Reggae",
+        "Country"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "genres",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_035",
+      "question": "Which genre of music is closely associated with Jamaica and artists like Bob Marley?",
+      "options": [
+        "Salsa",
+        "Blues",
+        "Reggae",
+        "Techno"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "genres",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_036",
+      "question": "Which genre of music tells a story through singing and acting on stage, often with orchestra?",
+      "options": [
+        "Rap",
+        "Folk",
+        "Jazz",
+        "Opera"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "genres",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_037",
+      "question": "Which genre of music is associated with electric guitars, heavy drums, and bands like The Beatles and Led Zeppelin?",
+      "options": [
+        "Rock",
+        "Opera",
+        "Baroque",
+        "Gospel"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "genres",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_038",
+      "question": "Which musical style combines spoken rhymes with a rhythmic beat?",
+      "options": [
+        "Country",
+        "Rap (hip-hop)",
+        "Reggae",
+        "Opera"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "genres",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_039",
+      "question": "Which composer wrote the Fifth Symphony with its famous four-note opening and also went deaf later in life?",
+      "options": [
+        "Wolfgang Amadeus Mozart",
+        "Johann Sebastian Bach",
+        "Ludwig van Beethoven",
+        "Frédéric Chopin"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_040",
+      "question": "Which composer wrote The Magic Flute and Eine kleine Nachtmusik?",
+      "options": [
+        "Ludwig van Beethoven",
+        "Franz Schubert",
+        "Joseph Haydn",
+        "Wolfgang Amadeus Mozart"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_041",
+      "question": "Which composer wrote the Four Seasons violin concertos?",
+      "options": [
+        "Antonio Vivaldi",
+        "Johann Sebastian Bach",
+        "George Frideric Handel",
+        "Claudio Monteverdi"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_042",
+      "question": "Which composer wrote the ballet Swan Lake?",
+      "options": [
+        "Sergei Rachmaninoff",
+        "Pyotr Ilyich Tchaikovsky",
+        "Igor Stravinsky",
+        "Claude Debussy"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_043",
+      "question": "Which composer wrote the Brandenburg Concertos?",
+      "options": [
+        "George Frideric Handel",
+        "Joseph Haydn",
+        "Johann Sebastian Bach",
+        "Johannes Brahms"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_044",
+      "question": "Which composer is known for the opera Carmen?",
+      "options": [
+        "Giuseppe Verdi",
+        "Giacomo Puccini",
+        "Gioachino Rossini",
+        "Georges Bizet"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_045",
+      "question": "Which British band, formed in Liverpool, included John Lennon and Paul McCartney?",
+      "options": [
+        "The Beatles",
+        "The Rolling Stones",
+        "Queen",
+        "Pink Floyd"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "bands",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_046",
+      "question": "Which band performed the 1975 song \"Bohemian Rhapsody\"?",
+      "options": [
+        "The Who",
+        "Queen",
+        "Led Zeppelin",
+        "Genesis"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "bands",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_047",
+      "question": "Which singer is known as the \"King of Pop\"?",
+      "options": [
+        "Elvis Presley",
+        "Prince",
+        "Michael Jackson",
+        "Stevie Wonder"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "artists",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_048",
+      "question": "Which singer is known as the \"King of Rock and Roll\"?",
+      "options": [
+        "Chuck Berry",
+        "Little Richard",
+        "Buddy Holly",
+        "Elvis Presley"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "artists",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_049",
+      "question": "Which singer from Barbados released the song \"Umbrella\" in 2007?",
+      "options": [
+        "Rihanna",
+        "Beyoncé",
+        "Adele",
+        "Shakira"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "artists",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_050",
+      "question": "Which Colombian singer is known for the song \"Hips Don't Lie\"?",
+      "options": [
+        "Jennifer Lopez",
+        "Shakira",
+        "Selena Gomez",
+        "Ariana Grande"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "artists",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_051",
+      "question": "What do we call the part of a violin you pull across the strings to play it?",
+      "options": [
+        "A pick",
+        "A slide",
+        "A bow",
+        "A reed"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_052",
+      "question": "What do guitar players often use to pluck or strum strings?",
+      "options": [
+        "A bow",
+        "A reed",
+        "A mallet",
+        "A pick"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_053",
+      "question": "What is the stick used to hit a drum called?",
+      "options": [
+        "A drumstick",
+        "A baton",
+        "A bow",
+        "A reed"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_054",
+      "question": "Which long-necked stringed instrument is most closely associated with India and Ravi Shankar?",
+      "options": [
+        "Banjo",
+        "Sitar",
+        "Mandolin",
+        "Harp"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_055",
+      "question": "Which wind instrument is traditionally associated with Scotland?",
+      "options": [
+        "Accordion",
+        "Bugle",
+        "Bagpipes",
+        "Harmonica"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_056",
+      "question": "Which stringed instrument is commonly associated with Hawaiian music and is smaller than a guitar?",
+      "options": [
+        "Banjo",
+        "Mandolin",
+        "Lute",
+        "Ukulele"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "instruments",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_057",
+      "question": "How many lines are there in a standard musical staff?",
+      "options": [
+        "Five",
+        "Four",
+        "Six",
+        "Seven"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_058",
+      "question": "What is a lullaby?",
+      "options": [
+        "A fast dance tune",
+        "A gentle song meant to help a child fall asleep",
+        "A song for a wedding",
+        "A march for soldiers"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "music theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_005",
+      "question": "A melody is moved to a higher key while keeping the intervals between notes the same. What has happened?",
+      "options": [
+        "Transposition",
+        "Compression",
+        "Sampling",
+        "Distortion"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_006",
+      "question": "Two notes sound simultaneously and create a sense of tension that seeks resolution. Which musical element is most directly involved?",
+      "options": [
+        "Dynamics",
+        "Harmony",
+        "Tempo",
+        "Meter"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "application"
+    },
+    {
+      "id": "music_quality_007",
+      "question": "A recording sounds louder overall after dynamic range compression. What has the process mainly changed?",
+      "options": [
+        "The song's language",
+        "The length of the melody",
+        "The difference between the loudest and quietest parts",
+        "The number of instruments"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "audio production",
+      "type": "reasoning"
+    },
+    {
+      "id": "music_quality_008",
+      "question": "A drummer consistently emphasizes certain beats within a repeated pattern. Which musical feature is being shaped?",
+      "options": [
+        "Timbre only",
+        "Key signature only",
+        "Lyrics",
+        "Rhythm and meter"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "rhythm",
+      "type": "analysis"
+    },
+    {
+      "id": "music_quality_059",
+      "question": "Which composer wrote the \"Moonlight Sonata\"?",
+      "options": [
+        "Wolfgang Amadeus Mozart",
+        "Ludwig van Beethoven",
+        "Frédéric Chopin",
+        "Franz Liszt"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_060",
+      "question": "Which Baroque composer wrote Messiah, including the \"Hallelujah\" chorus?",
+      "options": [
+        "Johann Sebastian Bach",
+        "Antonio Vivaldi",
+        "George Frideric Handel",
+        "Henry Purcell"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_061",
+      "question": "Which Polish composer is best known for his piano nocturnes and polonaises?",
+      "options": [
+        "Franz Liszt",
+        "Robert Schumann",
+        "Ignacy Paderewski",
+        "Frédéric Chopin"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_062",
+      "question": "Which Russian composer wrote The Rite of Spring?",
+      "options": [
+        "Igor Stravinsky",
+        "Sergei Prokofiev",
+        "Dmitri Shostakovich",
+        "Nikolai Rimsky-Korsakov"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_063",
+      "question": "Which Italian composer wrote La Traviata and Rigoletto?",
+      "options": [
+        "Giacomo Puccini",
+        "Giuseppe Verdi",
+        "Gaetano Donizetti",
+        "Vincenzo Bellini"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_064",
+      "question": "Which Italian composer wrote La Bohème and Madama Butterfly?",
+      "options": [
+        "Giuseppe Verdi",
+        "Gioachino Rossini",
+        "Giacomo Puccini",
+        "Ruggero Leoncavallo"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_065",
+      "question": "Which Austrian composer is known for the \"Surprise\" symphony and is often called the \"father of the symphony\"?",
+      "options": [
+        "Wolfgang Amadeus Mozart",
+        "Franz Schubert",
+        "Anton Bruckner",
+        "Joseph Haydn"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_066",
+      "question": "Which composer wrote the orchestral piece Boléro?",
+      "options": [
+        "Maurice Ravel",
+        "Claude Debussy",
+        "Erik Satie",
+        "Gabriel Fauré"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_067",
+      "question": "Which French composer wrote the piano piece \"Clair de Lune\"?",
+      "options": [
+        "Maurice Ravel",
+        "Claude Debussy",
+        "Camille Saint-Saëns",
+        "Erik Satie"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_068",
+      "question": "Which composer wrote The Planets, a suite for orchestra named after the planets?",
+      "options": [
+        "Edward Elgar",
+        "Ralph Vaughan Williams",
+        "Gustav Holst",
+        "Benjamin Britten"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_069",
+      "question": "Which American composer wrote Rhapsody in Blue?",
+      "options": [
+        "Aaron Copland",
+        "Leonard Bernstein",
+        "Scott Joplin",
+        "George Gershwin"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_070",
+      "question": "Which American composer wrote the ragtime piece \"The Entertainer\"?",
+      "options": [
+        "Scott Joplin",
+        "George Gershwin",
+        "Duke Ellington",
+        "Louis Armstrong"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_071",
+      "question": "Which composer wrote The Nutcracker ballet?",
+      "options": [
+        "Sergei Prokofiev",
+        "Pyotr Ilyich Tchaikovsky",
+        "Igor Stravinsky",
+        "Alexander Borodin"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_072",
+      "question": "Which composer wrote the opera The Barber of Seville?",
+      "options": [
+        "Giuseppe Verdi",
+        "Gaetano Donizetti",
+        "Gioachino Rossini",
+        "Wolfgang Amadeus Mozart"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "composers",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_073",
+      "question": "What is the difference between major and minor scales in how they generally sound?",
+      "options": [
+        "Major is faster, minor is slower",
+        "Major is louder, minor is softer",
+        "Major uses more notes, minor uses fewer",
+        "Major sounds brighter, minor sounds darker"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_074",
+      "question": "How many sharps or flats does the C major scale have?",
+      "options": [
+        "None",
+        "One",
+        "Two",
+        "Three"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_075",
+      "question": "What is the time signature 4/4 sometimes called?",
+      "options": [
+        "Waltz time",
+        "Common time",
+        "Cut time",
+        "Compound time"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_076",
+      "question": "How many beats are in a measure of 3/4 time?",
+      "options": [
+        "Four",
+        "Two",
+        "Three",
+        "Six"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_077",
+      "question": "What is a \"triad\"?",
+      "options": [
+        "A group of three singers",
+        "A rhythm of three beats",
+        "A scale with three notes",
+        "A three-note chord built from stacked thirds"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_078",
+      "question": "What does \"legato\" instruct a performer to do?",
+      "options": [
+        "Play smoothly connected notes",
+        "Play short, detached notes",
+        "Play louder",
+        "Play slower"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_079",
+      "question": "What does \"staccato\" instruct a performer to do?",
+      "options": [
+        "Play smoothly connected notes",
+        "Play short, detached notes",
+        "Play very softly",
+        "Gradually slow down"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_080",
+      "question": "What does \"allegro\" indicate about tempo?",
+      "options": [
+        "Slow and calm",
+        "Moderate walking pace",
+        "Fast and lively",
+        "Very slow and heavy"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_081",
+      "question": "What does \"adagio\" indicate about tempo?",
+      "options": [
+        "Fast",
+        "Very fast",
+        "Moderate",
+        "Slow"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_082",
+      "question": "What is a \"key signature\" at the beginning of a staff used for?",
+      "options": [
+        "Showing which notes are sharp or flat throughout a piece",
+        "Showing the tempo",
+        "Showing the dynamics",
+        "Showing the instrument"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_083",
+      "question": "What does a sharp (♯) do to a note?",
+      "options": [
+        "Lowers it by a semitone",
+        "Raises it by a semitone",
+        "Doubles its length",
+        "Makes it louder"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_084",
+      "question": "What does a flat (♭) do to a note?",
+      "options": [
+        "Raises it by a semitone",
+        "Shortens it",
+        "Lowers it by a semitone",
+        "Makes it softer"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_085",
+      "question": "How many semitones are in an octave?",
+      "options": [
+        "Eight",
+        "Ten",
+        "Seven",
+        "Twelve"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_086",
+      "question": "What is a \"cadenza\" in a concerto?",
+      "options": [
+        "A solo passage often showing the soloist's virtuosity",
+        "A slow introduction",
+        "A repeated chorus",
+        "A section for the whole orchestra"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_087",
+      "question": "Which instrument is the highest-pitched member of the standard orchestral string family?",
+      "options": [
+        "Viola",
+        "Violin",
+        "Cello",
+        "Double bass"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "instruments",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_088",
+      "question": "Which instrument is a woodwind that uses a single reed and is often played in jazz?",
+      "options": [
+        "Trumpet",
+        "Trombone",
+        "Saxophone",
+        "Tuba"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "instruments",
+      "type": "classification"
+    },
+    {
+      "id": "music_quality_089",
+      "question": "Which of these instruments is a double-reed woodwind?",
+      "options": [
+        "Clarinet",
+        "Flute",
+        "Saxophone",
+        "Oboe"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "instruments",
+      "type": "classification"
+    },
+    {
+      "id": "music_quality_090",
+      "question": "Which of these is a brass instrument?",
+      "options": [
+        "French horn",
+        "Oboe",
+        "Cello",
+        "Clarinet"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "instruments",
+      "type": "classification"
+    },
+    {
+      "id": "music_quality_091",
+      "question": "Which instrument is used to tune an orchestra, with its note A?",
+      "options": [
+        "Violin",
+        "Oboe",
+        "Trumpet",
+        "Flute"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "instruments",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_092",
+      "question": "Which Iranian long-necked lute, whose name means \"three strings,\" is plucked with the index fingernail?",
+      "options": [
+        "Tombak",
+        "Daf",
+        "Setar",
+        "Santur"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "instruments",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_093",
+      "question": "Which Iranian instrument is a goblet-shaped drum played with the fingers and palms?",
+      "options": [
+        "Daf",
+        "Santur",
+        "Kamancheh",
+        "Tombak"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "instruments",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_094",
+      "question": "Which Iranian instrument is a hammered dulcimer played with two small mallets?",
+      "options": [
+        "Santur",
+        "Setar",
+        "Ney",
+        "Barbat"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "instruments",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_095",
+      "question": "Which Persian instrument is an end-blown reed flute?",
+      "options": [
+        "Santur",
+        "Ney",
+        "Kamancheh",
+        "Tar"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "instruments",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_096",
+      "question": "Which genre originated in African American communities in the Deep South and is built on a twelve-bar pattern?",
+      "options": [
+        "Opera",
+        "Baroque",
+        "Blues",
+        "Polka"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "genres",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_097",
+      "question": "Which Latin American dance and music genre originated in Argentina?",
+      "options": [
+        "Salsa",
+        "Samba",
+        "Bossa nova",
+        "Tango"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "genres",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_098",
+      "question": "Which Brazilian genre blends samba with jazz and was popularized by João Gilberto?",
+      "options": [
+        "Bossa nova",
+        "Samba",
+        "Tango",
+        "Merengue"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "genres",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_099",
+      "question": "Which genre of music developed in Jamaica from ska and rocksteady in the late 1960s?",
+      "options": [
+        "Salsa",
+        "Reggae",
+        "Calypso",
+        "Soul"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "genres",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_100",
+      "question": "Which jazz trumpeter and singer is known for the song \"What a Wonderful World\"?",
+      "options": [
+        "Miles Davis",
+        "Duke Ellington",
+        "Louis Armstrong",
+        "Dizzy Gillespie"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "artists",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_101",
+      "question": "Which jazz musician recorded the best-selling album Kind of Blue?",
+      "options": [
+        "John Coltrane",
+        "Charlie Parker",
+        "Thelonious Monk",
+        "Miles Davis"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "artists",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_102",
+      "question": "Which American singer is known as the \"Queen of Soul\"?",
+      "options": [
+        "Aretha Franklin",
+        "Whitney Houston",
+        "Diana Ross",
+        "Etta James"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "artists",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_103",
+      "question": "What is a \"concerto\"?",
+      "options": [
+        "A piece for unaccompanied choir",
+        "A work for a solo instrument accompanied by an orchestra",
+        "A suite of dances",
+        "The overture to an opera"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_104",
+      "question": "What does \"ritardando\" instruct a performer to do?",
+      "options": [
+        "Gradually get louder",
+        "Play detached notes",
+        "Gradually slow down",
+        "Play very quietly"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_009",
+      "question": "A producer records several independent vocal takes and combines the strongest sections into one performance. What technique is this?",
+      "options": [
+        "Comping",
+        "Reverb",
+        "Panning",
+        "Equalization"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "recording",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_010",
+      "question": "A song alternates between a verse and a recurring section that contains the main hook. Which common structure does this suggest?",
+      "options": [
+        "Single sustained note",
+        "Verse-chorus form",
+        "Unmetered improvisation only",
+        "Random form"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "song structure",
+      "type": "inference"
+    },
+    {
+      "id": "music_quality_011",
+      "question": "Two microphones capture the same source at slightly different times, causing phase-related cancellation at some frequencies. What problem may result?",
+      "options": [
+        "Tempo mapping",
+        "Pitch correction",
+        "Comb filtering",
+        "Overdubbing"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "audio engineering",
+      "type": "analysis"
+    },
+    {
+      "id": "music_quality_012",
+      "question": "A performer changes the volume gradually from soft to loud over several measures. Which expressive marking best describes this?",
+      "options": [
+        "Staccato",
+        "Ritardando",
+        "Glissando",
+        "Crescendo"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "notation",
+      "type": "recognition"
+    },
+    {
+      "id": "music_quality_105",
+      "question": "What is an \"interval\" in music theory?",
+      "options": [
+        "The silence between two phrases",
+        "The length of a measure",
+        "The distance in pitch between two notes",
+        "A change in tempo"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_106",
+      "question": "What is the interval between C and G called?",
+      "options": [
+        "A perfect fourth",
+        "A major third",
+        "A major sixth",
+        "A perfect fifth"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_107",
+      "question": "What is the interval between C and E called?",
+      "options": [
+        "A major third",
+        "A minor third",
+        "A perfect fourth",
+        "A major second"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_108",
+      "question": "What is a \"tritone\"?",
+      "options": [
+        "An interval of three semitones",
+        "An interval of three whole tones, also called an augmented fourth",
+        "A chord built from three notes",
+        "A scale of three notes"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_109",
+      "question": "In the key of C major, which chord is the dominant (V)?",
+      "options": [
+        "F major",
+        "D minor",
+        "G major",
+        "A minor"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_110",
+      "question": "In the key of C major, which chord is the subdominant (IV)?",
+      "options": [
+        "G major",
+        "E minor",
+        "A minor",
+        "F major"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_111",
+      "question": "What is the relative minor of C major?",
+      "options": [
+        "A minor",
+        "E minor",
+        "D minor",
+        "G minor"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_112",
+      "question": "What is the relative major of A minor?",
+      "options": [
+        "G major",
+        "C major",
+        "E major",
+        "F major"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_113",
+      "question": "How many sharps does the key of D major have?",
+      "options": [
+        "One",
+        "Three",
+        "Two",
+        "Four"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_114",
+      "question": "How many flats does the key of F major have?",
+      "options": [
+        "Two",
+        "Three",
+        "None",
+        "One"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_115",
+      "question": "What is the \"circle of fifths\" used to show?",
+      "options": [
+        "The relationships between keys and their key signatures",
+        "The order of instruments in an orchestra",
+        "The sequence of chords in a blues",
+        "The history of Baroque music"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_116",
+      "question": "What is a \"perfect cadence\" (V–I)?",
+      "options": [
+        "A change of key in the middle of a piece",
+        "A chord progression that creates a strong sense of ending",
+        "A very fast trill",
+        "A repeated bass note"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_117",
+      "question": "What is a \"plagal cadence\" (IV–I) often called?",
+      "options": [
+        "The \"deceptive\" cadence",
+        "The \"half\" cadence",
+        "The \"Amen\" cadence",
+        "The \"perfect\" cadence"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_118",
+      "question": "What is a \"deceptive cadence\"?",
+      "options": [
+        "A progression that ends on the dominant",
+        "A fast final cadence",
+        "A cadence with no harmony",
+        "A progression where the dominant resolves to an unexpected chord such as vi"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_119",
+      "question": "What is \"polyphony\"?",
+      "options": [
+        "Music with several independent melodic lines at the same time",
+        "Music with a single unaccompanied melody",
+        "Music with melody supported by chords",
+        "Music with no clear pitch"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_120",
+      "question": "What is \"monophony\"?",
+      "options": [
+        "Music with several independent melodies",
+        "Music with a single melodic line without accompaniment",
+        "Music with only percussion",
+        "Music with a repeating bass line"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_121",
+      "question": "What is \"homophony\"?",
+      "options": [
+        "Several equal melodic lines",
+        "A single unaccompanied melody",
+        "A main melody supported by chordal accompaniment",
+        "A repeated rhythm without pitch"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_122",
+      "question": "What is a \"canon\" in music?",
+      "options": [
+        "A piece with no repeats",
+        "A very slow movement",
+        "A piece for a single instrument",
+        "A piece in which a melody is imitated at a time delay by other voices"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_123",
+      "question": "What is a \"fugue\"?",
+      "options": [
+        "A composition built on a subject imitated by several voices",
+        "A piece for solo voice",
+        "A dance in triple time",
+        "A slow introduction to an opera"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_124",
+      "question": "What does \"rubato\" mean?",
+      "options": [
+        "A very loud passage",
+        "Flexible tempo with slight speeding up and slowing down for expression",
+        "A strict, steady tempo",
+        "A repeated rhythm pattern"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_125",
+      "question": "What is a \"time signature\" of 6/8 most commonly felt as?",
+      "options": [
+        "Six groups of one eighth note",
+        "Three groups of two eighth notes",
+        "Two groups of three eighth notes",
+        "Four groups of two eighth notes"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_126",
+      "question": "What is \"syncopation\"?",
+      "options": [
+        "Playing every beat equally",
+        "Gradually getting faster",
+        "Playing very softly",
+        "Emphasis on weak beats or off-beats"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_127",
+      "question": "What is a \"modulation\" in music?",
+      "options": [
+        "A change from one key to another within a piece",
+        "A change in tempo",
+        "A change in volume",
+        "A change in instrument"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_128",
+      "question": "What is the Dorian mode?",
+      "options": [
+        "A major-type mode with a lowered seventh",
+        "A minor-type mode with a raised sixth degree",
+        "A mode with no half steps",
+        "A mode with five notes"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_129",
+      "question": "What is a pentatonic scale?",
+      "options": [
+        "A scale with seven notes per octave",
+        "A scale with twelve notes per octave",
+        "A scale with five notes per octave",
+        "A scale with three notes per octave"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_130",
+      "question": "What is the twelve-tone technique associated with?",
+      "options": [
+        "Johannes Brahms",
+        "Claude Debussy",
+        "Giacomo Puccini",
+        "Arnold Schoenberg"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_131",
+      "question": "Which period of Western music came directly before the Classical period?",
+      "options": [
+        "The Baroque period",
+        "The Romantic period",
+        "The Renaissance period",
+        "The Modern period"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_132",
+      "question": "Which composer is most associated with the Classical-to-Romantic transition and wrote nine symphonies, the last with a choral finale?",
+      "options": [
+        "Franz Schubert",
+        "Ludwig van Beethoven",
+        "Johannes Brahms",
+        "Felix Mendelssohn"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_133",
+      "question": "Which composer is known for the opera cycle The Ring of the Nibelung?",
+      "options": [
+        "Giuseppe Verdi",
+        "Richard Strauss",
+        "Richard Wagner",
+        "Giacomo Puccini"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_134",
+      "question": "Which composer wrote the Symphonie fantastique?",
+      "options": [
+        "Franz Liszt",
+        "Gustav Mahler",
+        "Camille Saint-Saëns",
+        "Hector Berlioz"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_135",
+      "question": "Which composer is known as a leading figure in Impressionist music?",
+      "options": [
+        "Claude Debussy",
+        "Johannes Brahms",
+        "Giuseppe Verdi",
+        "Anton Bruckner"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_136",
+      "question": "Which composer wrote the \"Goldberg Variations\"?",
+      "options": [
+        "George Frideric Handel",
+        "Johann Sebastian Bach",
+        "Domenico Scarlatti",
+        "Henry Purcell"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_137",
+      "question": "Which 20th-century composer wrote 4′33″, a piece consisting of silence?",
+      "options": [
+        "Philip Glass",
+        "Steve Reich",
+        "John Cage",
+        "Karlheinz Stockhausen"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_138",
+      "question": "Which American composer is associated with minimalist works such as Einstein on the Beach?",
+      "options": [
+        "Aaron Copland",
+        "Leonard Bernstein",
+        "Samuel Barber",
+        "Philip Glass"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_139",
+      "question": "Which composer wrote the opera Aida?",
+      "options": [
+        "Giuseppe Verdi",
+        "Giacomo Puccini",
+        "Richard Wagner",
+        "Georges Bizet"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_140",
+      "question": "Which pianist and composer was famous for virtuosity and wrote the Hungarian Rhapsodies?",
+      "options": [
+        "Frédéric Chopin",
+        "Franz Liszt",
+        "Johannes Brahms",
+        "Sergei Rachmaninoff"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_141",
+      "question": "Which composer wrote the Pictures at an Exhibition suite?",
+      "options": [
+        "Nikolai Rimsky-Korsakov",
+        "Alexander Borodin",
+        "Modest Mussorgsky",
+        "Sergei Rachmaninoff"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_142",
+      "question": "Which composer wrote the symphonic suite Scheherazade, based on tales from the Arabian Nights?",
+      "options": [
+        "Pyotr Ilyich Tchaikovsky",
+        "Modest Mussorgsky",
+        "Alexander Glazunov",
+        "Nikolai Rimsky-Korsakov"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_143",
+      "question": "Which Persian musical system is the traditional modal repertoire of Iranian classical music?",
+      "options": [
+        "The radif and dastgah system",
+        "The raga system",
+        "The maqam of Turkey only",
+        "The Western diatonic system"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "iranian music",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_144",
+      "question": "Which Iranian instrument is a bowed spike fiddle with a round resonator?",
+      "options": [
+        "Setar",
+        "Kamancheh",
+        "Santur",
+        "Tar"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "iranian music",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_145",
+      "question": "What does a low-pass filter do?",
+      "options": [
+        "It lets high frequencies through and reduces low frequencies",
+        "It boosts all frequencies equally",
+        "It lets low frequencies through and reduces high frequencies",
+        "It removes only one frequency"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "audio engineering",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_146",
+      "question": "What does \"reverb\" simulate?",
+      "options": [
+        "A change in pitch",
+        "A change in tempo",
+        "A distorted guitar sound",
+        "The reflections of sound in a space"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "audio engineering",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_147",
+      "question": "What is the standard sample rate of CD audio?",
+      "options": [
+        "44.1 kHz",
+        "22.05 kHz",
+        "96 kHz",
+        "48 MHz"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "audio engineering",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_148",
+      "question": "Which Hungarian composer, also a pioneering collector of folk songs, wrote Concerto for Orchestra?",
+      "options": [
+        "Zoltán Kodály",
+        "Béla Bartók",
+        "Franz Liszt",
+        "György Ligeti"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "music_quality_149",
+      "question": "What is \"basso continuo\" in Baroque music?",
+      "options": [
+        "A solo part for bass singer",
+        "A single drone note held throughout",
+        "A bass line with chords realized above it, usually by keyboard and a bass instrument",
+        "A final cadence of a piece"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "theory",
+      "type": "concept"
+    },
+    {
+      "id": "music_quality_150",
+      "question": "Which Baroque composer wrote The Well-Tempered Clavier, with preludes and fugues in all 24 keys?",
+      "options": [
+        "George Frideric Handel",
+        "Domenico Scarlatti",
+        "François Couperin",
+        "Johann Sebastian Bach"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    }
+  ]
+}

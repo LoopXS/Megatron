@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "culture",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "culture_quality_001",
+      "question": "Which building is famously associated with ancient Athens?",
+      "options": [
+        "Parthenon",
+        "Stonehenge",
+        "Colosseum",
+        "Hagia Sophia"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "architecture",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_002",
+      "question": "Origami is traditionally associated with which country?",
+      "options": [
+        "Brazil",
+        "Japan",
+        "Egypt",
+        "Norway"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "crafts",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_003",
+      "question": "Which art movement is associated with Claude Monet?",
+      "options": [
+        "Pop Art",
+        "Cubism",
+        "Impressionism",
+        "Surrealism"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_004",
+      "question": "A museum label identifies an object as a ceramic vessel made for a traditional tea ceremony. Which category best fits it?",
+      "options": [
+        "Musical notation",
+        "Digital media",
+        "Astronomical data",
+        "Material culture"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "material culture",
+      "type": "classification"
+    },
+    {
+      "id": "culture_quality_013",
+      "question": "Which artist painted the Mona Lisa?",
+      "options": [
+        "Leonardo da Vinci",
+        "Michelangelo",
+        "Raphael",
+        "Vincent van Gogh"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "painting",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_014",
+      "question": "In which country is the Taj Mahal located?",
+      "options": [
+        "Pakistan",
+        "India",
+        "Iran",
+        "Turkey"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "architecture",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_015",
+      "question": "Which festival is widely celebrated as the Hindu festival of lights?",
+      "options": [
+        "Holi",
+        "Navratri",
+        "Diwali",
+        "Vesak"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "festivals",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_016",
+      "question": "Which painter created The Starry Night?",
+      "options": [
+        "Rembrandt",
+        "Claude Monet",
+        "Piet Mondrian",
+        "Vincent van Gogh"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_017",
+      "question": "In which city is the Louvre Museum located?",
+      "options": [
+        "Paris",
+        "London",
+        "Rome",
+        "Madrid"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "museums",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_018",
+      "question": "Which country is the tango dance most closely associated with?",
+      "options": [
+        "Spain",
+        "Argentina",
+        "Brazil",
+        "Cuba"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "dance",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_019",
+      "question": "What is the traditional Japanese garment with wide sleeves tied with a sash called?",
+      "options": [
+        "Sari",
+        "Hanbok",
+        "Kimono",
+        "Qipao"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "clothing",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_020",
+      "question": "Which country is most closely associated with flamenco?",
+      "options": [
+        "Italy",
+        "Greece",
+        "Portugal",
+        "Spain"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "dance",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_021",
+      "question": "In which Italian city is Michelangelo's statue of David displayed?",
+      "options": [
+        "Florence",
+        "Venice",
+        "Milan",
+        "Naples"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "sculpture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_022",
+      "question": "In which country is the Great Wall, one of the world's best-known monuments, located?",
+      "options": [
+        "Japan",
+        "China",
+        "Mongolia",
+        "India"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "architecture",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_023",
+      "question": "What material is the Eiffel Tower mainly made of?",
+      "options": [
+        "Marble",
+        "Bronze",
+        "Iron",
+        "Concrete"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_024",
+      "question": "The Statue of Liberty was a gift to the United States from which country?",
+      "options": [
+        "United Kingdom",
+        "Spain",
+        "Italy",
+        "France"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "monuments",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_025",
+      "question": "What is the art of beautiful handwriting called?",
+      "options": [
+        "Calligraphy",
+        "Cartography",
+        "Typography",
+        "Mosaic"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "crafts",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_026",
+      "question": "Which country is the original home of sushi?",
+      "options": [
+        "China",
+        "Japan",
+        "Korea",
+        "Thailand"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "cuisine",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_027",
+      "question": "Which country is the original home of pizza?",
+      "options": [
+        "France",
+        "Greece",
+        "Italy",
+        "Spain"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "cuisine",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_028",
+      "question": "Nowruz, celebrated in Iran and neighboring regions, marks the arrival of which season?",
+      "options": [
+        "Summer",
+        "Autumn",
+        "Winter",
+        "Spring"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "festivals",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_029",
+      "question": "Which Indian festival is known for people throwing colored powder at one another?",
+      "options": [
+        "Holi",
+        "Diwali",
+        "Pongal",
+        "Onam"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "festivals",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_030",
+      "question": "In which country is the famous Carnival of Rio de Janeiro held?",
+      "options": [
+        "Mexico",
+        "Brazil",
+        "Spain",
+        "Argentina"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "festivals",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_031",
+      "question": "Which country hosts the Oktoberfest beer festival in Munich?",
+      "options": [
+        "Austria",
+        "Switzerland",
+        "Germany",
+        "Belgium"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "festivals",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_032",
+      "question": "The Day of the Dead (Día de los Muertos) is a traditional holiday of which country?",
+      "options": [
+        "Peru",
+        "Spain",
+        "Cuba",
+        "Mexico"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "festivals",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_033",
+      "question": "Which ancient civilization built the pyramids of Giza?",
+      "options": [
+        "Egyptians",
+        "Romans",
+        "Greeks",
+        "Persians"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "ancient civilizations",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_034",
+      "question": "Which ancient civilization built the Colosseum?",
+      "options": [
+        "Greeks",
+        "Romans",
+        "Egyptians",
+        "Ottomans"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "ancient civilizations",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_035",
+      "question": "What is the art of making pictures by arranging small pieces of colored stone or glass called?",
+      "options": [
+        "Collage",
+        "Sketching",
+        "Mosaic",
+        "Etching"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "crafts",
+      "type": "classification"
+    },
+    {
+      "id": "culture_quality_036",
+      "question": "The haka is a traditional ceremonial dance of which people?",
+      "options": [
+        "The Aboriginal peoples of Australia",
+        "The Inuit of Canada",
+        "The Celts of Ireland",
+        "The Māori of New Zealand"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "dance",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_037",
+      "question": "What is the traditional Scottish knee-length skirt made of tartan cloth called?",
+      "options": [
+        "Kilt",
+        "Poncho",
+        "Kimono",
+        "Sarong"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "clothing",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_038",
+      "question": "What do we call an artist who carves or models statues?",
+      "options": [
+        "Architect",
+        "Sculptor",
+        "Potter",
+        "Photographer"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "sculpture",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_039",
+      "question": "Where are paintings and sculptures usually displayed for the public?",
+      "options": [
+        "In a library",
+        "In a stadium",
+        "In a museum or gallery",
+        "In an airport"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "museums",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_040",
+      "question": "The famous golden funeral mask of Tutankhamun comes from which country?",
+      "options": [
+        "Greece",
+        "Iraq",
+        "Sudan",
+        "Egypt"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "archaeology",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_041",
+      "question": "In which country is the ancient Inca citadel of Machu Picchu located?",
+      "options": [
+        "Peru",
+        "Mexico",
+        "Chile",
+        "Brazil"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "world heritage",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_042",
+      "question": "Which Italian city is famous for its canals and gondolas?",
+      "options": [
+        "Rome",
+        "Venice",
+        "Florence",
+        "Naples"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "architecture",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_043",
+      "question": "Which Spanish artist is best known as a co-founder of Cubism?",
+      "options": [
+        "Salvador Dalí",
+        "Diego Velázquez",
+        "Pablo Picasso",
+        "Francisco Goya"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_044",
+      "question": "Which country is world-famous for its hand-knotted rugs known as Persian carpets?",
+      "options": [
+        "Italy",
+        "Russia",
+        "Egypt",
+        "Iran"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "crafts",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_045",
+      "question": "In which country is the Sydney Opera House located?",
+      "options": [
+        "Australia",
+        "New Zealand",
+        "Canada",
+        "Ireland"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "architecture",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_046",
+      "question": "What is the traditional Indian garment made of a long piece of cloth draped around the body called?",
+      "options": [
+        "Kimono",
+        "Sari",
+        "Dirndl",
+        "Kilt"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "clothing",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_047",
+      "question": "What is the traditional Korean national dress called?",
+      "options": [
+        "Kimono",
+        "Sari",
+        "Hanbok",
+        "Ao dai"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "clothing",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_048",
+      "question": "How many animals appear in the Chinese zodiac?",
+      "options": [
+        "Ten",
+        "Eight",
+        "Fourteen",
+        "Twelve"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "traditions",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_049",
+      "question": "Which of these is a traditional form of Japanese theatre?",
+      "options": [
+        "Kabuki",
+        "Opera",
+        "Ballet",
+        "Flamenco"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "theatre",
+      "type": "classification"
+    },
+    {
+      "id": "culture_quality_050",
+      "question": "What is the Japanese art of arranging flowers called?",
+      "options": [
+        "Origami",
+        "Ikebana",
+        "Bonsai",
+        "Sumi-e"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "crafts",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_051",
+      "question": "Which festival marks the end of the Muslim fasting month of Ramadan?",
+      "options": [
+        "Eid al-Adha",
+        "Mawlid",
+        "Eid al-Fitr",
+        "Ashura"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "festivals",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_052",
+      "question": "Which country is the original home of the baguette?",
+      "options": [
+        "Italy",
+        "Germany",
+        "Spain",
+        "France"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "cuisine",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_053",
+      "question": "Which famous clock tower stands beside the Houses of Parliament in London?",
+      "options": [
+        "Big Ben",
+        "The Leaning Tower",
+        "The Space Needle",
+        "The Eiffel Tower"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "architecture",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_054",
+      "question": "In which country is the Leaning Tower of Pisa located?",
+      "options": [
+        "France",
+        "Italy",
+        "Spain",
+        "Greece"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "architecture",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_055",
+      "question": "Which of these is a primary color in traditional painting?",
+      "options": [
+        "Green",
+        "Orange",
+        "Red",
+        "Purple"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "painting",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_056",
+      "question": "In which country were the ancient Olympic Games first held?",
+      "options": [
+        "Italy",
+        "Egypt",
+        "France",
+        "Greece"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "traditions",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_057",
+      "question": "In which country did the Renaissance begin?",
+      "options": [
+        "Italy",
+        "England",
+        "Spain",
+        "Germany"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "art history",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_058",
+      "question": "La Tomatina, a festival where people throw tomatoes at each other, takes place in which country?",
+      "options": [
+        "Italy",
+        "Spain",
+        "Mexico",
+        "Portugal"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "festivals",
+      "type": "recognition"
+    },
+    {
+      "id": "culture_quality_005",
+      "question": "A cultural tradition survives after younger generations adapt its rituals to modern life. What does this demonstrate?",
+      "options": [
+        "Cultural continuity with adaptation",
+        "Complete cultural isolation",
+        "Biological inheritance",
+        "The end of cultural transmission"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "cultural change",
+      "type": "analysis"
+    },
+    {
+      "id": "culture_quality_006",
+      "question": "Why can architecture reveal information about the values of a society?",
+      "options": [
+        "Architecture is unrelated to society",
+        "Buildings reflect available technology, social organization, beliefs, and priorities",
+        "Architecture never changes across history",
+        "Buildings contain only engineering information"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "reasoning"
+    },
+    {
+      "id": "culture_quality_007",
+      "question": "A festival combines local music with food traditions introduced by migrants generations earlier. What process does this illustrate?",
+      "options": [
+        "Geological migration",
+        "Climate adaptation",
+        "Cultural exchange and blending",
+        "Cultural extinction by definition"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "culture",
+      "type": "application"
+    },
+    {
+      "id": "culture_quality_008",
+      "question": "An artifact is found far from the region where its raw material originated. What can this suggest?",
+      "options": [
+        "The regions could never have interacted",
+        "The artifact must have formed naturally",
+        "The material has no geographic origin",
+        "Trade or movement connected the regions"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "archaeology",
+      "type": "inference"
+    },
+    {
+      "id": "culture_quality_059",
+      "question": "Which art movement is Salvador Dalí most closely associated with?",
+      "options": [
+        "Cubism",
+        "Surrealism",
+        "Impressionism",
+        "Pop art"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_060",
+      "question": "Which painter created the anti-war masterpiece Guernica?",
+      "options": [
+        "Georges Braque",
+        "Henri Matisse",
+        "Pablo Picasso",
+        "Joan Miró"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_061",
+      "question": "Which artist is considered a leading figure of the Pop art movement?",
+      "options": [
+        "Jackson Pollock",
+        "Claude Monet",
+        "Paul Cézanne",
+        "Andy Warhol"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_062",
+      "question": "Notre-Dame de Paris is best known as a major example of which architectural style?",
+      "options": [
+        "Gothic",
+        "Baroque",
+        "Neoclassical",
+        "Art Deco"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "classification"
+    },
+    {
+      "id": "culture_quality_063",
+      "question": "In which Spanish city is the Alhambra palace complex located?",
+      "options": [
+        "Madrid",
+        "Granada",
+        "Seville",
+        "Barcelona"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_064",
+      "question": "Which architect designed the Guggenheim Museum in Bilbao?",
+      "options": [
+        "Zaha Hadid",
+        "Renzo Piano",
+        "Frank Gehry",
+        "Norman Foster"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_065",
+      "question": "Which Barcelona basilica, designed by Antoni Gaudí, has been under construction for well over a century?",
+      "options": [
+        "Santa Maria del Mar",
+        "Montserrat Abbey",
+        "Barcelona Cathedral",
+        "Sagrada Família"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_066",
+      "question": "Which painting by Sandro Botticelli shows a goddess arriving on a seashell?",
+      "options": [
+        "The Birth of Venus",
+        "The School of Athens",
+        "The Last Judgment",
+        "The Night Watch"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_067",
+      "question": "Michelangelo painted the famous ceiling frescoes of which chapel?",
+      "options": [
+        "The Scrovegni Chapel",
+        "The Sistine Chapel",
+        "The Sainte-Chapelle",
+        "The Palatine Chapel"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_068",
+      "question": "Which painting medium mixes pigment with egg yolk and was widely used in medieval and early Renaissance art?",
+      "options": [
+        "Acrylic",
+        "Gouache",
+        "Tempera",
+        "Pastel"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_069",
+      "question": "Which Dutch Golden Age painter created Girl with a Pearl Earring?",
+      "options": [
+        "Rembrandt",
+        "Frans Hals",
+        "Jan Steen",
+        "Johannes Vermeer"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_070",
+      "question": "In which city is the Hagia Sophia located?",
+      "options": [
+        "Istanbul",
+        "Athens",
+        "Cairo",
+        "Ankara"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_071",
+      "question": "Persepolis was the ceremonial capital of which empire?",
+      "options": [
+        "The Sasanian Empire",
+        "The Achaemenid Empire",
+        "The Ottoman Empire",
+        "The Roman Empire"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "ancient civilizations",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_072",
+      "question": "What is the traditional Japanese tea ceremony called?",
+      "options": [
+        "Ikebana",
+        "Kabuki",
+        "Chanoyu (sado)",
+        "Noh"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "traditions",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_073",
+      "question": "Which Mexican painter is famous for her many symbolic self-portraits?",
+      "options": [
+        "Georgia O'Keeffe",
+        "Mary Cassatt",
+        "Artemisia Gentileschi",
+        "Frida Kahlo"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_074",
+      "question": "In which country was the Bauhaus design school founded?",
+      "options": [
+        "Germany",
+        "Austria",
+        "Netherlands",
+        "Switzerland"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "art history",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_075",
+      "question": "Which type of clay is essential for making true porcelain?",
+      "options": [
+        "Terracotta",
+        "Kaolin",
+        "Adobe",
+        "Marl"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "crafts",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_076",
+      "question": "In which city is the Forbidden City, the former imperial palace of China?",
+      "options": [
+        "Shanghai",
+        "Xi'an",
+        "Beijing",
+        "Nanjing"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_077",
+      "question": "Which dance tradition is known for rapid footwork combined with a rigid upper body?",
+      "options": [
+        "Flamenco",
+        "Bharatanatyam",
+        "Tango",
+        "Irish step dance"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "dance",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_078",
+      "question": "Which field studies human societies, cultures, and their development?",
+      "options": [
+        "Anthropology",
+        "Geology",
+        "Zoology",
+        "Cartography"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "anthropology",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_079",
+      "question": "What do we call stories, songs, and customs passed from generation to generation by word of mouth?",
+      "options": [
+        "Written law",
+        "Oral tradition",
+        "Material culture",
+        "Official archive"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "traditions",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_080",
+      "question": "What is the large rounded roof structure of the Pantheon in Rome called?",
+      "options": [
+        "A spire",
+        "A minaret",
+        "A dome",
+        "An obelisk"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_081",
+      "question": "Which tall, slender tower is typically attached to a mosque?",
+      "options": [
+        "Spire",
+        "Pagoda",
+        "Obelisk",
+        "Minaret"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_082",
+      "question": "A pagoda, a tiered tower with multiple eaves, is most closely associated with which region?",
+      "options": [
+        "East Asia",
+        "Western Europe",
+        "North Africa",
+        "Scandinavia"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_083",
+      "question": "Which Spanish painter created The Third of May 1808?",
+      "options": [
+        "Diego Velázquez",
+        "Francisco Goya",
+        "El Greco",
+        "Bartolomé Murillo"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_084",
+      "question": "Which Norwegian painter created The Scream?",
+      "options": [
+        "Gustav Klimt",
+        "Egon Schiele",
+        "Edvard Munch",
+        "Henri Rousseau"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_085",
+      "question": "Which Austrian painter is known for The Kiss and its lavish use of gold leaf?",
+      "options": [
+        "Egon Schiele",
+        "Oskar Kokoschka",
+        "Paul Klee",
+        "Gustav Klimt"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_086",
+      "question": "Which Russian-born pioneer of abstract art painted Composition VII?",
+      "options": [
+        "Wassily Kandinsky",
+        "Marc Chagall",
+        "Piet Mondrian",
+        "Henri Matisse"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_087",
+      "question": "Piet Mondrian is best known for abstract works made of which elements?",
+      "options": [
+        "Swirling brushstrokes of dreamlike scenes",
+        "Grids of black lines and primary colors",
+        "Dripped and splattered paint",
+        "Tiny dots of pure color"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "classification"
+    },
+    {
+      "id": "culture_quality_088",
+      "question": "Which printmaking technique involves cutting lines into a metal plate to hold ink?",
+      "options": [
+        "Fresco",
+        "Collage",
+        "Engraving",
+        "Mosaic"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "art techniques",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_089",
+      "question": "Caravaggio's dramatic contrasts of light and shadow are characteristic of which style?",
+      "options": [
+        "Gothic",
+        "Rococo",
+        "Romanticism",
+        "Baroque"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "art history",
+      "type": "classification"
+    },
+    {
+      "id": "culture_quality_090",
+      "question": "What does the term sfumato describe in Renaissance painting?",
+      "options": [
+        "Soft, gradual blending of tones without hard outlines",
+        "Painting on wet plaster",
+        "Using only a single color",
+        "Applying thick, textured paint"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "art techniques",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_091",
+      "question": "What is the traditional Māori art of facial and body tattooing called?",
+      "options": [
+        "Mehndi",
+        "Tā moko",
+        "Ukiyo-e",
+        "Batik"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "crafts",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_092",
+      "question": "Batik, a wax-resist fabric dyeing technique, is especially associated with which country?",
+      "options": [
+        "Peru",
+        "Morocco",
+        "Indonesia",
+        "Norway"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "crafts",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_093",
+      "question": "Which rock-cut city in Jordan is a UNESCO World Heritage Site?",
+      "options": [
+        "Persepolis",
+        "Palmyra",
+        "Babylon",
+        "Petra"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "world heritage",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_094",
+      "question": "In which country is the temple complex of Angkor Wat located?",
+      "options": [
+        "Cambodia",
+        "Thailand",
+        "Vietnam",
+        "Laos"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "world heritage",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_095",
+      "question": "Which civilization built the city of Chichen Itza in present-day Mexico?",
+      "options": [
+        "The Aztecs",
+        "The Maya",
+        "The Incas",
+        "The Olmecs"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "ancient civilizations",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_096",
+      "question": "Which culture created the enormous geoglyphs known as the Nazca Lines in Peru?",
+      "options": [
+        "The Inca",
+        "The Maya",
+        "The Nazca culture",
+        "The Aztecs"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "ancient civilizations",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_097",
+      "question": "Which Roman city was buried by the eruption of Mount Vesuvius in 79 CE and is now a major archaeological site?",
+      "options": [
+        "Rome",
+        "Naples",
+        "Syracuse",
+        "Pompeii"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "archaeology",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_098",
+      "question": "Which festival, celebrated with lanterns, ends the Chinese New Year festivities?",
+      "options": [
+        "The Lantern Festival",
+        "The Dragon Boat Festival",
+        "The Mid-Autumn Festival",
+        "Qingming"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "festivals",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_099",
+      "question": "Which Persian festival is celebrated on the longest night of the year?",
+      "options": [
+        "Nowruz",
+        "Yalda",
+        "Mehregan",
+        "Tirgan"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "festivals",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_100",
+      "question": "In which Spanish city does the San Fermín festival, with its running of the bulls, take place?",
+      "options": [
+        "Seville",
+        "Valencia",
+        "Pamplona",
+        "Barcelona"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "festivals",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_101",
+      "question": "Who created the woodblock print The Great Wave off Kanagawa?",
+      "options": [
+        "Hiroshige",
+        "Utamaro",
+        "Kuniyoshi",
+        "Hokusai"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "art history",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_102",
+      "question": "Which spinning dance is performed by the Mevlevi Sufi order?",
+      "options": [
+        "The sema (whirling dance)",
+        "The haka",
+        "The polka",
+        "The flamenco"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "dance",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_103",
+      "question": "Which form of Japanese theatre features masks, slow stylized movement, and minimalist staging?",
+      "options": [
+        "Kabuki",
+        "Noh",
+        "Bunraku",
+        "Rakugo"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "theatre",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_104",
+      "question": "Which Dutch painter created The Night Watch?",
+      "options": [
+        "Johannes Vermeer",
+        "Vincent van Gogh",
+        "Rembrandt van Rijn",
+        "Pieter Bruegel"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_009",
+      "question": "A museum reconstructs an object using fragments from several pieces but clearly labels which parts are reconstructed. Why is that distinction important?",
+      "options": [
+        "It separates original evidence from interpretive reconstruction",
+        "It makes the artifact older",
+        "It guarantees the reconstruction is perfect",
+        "It removes the need for provenance"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "museology",
+      "type": "analysis"
+    },
+    {
+      "id": "culture_quality_010",
+      "question": "Two societies use similar geometric patterns in textiles but have no known historical contact. What is the safest conclusion?",
+      "options": [
+        "The designs must have identical meanings",
+        "Similar patterns can arise independently; similarity alone does not prove contact",
+        "The societies must have shared one ancestor",
+        "The patterns prove direct trade"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "comparative culture",
+      "type": "reasoning"
+    },
+    {
+      "id": "culture_quality_011",
+      "question": "A traditional craft declines because mass-produced alternatives become cheaper, but later returns through heritage programs. What does this show?",
+      "options": [
+        "Heritage programs always restore the original practice unchanged",
+        "Price has no effect on cultural practices",
+        "Cultural practices can decline and be revitalized through changing social conditions",
+        "Traditional crafts can never disappear"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "heritage",
+      "type": "inference"
+    },
+    {
+      "id": "culture_quality_012",
+      "question": "A curator compares two versions of the same cultural object made a century apart. Which comparison is most informative?",
+      "options": [
+        "Only the object's color",
+        "Whether both objects have the same weight",
+        "Only its current market price",
+        "Changes in materials, function, decoration, and social context"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "material culture",
+      "type": "analysis"
+    },
+    {
+      "id": "culture_quality_105",
+      "question": "Which 1917 work by Marcel Duchamp, a signed porcelain urinal, challenged traditional definitions of art?",
+      "options": [
+        "The Large Glass",
+        "Nude Descending a Staircase",
+        "Fountain",
+        "Bicycle Wheel"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_106",
+      "question": "Which architect popularized the maxim \"less is more\"?",
+      "options": [
+        "Le Corbusier",
+        "Frank Lloyd Wright",
+        "Antoni Gaudí",
+        "Ludwig Mies van der Rohe"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_107",
+      "question": "Which architect designed Fallingwater, the house built over a waterfall in Pennsylvania?",
+      "options": [
+        "Frank Lloyd Wright",
+        "Mies van der Rohe",
+        "Le Corbusier",
+        "Eero Saarinen"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_108",
+      "question": "Which architect designed the Villa Savoye near Paris, a landmark of modernist architecture?",
+      "options": [
+        "Walter Gropius",
+        "Le Corbusier",
+        "Alvar Aalto",
+        "Louis Kahn"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_109",
+      "question": "Which Ottoman architect designed the Süleymaniye Mosque in Istanbul?",
+      "options": [
+        "Mehmed Tahir",
+        "Vedat Tek",
+        "Mimar Sinan",
+        "Kemaleddin Bey"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_110",
+      "question": "Which mosque in Shiraz is known as the \"Pink Mosque\" for its rose-colored tilework and stained glass?",
+      "options": [
+        "Shah Mosque",
+        "Sheikh Lotfollah Mosque",
+        "Jameh Mosque of Yazd",
+        "Nasir al-Mulk Mosque"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_111",
+      "question": "Which movement, whose name means \"wild beasts,\" was led by Henri Matisse and André Derain?",
+      "options": [
+        "Fauvism",
+        "Cubism",
+        "Expressionism",
+        "Futurism"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_112",
+      "question": "Who wrote the 1924 manifesto of Surrealism?",
+      "options": [
+        "Tristan Tzara",
+        "André Breton",
+        "Filippo Marinetti",
+        "Guillaume Apollinaire"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_113",
+      "question": "Which Abstract Expressionist is best known for his drip technique?",
+      "options": [
+        "Mark Rothko",
+        "Willem de Kooning",
+        "Jackson Pollock",
+        "Franz Kline"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_114",
+      "question": "Which Abstract Expressionist is best known for large canvases of floating, luminous rectangles of color?",
+      "options": [
+        "Jackson Pollock",
+        "Barnett Newman",
+        "Robert Motherwell",
+        "Mark Rothko"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_115",
+      "question": "The Rosetta Stone was crucial for deciphering which writing system?",
+      "options": [
+        "Egyptian hieroglyphs",
+        "Linear B",
+        "Maya glyphs",
+        "Sumerian cuneiform"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "archaeology",
+      "type": "inference"
+    },
+    {
+      "id": "culture_quality_116",
+      "question": "The trilingual Behistun Inscription helped scholars decipher which script?",
+      "options": [
+        "Egyptian hieroglyphs",
+        "Cuneiform",
+        "Linear A",
+        "Phoenician script"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "archaeology",
+      "type": "inference"
+    },
+    {
+      "id": "culture_quality_117",
+      "question": "Which Greek architectural order is recognized by the scroll-shaped volutes on its column capitals?",
+      "options": [
+        "Doric",
+        "Corinthian",
+        "Ionic",
+        "Tuscan"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "classification"
+    },
+    {
+      "id": "culture_quality_118",
+      "question": "Which Greek architectural order has capitals decorated with acanthus leaves?",
+      "options": [
+        "Doric",
+        "Ionic",
+        "Composite",
+        "Corinthian"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "classification"
+    },
+    {
+      "id": "culture_quality_119",
+      "question": "In the art world, what does the term provenance refer to?",
+      "options": [
+        "The documented history of an artwork's ownership",
+        "The medium an artwork is made from",
+        "The estimated market price of an artwork",
+        "The artist's stylistic influences"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "museology",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_120",
+      "question": "What is patina in the context of bronze sculpture?",
+      "options": [
+        "A protective coat of wax applied before casting",
+        "A surface layer formed by oxidation or applied chemically",
+        "The internal metal armature",
+        "The mold used for casting"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "art techniques",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_121",
+      "question": "For which purpose is the lost-wax technique traditionally used?",
+      "options": [
+        "Dyeing fabric",
+        "Glazing ceramics",
+        "Casting metal sculptures",
+        "Carving marble"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "art techniques",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_122",
+      "question": "What does cultural relativism hold?",
+      "options": [
+        "All cultures eventually develop in the same way",
+        "Some cultures are objectively superior to others",
+        "Cultural traditions never change",
+        "A culture's beliefs and practices should be understood within their own context"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "anthropology",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_123",
+      "question": "Which term describes judging other cultures by the standards of one's own?",
+      "options": [
+        "Ethnocentrism",
+        "Cultural relativism",
+        "Syncretism",
+        "Acculturation"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "anthropology",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_124",
+      "question": "Which anthropologist is associated with the method of \"thick description\" in interpreting cultures?",
+      "options": [
+        "Margaret Mead",
+        "Clifford Geertz",
+        "Claude Lévi-Strauss",
+        "Franz Boas"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "anthropology",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_125",
+      "question": "Which anthropologist wrote Coming of Age in Samoa?",
+      "options": [
+        "Ruth Benedict",
+        "Bronisław Malinowski",
+        "Margaret Mead",
+        "Edward Evans-Pritchard"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "anthropology",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_126",
+      "question": "Which anthropologist's fieldwork on the Trobriand Islands described the Kula ring exchange system?",
+      "options": [
+        "Margaret Mead",
+        "Franz Boas",
+        "Clifford Geertz",
+        "Bronisław Malinowski"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "anthropology",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_127",
+      "question": "What does syncretism mean in the study of culture and religion?",
+      "options": [
+        "The blending of different traditions into a new combined form",
+        "The complete rejection of foreign customs",
+        "The preservation of a tradition without any change",
+        "The imposition of one culture's practices on another by force"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "anthropology",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_128",
+      "question": "What is acculturation?",
+      "options": [
+        "The loss of all one's native language",
+        "Cultural change resulting from sustained contact between groups",
+        "The study of ancient artifacts",
+        "The creation of a new religion"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "anthropology",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_129",
+      "question": "Which UNESCO convention, adopted in 2003, protects traditions such as oral expressions, festivals, and craftsmanship?",
+      "options": [
+        "The World Heritage Convention",
+        "The Hague Convention",
+        "The Convention for the Safeguarding of the Intangible Cultural Heritage",
+        "The Convention on Illicit Trafficking of Cultural Property"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "heritage",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_130",
+      "question": "In which year was the UNESCO World Heritage Convention adopted?",
+      "options": [
+        "1954",
+        "1989",
+        "2003",
+        "1972"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "heritage",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_131",
+      "question": "Which Mexican muralist's mural at Rockefeller Center was destroyed in 1934 after a dispute over a portrait of Lenin?",
+      "options": [
+        "Diego Rivera",
+        "José Clemente Orozco",
+        "David Alfaro Siqueiros",
+        "Rufino Tamayo"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "painting",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_132",
+      "question": "Which 1913 exhibition in New York introduced modern European art to a large American audience?",
+      "options": [
+        "The Salon des Refusés",
+        "The Armory Show",
+        "The Venice Biennale",
+        "The Great Exhibition"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_133",
+      "question": "Which Japanese aesthetic finds beauty in imperfection and impermanence?",
+      "options": [
+        "Ukiyo-e",
+        "Kintsugi",
+        "Wabi-sabi",
+        "Ikebana"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "aesthetics",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_134",
+      "question": "What is kintsugi?",
+      "options": [
+        "Painting on wet plaster",
+        "Folding paper into figures",
+        "Carving designs into wood blocks",
+        "Repairing broken pottery with lacquer mixed with gold"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "crafts",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_135",
+      "question": "Who designed the Sydney Opera House?",
+      "options": [
+        "Jørn Utzon",
+        "Frank Gehry",
+        "Oscar Niemeyer",
+        "Renzo Piano"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_136",
+      "question": "Which architect designed the glass pyramid at the Louvre?",
+      "options": [
+        "Norman Foster",
+        "I. M. Pei",
+        "Richard Meier",
+        "Kenzo Tange"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_137",
+      "question": "Which two architects designed the Centre Pompidou in Paris?",
+      "options": [
+        "Le Corbusier and Pierre Jeanneret",
+        "Herzog and de Meuron",
+        "Renzo Piano and Richard Rogers",
+        "Norman Foster and Zaha Hadid"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_138",
+      "question": "The term Brutalism derives from a French phrase meaning what?",
+      "options": [
+        "Brute force",
+        "Rough stone",
+        "Bare steel",
+        "Raw concrete"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_139",
+      "question": "Which ornate, playful style of 18th-century France is known for curving, asymmetrical decoration?",
+      "options": [
+        "Rococo",
+        "Gothic",
+        "Neoclassicism",
+        "Romanesque"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "classification"
+    },
+    {
+      "id": "culture_quality_140",
+      "question": "In Persian and Islamic architecture, what is an iwan?",
+      "options": [
+        "A tall slender tower",
+        "A vaulted hall open on one side",
+        "A walled garden",
+        "A domed tomb chamber"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_141",
+      "question": "What is muqarnas in Islamic architecture?",
+      "options": [
+        "A calligraphic frieze",
+        "A tiled prayer niche",
+        "Honeycomb-like decorative vaulting",
+        "A fountain courtyard"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_142",
+      "question": "What is an arabesque in Islamic art?",
+      "options": [
+        "A calligraphic style for the Quran",
+        "A type of pointed arch",
+        "A glazed tile technique",
+        "A repeating, interlacing ornamental pattern of plant-like forms"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "concept"
+    },
+    {
+      "id": "culture_quality_143",
+      "question": "Which historical event prompted the emergence of the Dada movement as a protest?",
+      "options": [
+        "World War I",
+        "The French Revolution",
+        "The Great Depression",
+        "The Russian Revolution"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "cause/effect"
+    },
+    {
+      "id": "culture_quality_144",
+      "question": "Which sculptor created the Bird in Space series?",
+      "options": [
+        "Auguste Rodin",
+        "Constantin Brâncuși",
+        "Henry Moore",
+        "Alberto Giacometti"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "sculpture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_145",
+      "question": "Who designed the great dome of the Florence Cathedral?",
+      "options": [
+        "Leon Battista Alberti",
+        "Michelangelo",
+        "Filippo Brunelleschi",
+        "Donato Bramante"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_146",
+      "question": "The Terracotta Army was buried to accompany which ruler?",
+      "options": [
+        "Kublai Khan",
+        "Emperor Wu of Han",
+        "Emperor Taizong of Tang",
+        "Qin Shi Huang"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "archaeology",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_147",
+      "question": "The Konark Sun Temple in India is dedicated to which deity?",
+      "options": [
+        "Surya",
+        "Vishnu",
+        "Shiva",
+        "Ganesha"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "world heritage",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_148",
+      "question": "The Japanese term ukiyo-e is usually translated as what?",
+      "options": [
+        "Paintings of the rising sun",
+        "Pictures of the floating world",
+        "Scenes of the four seasons",
+        "Ink on silk"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_149",
+      "question": "Which movement led by Kazimir Malevich produced the Black Square?",
+      "options": [
+        "Constructivism",
+        "De Stijl",
+        "Suprematism",
+        "Futurism"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "identification"
+    },
+    {
+      "id": "culture_quality_150",
+      "question": "Which Italian movement, launched by Filippo Marinetti's 1909 manifesto, celebrated speed, machinery, and modern life?",
+      "options": [
+        "Dadaism",
+        "Symbolism",
+        "Constructivism",
+        "Futurism"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "identification"
+    }
+  ]
+}

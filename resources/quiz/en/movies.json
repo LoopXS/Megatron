@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "movies",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "movies_quality_001",
+      "question": "Which film features the fictional archaeologist Indiana Jones?",
+      "options": [
+        "Raiders of the Lost Ark",
+        "Jaws",
+        "Jurassic Park",
+        "The Godfather"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "adventure",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_002",
+      "question": "Who directed the film Titanic (1997)?",
+      "options": [
+        "Steven Spielberg",
+        "James Cameron",
+        "Peter Jackson",
+        "Christopher Nolan"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_003",
+      "question": "Which film series follows a young wizard named Harry Potter?",
+      "options": [
+        "The Lord of the Rings",
+        "The Matrix",
+        "Harry Potter",
+        "The Hunger Games"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "fantasy",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_004",
+      "question": "In Toy Story, what kind of character is Woody?",
+      "options": [
+        "A dinosaur",
+        "A robot",
+        "A race car",
+        "A cowboy doll"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_013",
+      "question": "What is the name of the most famous annual film awards ceremony held in Hollywood?",
+      "options": [
+        "The Oscars",
+        "The Grammys",
+        "The Emmys",
+        "The Tonys"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "awards",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_014",
+      "question": "Which animated film features a lion cub named Simba?",
+      "options": [
+        "Finding Nemo",
+        "The Lion King",
+        "Shrek",
+        "Aladdin"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_015",
+      "question": "In Finding Nemo, what kind of fish is Nemo?",
+      "options": [
+        "A goldfish",
+        "A shark",
+        "A clownfish",
+        "A pufferfish"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_016",
+      "question": "Which green ogre is the hero of a popular animated film series?",
+      "options": [
+        "Hulk",
+        "Grinch",
+        "Yoda",
+        "Shrek"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_017",
+      "question": "In Frozen, what is the name of the snowman who loves warm hugs?",
+      "options": [
+        "Olaf",
+        "Sven",
+        "Kristoff",
+        "Hans"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_018",
+      "question": "Which studio created Toy Story, Up, and Inside Out?",
+      "options": [
+        "DreamWorks",
+        "Pixar",
+        "Studio Ghibli",
+        "Warner Bros."
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_019",
+      "question": "Which Pixar film follows a lonely trash-compacting robot who falls in love on a deserted Earth?",
+      "options": [
+        "Cars",
+        "Ratatouille",
+        "WALL-E",
+        "Brave"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_020",
+      "question": "Which film franchise features lightsabers and the Force?",
+      "options": [
+        "Star Trek",
+        "Alien",
+        "The Matrix",
+        "Star Wars"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "sci-fi",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_021",
+      "question": "In the Star Wars films, what is the name of Luke Skywalker's father?",
+      "options": [
+        "Darth Vader",
+        "Obi-Wan Kenobi",
+        "Han Solo",
+        "Yoda"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "sci-fi",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_022",
+      "question": "In The Lord of the Rings, what is the name of the hobbit who carries the One Ring?",
+      "options": [
+        "Gandalf",
+        "Frodo",
+        "Aragorn",
+        "Legolas"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "fantasy",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_023",
+      "question": "In the Harry Potter films, what is the name of the wizarding school Harry attends?",
+      "options": [
+        "Beauxbatons",
+        "Durmstrang",
+        "Hogwarts",
+        "Ilvermorny"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "fantasy",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_024",
+      "question": "Which superhero is known as the Caped Crusader of Gotham City?",
+      "options": [
+        "Superman",
+        "Spider-Man",
+        "Iron Man",
+        "Batman"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "superheroes",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_025",
+      "question": "Which superhero wears a red-and-blue suit and shoots webs from his wrists?",
+      "options": [
+        "Spider-Man",
+        "Captain America",
+        "Flash",
+        "Daredevil"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "superheroes",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_026",
+      "question": "In the Marvel films, which hero is a billionaire who builds a powered armor suit?",
+      "options": [
+        "Thor",
+        "Iron Man",
+        "Hawkeye",
+        "Ant-Man"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "superheroes",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_027",
+      "question": "Which Marvel hero wields a magical hammer called Mjölnir?",
+      "options": [
+        "Loki",
+        "Black Panther",
+        "Thor",
+        "Doctor Strange"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "superheroes",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_028",
+      "question": "In which film do a group of dinosaurs escape from a theme park?",
+      "options": [
+        "King Kong",
+        "Godzilla",
+        "Avatar",
+        "Jurassic Park"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "adventure",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_029",
+      "question": "In which 1975 film does a giant shark terrorize a beach town?",
+      "options": [
+        "Jaws",
+        "Deep Blue Sea",
+        "The Meg",
+        "Piranha"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "thriller",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_030",
+      "question": "Which musical film features the song \"Do-Re-Mi\" and a family of singers in Austria?",
+      "options": [
+        "Mary Poppins",
+        "The Sound of Music",
+        "Grease",
+        "Oliver!"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "musical",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_031",
+      "question": "In which film does Dorothy travel to Oz with her dog Toto?",
+      "options": [
+        "Alice in Wonderland",
+        "Peter Pan",
+        "The Wizard of Oz",
+        "Mary Poppins"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "musical",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_032",
+      "question": "Which film features a nanny who flies with an umbrella?",
+      "options": [
+        "Matilda",
+        "Annie",
+        "Pollyanna",
+        "Mary Poppins"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "musical",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_033",
+      "question": "Which classic 1942 film stars Humphrey Bogart as a nightclub owner in wartime Morocco?",
+      "options": [
+        "Casablanca",
+        "Citizen Kane",
+        "Gone with the Wind",
+        "Rebecca"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "classic",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_034",
+      "question": "Which comedian is famous for the Tramp character with a bowler hat and cane?",
+      "options": [
+        "Buster Keaton",
+        "Charlie Chaplin",
+        "Harold Lloyd",
+        "Stan Laurel"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "silent era",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_035",
+      "question": "Which 1990 comedy follows an eight-year-old who defends his house from burglars after his family forgets him on a Christmas trip?",
+      "options": [
+        "Jumanji",
+        "Dennis the Menace",
+        "Home Alone",
+        "Problem Child"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "comedy",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_036",
+      "question": "In E.T. the Extra-Terrestrial, what does the alien want to do?",
+      "options": [
+        "Conquer Earth",
+        "Become famous",
+        "Learn to drive",
+        "Go home"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "family",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_037",
+      "question": "Which 1997 film is set on a doomed ocean liner that hits an iceberg?",
+      "options": [
+        "Titanic",
+        "The Poseidon Adventure",
+        "Atlantis",
+        "Pearl Harbor"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "disaster",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_038",
+      "question": "Which actor starred as the Terminator in the 1984 film?",
+      "options": [
+        "Sylvester Stallone",
+        "Arnold Schwarzenegger",
+        "Bruce Willis",
+        "Jean-Claude Van Damme"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "action",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_039",
+      "question": "What do we call a film made with drawings or computer-generated images instead of live actors?",
+      "options": [
+        "A documentary",
+        "A silent film",
+        "An animated film",
+        "A biopic"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "genres",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_040",
+      "question": "What do we call a film that tells the true life story of a real person?",
+      "options": [
+        "A sequel",
+        "A prequel",
+        "A remake",
+        "A biopic"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "genres",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_041",
+      "question": "What do we call a film that presents real events and facts instead of a fictional story?",
+      "options": [
+        "A documentary",
+        "A fantasy",
+        "A musical",
+        "A comedy"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "genres",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_042",
+      "question": "What is the person who is in charge of the creative vision of a film called?",
+      "options": [
+        "The cinematographer",
+        "The director",
+        "The editor",
+        "The producer"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "film basics",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_043",
+      "question": "What is a film that continues the story of an earlier film called?",
+      "options": [
+        "A remake",
+        "A trailer",
+        "A sequel",
+        "A prequel"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "film basics",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_044",
+      "question": "What is the short preview used to advertise a film called?",
+      "options": [
+        "A script",
+        "A credit",
+        "A poster",
+        "A trailer"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "film basics",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_045",
+      "question": "What do we call the written text of a film containing dialogue and action?",
+      "options": [
+        "A screenplay",
+        "A storyboard",
+        "A soundtrack",
+        "A review"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "film basics",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_046",
+      "question": "What do we call the music and songs that accompany a film?",
+      "options": [
+        "The screenplay",
+        "The soundtrack",
+        "The credits",
+        "The trailer"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "film basics",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_047",
+      "question": "What do we call the list of cast and crew shown at the end of a film?",
+      "options": [
+        "The synopsis",
+        "The poster",
+        "The credits",
+        "The trailer"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "film basics",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_048",
+      "question": "Which Japanese studio produced Spirited Away and My Neighbor Totoro?",
+      "options": [
+        "Toei Animation",
+        "Madhouse",
+        "Pixar",
+        "Studio Ghibli"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_049",
+      "question": "In Aladdin, what lives inside the magic lamp?",
+      "options": [
+        "A genie",
+        "A dragon",
+        "A fairy",
+        "A wizard"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_050",
+      "question": "In Cinderella, what does the heroine lose while leaving the ball?",
+      "options": [
+        "A necklace",
+        "A glass slipper",
+        "A crown",
+        "A mask"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_051",
+      "question": "In Snow White and the Seven Dwarfs, what does the wicked queen give Snow White?",
+      "options": [
+        "A magic mirror",
+        "A golden comb",
+        "A poisoned apple",
+        "A red rose"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_052",
+      "question": "In Kung Fu Panda, what kind of animal is Po?",
+      "options": [
+        "A tiger",
+        "A monkey",
+        "A crane",
+        "A panda"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_053",
+      "question": "Which film features a rat who dreams of becoming a chef in Paris?",
+      "options": [
+        "Ratatouille",
+        "Flushed Away",
+        "Zootopia",
+        "Madagascar"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_054",
+      "question": "In The Chronicles of Narnia, through which piece of furniture do the children enter Narnia?",
+      "options": [
+        "A mirror",
+        "A wardrobe",
+        "A clock",
+        "A door"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "fantasy",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_055",
+      "question": "In The Hobbit, what is the name of the wizard who guides Bilbo?",
+      "options": [
+        "Merlin",
+        "Saruman",
+        "Gandalf",
+        "Dumbledore"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "fantasy",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_056",
+      "question": "Which film series features the pirate Captain Jack Sparrow?",
+      "options": [
+        "Treasure Island",
+        "Hook",
+        "Peter Pan",
+        "Pirates of the Caribbean"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "adventure",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_057",
+      "question": "What is the golden statuette given at the Academy Awards called?",
+      "options": [
+        "The Oscar",
+        "The Palme d'Or",
+        "The Golden Globe",
+        "The Emmy"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "awards",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_058",
+      "question": "In the animated film Up, what lifts the old man's house into the sky?",
+      "options": [
+        "Rockets",
+        "Balloons",
+        "Kites",
+        "Helicopter blades"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "animation",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_005",
+      "question": "A film repeatedly cuts between two locations to show events happening at the same time. Which editing technique is being used?",
+      "options": [
+        "Cross-cutting",
+        "Match moving",
+        "Color grading",
+        "Slow motion"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "film language",
+      "type": "classification"
+    },
+    {
+      "id": "movies_quality_006",
+      "question": "A character knows a crucial fact that the audience does not learn until much later. Which storytelling device is this most closely related to?",
+      "options": [
+        "Montage",
+        "Delayed revelation",
+        "Voice-over narration",
+        "Diegetic sound"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "storytelling",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_007",
+      "question": "A movie uses lighting with strong shadows and a high-contrast black-and-white look to create a tense mood. Which visual tradition does this most resemble?",
+      "options": [
+        "Musical theater",
+        "Documentary realism",
+        "Film noir",
+        "Silent comedy"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "cinematography",
+      "type": "comparison"
+    },
+    {
+      "id": "movies_quality_008",
+      "question": "An actor's performance is recorded against a green screen and later placed into a digitally created environment. Which process is most directly involved?",
+      "options": [
+        "Practical makeup",
+        "Foley recording",
+        "ADR only",
+        "Chroma key compositing"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "production",
+      "type": "application"
+    },
+    {
+      "id": "movies_quality_059",
+      "question": "Who directed the film Jaws and also E.T. the Extra-Terrestrial?",
+      "options": [
+        "George Lucas",
+        "Steven Spielberg",
+        "Ridley Scott",
+        "Francis Ford Coppola"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_060",
+      "question": "Who directed Pulp Fiction (1994)?",
+      "options": [
+        "Martin Scorsese",
+        "David Fincher",
+        "Quentin Tarantino",
+        "Oliver Stone"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_061",
+      "question": "Who directed the Dark Knight trilogy starring Christian Bale as Batman?",
+      "options": [
+        "Tim Burton",
+        "Zack Snyder",
+        "Joel Schumacher",
+        "Christopher Nolan"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_062",
+      "question": "Who directed the film Psycho (1960)?",
+      "options": [
+        "Alfred Hitchcock",
+        "Stanley Kubrick",
+        "Orson Welles",
+        "Billy Wilder"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_063",
+      "question": "Who directed 2001: A Space Odyssey?",
+      "options": [
+        "Ridley Scott",
+        "Stanley Kubrick",
+        "Steven Spielberg",
+        "Andrei Tarkovsky"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_064",
+      "question": "Who directed the original Star Wars (1977)?",
+      "options": [
+        "Steven Spielberg",
+        "J. J. Abrams",
+        "George Lucas",
+        "Irvin Kershner"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_065",
+      "question": "Who directed The Godfather (1972)?",
+      "options": [
+        "Martin Scorsese",
+        "Sidney Lumet",
+        "Brian De Palma",
+        "Francis Ford Coppola"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_066",
+      "question": "Which Japanese director made Seven Samurai and Rashomon?",
+      "options": [
+        "Akira Kurosawa",
+        "Hayao Miyazaki",
+        "Yasujiro Ozu",
+        "Takeshi Kitano"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_067",
+      "question": "Who directed the film Parasite (2019)?",
+      "options": [
+        "Park Chan-wook",
+        "Bong Joon-ho",
+        "Ang Lee",
+        "Hirokazu Kore-eda"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_068",
+      "question": "Who directed The Shawshank Redemption (1994)?",
+      "options": [
+        "Rob Reiner",
+        "Robert Zemeckis",
+        "Frank Darabont",
+        "Clint Eastwood"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_069",
+      "question": "Which Iranian director made the film A Separation (2011)?",
+      "options": [
+        "Abbas Kiarostami",
+        "Jafar Panahi",
+        "Majid Majidi",
+        "Asghar Farhadi"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "iranian cinema",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_070",
+      "question": "Which Iranian director made Taste of Cherry, which won the Palme d'Or in 1997?",
+      "options": [
+        "Abbas Kiarostami",
+        "Mohsen Makhmalbaf",
+        "Dariush Mehrjui",
+        "Bahram Beyzai"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "iranian cinema",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_071",
+      "question": "Which Iranian film directed by Majid Majidi was nominated for the Oscar for Best Foreign Language Film in 1999?",
+      "options": [
+        "The Color of Paradise",
+        "Children of Heaven",
+        "The Cow",
+        "The Runner"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "iranian cinema",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_072",
+      "question": "Which film won the Academy Award for Best Picture for 1994 and features a man sitting on a bench telling his life story?",
+      "options": [
+        "Pulp Fiction",
+        "The Shawshank Redemption",
+        "Forrest Gump",
+        "Braveheart"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "awards",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_073",
+      "question": "Which fantasy film won 11 Academy Awards in 2004, tying a record?",
+      "options": [
+        "The Two Towers",
+        "The Fellowship of the Ring",
+        "Gladiator",
+        "The Return of the King"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "awards",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_074",
+      "question": "Which film won the Oscar for Best Picture in 2020, becoming the first non-English-language film to do so?",
+      "options": [
+        "Parasite",
+        "Roma",
+        "Joker",
+        "1917"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "awards",
+      "type": "recognition"
+    },
+    {
+      "id": "movies_quality_075",
+      "question": "What is the top prize at the Cannes Film Festival called?",
+      "options": [
+        "Golden Lion",
+        "Palme d'Or",
+        "Golden Bear",
+        "Silver Shell"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "awards",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_076",
+      "question": "What is the top prize at the Venice Film Festival called?",
+      "options": [
+        "Palme d'Or",
+        "Golden Bear",
+        "Golden Lion",
+        "Crystal Globe"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "awards",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_077",
+      "question": "What is the top prize at the Berlin International Film Festival called?",
+      "options": [
+        "Golden Lion",
+        "Palme d'Or",
+        "Golden Leopard",
+        "Golden Bear"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "awards",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_078",
+      "question": "Which film won Best Picture at the Oscars for 1998 and tells the story of William Shakespeare's early romance?",
+      "options": [
+        "Shakespeare in Love",
+        "Saving Private Ryan",
+        "The Thin Red Line",
+        "Life Is Beautiful"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "awards",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_079",
+      "question": "What is a \"montage\" in film editing?",
+      "options": [
+        "A single long take without cuts",
+        "A sequence of short shots joined to condense time or convey ideas",
+        "A scene filmed from a character's view",
+        "A fade to black at the end of a film"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "film language",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_080",
+      "question": "What is a \"long take\" in cinema?",
+      "options": [
+        "A shot filmed with a very wide lens",
+        "A scene with no sound",
+        "A single continuous shot that lasts for an extended time",
+        "A scene filmed at night"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "film language",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_081",
+      "question": "What is a \"close-up\" used for in film?",
+      "options": [
+        "To show an entire landscape",
+        "To follow a moving character",
+        "To show two people talking",
+        "To show a subject's face or detail large in the frame"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "film language",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_082",
+      "question": "In film, what does \"diegetic sound\" mean?",
+      "options": [
+        "Sound that comes from within the world of the story",
+        "Music added only for the audience",
+        "Narration by an off-screen voice",
+        "Silence between scenes"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "film language",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_083",
+      "question": "What is a \"flashback\" in storytelling?",
+      "options": [
+        "A scene repeated for emphasis",
+        "A scene that shows events from an earlier time",
+        "A scene shown in slow motion",
+        "A scene filmed in reverse"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "film language",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_084",
+      "question": "What is a \"voice-over\" in a film?",
+      "options": [
+        "A character speaking directly to the camera",
+        "A song played during the credits",
+        "A narrator's voice heard over the images",
+        "A recorded phone call"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "film language",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_085",
+      "question": "What is \"slow motion\" used for in film?",
+      "options": [
+        "To save film stock",
+        "To speed up the action",
+        "To show a character's thoughts",
+        "To stretch time and emphasize a moment"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "film language",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_086",
+      "question": "What is a \"tracking shot\"?",
+      "options": [
+        "A shot in which the camera moves along with its subject",
+        "A shot filmed from a drone",
+        "A shot with no cuts for ten minutes",
+        "A shot from directly above"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "film language",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_087",
+      "question": "The Western is a genre most closely associated with which setting?",
+      "options": [
+        "Medieval Europe",
+        "The American frontier in the 19th century",
+        "Outer space",
+        "Ancient Rome"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "genres",
+      "type": "classification"
+    },
+    {
+      "id": "movies_quality_088",
+      "question": "Which genre uses exaggerated fear and suspense to unsettle the audience?",
+      "options": [
+        "Romance",
+        "Musical",
+        "Horror",
+        "Western"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "genres",
+      "type": "classification"
+    },
+    {
+      "id": "movies_quality_089",
+      "question": "What kind of film is Fargo (1996), blending crime with dark humor?",
+      "options": [
+        "A silent comedy",
+        "A romantic musical",
+        "A war epic",
+        "A dark comedy-crime film"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "genres",
+      "type": "classification"
+    },
+    {
+      "id": "movies_quality_090",
+      "question": "Which 1927 film, The Jazz Singer, is known for what milestone in cinema?",
+      "options": [
+        "The first feature film with synchronized dialogue",
+        "The first color feature film",
+        "The first animated feature",
+        "The first film shot in 3D"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_091",
+      "question": "Which 1937 film was the first full-length cel-animated feature film?",
+      "options": [
+        "Pinocchio",
+        "Snow White and the Seven Dwarfs",
+        "Bambi",
+        "Fantasia"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_092",
+      "question": "Which French brothers are credited with holding one of the first public film screenings in 1895?",
+      "options": [
+        "The Pathé brothers",
+        "The Gaumont brothers",
+        "The Lumière brothers",
+        "The Méliès brothers"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_093",
+      "question": "Which French filmmaker made A Trip to the Moon (1902)?",
+      "options": [
+        "Louis Lumière",
+        "Jean Renoir",
+        "François Truffaut",
+        "Georges Méliès"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_094",
+      "question": "What does a film producer usually do?",
+      "options": [
+        "Oversees financing and organizes the making of a film",
+        "Operates the camera during filming",
+        "Writes the music for the film",
+        "Acts in the lead role"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "production",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_095",
+      "question": "What does a cinematographer (director of photography) oversee?",
+      "options": [
+        "The film's costumes",
+        "The camera work and lighting of a film",
+        "The soundtrack",
+        "The casting"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "production",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_096",
+      "question": "What is a \"storyboard\" in filmmaking?",
+      "options": [
+        "The final edited version of a film",
+        "A list of actors",
+        "A series of drawings that plan the shots of a film",
+        "A written review"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "production",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_097",
+      "question": "Which technique brings clay figures to life by moving them slightly between photographed frames?",
+      "options": [
+        "Rotoscoping",
+        "Cel animation",
+        "Motion capture",
+        "Stop-motion animation"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "animation",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_098",
+      "question": "Which actor played Neo in The Matrix?",
+      "options": [
+        "Keanu Reeves",
+        "Brad Pitt",
+        "Tom Cruise",
+        "Johnny Depp"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "sci-fi",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_099",
+      "question": "In which film does the line \"I'll be back\" famously appear?",
+      "options": [
+        "Total Recall",
+        "The Terminator",
+        "Predator",
+        "Commando"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "sci-fi",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_100",
+      "question": "Which 1982 film by Ridley Scott depicts a future Los Angeles with replicants?",
+      "options": [
+        "Total Recall",
+        "Minority Report",
+        "Blade Runner",
+        "Dune"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "sci-fi",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_101",
+      "question": "Which film directed by Christopher Nolan features dream sharing and a spinning top?",
+      "options": [
+        "Interstellar",
+        "Tenet",
+        "Memento",
+        "Inception"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "sci-fi",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_102",
+      "question": "Which film directed by James Cameron is set on the moon Pandora?",
+      "options": [
+        "Avatar",
+        "Aliens",
+        "Gravity",
+        "Elysium"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "sci-fi",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_103",
+      "question": "Which composer wrote the score for Star Wars (1977) and Jaws?",
+      "options": [
+        "Hans Zimmer",
+        "John Williams",
+        "Ennio Morricone",
+        "Danny Elfman"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "music",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_104",
+      "question": "Which Italian composer wrote the score for The Good, the Bad and the Ugly?",
+      "options": [
+        "Nino Rota",
+        "John Williams",
+        "Ennio Morricone",
+        "Bernard Herrmann"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "music",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_009",
+      "question": "A screenplay presents a character's earlier actions first and reveals their consequences before showing the original cause. Which structure is being deliberately manipulated?",
+      "options": [
+        "Cause-and-effect order",
+        "Chronological order",
+        "Narrative chronology",
+        "Time sequence"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "screenwriting",
+      "type": "reasoning"
+    },
+    {
+      "id": "movies_quality_010",
+      "question": "A director repeatedly shows the same visual object whenever a character faces a difficult moral choice. What is the object functioning as?",
+      "options": [
+        "A production credit",
+        "A visual motif",
+        "A continuity error",
+        "A subtitle"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "film language",
+      "type": "analysis"
+    },
+    {
+      "id": "movies_quality_011",
+      "question": "A film tells its story through images and sounds while intentionally withholding most spoken dialogue. Which cinematic principle is being emphasized?",
+      "options": [
+        "Textual narration",
+        "Narrator commentary",
+        "Visual storytelling",
+        "Exposition through dialogue"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "cinema",
+      "type": "analysis"
+    },
+    {
+      "id": "movies_quality_012",
+      "question": "Two scenes are cut together so that an action begun in one shot appears to continue smoothly in the next shot from a different angle. Which editing principle is most relevant?",
+      "options": [
+        "Non-diegetic scoring",
+        "Random montage",
+        "Jump cutting for disorientation",
+        "Continuity editing"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "editing",
+      "type": "application"
+    },
+    {
+      "id": "movies_quality_105",
+      "question": "Who directed Citizen Kane (1941), often voted among the greatest films of all time?",
+      "options": [
+        "Alfred Hitchcock",
+        "John Ford",
+        "Orson Welles",
+        "Howard Hawks"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_106",
+      "question": "Who directed Bicycle Thieves (1948), a landmark of Italian neorealism?",
+      "options": [
+        "Federico Fellini",
+        "Roberto Rossellini",
+        "Luchino Visconti",
+        "Vittorio De Sica"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_107",
+      "question": "Who directed 8½ (1963)?",
+      "options": [
+        "Federico Fellini",
+        "Michelangelo Antonioni",
+        "Pier Paolo Pasolini",
+        "Bernardo Bertolucci"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_108",
+      "question": "Who directed Breathless (1960), a landmark of the French New Wave?",
+      "options": [
+        "François Truffaut",
+        "Jean-Luc Godard",
+        "Éric Rohmer",
+        "Claude Chabrol"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_109",
+      "question": "Who directed The 400 Blows (1959)?",
+      "options": [
+        "Jean-Luc Godard",
+        "Jacques Rivette",
+        "François Truffaut",
+        "Alain Resnais"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_110",
+      "question": "Who directed Persona (1966)?",
+      "options": [
+        "Carl Theodor Dreyer",
+        "Lars von Trier",
+        "Andrei Tarkovsky",
+        "Ingmar Bergman"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_111",
+      "question": "Who directed Stalker (1979)?",
+      "options": [
+        "Andrei Tarkovsky",
+        "Sergei Eisenstein",
+        "Elem Klimov",
+        "Nikita Mikhalkov"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_112",
+      "question": "Who directed Battleship Potemkin (1925)?",
+      "options": [
+        "Dziga Vertov",
+        "Sergei Eisenstein",
+        "Vsevolod Pudovkin",
+        "Lev Kuleshov"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_113",
+      "question": "Who directed the 1927 science-fiction film Metropolis?",
+      "options": [
+        "F. W. Murnau",
+        "G. W. Pabst",
+        "Fritz Lang",
+        "Robert Wiene"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_114",
+      "question": "Who directed Tokyo Story (1953)?",
+      "options": [
+        "Akira Kurosawa",
+        "Kenji Mizoguchi",
+        "Mikio Naruse",
+        "Yasujirō Ozu"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_115",
+      "question": "Who directed Taxi Driver (1976)?",
+      "options": [
+        "Martin Scorsese",
+        "Francis Ford Coppola",
+        "Brian De Palma",
+        "Sidney Lumet"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_116",
+      "question": "Who directed Apocalypse Now (1979)?",
+      "options": [
+        "Oliver Stone",
+        "Francis Ford Coppola",
+        "Michael Cimino",
+        "Stanley Kubrick"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_117",
+      "question": "Who directed Lawrence of Arabia (1962)?",
+      "options": [
+        "Carol Reed",
+        "Alfred Hitchcock",
+        "David Lean",
+        "Michael Powell"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "directors",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_118",
+      "question": "Which 1969 film by Dariush Mehrjui is considered a landmark of the Iranian New Wave?",
+      "options": [
+        "The Cycle",
+        "Hamoon",
+        "Leila",
+        "The Cow"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "iranian cinema",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_119",
+      "question": "Which Iranian film by Abbas Kiarostami was released in 1990 and is based on a real impersonation case?",
+      "options": [
+        "Close-Up",
+        "Where Is the Friend's House?",
+        "Through the Olive Trees",
+        "The Wind Will Carry Us"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "iranian cinema",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_120",
+      "question": "Which Iranian director won the Oscar for Best International Feature for The Salesman (2016)?",
+      "options": [
+        "Jafar Panahi",
+        "Asghar Farhadi",
+        "Mohammad Rasoulof",
+        "Majid Majidi"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "iranian cinema",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_121",
+      "question": "What did the Soviet \"Kuleshov effect\" demonstrate about editing?",
+      "options": [
+        "Sound is more important than image",
+        "Long takes create more realism",
+        "Viewers derive meaning from the juxtaposition of shots",
+        "Color affects audience emotion"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_122",
+      "question": "What is a \"MacGuffin,\" a term popularized by Alfred Hitchcock?",
+      "options": [
+        "A character who narrates the film",
+        "A sudden twist at the end of a story",
+        "A recurring piece of music",
+        "An object or goal that drives the plot but is itself unimportant"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_123",
+      "question": "What is the \"180-degree rule\" in filmmaking?",
+      "options": [
+        "Keeping the camera on one side of an imaginary line between characters",
+        "Rotating the camera halfway in each shot",
+        "Filming each scene twice from opposite angles",
+        "Cutting every 180 seconds"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_124",
+      "question": "What is \"mise-en-scène\"?",
+      "options": [
+        "The final editing of a film",
+        "Everything placed in front of the camera, including set, lighting, and costume",
+        "The sound design of a film",
+        "The marketing of a film"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_125",
+      "question": "What is a \"jump cut\"?",
+      "options": [
+        "A cut between two parallel stories",
+        "A cut hidden by a moving object",
+        "A cut that abruptly skips forward in time within the same shot",
+        "A fade between two scenes"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_126",
+      "question": "What is a \"match cut\"?",
+      "options": [
+        "A cut that skips over a long period",
+        "A cut that follows a conversation",
+        "A cut to a black screen",
+        "A cut that links two shots through similar shape, motion, or composition"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_127",
+      "question": "What does the term \"auteur\" mean in film criticism?",
+      "options": [
+        "A director regarded as the main creative author of a film",
+        "A producer who finances a film",
+        "An actor who also writes",
+        "A critic who reviews silent films"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_128",
+      "question": "What is \"non-diegetic sound\"?",
+      "options": [
+        "Dialogue spoken by characters",
+        "Sound that originates outside the story world, such as a musical score",
+        "Sound produced by on-screen objects",
+        "A character's inner voice only"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_129",
+      "question": "What is \"Dutch angle\" in cinematography?",
+      "options": [
+        "A shot filmed from far away",
+        "A shot with extreme depth of field",
+        "A shot with the camera tilted so the horizon is slanted",
+        "A shot from the ground looking up"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_130",
+      "question": "What is \"deep focus\" in cinematography?",
+      "options": [
+        "Blurring the background to isolate a subject",
+        "Filming in near darkness",
+        "Using only close-ups",
+        "Keeping both foreground and background sharp in the same shot"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_131",
+      "question": "What is \"rotoscoping\"?",
+      "options": [
+        "Tracing over live-action footage frame by frame to create animation",
+        "Moving clay figures between frames",
+        "Projecting film on a rotating screen",
+        "Mixing two exposures"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "film theory",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_132",
+      "question": "Which 1915 film by D. W. Griffith is notable for pioneering film techniques but is widely condemned for its racist content?",
+      "options": [
+        "Intolerance",
+        "The Birth of a Nation",
+        "Broken Blossoms",
+        "Way Down East"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_133",
+      "question": "Which 1935 film is considered the first feature-length film made in three-strip Technicolor?",
+      "options": [
+        "The Wizard of Oz",
+        "Snow White and the Seven Dwarfs",
+        "Becky Sharp",
+        "The Jazz Singer"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_134",
+      "question": "What was the Hollywood \"Production Code\" (Hays Code)?",
+      "options": [
+        "A union agreement for actors",
+        "A technical standard for film stock",
+        "A system to rate box office results",
+        "A set of moral guidelines that censored American films"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_135",
+      "question": "What was the \"Dogme 95\" movement?",
+      "options": [
+        "A Danish filmmaking movement advocating a strict, minimal style",
+        "An Italian movement about neorealism",
+        "A Soviet editing theory",
+        "A German silent film movement"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_136",
+      "question": "Which film movement of the 1920s Germany included The Cabinet of Dr. Caligari?",
+      "options": [
+        "Italian neorealism",
+        "German Expressionism",
+        "French New Wave",
+        "Dogme 95"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_137",
+      "question": "Which film movement began in 1940s Italy and used non-professional actors and real locations?",
+      "options": [
+        "German Expressionism",
+        "Soviet montage",
+        "Italian neorealism",
+        "French New Wave"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_138",
+      "question": "Which Indian director made the Apu Trilogy, beginning with Pather Panchali?",
+      "options": [
+        "Ritwik Ghatak",
+        "Mrinal Sen",
+        "Raj Kapoor",
+        "Satyajit Ray"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_139",
+      "question": "Which actor won the first Academy Award for Best Actor?",
+      "options": [
+        "Emil Jannings",
+        "Charlie Chaplin",
+        "Douglas Fairbanks",
+        "Rudolph Valentino"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_140",
+      "question": "Which film won all five major Academy Awards (Picture, Director, Actor, Actress, Screenplay) for 1991 films?",
+      "options": [
+        "Dances with Wolves",
+        "The Silence of the Lambs",
+        "Schindler's List",
+        "Forrest Gump"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "awards",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_141",
+      "question": "Which director has won the most Academy Awards for Best Director?",
+      "options": [
+        "Steven Spielberg",
+        "Martin Scorsese",
+        "John Ford",
+        "Frank Capra"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "awards",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_142",
+      "question": "Which actress has won the most Academy Awards for acting, with four wins?",
+      "options": [
+        "Meryl Streep",
+        "Ingrid Bergman",
+        "Bette Davis",
+        "Katharine Hepburn"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "awards",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_143",
+      "question": "What does ADR (automated dialogue replacement) refer to?",
+      "options": [
+        "Re-recording dialogue in a studio after filming",
+        "Adding subtitles to a film",
+        "Automatically editing scenes",
+        "Recording sound effects on set"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "production",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_144",
+      "question": "What is a \"gaffer\" on a film set?",
+      "options": [
+        "The person who records sound",
+        "The chief electrician in charge of lighting",
+        "The person who operates a boom",
+        "The person who manages the budget"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "production",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_145",
+      "question": "What does a \"best boy\" assist with on a film set?",
+      "options": [
+        "The director",
+        "The editor",
+        "The gaffer or key grip",
+        "The costume designer"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "production",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_146",
+      "question": "What is a \"key grip\" responsible for?",
+      "options": [
+        "Costume design",
+        "Casting",
+        "Writing the script",
+        "Camera support equipment and movement on set"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "production",
+      "type": "concept"
+    },
+    {
+      "id": "movies_quality_147",
+      "question": "Which composer wrote the famous shrieking-violin score for Psycho (1960)?",
+      "options": [
+        "Bernard Herrmann",
+        "Jerry Goldsmith",
+        "Henry Mancini",
+        "Max Steiner"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "music",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_148",
+      "question": "Which Jafar Panahi film won the Golden Lion at the Venice Film Festival in 2000?",
+      "options": [
+        "Offside",
+        "The Circle",
+        "Crimson Gold",
+        "Taxi"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "iranian cinema",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_149",
+      "question": "In which year was the first Academy Awards ceremony held?",
+      "options": [
+        "1939",
+        "1919",
+        "1929",
+        "1949"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "awards",
+      "type": "identification"
+    },
+    {
+      "id": "movies_quality_150",
+      "question": "Which film shared the Palme d'Or in 1997 with Abbas Kiarostami's Taste of Cherry?",
+      "options": [
+        "Secrets & Lies",
+        "Breaking the Waves",
+        "Fargo",
+        "The Eel"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "awards",
+      "type": "identification"
+    }
+  ]
+}

@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "games",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "games_quality_001",
+      "question": "In chess, which piece can move in an L-shaped pattern?",
+      "options": [
+        "Knight",
+        "Bishop",
+        "Rook",
+        "Queen"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "board games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_002",
+      "question": "In a standard deck, how many suits are there?",
+      "options": [
+        "Six",
+        "Four",
+        "Three",
+        "Five"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "card games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_003",
+      "question": "In Minecraft, which material is commonly used to make a crafting table?",
+      "options": [
+        "Iron bars",
+        "Sand",
+        "Wood planks",
+        "Glass"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "sandbox games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_004",
+      "question": "In Super Mario games, what is Mario's brother commonly named?",
+      "options": [
+        "Wario",
+        "Yoshi",
+        "Bowser",
+        "Luigi"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "platform games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_005",
+      "question": "A game gives a player a shield that absorbs a fixed amount of damage before breaking. What kind of mechanic is this?",
+      "options": [
+        "Damage mitigation with a limited resource",
+        "Permanent invincibility",
+        "Random map generation",
+        "Respawn-only movement"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "game mechanics",
+      "type": "classification"
+    },
+    {
+      "id": "games_quality_006",
+      "question": "A strategy game lets players choose between spending resources on immediate defense or long-term research. What kind of decision is this?",
+      "options": [
+        "Random matchmaking",
+        "Resource allocation trade-off",
+        "Input remapping",
+        "Purely cosmetic customization"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "strategy games",
+      "type": "reasoning"
+    },
+    {
+      "id": "games_quality_007",
+      "question": "In a racing game, a player takes a shorter route but enters a slower surface. What should the player compare to decide whether the shortcut helps?",
+      "options": [
+        "Only the route's length",
+        "The car's color",
+        "Total travel time",
+        "The menu music"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "racing games",
+      "type": "application"
+    },
+    {
+      "id": "games_quality_008",
+      "question": "A multiplayer game rewards a player for assisting teammates even without making the final elimination. What behavior is the system encouraging?",
+      "options": [
+        "Avoiding objectives",
+        "Solo play only",
+        "Ignoring allies",
+        "Team-oriented support"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "multiplayer design",
+      "type": "analysis"
+    },
+    {
+      "id": "games_quality_009",
+      "question": "A game mechanic gives a powerful ability a long cooldown after use. What design purpose can this serve?",
+      "options": [
+        "Preventing constant use and encouraging timing decisions",
+        "Guaranteeing every player wins",
+        "Removing all player choice",
+        "Making the ability permanently unavailable"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "game design",
+      "type": "analysis"
+    },
+    {
+      "id": "games_quality_010",
+      "question": "Two strategies have similar average rewards, but one is much more sensitive to a player's timing skill. Which characteristic is being compared?",
+      "options": [
+        "Audio quality",
+        "Skill dependence",
+        "Screen resolution",
+        "Story length"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "game design",
+      "type": "comparison"
+    },
+    {
+      "id": "games_quality_011",
+      "question": "A game secretly changes enemy behavior based on how the player performs, without changing the stated rules. What system is most directly being used?",
+      "options": [
+        "Controller remapping",
+        "Save-file encryption",
+        "Dynamic difficulty adjustment",
+        "Texture compression"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "game systems",
+      "type": "inference"
+    },
+    {
+      "id": "games_quality_012",
+      "question": "A competitive game's ranking system gives points for beating stronger opponents and removes more points after losing to weaker opponents. What principle is it trying to capture?",
+      "options": [
+        "Playtime alone",
+        "Cosmetic rarity",
+        "Random reward frequency",
+        "Relative performance against opponent strength"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "competitive systems",
+      "type": "reasoning"
+    },
+    {
+      "id": "games_quality_013",
+      "question": "Which company created the Mario franchise?",
+      "options": [
+        "Sega",
+        "Sony",
+        "Nintendo",
+        "Atari"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "game companies",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_014",
+      "question": "In Pac-Man, what chases the player through the maze?",
+      "options": [
+        "Robots",
+        "Spiders",
+        "Dragons",
+        "Ghosts"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "classic arcade",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_015",
+      "question": "Which game features green explosive mobs called Creepers?",
+      "options": [
+        "Terraria",
+        "Roblox",
+        "Minecraft",
+        "Fortnite"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "sandbox games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_016",
+      "question": "What type is Pikachu in the Pokémon games?",
+      "options": [
+        "Water",
+        "Fire",
+        "Grass",
+        "Electric"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "game characters",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_017",
+      "question": "What color is Sonic the Hedgehog?",
+      "options": [
+        "Red",
+        "Green",
+        "Blue",
+        "Yellow"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "game characters",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_018",
+      "question": "In The Legend of Zelda series, what is the name of the main hero?",
+      "options": [
+        "Link",
+        "Ganon",
+        "Navi",
+        "Epona"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_019",
+      "question": "Which company makes the PlayStation consoles?",
+      "options": [
+        "Nintendo",
+        "Microsoft",
+        "Sega",
+        "Sony"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "consoles",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_020",
+      "question": "Which company makes the Xbox consoles?",
+      "options": [
+        "Microsoft",
+        "Sony",
+        "Nintendo",
+        "Apple"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "consoles",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_021",
+      "question": "Fortnite is best known for which game mode?",
+      "options": [
+        "Farming simulation",
+        "Card battling",
+        "Rhythm challenge",
+        "Battle royale"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "game genres",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_022",
+      "question": "In Monopoly, what do players mainly buy and trade?",
+      "options": [
+        "Sports teams",
+        "Musical instruments",
+        "Properties",
+        "Pets"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "board games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_023",
+      "question": "How many squares are there on a standard chessboard?",
+      "options": [
+        "32",
+        "48",
+        "64",
+        "72"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "chess",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_024",
+      "question": "What is it called in chess when a king is under attack and cannot escape?",
+      "options": [
+        "Checkmate",
+        "Stalemate",
+        "Castling",
+        "Promotion"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "chess",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_025",
+      "question": "How many pieces does each player start with in chess?",
+      "options": [
+        "8",
+        "12",
+        "20",
+        "16"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "chess",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_026",
+      "question": "In Among Us, what is the role of a player who secretly sabotages the crew?",
+      "options": [
+        "Impostor",
+        "Crewmate",
+        "Engineer",
+        "Scientist"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "multiplayer games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_027",
+      "question": "In Angry Birds, which creatures are the birds trying to defeat?",
+      "options": [
+        "Green pigs",
+        "Cats",
+        "Foxes",
+        "Rats"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mobile games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_028",
+      "question": "In the original arcade Donkey Kong, what does the ape roll down the ramps?",
+      "options": [
+        "Boulders",
+        "Barrels",
+        "Wheels",
+        "Logs"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "classic arcade",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_029",
+      "question": "Which series stars the armored soldier known as Master Chief?",
+      "options": [
+        "Gears of War",
+        "Doom",
+        "Destiny",
+        "Halo"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "game franchises",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_030",
+      "question": "What is the core action in Candy Crush Saga?",
+      "options": [
+        "Matching candies of the same kind",
+        "Racing cars",
+        "Building towers",
+        "Catching fish"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mobile games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_031",
+      "question": "In Scrabble, what do players use to form words?",
+      "options": [
+        "Letter tiles",
+        "Dominoes",
+        "Playing cards",
+        "Coins"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "board games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_032",
+      "question": "In Jenga, what do players remove and stack on top of the tower?",
+      "options": [
+        "Metal rods",
+        "Wooden blocks",
+        "Paper cups",
+        "Marbles"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "tabletop games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_033",
+      "question": "The Sims is best described as what type of game?",
+      "options": [
+        "Space shooter",
+        "Life simulation",
+        "Racing game",
+        "Card battler"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "game genres",
+      "type": "classification"
+    },
+    {
+      "id": "games_quality_034",
+      "question": "Which Nintendo console, released in 2017, can be played both docked and handheld?",
+      "options": [
+        "Nintendo Switch",
+        "Wii",
+        "GameCube",
+        "Game Boy Advance"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "consoles",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_035",
+      "question": "What does NPC stand for in video games?",
+      "options": [
+        "Non-player character",
+        "New player card",
+        "Network packet control",
+        "Normal play cycle"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "video game terms",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_036",
+      "question": "What is a powerful enemy fought at the end of a level usually called?",
+      "options": [
+        "A sidekick",
+        "A checkpoint",
+        "A boss",
+        "An avatar"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "video game terms",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_037",
+      "question": "In many games, what does HP usually stand for?",
+      "options": [
+        "Heavy punches",
+        "Health points",
+        "Hero position",
+        "Hyper pace"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "video game terms",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_038",
+      "question": "In bowling, what is it called when all ten pins fall on the first roll?",
+      "options": [
+        "A spare",
+        "A gutter",
+        "A strike",
+        "A split"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "sports games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_039",
+      "question": "In Super Mario games, which item commonly makes Mario grow larger?",
+      "options": [
+        "Coin",
+        "Super Mushroom",
+        "Warp Pipe",
+        "Goal Flag"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "platform games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_040",
+      "question": "Who is the princess Mario usually rescues from Bowser?",
+      "options": [
+        "Princess Zelda",
+        "Princess Peach",
+        "Princess Leia",
+        "Princess Fiona"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "game characters",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_041",
+      "question": "Which Fire-type starter Pokémon can be chosen in Pokémon Red and Blue?",
+      "options": [
+        "Squirtle",
+        "Bulbasaur",
+        "Pidgey",
+        "Charmander"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_042",
+      "question": "What is the name of Sonic's two-tailed fox friend?",
+      "options": [
+        "Knuckles",
+        "Tails",
+        "Shadow",
+        "Amy"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "game characters",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_043",
+      "question": "What happens in Tetris when a horizontal row is completely filled?",
+      "options": [
+        "The game restarts",
+        "The pieces turn invisible",
+        "The screen changes color permanently",
+        "The row is cleared"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "puzzle games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_044",
+      "question": "Which ancient strategy game is played with black and white stones on a grid?",
+      "options": [
+        "Checkers",
+        "Backgammon",
+        "Mahjong",
+        "Go"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "board games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_045",
+      "question": "In Rock-Paper-Scissors, which choice beats scissors?",
+      "options": [
+        "Paper",
+        "Rock",
+        "Fire",
+        "Water"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "classic games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_046",
+      "question": "Which Nintendo character is a round pink hero who can inhale enemies?",
+      "options": [
+        "Yoshi",
+        "Toad",
+        "Kirby",
+        "Wario"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_047",
+      "question": "Which racing series features Mario characters throwing shells and banana peels?",
+      "options": [
+        "Gran Turismo",
+        "Mario Kart",
+        "Forza",
+        "Need for Speed"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "racing games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_048",
+      "question": "What is the in-game currency in Animal Crossing?",
+      "options": [
+        "Bells",
+        "Rupees",
+        "Rings",
+        "Gil"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "simulation games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_049",
+      "question": "Which simple 1972 game from Atari simulates table tennis?",
+      "options": [
+        "Pac-Man",
+        "Tetris",
+        "Pong",
+        "Asteroids"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "classic arcade",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_050",
+      "question": "In tic-tac-toe, how many squares make up the grid?",
+      "options": [
+        "6",
+        "8",
+        "12",
+        "9"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "puzzle games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_051",
+      "question": "Which genre is built around jumping between platforms and avoiding hazards?",
+      "options": [
+        "Rhythm game",
+        "Card game",
+        "Platformer",
+        "Trivia game"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "game genres",
+      "type": "classification"
+    },
+    {
+      "id": "games_quality_052",
+      "question": "In the board game Battleship, what are players trying to find?",
+      "options": [
+        "Hidden treasure",
+        "Secret words",
+        "The opponent's hidden ships",
+        "Missing pieces"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "board games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_053",
+      "question": "How many letters are in the target word in Wordle?",
+      "options": [
+        "Five",
+        "Four",
+        "Six",
+        "Seven"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "puzzle games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_054",
+      "question": "Which digits are used to fill a standard Sudoku grid?",
+      "options": [
+        "0 through 9",
+        "1 through 8",
+        "1 through 10",
+        "1 through 9"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "puzzle games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_055",
+      "question": "Call of Duty is best known as which type of game?",
+      "options": [
+        "Farming simulator",
+        "First-person shooter",
+        "Puzzle game",
+        "Rhythm game"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "game genres",
+      "type": "classification"
+    },
+    {
+      "id": "games_quality_056",
+      "question": "Which Nintendo console was Wii Sports designed for?",
+      "options": [
+        "Xbox 360",
+        "Wii",
+        "PlayStation 3",
+        "Game Boy"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "consoles",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_057",
+      "question": "In Pokémon, what are Poké Balls used for?",
+      "options": [
+        "Paying shopkeepers",
+        "Capturing wild Pokémon",
+        "Cooking food",
+        "Opening doors"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "game mechanics",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_058",
+      "question": "Which series features the sacred relic known as the Triforce?",
+      "options": [
+        "The Legend of Zelda",
+        "Final Fantasy",
+        "Metroid",
+        "Fire Emblem"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "game franchises",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_059",
+      "question": "What are the falling pieces in Tetris called?",
+      "options": [
+        "Pentominoes",
+        "Dominoes",
+        "Tetrominoes",
+        "Trominoes"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "puzzle games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_060",
+      "question": "On a standard six-sided die, opposite faces add up to what number?",
+      "options": [
+        "7",
+        "6",
+        "8",
+        "9"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "tabletop games",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_061",
+      "question": "Which company publishes the Grand Theft Auto series?",
+      "options": [
+        "Ubisoft",
+        "Rockstar Games",
+        "Electronic Arts",
+        "Capcom"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_062",
+      "question": "In which decade was the original Pac-Man released?",
+      "options": [
+        "The 1960s",
+        "The 1980s",
+        "The 1970s",
+        "The 1990s"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "video game history",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_063",
+      "question": "Who created the original Minecraft?",
+      "options": [
+        "Gabe Newell",
+        "Hideo Kojima",
+        "Markus Persson",
+        "Sid Meier"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_064",
+      "question": "Which studio developed The Witcher 3: Wild Hunt?",
+      "options": [
+        "BioWare",
+        "Bethesda",
+        "CD Projekt Red",
+        "Ubisoft Montreal"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_065",
+      "question": "Which company developed Half-Life and operates the Steam platform?",
+      "options": [
+        "Valve",
+        "Epic Games",
+        "id Software",
+        "Blizzard"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_066",
+      "question": "In Pokémon Red and Blue, which region contains Pallet Town?",
+      "options": [
+        "Kanto",
+        "Johto",
+        "Hoenn",
+        "Sinnoh"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "game worlds",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_067",
+      "question": "What is the name of the kingdom where The Legend of Zelda mainly takes place?",
+      "options": [
+        "Hyrule",
+        "Tamriel",
+        "Azeroth",
+        "The Mushroom Kingdom"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "game worlds",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_068",
+      "question": "Ryu and Ken are characters from which fighting game series?",
+      "options": [
+        "Mortal Kombat",
+        "Tekken",
+        "Soulcalibur",
+        "Street Fighter"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "fighting games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_069",
+      "question": "Which company is the developer behind the Final Fantasy series?",
+      "options": [
+        "Capcom",
+        "Konami",
+        "Bandai Namco",
+        "Square Enix"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_070",
+      "question": "Dark Souls was created by which Japanese studio?",
+      "options": [
+        "Capcom",
+        "PlatinumGames",
+        "Level-5",
+        "FromSoftware"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_071",
+      "question": "Who created Tetris in 1985?",
+      "options": [
+        "Alexey Pajitnov",
+        "Nolan Bushnell",
+        "Ralph Baer",
+        "Shigeru Miyamoto"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_072",
+      "question": "Which chess piece can capture using the special move en passant?",
+      "options": [
+        "Pawn",
+        "Knight",
+        "Bishop",
+        "Rook"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "chess",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_073",
+      "question": "Which two pieces are involved in castling?",
+      "options": [
+        "King and queen",
+        "King and rook",
+        "King and bishop",
+        "Queen and rook"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "chess",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_074",
+      "question": "In standard poker, which of these hands ranks highest?",
+      "options": [
+        "Full house",
+        "Royal flush",
+        "Four of a kind",
+        "Straight"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "card games",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_075",
+      "question": "Which company developed Overwatch?",
+      "options": [
+        "Riot Games",
+        "Blizzard Entertainment",
+        "Valve",
+        "Supercell"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_076",
+      "question": "League of Legends belongs to which genre?",
+      "options": [
+        "Battle royale",
+        "Rhythm game",
+        "MOBA",
+        "Farming simulation"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "esports",
+      "type": "classification"
+    },
+    {
+      "id": "games_quality_077",
+      "question": "In Portal, which artificial intelligence guides and mocks the player?",
+      "options": [
+        "SHODAN",
+        "Cortana",
+        "GLaDOS",
+        "HAL 9000"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_078",
+      "question": "Which studio developed The Elder Scrolls V: Skyrim?",
+      "options": [
+        "BioWare",
+        "Obsidian Entertainment",
+        "Rockstar North",
+        "Bethesda Game Studios"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_079",
+      "question": "In which game did Mario first appear?",
+      "options": [
+        "Donkey Kong",
+        "Super Mario Bros.",
+        "Metroid",
+        "Pong"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_080",
+      "question": "Joel and Ellie are the lead characters of which game?",
+      "options": [
+        "Horizon Zero Dawn",
+        "Days Gone",
+        "The Last of Us",
+        "Metro Exodus"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_081",
+      "question": "Who is the bounty hunter protagonist of the Metroid series?",
+      "options": [
+        "Lara Croft",
+        "Jill Valentine",
+        "Samus Aran",
+        "Chun-Li"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_082",
+      "question": "In the Fallout series, which company builds the underground vaults?",
+      "options": [
+        "Umbrella Corporation",
+        "Aperture Science",
+        "Vault-Tec",
+        "Weyland-Yutani"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "game worlds",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_083",
+      "question": "Who is the main protagonist of the Mass Effect trilogy?",
+      "options": [
+        "Commander Shepard",
+        "Master Chief",
+        "Gordon Freeman",
+        "Marcus Fenix"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_084",
+      "question": "Who is the solo developer of Stardew Valley?",
+      "options": [
+        "Eric Barone",
+        "Toby Fox",
+        "Markus Persson",
+        "Jonathan Blow"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_085",
+      "question": "Which studio developed Among Us?",
+      "options": [
+        "Mojang",
+        "Supercell",
+        "Innersloth",
+        "Valve"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_086",
+      "question": "Which two teams face each other in a standard Counter-Strike match?",
+      "options": [
+        "Soldiers and Zombies",
+        "Terrorists and Counter-Terrorists",
+        "Pirates and Ninjas",
+        "Attackers and Aliens"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "multiplayer games",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_087",
+      "question": "Whose name appears in the title of the original Civilization game?",
+      "options": [
+        "Will Wright",
+        "Sid Meier",
+        "Peter Molyneux",
+        "Richard Garriott"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_088",
+      "question": "Which company developed the original Resident Evil?",
+      "options": [
+        "Konami",
+        "Sega",
+        "Square Enix",
+        "Capcom"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_089",
+      "question": "How many regular types exist in the main Pokémon games, including Fairy?",
+      "options": [
+        "15",
+        "18",
+        "16",
+        "20"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "game mechanics",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_090",
+      "question": "In chess, what is the result of a stalemate?",
+      "options": [
+        "A win for White",
+        "A draw",
+        "A win for Black",
+        "A win for the stalemated player"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "chess",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_091",
+      "question": "In the standard US edition of Monopoly, how much do you collect for passing Go?",
+      "options": [
+        "$100",
+        "$200",
+        "$150",
+        "$500"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "board games",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_092",
+      "question": "How many letter tiles are in a standard English Scrabble set?",
+      "options": [
+        "80",
+        "100",
+        "90",
+        "120"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "board games",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_093",
+      "question": "Which of these is one of the five resources in Catan?",
+      "options": [
+        "Wool",
+        "Gold",
+        "Silver",
+        "Oil"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "board games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_094",
+      "question": "Which die is rolled for most attack rolls and ability checks in Dungeons & Dragons?",
+      "options": [
+        "d6",
+        "d8",
+        "d12",
+        "d20"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "tabletop games",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_095",
+      "question": "Which game was bundled with the Game Boy in North America and Europe?",
+      "options": [
+        "Super Mario Land",
+        "Pokémon Red",
+        "Tetris",
+        "Kirby's Dream Land"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_096",
+      "question": "Which fictional city is the main setting of Grand Theft Auto V?",
+      "options": [
+        "Vice City",
+        "Liberty City",
+        "San Fierro",
+        "Los Santos"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "game worlds",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_097",
+      "question": "Zagreus, prince of the Underworld, is the hero of which game?",
+      "options": [
+        "Hollow Knight",
+        "Hades",
+        "Dead Cells",
+        "Bastion"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_098",
+      "question": "Which company develops the Assassin's Creed series?",
+      "options": [
+        "Capcom",
+        "Electronic Arts",
+        "Activision",
+        "Ubisoft"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_099",
+      "question": "Which fantasy novelist contributed to the world-building of Elden Ring?",
+      "options": [
+        "Neil Gaiman",
+        "Brandon Sanderson",
+        "Terry Pratchett",
+        "George R. R. Martin"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_100",
+      "question": "Which company acquired Mojang, the studio behind Minecraft, in 2014?",
+      "options": [
+        "Microsoft",
+        "Sony",
+        "Google",
+        "Nintendo"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_101",
+      "question": "Which of these is a playable race in StarCraft?",
+      "options": [
+        "Protoss",
+        "Orcs",
+        "Elves",
+        "Dwarves"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "game worlds",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_102",
+      "question": "In World of Warcraft, the two main player factions are the Alliance and which other?",
+      "options": [
+        "The Empire",
+        "The Legion",
+        "The Order",
+        "The Horde"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "game worlds",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_103",
+      "question": "Which Nintendo handheld console launched in 1989?",
+      "options": [
+        "Nintendo DS",
+        "Nintendo Switch",
+        "Game Boy",
+        "Virtual Boy"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "consoles",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_104",
+      "question": "In Super Mario Odyssey, what is the name of the living hat that travels with Mario?",
+      "options": [
+        "Yoshi",
+        "Luma",
+        "Toad",
+        "Cappy"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_105",
+      "question": "Before making video games, what was Nintendo originally founded to produce?",
+      "options": [
+        "Mechanical toys",
+        "Radio equipment",
+        "Pachinko machines",
+        "Hanafuda playing cards"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_106",
+      "question": "Which console is generally regarded as the first commercially sold home video game console?",
+      "options": [
+        "Atari 2600",
+        "Magnavox Odyssey",
+        "Nintendo Famicom",
+        "Sega Genesis"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_107",
+      "question": "Which Atari 2600 game is widely credited with containing the first hidden Easter egg?",
+      "options": [
+        "Pitfall!",
+        "Adventure",
+        "Combat",
+        "Space Invaders"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_108",
+      "question": "Who designed the original Pac-Man?",
+      "options": [
+        "Shigeru Miyamoto",
+        "Hideo Kojima",
+        "Toru Iwatani",
+        "Yu Suzuki"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_109",
+      "question": "Who designed the arcade game Space Invaders?",
+      "options": [
+        "Gunpei Yokoi",
+        "Tomohiro Nishikado",
+        "Masahiro Sakurai",
+        "Yuji Naka"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_110",
+      "question": "In which year was Super Mario Bros. first released in Japan?",
+      "options": [
+        "1983",
+        "1985",
+        "1987",
+        "1989"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_111",
+      "question": "The first The Legend of Zelda game debuted in Japan during which year?",
+      "options": [
+        "1984",
+        "1988",
+        "1990",
+        "1986"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_112",
+      "question": "What is Gordon Freeman's profession in Half-Life?",
+      "options": [
+        "Marine sergeant",
+        "Archaeologist",
+        "Theoretical physicist",
+        "Detective"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_113",
+      "question": "What is the name of the silent protagonist of the original Portal?",
+      "options": [
+        "Alyx",
+        "Eve",
+        "Ellie",
+        "Chell"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "game characters",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_114",
+      "question": "In Hollow Knight, what is the name of the ruined underground kingdom the player explores?",
+      "options": [
+        "Dalaran",
+        "Hyrule",
+        "Hallownest",
+        "Lordran"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "game worlds",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_115",
+      "question": "Since Minecraft Java Edition 1.18, what is the lowest Y level of the world?",
+      "options": [
+        "-64",
+        "-32",
+        "0",
+        "-128"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "game mechanics",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_116",
+      "question": "In Fool's Mate, the fastest possible checkmate, how many moves does the winning side play?",
+      "options": [
+        "2",
+        "1",
+        "3",
+        "4"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "chess",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_117",
+      "question": "The fifty-move rule allows a draw claim after fifty moves without a capture or which other event?",
+      "options": [
+        "A pawn move",
+        "A castling move",
+        "A check",
+        "A draw offer"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "chess",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_118",
+      "question": "Who won the famous 1851 game known as the Immortal Game?",
+      "options": [
+        "Paul Morphy",
+        "Wilhelm Steinitz",
+        "Adolf Anderssen",
+        "Emanuel Lasker"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "chess",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_119",
+      "question": "In which year did IBM's Deep Blue win a match against world champion Garry Kasparov?",
+      "options": [
+        "1997",
+        "1989",
+        "1993",
+        "2001"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "chess",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_120",
+      "question": "What was the final score of the 2016 match between AlphaGo and Lee Sedol?",
+      "options": [
+        "5–0 in favor of AlphaGo",
+        "3–2 in favor of Lee Sedol",
+        "4–1 in favor of AlphaGo",
+        "3–2 in favor of AlphaGo"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "board games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_121",
+      "question": "In Go, what are the empty points adjacent to a stone or chain called?",
+      "options": [
+        "Liberties",
+        "Territories",
+        "Ladders",
+        "Eyes"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "board games",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_122",
+      "question": "Which 1904-patented game by Elizabeth Magie was an early ancestor of Monopoly?",
+      "options": [
+        "The Real Estate Race",
+        "The Landlord's Game",
+        "The Tycoon's Trail",
+        "The Property Parade"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "board games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_123",
+      "question": "Who invented Scrabble?",
+      "options": [
+        "Alfred Mosher Butts",
+        "Charles Darrow",
+        "Milton Bradley",
+        "Edwin Land"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "board games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_124",
+      "question": "Who designed the board game Catan?",
+      "options": [
+        "Reiner Knizia",
+        "Uwe Rosenberg",
+        "Wolfgang Kramer",
+        "Klaus Teuber"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "board games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_125",
+      "question": "Who designed Magic: The Gathering?",
+      "options": [
+        "Gary Gygax",
+        "Sid Meier",
+        "Alan Moon",
+        "Richard Garfield"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "card games",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_126",
+      "question": "In which year was the first edition of Dungeons & Dragons published?",
+      "options": [
+        "1969",
+        "1974",
+        "1979",
+        "1984"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "tabletop games",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_127",
+      "question": "Who is credited as the creator of Pokémon?",
+      "options": [
+        "Shigeru Miyamoto",
+        "Hideo Kojima",
+        "Satoshi Tajiri",
+        "Yuji Naka"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_128",
+      "question": "The original Pokémon games first released in Japan in which year?",
+      "options": [
+        "1993",
+        "1996",
+        "1998",
+        "2000"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_129",
+      "question": "The Elder Scrolls V: Skyrim was released on 11/11/11. In which year was that?",
+      "options": [
+        "2009",
+        "2012",
+        "2013",
+        "2011"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_130",
+      "question": "How was the first episode of the original Doom (1993) widely distributed?",
+      "options": [
+        "As shareware",
+        "Only in arcades",
+        "Through a subscription service",
+        "As a printed book"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_131",
+      "question": "In which year did Valve launch the Steam platform?",
+      "options": [
+        "1999",
+        "2001",
+        "2006",
+        "2003"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_132",
+      "question": "Which Atari 2600 game is often associated with the video game crash of 1983?",
+      "options": [
+        "E.T. the Extra-Terrestrial",
+        "Pac-Man",
+        "Pitfall!",
+        "Missile Command"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_133",
+      "question": "Which was Sega's final home video game console?",
+      "options": [
+        "Saturn",
+        "Master System",
+        "Genesis",
+        "Dreamcast"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "consoles",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_134",
+      "question": "Sony's PlayStation began as a collaborative project with which company?",
+      "options": [
+        "Sega",
+        "Atari",
+        "Nintendo",
+        "Philips"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_135",
+      "question": "Which Nintendo engineer led the design of the original Game Boy?",
+      "options": [
+        "Gunpei Yokoi",
+        "Satoru Iwata",
+        "Shigeru Miyamoto",
+        "Masayuki Uemura"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_136",
+      "question": "Who created the Metal Gear series?",
+      "options": [
+        "Shinji Mikami",
+        "Hidetaka Miyazaki",
+        "Hideo Kojima",
+        "Yoko Taro"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_137",
+      "question": "Who created Undertale?",
+      "options": [
+        "Toby Fox",
+        "Eric Barone",
+        "Markus Persson",
+        "Lucas Pope"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_138",
+      "question": "Which studio created the 1993 adventure game Myst?",
+      "options": [
+        "Sierra On-Line",
+        "LucasArts",
+        "Cyan",
+        "Infocom"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_139",
+      "question": "The roguelike genre is named after which 1980 game?",
+      "options": [
+        "Rogue",
+        "Zork",
+        "Ultima",
+        "Hack"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "game genres",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_140",
+      "question": "Who developed the Elo rating system used to rank chess players?",
+      "options": [
+        "Garry Kasparov",
+        "Wilhelm Steinitz",
+        "Claude Shannon",
+        "Arpad Elo"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "chess",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_141",
+      "question": "In which year was FIDE, the international chess federation, founded?",
+      "options": [
+        "1886",
+        "1950",
+        "1972",
+        "1924"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "chess",
+      "type": "recognition"
+    },
+    {
+      "id": "games_quality_142",
+      "question": "Which 1986 NES game first used the famous Konami Code?",
+      "options": [
+        "Castlevania",
+        "Gradius",
+        "Contra",
+        "Metal Gear"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_143",
+      "question": "Which 2014 game popularized the Nemesis System, where enemies remember past encounters?",
+      "options": [
+        "Dragon Age: Inquisition",
+        "Alien: Isolation",
+        "Middle-earth: Shadow of Mordor",
+        "Dark Souls II"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "game mechanics",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_144",
+      "question": "Who served as president of Nintendo from 2002 until 2015?",
+      "options": [
+        "Hiroshi Yamauchi",
+        "Satoru Iwata",
+        "Tatsumi Kimishima",
+        "Reggie Fils-Aimé"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_145",
+      "question": "In Go, what is komi?",
+      "options": [
+        "A rule for capturing stones in a ring",
+        "Compensation points given to White for Black moving first",
+        "A penalty for passing",
+        "The name of the opening move"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "board games",
+      "type": "concept"
+    },
+    {
+      "id": "games_quality_146",
+      "question": "Who became the first official World Chess Champion in 1886?",
+      "options": [
+        "Wilhelm Steinitz",
+        "Emanuel Lasker",
+        "José Raúl Capablanca",
+        "Alexander Alekhine"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "chess",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_147",
+      "question": "Which DeepMind program learned chess through self-play and beat Stockfish in a 2017 match?",
+      "options": [
+        "AlphaFold",
+        "AlphaZero",
+        "Watson",
+        "Deep Fritz"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "chess",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_148",
+      "question": "Spacewar!, one of the earliest computer games, was first developed in 1962 on which computer?",
+      "options": [
+        "Apple II",
+        "PDP-1",
+        "Commodore 64",
+        "IBM PC"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "video game history",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_149",
+      "question": "Who created the Ultima role-playing series?",
+      "options": [
+        "Sid Meier",
+        "John Romero",
+        "Peter Molyneux",
+        "Richard Garriott"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "game developers",
+      "type": "identification"
+    },
+    {
+      "id": "games_quality_150",
+      "question": "What was the Sega Genesis called in Japan?",
+      "options": [
+        "Master System",
+        "Saturn",
+        "Mega Drive",
+        "Neo Geo"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "consoles",
+      "type": "identification"
+    }
+  ]
+}

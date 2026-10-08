@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "animals",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "animals_quality_001",
+      "question": "Which animal is the largest living land animal?",
+      "options": [
+        "African elephant",
+        "Polar bear",
+        "Hippopotamus",
+        "Giraffe"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_002",
+      "question": "Which animal is known for changing its skin color and using camouflage?",
+      "options": [
+        "Penguin",
+        "Chameleon",
+        "Horse",
+        "Elephant"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "reptiles",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_003",
+      "question": "What do bees collect from flowers to make honey?",
+      "options": [
+        "Sand",
+        "Tree bark",
+        "Nectar",
+        "Salt"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "insects",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_004",
+      "question": "Which animal is a marsupial?",
+      "options": [
+        "Eagle",
+        "Dolphin",
+        "Tiger",
+        "Kangaroo"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_013",
+      "question": "What is a baby kangaroo called?",
+      "options": [
+        "Joey",
+        "Cub",
+        "Pup",
+        "Kit"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_014",
+      "question": "Which flightless bird is famous for living in the icy regions of Antarctica?",
+      "options": [
+        "Ostrich",
+        "Penguin",
+        "Kiwi",
+        "Emu"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "birds",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_015",
+      "question": "How many legs does an adult insect have?",
+      "options": [
+        "Four",
+        "Eight",
+        "Six",
+        "Ten"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "insects",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_016",
+      "question": "How many legs does a spider have?",
+      "options": [
+        "Six",
+        "Ten",
+        "Four",
+        "Eight"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "arachnids",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_017",
+      "question": "Which animal is the fastest on land?",
+      "options": [
+        "Cheetah",
+        "Lion",
+        "Leopard",
+        "Zebra"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_018",
+      "question": "Which animal is the largest in the world?",
+      "options": [
+        "African elephant",
+        "Blue whale",
+        "Great white shark",
+        "Giraffe"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "marine life",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_019",
+      "question": "Which animal is the main source of the wool used in sweaters?",
+      "options": [
+        "Cow",
+        "Pig",
+        "Sheep",
+        "Horse"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "farm animals",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_020",
+      "question": "What is the main food of the giant panda?",
+      "options": [
+        "Fish",
+        "Honey",
+        "Fruit",
+        "Bamboo"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_021",
+      "question": "Which animal is the tallest in the world?",
+      "options": [
+        "Giraffe",
+        "Elephant",
+        "Ostrich",
+        "Camel"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_022",
+      "question": "What is a young frog called before it grows legs?",
+      "options": [
+        "Caterpillar",
+        "Tadpole",
+        "Fledgling",
+        "Cub"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "amphibians",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_023",
+      "question": "Which of these animals lays eggs?",
+      "options": [
+        "Dog",
+        "Cow",
+        "Hen",
+        "Horse"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "birds",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_024",
+      "question": "What do we call animals that eat only plants?",
+      "options": [
+        "Carnivores",
+        "Omnivores",
+        "Scavengers",
+        "Herbivores"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "ecology",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_025",
+      "question": "What do we call animals that eat both plants and meat?",
+      "options": [
+        "Omnivores",
+        "Herbivores",
+        "Carnivores",
+        "Decomposers"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "ecology",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_026",
+      "question": "Which sea animal has eight arms?",
+      "options": [
+        "Jellyfish",
+        "Octopus",
+        "Dolphin",
+        "Seahorse"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "marine life",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_027",
+      "question": "Which of these mammals is able to fly?",
+      "options": [
+        "Flying squirrel",
+        "Flying fish",
+        "Bat",
+        "Penguin"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_028",
+      "question": "Which common garden animal carries a spiral shell on its back?",
+      "options": [
+        "Earthworm",
+        "Ant",
+        "Butterfly",
+        "Snail"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "invertebrates",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_029",
+      "question": "What is a group of lions called?",
+      "options": [
+        "Pride",
+        "Herd",
+        "Pack",
+        "Flock"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "animal behavior",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_030",
+      "question": "What is a group of fish swimming together called?",
+      "options": [
+        "Pride",
+        "School",
+        "Pack",
+        "Herd"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "marine life",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_031",
+      "question": "Which animal is known for its black and white stripes?",
+      "options": [
+        "Horse",
+        "Donkey",
+        "Zebra",
+        "Antelope"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_032",
+      "question": "Which of these animals is a reptile?",
+      "options": [
+        "Frog",
+        "Dolphin",
+        "Salamander",
+        "Crocodile"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "reptiles",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_033",
+      "question": "Which of these animals is an amphibian?",
+      "options": [
+        "Frog",
+        "Lizard",
+        "Snake",
+        "Turtle"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "amphibians",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_034",
+      "question": "Which of these animals is a bird?",
+      "options": [
+        "Bat",
+        "Owl",
+        "Butterfly",
+        "Dragonfly"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "birds",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_035",
+      "question": "Which of these sea animals is a mammal?",
+      "options": [
+        "Shark",
+        "Tuna",
+        "Dolphin",
+        "Octopus"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "marine life",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_036",
+      "question": "Which animal spins webs to catch its prey?",
+      "options": [
+        "Bee",
+        "Ant",
+        "Beetle",
+        "Spider"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "arachnids",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_037",
+      "question": "A monarch caterpillar eventually turns into which insect?",
+      "options": [
+        "Butterfly",
+        "Dragonfly",
+        "Beetle",
+        "Bee"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "insects",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_038",
+      "question": "Which animal uses its trunk to drink and pick up food?",
+      "options": [
+        "Hippopotamus",
+        "Elephant",
+        "Rhinoceros",
+        "Giraffe"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_039",
+      "question": "Which desert animal stores fat in one or two humps?",
+      "options": [
+        "Horse",
+        "Donkey",
+        "Camel",
+        "Llama"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_040",
+      "question": "What covers the body of a bird?",
+      "options": [
+        "Fur",
+        "Scales",
+        "Shells",
+        "Feathers"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "birds",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_041",
+      "question": "What covers the body of most fish?",
+      "options": [
+        "Scales",
+        "Fur",
+        "Feathers",
+        "Hair"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "marine life",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_042",
+      "question": "Which farm animal is most commonly milked for dairy products?",
+      "options": [
+        "Hen",
+        "Cow",
+        "Pig",
+        "Duck"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "farm animals",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_043",
+      "question": "Which bird is famous for copying human speech?",
+      "options": [
+        "Eagle",
+        "Sparrow",
+        "Parrot",
+        "Pigeon"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "birds",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_044",
+      "question": "Which slow-moving rainforest animal spends most of its life hanging from branches?",
+      "options": [
+        "Leopard",
+        "Parrot",
+        "Jaguar",
+        "Sloth"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_045",
+      "question": "What is a baby sheep called?",
+      "options": [
+        "Lamb",
+        "Calf",
+        "Foal",
+        "Kid"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "farm animals",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_046",
+      "question": "What is a baby horse called?",
+      "options": [
+        "Calf",
+        "Foal",
+        "Lamb",
+        "Kid"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "farm animals",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_047",
+      "question": "Which animal is famous for building dams across streams?",
+      "options": [
+        "Otter",
+        "Rabbit",
+        "Beaver",
+        "Squirrel"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_048",
+      "question": "Which insect produces the silk used to make fabric?",
+      "options": [
+        "Honeybee",
+        "Ant",
+        "Ladybug",
+        "Silkworm"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "insects",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_049",
+      "question": "Which animal spends the winter in a long, deep sleep called hibernation?",
+      "options": [
+        "Bear",
+        "Giraffe",
+        "Camel",
+        "Dolphin"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "animal behavior",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_050",
+      "question": "What is the home that a bird builds for its eggs called?",
+      "options": [
+        "Burrow",
+        "Nest",
+        "Den",
+        "Hive"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "birds",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_051",
+      "question": "What is the underground home of a rabbit called?",
+      "options": [
+        "Nest",
+        "Hive",
+        "Burrow",
+        "Lodge"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_052",
+      "question": "Which is the largest living bird?",
+      "options": [
+        "Eagle",
+        "Albatross",
+        "Heron",
+        "Ostrich"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "birds",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_053",
+      "question": "Which animal can drop its tail to escape a predator and later grow a new one?",
+      "options": [
+        "Lizard",
+        "Snake",
+        "Frog",
+        "Crocodile"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "reptiles",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_054",
+      "question": "Which sea creature has a hard shell, claws, and walks sideways?",
+      "options": [
+        "Starfish",
+        "Crab",
+        "Jellyfish",
+        "Seahorse"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "marine life",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_055",
+      "question": "Which of these animals is a big cat?",
+      "options": [
+        "Wolf",
+        "Hyena",
+        "Jaguar",
+        "Fox"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_056",
+      "question": "Which domestic animal is traditionally called man's best friend?",
+      "options": [
+        "Horse",
+        "Cat",
+        "Parrot",
+        "Dog"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_057",
+      "question": "In which part of the world do polar bears live in the wild?",
+      "options": [
+        "The Arctic",
+        "Antarctica",
+        "The Sahara",
+        "The Amazon"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "habitats",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_058",
+      "question": "Which animal finds insects in the dark by sending out high-pitched sounds and listening for echoes?",
+      "options": [
+        "Owl",
+        "Bat",
+        "Frog",
+        "Hedgehog"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "mammals",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_005",
+      "question": "Why do many birds have hollow or lightweight bones?",
+      "options": [
+        "They reduce body mass and can support efficient flight",
+        "They prevent all diseases",
+        "They allow birds to breathe underwater",
+        "They make birds unable to land"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "bird biology",
+      "type": "cause/effect"
+    },
+    {
+      "id": "animals_quality_006",
+      "question": "A desert animal is active mainly at night. What environmental advantage can this behavior provide?",
+      "options": [
+        "It guarantees unlimited food",
+        "It can reduce exposure to daytime heat",
+        "It prevents all predators",
+        "It eliminates the need for water"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "ecology",
+      "type": "inference"
+    },
+    {
+      "id": "animals_quality_007",
+      "question": "Why do ruminant animals such as cows have specialized digestive systems?",
+      "options": [
+        "They cannot digest any carbohydrates",
+        "They eat only meat",
+        "They rely on microbial fermentation to help break down plant material",
+        "They absorb sunlight as food"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "animal physiology",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_008",
+      "question": "A population of rabbits increases rapidly after predators disappear. What ecological effect is most likely if food becomes limited?",
+      "options": [
+        "Predators will increase without any mechanism",
+        "Plants will immediately disappear worldwide",
+        "All rabbits will stop reproducing permanently",
+        "Competition for food will increase"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "ecology",
+      "type": "reasoning"
+    },
+    {
+      "id": "animals_quality_059",
+      "question": "Which feature is found in all mammals but in no other group of animals?",
+      "options": [
+        "A backbone",
+        "Mammary glands that produce milk",
+        "Lungs for breathing air",
+        "A four-chambered heart"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "mammals",
+      "type": "distinction"
+    },
+    {
+      "id": "animals_quality_060",
+      "question": "Which organs do fish use to take oxygen from the water?",
+      "options": [
+        "Lungs",
+        "Swim bladder",
+        "Gills",
+        "Fins"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "fish biology",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_061",
+      "question": "The platypus is unusual among mammals because it",
+      "options": [
+        "has no hair",
+        "lacks a backbone",
+        "cannot produce milk",
+        "lays eggs"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "mammals",
+      "type": "distinction"
+    },
+    {
+      "id": "animals_quality_062",
+      "question": "What is the main purpose of the swim bladder in many bony fish?",
+      "options": [
+        "Controlling buoyancy",
+        "Digesting food",
+        "Filtering waste from blood",
+        "Producing body heat"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "fish biology",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_063",
+      "question": "To which group of animals do spiders and scorpions belong?",
+      "options": [
+        "Insects",
+        "Arachnids",
+        "Crustaceans",
+        "Myriapods"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "taxonomy",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_064",
+      "question": "Which of these animals is a crustacean?",
+      "options": [
+        "Snail",
+        "Jellyfish",
+        "Barnacle",
+        "Millipede"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "taxonomy",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_065",
+      "question": "What term describes animals that are most active at dawn and dusk?",
+      "options": [
+        "Nocturnal",
+        "Diurnal",
+        "Aquatic",
+        "Crepuscular"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "animal behavior",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_066",
+      "question": "Why do Arctic terns migrate between the Arctic and Antarctic each year?",
+      "options": [
+        "To reach areas with plentiful food and suitable breeding conditions",
+        "To avoid every other bird species",
+        "To shed their feathers in warmer water",
+        "To find mates that live only in the south"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "animal behavior",
+      "type": "cause/effect"
+    },
+    {
+      "id": "animals_quality_067",
+      "question": "Which of these animals is a monotreme, a mammal that lays eggs?",
+      "options": [
+        "Opossum",
+        "Echidna",
+        "Koala",
+        "Wombat"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "mammals",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_068",
+      "question": "Why does a snake flick its forked tongue?",
+      "options": [
+        "To inject venom",
+        "To cool its body",
+        "To collect chemical cues from the air",
+        "To listen for vibrations"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "reptiles",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_069",
+      "question": "What is the process called by which a tadpole changes into an adult frog?",
+      "options": [
+        "Molting",
+        "Hibernation",
+        "Migration",
+        "Metamorphosis"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "amphibians",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_070",
+      "question": "Which of these insects undergoes complete metamorphosis, including a pupal stage?",
+      "options": [
+        "Butterfly",
+        "Grasshopper",
+        "Cockroach",
+        "Dragonfly"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "insects",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_071",
+      "question": "What is the ecological role of a decomposer?",
+      "options": [
+        "Hunting other animals for food",
+        "Breaking down dead matter and returning nutrients to the soil",
+        "Producing food from sunlight",
+        "Spreading pollen between flowers"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "ecology",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_072",
+      "question": "Which of these animals sits at the top of the marine food chain?",
+      "options": [
+        "Sea turtle",
+        "Manta ray",
+        "Orca",
+        "Sardine"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "marine life",
+      "type": "application"
+    },
+    {
+      "id": "animals_quality_073",
+      "question": "What is a keystone species?",
+      "options": [
+        "The most numerous species in an area",
+        "The oldest species in an ecosystem",
+        "A species found nowhere else on Earth",
+        "A species with a disproportionately large effect on its ecosystem"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "ecology",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_074",
+      "question": "Which bird is well known for laying its eggs in the nests of other birds?",
+      "options": [
+        "Cuckoo",
+        "Sparrow",
+        "Swallow",
+        "Heron"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "birds",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_075",
+      "question": "What do hummingbirds mainly feed on?",
+      "options": [
+        "Seeds",
+        "Nectar",
+        "Small fish",
+        "Carrion"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "birds",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_076",
+      "question": "Which is the largest living species of fish?",
+      "options": [
+        "Blue whale",
+        "Great white shark",
+        "Whale shark",
+        "Manta ray"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "marine life",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_077",
+      "question": "What type of animal is a seahorse?",
+      "options": [
+        "A crustacean",
+        "A mollusc",
+        "A mammal",
+        "A fish"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "marine life",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_078",
+      "question": "What does it mean to say an animal is ectothermic, or cold-blooded?",
+      "options": [
+        "Its body temperature depends mainly on its surroundings",
+        "It has no blood circulation",
+        "Its body temperature is always below 10 degrees Celsius",
+        "It cannot move in cool weather"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "animal physiology",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_079",
+      "question": "Which land animal lives in family herds usually led by an older female called the matriarch?",
+      "options": [
+        "Rhinoceros",
+        "Elephant",
+        "Hippopotamus",
+        "Giraffe"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "mammals",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_080",
+      "question": "What is the main food of the koala?",
+      "options": [
+        "Bamboo",
+        "Grass seeds",
+        "Eucalyptus leaves",
+        "Insects"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "mammals",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_081",
+      "question": "How do camels survive long periods without drinking?",
+      "options": [
+        "They absorb water through their skin",
+        "They store several liters of water in their humps",
+        "They get all their water from the sand",
+        "They conserve water efficiently and store fat in the hump"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "animal physiology",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_082",
+      "question": "Which organ helps birds grind their food, since they have no teeth?",
+      "options": [
+        "Gizzard",
+        "Crop",
+        "Liver",
+        "Syrinx"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "bird biology",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_083",
+      "question": "What is the term for an interaction in which both species benefit?",
+      "options": [
+        "Parasitism",
+        "Mutualism",
+        "Commensalism",
+        "Predation"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "ecology",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_084",
+      "question": "A tapeworm living in the intestine of a mammal is an example of which interaction?",
+      "options": [
+        "Mutualism",
+        "Commensalism",
+        "Parasitism",
+        "Predation"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "ecology",
+      "type": "application"
+    },
+    {
+      "id": "animals_quality_085",
+      "question": "Which of these animals is NOT an insect?",
+      "options": [
+        "Ant",
+        "Beetle",
+        "Wasp",
+        "Scorpion"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "taxonomy",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_086",
+      "question": "Which land mammal is the closest living relative of whales and dolphins?",
+      "options": [
+        "Hippopotamus",
+        "Elephant",
+        "Rhinoceros",
+        "Bear"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "evolution",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_087",
+      "question": "What is the term for a species that is native to only one specific region?",
+      "options": [
+        "Invasive",
+        "Endemic",
+        "Migratory",
+        "Nocturnal"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "ecology",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_088",
+      "question": "Which bird can turn its head about 270 degrees?",
+      "options": [
+        "Eagle",
+        "Parrot",
+        "Owl",
+        "Heron"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "bird biology",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_089",
+      "question": "In a honeybee colony, which bee is responsible for laying the eggs?",
+      "options": [
+        "The worker",
+        "The drone",
+        "The forager",
+        "The queen"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "insects",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_090",
+      "question": "Which group of animals typically has a three-chambered heart?",
+      "options": [
+        "Amphibians",
+        "Mammals",
+        "Birds",
+        "Fish"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "animal physiology",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_091",
+      "question": "What term describes animals that live mainly in trees?",
+      "options": [
+        "Aquatic",
+        "Arboreal",
+        "Fossorial",
+        "Terrestrial"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "animal behavior",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_092",
+      "question": "Which deep-sea fish uses a glowing lure to attract its prey?",
+      "options": [
+        "Tuna",
+        "Mackerel",
+        "Anglerfish",
+        "Stingray"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "marine life",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_093",
+      "question": "Which is the only big cat that lives in permanent social groups?",
+      "options": [
+        "Tiger",
+        "Leopard",
+        "Jaguar",
+        "Lion"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "mammals",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_094",
+      "question": "What do monarch butterflies in North America famously do each autumn?",
+      "options": [
+        "Migrate thousands of kilometers to overwintering sites",
+        "Hibernate in tree hollows",
+        "Bury themselves in the soil",
+        "Lay all their eggs in the snow"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "animal behavior",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_095",
+      "question": "Which marine reptile comes ashore to lay its eggs on sandy beaches?",
+      "options": [
+        "Dolphin",
+        "Sea turtle",
+        "Seal",
+        "Manatee"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "reptiles",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_096",
+      "question": "What is the main function of the lateral line in fish?",
+      "options": [
+        "Producing sounds",
+        "Absorbing oxygen",
+        "Detecting water movement and vibrations",
+        "Storing fat"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "fish biology",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_097",
+      "question": "Which is the largest living reptile?",
+      "options": [
+        "Komodo dragon",
+        "Green anaconda",
+        "Leatherback turtle",
+        "Saltwater crocodile"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "reptiles",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_098",
+      "question": "What is the name of the stage that hatches from a butterfly egg?",
+      "options": [
+        "Larva",
+        "Pupa",
+        "Nymph",
+        "Adult"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "insects",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_099",
+      "question": "What type of animal is a pangolin?",
+      "options": [
+        "A reptile",
+        "A mammal",
+        "An insect",
+        "A bird"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "mammals",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_100",
+      "question": "What do vultures mainly eat?",
+      "options": [
+        "Fruit",
+        "Nectar",
+        "Carrion",
+        "Seeds"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "birds",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_101",
+      "question": "Which flightless bird is native to New Zealand?",
+      "options": [
+        "Emu",
+        "Ostrich",
+        "Rhea",
+        "Kiwi"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "birds",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_102",
+      "question": "What makes the axolotl remarkable among vertebrates?",
+      "options": [
+        "It can regenerate lost limbs and other body parts",
+        "It breathes only through lungs",
+        "It lives only in deserts",
+        "It has no backbone"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "amphibians",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_103",
+      "question": "Which sea animal has three hearts?",
+      "options": [
+        "Dolphin",
+        "Octopus",
+        "Jellyfish",
+        "Shark"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "marine life",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_104",
+      "question": "What is a group of crows traditionally called?",
+      "options": [
+        "A parliament",
+        "A gaggle",
+        "A murder",
+        "A pod"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "animal behavior",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_009",
+      "question": "A species has a body color that closely matches its environment and predators overlook it more often. Which evolutionary process can increase the frequency of this trait?",
+      "options": [
+        "Natural selection",
+        "Geological erosion",
+        "Photosynthesis",
+        "Random weathering"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "evolution",
+      "type": "analysis"
+    },
+    {
+      "id": "animals_quality_010",
+      "question": "Two species occupy the same habitat but use different food sources, reducing direct competition. What ecological concept does this illustrate?",
+      "options": [
+        "Thermal expansion",
+        "Resource partitioning",
+        "Artificial selection",
+        "Mutual extinction"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "ecology",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_011",
+      "question": "A marine mammal has a thick layer of blubber in cold water. What is the primary advantage?",
+      "options": [
+        "A mechanism for changing its species",
+        "A structure that produces oxygen",
+        "Insulation that reduces heat loss",
+        "A way to digest rocks"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "animal physiology",
+      "type": "application"
+    },
+    {
+      "id": "animals_quality_012",
+      "question": "A predator population falls sharply. If prey and food availability are otherwise stable, what short-term change is most plausible for the prey population?",
+      "options": [
+        "It will turn into predators",
+        "It cannot change",
+        "It must immediately become extinct",
+        "It may increase because predation pressure is reduced"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "population ecology",
+      "type": "inference"
+    },
+    {
+      "id": "animals_quality_105",
+      "question": "Wings of insects, birds, and bats evolved separately for flight. Which term describes the independent evolution of similar traits under similar pressures?",
+      "options": [
+        "Divergent evolution",
+        "Genetic drift",
+        "Convergent evolution",
+        "Coevolution"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "evolution",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_106",
+      "question": "The forelimbs of whales, bats, and humans have a similar bone arrangement despite different uses. What does this indicate?",
+      "options": [
+        "Analogous structures from convergent evolution",
+        "Vestigial organs with no function",
+        "Structures shaped by sexual selection",
+        "Homologous structures inherited from a common ancestor"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "evolution",
+      "type": "inference"
+    },
+    {
+      "id": "animals_quality_107",
+      "question": "Which pattern describes small mammals tending to evolve larger bodies, and large mammals smaller bodies, when isolated on islands?",
+      "options": [
+        "The island rule",
+        "Bergmann's rule",
+        "Allen's rule",
+        "Cope's rule"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "biogeography",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_108",
+      "question": "According to Bergmann's rule, how do populations of a widespread mammal species typically differ in cold regions compared with warm ones?",
+      "options": [
+        "They tend to have smaller bodies",
+        "They tend to have larger bodies",
+        "They tend to have paler fur",
+        "They tend to have longer limbs"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "biogeography",
+      "type": "application"
+    },
+    {
+      "id": "animals_quality_109",
+      "question": "According to Allen's rule, how do endotherms in cold climates typically differ from relatives in warm climates?",
+      "options": [
+        "They have longer limbs, ears, and tails",
+        "They have thinner fur",
+        "They have shorter limbs, ears, and tails",
+        "They have larger surface area relative to volume"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "animal physiology",
+      "type": "application"
+    },
+    {
+      "id": "animals_quality_110",
+      "question": "What does countercurrent heat exchange in the legs of Arctic wading birds accomplish?",
+      "options": [
+        "It increases blood oxygen levels",
+        "It speeds up digestion",
+        "It stores fat in the legs",
+        "It minimizes heat lost through the feet"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "animal physiology",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_111",
+      "question": "The Jacobson's (vomeronasal) organ, used together with tongue flicking, is especially well developed in which animals?",
+      "options": [
+        "Snakes",
+        "Birds",
+        "Fish",
+        "Dolphins"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "reptiles",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_112",
+      "question": "To which phylum do octopuses, snails, and clams belong?",
+      "options": [
+        "Arthropoda",
+        "Mollusca",
+        "Annelida",
+        "Echinodermata"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "taxonomy",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_113",
+      "question": "Which phylum includes sea stars and sea urchins?",
+      "options": [
+        "Cnidaria",
+        "Mollusca",
+        "Echinodermata",
+        "Porifera"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "taxonomy",
+      "type": "classification"
+    },
+    {
+      "id": "animals_quality_114",
+      "question": "Which feature defines cnidarians such as jellyfish and corals?",
+      "options": [
+        "Jointed legs",
+        "A backbone",
+        "A hard external skeleton of chitin",
+        "Stinging cells called cnidocytes"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "taxonomy",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_115",
+      "question": "Which sex-determination system is found in birds?",
+      "options": [
+        "Females are ZW and males are ZZ",
+        "Females are XX and males are XY",
+        "Sex depends on incubation temperature",
+        "Males develop from unfertilized eggs"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "genetics",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_116",
+      "question": "In honeybees, how do male drones develop?",
+      "options": [
+        "From fertilized eggs with an extra chromosome",
+        "From unfertilized eggs, so they are haploid",
+        "From eggs fed only royal jelly",
+        "From eggs laid by the queen after mating twice"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "genetics",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_117",
+      "question": "In American alligators, what largely determines the sex of the hatchlings?",
+      "options": [
+        "Sex chromosomes inherited from the parents",
+        "The mother's diet during nesting",
+        "Incubation temperature of the eggs",
+        "The time of day of hatching"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "reptiles",
+      "type": "cause/effect"
+    },
+    {
+      "id": "animals_quality_118",
+      "question": "Which process best explains the evolution of the peacock's elaborate tail, despite its survival cost?",
+      "options": [
+        "Selection for flight efficiency",
+        "Genetic drift alone",
+        "Kin selection",
+        "Sexual selection"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "evolution",
+      "type": "inference"
+    },
+    {
+      "id": "animals_quality_119",
+      "question": "How does kin selection explain self-sacrificing behavior such as alarm calls?",
+      "options": [
+        "It helps relatives that share genes to survive and reproduce",
+        "It maximizes the lifespan of the caller",
+        "It removes all competition within a group",
+        "It results from random mutation"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "animal behavior",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_120",
+      "question": "Which of these animals is NOT a true fish?",
+      "options": [
+        "Catfish",
+        "Cuttlefish",
+        "Swordfish",
+        "Lionfish"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "taxonomy",
+      "type": "distinction"
+    },
+    {
+      "id": "animals_quality_121",
+      "question": "Which group of living reptiles is the closest relative of birds?",
+      "options": [
+        "Lizards",
+        "Turtles",
+        "Crocodilians",
+        "Snakes"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "evolution",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_122",
+      "question": "Among living reptiles, which group has a four-chambered heart?",
+      "options": [
+        "Snakes",
+        "Lizards",
+        "Turtles",
+        "Crocodilians"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "animal physiology",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_123",
+      "question": "Which feature allows bird lungs to extract oxygen so efficiently?",
+      "options": [
+        "Air sacs that create one-way airflow through the lungs",
+        "Very large alveoli like those of mammals",
+        "A powerful diaphragm",
+        "Gas exchange through the skin"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "bird biology",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_124",
+      "question": "Which is the main nitrogenous waste product of birds and most reptiles?",
+      "options": [
+        "Urea",
+        "Uric acid",
+        "Ammonia",
+        "Creatinine"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "animal physiology",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_125",
+      "question": "Which nitrogenous waste do most freshwater bony fish excrete?",
+      "options": [
+        "Uric acid",
+        "Urea",
+        "Ammonia",
+        "Nitrate"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "animal physiology",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_126",
+      "question": "Which of these mammals is eusocial, living in colonies with a single breeding queen?",
+      "options": [
+        "Meerkat",
+        "Wolf",
+        "Beaver",
+        "Naked mole-rat"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "mammals",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_127",
+      "question": "Which combination of traits defines eusociality?",
+      "options": [
+        "Cooperative brood care, overlapping generations, and a division of labor in reproduction",
+        "Living in groups and sharing food",
+        "Migrating together and nesting together",
+        "Hunting cooperatively and defending territory"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "animal behavior",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_128",
+      "question": "By entering which state can tardigrades survive near-total dehydration?",
+      "options": [
+        "Estivation",
+        "Cryptobiosis",
+        "Torpor",
+        "Diapause"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "animal physiology",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_129",
+      "question": "What is estivation?",
+      "options": [
+        "Dormancy during winter cold",
+        "A seasonal long-distance journey",
+        "Dormancy during hot, dry conditions",
+        "A stage of insect development"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "animal physiology",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_130",
+      "question": "Which of these animals has blood that is blue because it contains copper-based hemocyanin?",
+      "options": [
+        "Salmon",
+        "Frog",
+        "Earthworm",
+        "Octopus"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "animal physiology",
+      "type": "identification"
+    },
+    {
+      "id": "animals_quality_131",
+      "question": "What gives flamingos their pink color?",
+      "options": [
+        "Carotenoid pigments from their diet",
+        "Melanin in their feathers",
+        "Hemoglobin showing through the skin",
+        "Chlorophyll from algae"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "bird biology",
+      "type": "cause/effect"
+    },
+    {
+      "id": "animals_quality_132",
+      "question": "Which order contains the largest number of mammal species?",
+      "options": [
+        "Chiroptera",
+        "Rodentia",
+        "Carnivora",
+        "Primates"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "mammals",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_133",
+      "question": "What is the name of the ocean zone where sunlight is too weak for photosynthesis?",
+      "options": [
+        "Photic zone",
+        "Littoral zone",
+        "Aphotic zone",
+        "Neritic zone"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "marine life",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_134",
+      "question": "What is the basic energy source for the food webs around deep-sea hydrothermal vents?",
+      "options": [
+        "Sunlight",
+        "Photosynthetic algae",
+        "Falling plant debris",
+        "Chemosynthesis by bacteria"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "ecology",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_135",
+      "question": "Coral bleaching occurs when corals expel which organisms?",
+      "options": [
+        "Zooxanthellae, their symbiotic algae",
+        "Their calcium carbonate skeleton",
+        "Their polyps",
+        "Their parasitic worms"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "marine life",
+      "type": "cause/effect"
+    },
+    {
+      "id": "animals_quality_136",
+      "question": "Which living bird has the greatest wingspan among those listed?",
+      "options": [
+        "Andean condor",
+        "Wandering albatross",
+        "Bald eagle",
+        "Golden eagle"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "birds",
+      "type": "recognition"
+    },
+    {
+      "id": "animals_quality_137",
+      "question": "What is a lek in animal behavior?",
+      "options": [
+        "A shared nest used by several females",
+        "A group migration route",
+        "A gathering where males display to attract females",
+        "A territory defended against predators"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "animal behavior",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_138",
+      "question": "What is imprinting, as studied in ducklings by Konrad Lorenz?",
+      "options": [
+        "The inheritance of a parent's call",
+        "Learning by trial and error to find food",
+        "The ability to recognize predators at birth",
+        "Rapid learning to follow the first moving object seen after hatching"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "animal behavior",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_139",
+      "question": "What best describes the reproductive strategy of r-selected species?",
+      "options": [
+        "Many offspring with little parental care",
+        "Few offspring with extensive parental care",
+        "One large clutch every decade",
+        "No offspring until old age"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "ecology",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_140",
+      "question": "A harmless hoverfly resembles a wasp. Which term describes this kind of mimicry?",
+      "options": [
+        "Müllerian mimicry",
+        "Batesian mimicry",
+        "Aposematism",
+        "Crypsis"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "animal behavior",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_141",
+      "question": "The bright colors of poison dart frogs warn predators of their toxicity. What is this strategy called?",
+      "options": [
+        "Camouflage",
+        "Batesian mimicry",
+        "Aposematism",
+        "Countershading"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "animal behavior",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_142",
+      "question": "What is the benefit of countershading, with a dark back and pale belly, in many sharks and fish?",
+      "options": [
+        "It helps regulate body temperature",
+        "It attracts mates in deep water",
+        "It reflects harmful ultraviolet light",
+        "It reduces visibility from both above and below"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "animal behavior",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_143",
+      "question": "Which structure lets pit vipers detect the infrared heat of warm-blooded prey?",
+      "options": [
+        "Pit organs",
+        "The Jacobson's organ",
+        "The lateral line",
+        "The tympanum"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "animal physiology",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_144",
+      "question": "Which fish detect the weak electric fields of prey using organs called ampullae of Lorenzini?",
+      "options": [
+        "Seahorses",
+        "Sharks",
+        "Clownfish",
+        "Pufferfish"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "marine life",
+      "type": "mechanism"
+    },
+    {
+      "id": "animals_quality_145",
+      "question": "The electric eel is more closely related to which fish?",
+      "options": [
+        "True eels",
+        "Moray eels",
+        "Catfish",
+        "Lampreys"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "taxonomy",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_146",
+      "question": "What is the closest living relative of the okapi?",
+      "options": [
+        "Zebra",
+        "Antelope",
+        "Horse",
+        "Giraffe"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "evolution",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_147",
+      "question": "The Wallace Line marks a major boundary between the fauna of which regions?",
+      "options": [
+        "Asia and Australasia",
+        "Africa and Europe",
+        "North and South America",
+        "India and Southeast Asia"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "biogeography",
+      "type": "concept"
+    },
+    {
+      "id": "animals_quality_148",
+      "question": "Which land mammal has the longest gestation period?",
+      "options": [
+        "Giraffe",
+        "Elephant",
+        "Rhinoceros",
+        "Hippopotamus"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "mammals",
+      "type": "comparison"
+    },
+    {
+      "id": "animals_quality_149",
+      "question": "Which insect develops through incomplete metamorphosis, with nymphs and no pupal stage?",
+      "options": [
+        "Housefly",
+        "Honeybee",
+        "Grasshopper",
+        "Moth"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "insects",
+      "type": "application"
+    },
+    {
+      "id": "animals_quality_150",
+      "question": "Which scientist decoded the honeybee waggle dance and shared the 1973 Nobel Prize?",
+      "options": [
+        "Jane Goodall",
+        "Charles Darwin",
+        "Gregor Mendel",
+        "Karl von Frisch"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "animal behavior",
+      "type": "identification"
+    }
+  ]
+}

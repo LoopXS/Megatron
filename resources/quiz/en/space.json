@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "space",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "space_quality_001",
+      "question": "What is the name of the star at the center of our solar system?",
+      "options": [
+        "Sun",
+        "Sirius",
+        "Vega",
+        "Polaris"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "solar system",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_002",
+      "question": "Which planet is known for its Great Red Spot?",
+      "options": [
+        "Mars",
+        "Jupiter",
+        "Neptune",
+        "Venus"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "planets",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_003",
+      "question": "What force keeps planets in orbit around the Sun?",
+      "options": [
+        "Sound",
+        "Friction",
+        "Gravity",
+        "Magnetism"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_004",
+      "question": "Which object is Earth's natural satellite?",
+      "options": [
+        "Mars",
+        "The Sun",
+        "Venus",
+        "The Moon"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "solar system",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_005",
+      "question": "Why does the Moon appear to change shape during the month?",
+      "options": [
+        "We see different portions of its sunlit side as it orbits Earth",
+        "The Moon physically changes size",
+        "Clouds cover different parts of the Moon",
+        "Earth changes the Moon's color"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "lunar science",
+      "type": "cause/effect"
+    },
+    {
+      "id": "space_quality_006",
+      "question": "A planet has a very thick atmosphere rich in carbon dioxide. Which property would most likely be enhanced?",
+      "options": [
+        "Permanent darkness",
+        "A strong greenhouse effect",
+        "A complete absence of gravity",
+        "No atmospheric pressure"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "planetary science",
+      "type": "inference"
+    },
+    {
+      "id": "space_quality_007",
+      "question": "An astronaut travels far from Earth and measures the same speed of light in vacuum as on Earth. Which principle does this support?",
+      "options": [
+        "The rule that time never varies",
+        "The claim that light needs air",
+        "The invariant speed of light in vacuum",
+        "The idea that gravity disappears everywhere"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_008",
+      "question": "Why do astronauts appear weightless while orbiting Earth even though Earth's gravity is still acting on them?",
+      "options": [
+        "The spacecraft has no mass",
+        "The Sun cancels Earth's gravity",
+        "Gravity stops above the atmosphere",
+        "They and their spacecraft are in continuous free fall"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "orbital mechanics",
+      "type": "reasoning"
+    },
+    {
+      "id": "space_quality_009",
+      "question": "A planet orbits its star at twice Earth's orbital distance. If the star has the same mass as the Sun, what happens qualitatively to the planet's orbital period?",
+      "options": [
+        "It becomes longer",
+        "It becomes shorter",
+        "It becomes exactly half as long",
+        "It becomes zero"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "orbital mechanics",
+      "type": "application"
+    },
+    {
+      "id": "space_quality_010",
+      "question": "Astronomers detect a repeating dip in a star's brightness at regular intervals. What observation method can explain this pattern?",
+      "options": [
+        "The star must be exploding every interval",
+        "A transiting planet periodically blocks part of the star's light",
+        "The planet emits all of the star's light",
+        "The telescope changes size"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "exoplanets",
+      "type": "inference"
+    },
+    {
+      "id": "space_quality_011",
+      "question": "A star has exhausted much of the hydrogen in its core. Which broad evolutionary change can follow for a Sun-like star?",
+      "options": [
+        "It stops producing any energy instantly",
+        "It turns into a planet",
+        "Its core contracts while its outer layers expand into a giant phase",
+        "It immediately becomes a black hole"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "stellar evolution",
+      "type": "analysis"
+    },
+    {
+      "id": "space_quality_012",
+      "question": "Light from a distant galaxy takes billions of years to reach Earth. What does observing that light allow astronomers to study?",
+      "options": [
+        "Only objects inside Earth's atmosphere",
+        "Only the galaxy's future",
+        "A version of the galaxy with no time delay",
+        "The galaxy as it existed in the distant past"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "cosmology",
+      "type": "inference"
+    },
+    {
+      "id": "space_quality_013",
+      "question": "Which planet is known as the Red Planet?",
+      "options": [
+        "Venus",
+        "Mercury",
+        "Mars",
+        "Neptune"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "planets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_014",
+      "question": "Which planet is often called Earth's twin because of its similar size?",
+      "options": [
+        "Mars",
+        "Mercury",
+        "Uranus",
+        "Venus"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "planets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_015",
+      "question": "How many planets are in our Solar System?",
+      "options": [
+        "Seven",
+        "Nine",
+        "Eight",
+        "Ten"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "solar system",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_016",
+      "question": "Which planet is the farthest from the Sun?",
+      "options": [
+        "Uranus",
+        "Saturn",
+        "Pluto",
+        "Neptune"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "planets",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_017",
+      "question": "What is the name of the galaxy that contains our Solar System?",
+      "options": [
+        "Andromeda",
+        "Triangulum",
+        "Milky Way",
+        "Whirlpool"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "galaxies",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_018",
+      "question": "What is a 'shooting star' actually?",
+      "options": [
+        "A meteor burning up in Earth's atmosphere",
+        "A star falling to Earth",
+        "A comet's tail breaking off",
+        "A planet colliding with the Moon"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "small bodies",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_019",
+      "question": "What do we call a ball of ice and dust that grows a glowing tail near the Sun?",
+      "options": [
+        "Asteroid",
+        "Meteorite",
+        "Moon",
+        "Comet"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "small bodies",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_020",
+      "question": "Which famous space telescope was launched in 1990 and named after an astronomer?",
+      "options": [
+        "Hubble Space Telescope",
+        "Kepler",
+        "Spitzer",
+        "Chandra"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "telescopes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_021",
+      "question": "What does NASA stand for?",
+      "options": [
+        "National Astronomy and Satellite Agency",
+        "North American Space Association",
+        "New Age Space Alliance",
+        "National Aeronautics and Space Administration"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "space agencies",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_022",
+      "question": "Which dog became the first animal to orbit Earth in 1957?",
+      "options": [
+        "Belka",
+        "Strelka",
+        "Laika",
+        "Albert"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "space history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_023",
+      "question": "Which NASA mission first landed humans on the Moon in 1969?",
+      "options": [
+        "Apollo 8",
+        "Gemini 4",
+        "Apollo 11",
+        "Apollo 13"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "space history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_024",
+      "question": "What does ISS stand for in spaceflight?",
+      "options": [
+        "International Space Station",
+        "Interplanetary Shuttle System",
+        "Inner Solar Satellite",
+        "Integrated Star Scanner"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "space stations",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_025",
+      "question": "What do we call a person trained to travel and work in space?",
+      "options": [
+        "Aviator",
+        "Cartographer",
+        "Meteorologist",
+        "Astronaut"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "space exploration",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_026",
+      "question": "Which planet has the hottest surface in the Solar System?",
+      "options": [
+        "Venus",
+        "Mercury",
+        "Mars",
+        "Jupiter"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "planets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_027",
+      "question": "What causes day and night on Earth?",
+      "options": [
+        "Earth's rotation on its axis",
+        "Earth's orbit around the Sun",
+        "The Moon blocking sunlight",
+        "Clouds covering the Sun"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "earth in space",
+      "type": "cause/effect"
+    },
+    {
+      "id": "space_quality_028",
+      "question": "About how many days does Earth take to orbit the Sun once?",
+      "options": [
+        "About 30 days",
+        "About 365 days",
+        "About 100 days",
+        "About 700 days"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "earth in space",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_029",
+      "question": "What caused most of the craters on the Moon's surface?",
+      "options": [
+        "Ocean waves",
+        "Active volcanoes today",
+        "Strong winds",
+        "Impacts from asteroids and comets"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "moon",
+      "type": "cause/effect"
+    },
+    {
+      "id": "space_quality_030",
+      "question": "Which star appears the brightest in Earth's night sky, excluding the Sun?",
+      "options": [
+        "Sirius",
+        "Polaris",
+        "Betelgeuse",
+        "Vega"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "stars",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_031",
+      "question": "What do we call a pattern of stars that people have named, such as Orion or Ursa Major?",
+      "options": [
+        "Constellation",
+        "Galaxy",
+        "Nebula",
+        "Cluster only"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "stars",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_032",
+      "question": "How is Pluto currently classified?",
+      "options": [
+        "Full planet",
+        "Dwarf planet",
+        "Moon of Neptune",
+        "Asteroid"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "dwarf planets",
+      "type": "classification"
+    },
+    {
+      "id": "space_quality_033",
+      "question": "What do astronauts wear to survive outside their spacecraft?",
+      "options": [
+        "Diving suit",
+        "Spacesuit",
+        "Flight jacket",
+        "Radiation badge only"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "space exploration",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_034",
+      "question": "What do we call the curved path of one object around another in space?",
+      "options": [
+        "Orbit",
+        "Trajectory of light",
+        "Axis",
+        "Equator"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "orbits",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_035",
+      "question": "What is the Sun mostly made of?",
+      "options": [
+        "Hydrogen and helium",
+        "Iron and nickel",
+        "Oxygen and nitrogen",
+        "Rock and ice"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "solar system",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_036",
+      "question": "What process in its core produces the Sun's energy?",
+      "options": [
+        "Burning of coal",
+        "Nuclear fission",
+        "Nuclear fusion",
+        "Chemical explosions"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "stars",
+      "type": "mechanism"
+    },
+    {
+      "id": "space_quality_037",
+      "question": "Who became the first woman to travel into space in 1963?",
+      "options": [
+        "Sally Ride",
+        "Valentina Tereshkova",
+        "Mae Jemison",
+        "Svetlana Savitskaya"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "space history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_038",
+      "question": "What is a black hole?",
+      "options": [
+        "A dark planet without atmosphere",
+        "A hole in the Moon's surface",
+        "A region where gravity is so strong that not even light can escape",
+        "A cloud of cold dust"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "black holes",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_039",
+      "question": "Which NASA rover landed on Mars in February 2021?",
+      "options": [
+        "Curiosity",
+        "Perseverance",
+        "Spirit",
+        "Opportunity"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "mars exploration",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_040",
+      "question": "What happens during a solar eclipse?",
+      "options": [
+        "Earth passes between the Sun and Moon",
+        "The Moon passes between the Sun and Earth",
+        "The Sun turns off briefly",
+        "A planet blocks the Sun"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "eclipses",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_041",
+      "question": "Why does the Moon often look reddish during a total lunar eclipse?",
+      "options": [
+        "The Moon gets hot",
+        "Mars reflects light onto it",
+        "Dust covers the Moon",
+        "Earth's atmosphere bends red sunlight onto the Moon"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "eclipses",
+      "type": "cause/effect"
+    },
+    {
+      "id": "space_quality_042",
+      "question": "What are the large dark plains on the Moon called?",
+      "options": [
+        "Craters",
+        "Maria",
+        "Rilles",
+        "Highlands"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "moon",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_043",
+      "question": "How many natural moons does Earth have?",
+      "options": [
+        "Two",
+        "Three",
+        "None",
+        "One"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "moon",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_044",
+      "question": "What is Earth's overall shape, approximately?",
+      "options": [
+        "A perfect cube",
+        "A flat disk",
+        "A long cylinder",
+        "A slightly flattened sphere"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "earth in space",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_045",
+      "question": "In which direction does Earth rotate?",
+      "options": [
+        "East to west",
+        "West to east",
+        "North to south",
+        "South to north"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "earth in space",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_046",
+      "question": "Which planet lies between Saturn and Neptune?",
+      "options": [
+        "Mars",
+        "Jupiter",
+        "Uranus",
+        "Venus"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "planets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_047",
+      "question": "Which planet lies between Earth and Jupiter?",
+      "options": [
+        "Venus",
+        "Mars",
+        "Saturn",
+        "Mercury"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "planets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_048",
+      "question": "Between which two planets is the main asteroid belt located?",
+      "options": [
+        "Mars and Jupiter",
+        "Earth and Mars",
+        "Jupiter and Saturn",
+        "Venus and Earth"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "small bodies",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_049",
+      "question": "Which large space telescope, launched in December 2021, is considered Hubble's successor?",
+      "options": [
+        "Gaia",
+        "Spitzer",
+        "James Webb Space Telescope",
+        "Compton"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "telescopes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_050",
+      "question": "Which large spiral galaxy is the nearest to the Milky Way?",
+      "options": [
+        "Whirlpool Galaxy",
+        "Sombrero Galaxy",
+        "Cartwheel Galaxy",
+        "Andromeda Galaxy"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "galaxies",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_051",
+      "question": "What do we call a human-made object that orbits Earth?",
+      "options": [
+        "Meteorite",
+        "Asteroid",
+        "Artificial satellite",
+        "Natural moon"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "space technology",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_052",
+      "question": "What do we call a rock from space that survives and lands on Earth's surface?",
+      "options": [
+        "Meteor",
+        "Comet",
+        "Meteorite",
+        "Satellite"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "small bodies",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_053",
+      "question": "Compared with Earth's gravity, the Moon's surface gravity is roughly what?",
+      "options": [
+        "About one-sixth",
+        "About the same",
+        "Twice as strong",
+        "About one-tenth"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "moon",
+      "type": "comparison"
+    },
+    {
+      "id": "space_quality_054",
+      "question": "What is the main cause of ocean tides on Earth?",
+      "options": [
+        "Wind alone",
+        "Earth's magnetic field",
+        "Ocean temperature changes",
+        "The Moon's gravity"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "earth in space",
+      "type": "cause/effect"
+    },
+    {
+      "id": "space_quality_055",
+      "question": "Which planet is called the Blue Planet because of its oceans?",
+      "options": [
+        "Neptune",
+        "Earth",
+        "Uranus",
+        "Venus"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "planets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_056",
+      "question": "Why do stars appear to twinkle when seen from Earth?",
+      "options": [
+        "The stars blink on and off",
+        "Earth's atmosphere bends their light unevenly",
+        "Planets orbit them",
+        "They spin very fast"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "stars",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_057",
+      "question": "What is the term for the force that pushes a rocket upward by expelling gas downward?",
+      "options": [
+        "Drag",
+        "Thrust",
+        "Lift",
+        "Friction"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "space exploration",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_058",
+      "question": "What do we call the Moon's different shapes seen from Earth, such as crescent and full?",
+      "options": [
+        "Phases",
+        "Eclipses",
+        "Tides",
+        "Seasons"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "moon",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_059",
+      "question": "Which planet rotates on its side, with an axial tilt of about 98 degrees?",
+      "options": [
+        "Neptune",
+        "Saturn",
+        "Uranus",
+        "Mars"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "planets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_060",
+      "question": "Which planet has Olympus Mons, the tallest known volcano in the Solar System?",
+      "options": [
+        "Mars",
+        "Venus",
+        "Earth",
+        "Mercury"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "planets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_061",
+      "question": "Which moon is the largest in the entire Solar System?",
+      "options": [
+        "Titan",
+        "Ganymede",
+        "Callisto",
+        "Triton"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "moons",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_062",
+      "question": "Which constellation contains the bright stars Betelgeuse and Rigel?",
+      "options": [
+        "Cassiopeia",
+        "Orion",
+        "Scorpius",
+        "Ursa Minor"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "stars",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_063",
+      "question": "What is a supernova?",
+      "options": [
+        "A new star forming",
+        "A comet near the Sun",
+        "The explosion of a massive star or a white dwarf at the end of its life",
+        "A planet leaving its orbit"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "stars",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_064",
+      "question": "Which star is the closest to the Sun?",
+      "options": [
+        "Sirius",
+        "Alpha Centauri A only",
+        "Proxima Centauri",
+        "Vega"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "stars",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_065",
+      "question": "How many planets in our Solar System have ring systems?",
+      "options": [
+        "Four",
+        "One",
+        "Two",
+        "Eight"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "planets",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_066",
+      "question": "Which space station, operated by the Soviet Union and later Russia, was in orbit from 1986 to 2001?",
+      "options": [
+        "Mir",
+        "Skylab",
+        "Tiangong",
+        "Salyut 1"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "space stations",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_067",
+      "question": "Which Saturnian moon has a thick atmosphere and lakes of liquid methane?",
+      "options": [
+        "Titan",
+        "Enceladus",
+        "Mimas",
+        "Iapetus"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "moons",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_068",
+      "question": "Which moon of Jupiter is thought to hide a vast ocean beneath its icy crust?",
+      "options": [
+        "Io",
+        "Callisto only",
+        "Himalia",
+        "Europa"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "moons",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_069",
+      "question": "Which small moon of Saturn is known for geysers that spray water-ice into space?",
+      "options": [
+        "Phobos",
+        "Triton",
+        "Charon",
+        "Enceladus"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "moons",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_070",
+      "question": "What are the names of Mars's two small moons?",
+      "options": [
+        "Io and Europa",
+        "Titan and Rhea",
+        "Charon and Nix",
+        "Phobos and Deimos"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "moons",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_071",
+      "question": "In which year did the IAU reclassify Pluto as a dwarf planet?",
+      "options": [
+        "2006",
+        "1930",
+        "1999",
+        "2015"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "dwarf planets",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_072",
+      "question": "Which region beyond Neptune contains many icy bodies, including Pluto?",
+      "options": [
+        "Kuiper Belt",
+        "Asteroid Belt",
+        "Oort Cloud only",
+        "Van Allen Belt"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "solar system",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_073",
+      "question": "The Oort Cloud is hypothesized to be the source of which kind of object?",
+      "options": [
+        "Asteroids in the main belt",
+        "Long-period comets",
+        "Meteor showers only",
+        "Dwarf planets close to the Sun"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "solar system",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_074",
+      "question": "About how often does Halley's Comet return to the inner Solar System?",
+      "options": [
+        "About every 5 years",
+        "About every 76 years",
+        "About every 200 years",
+        "About every year"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "small bodies",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_075",
+      "question": "Which spacecraft, launched in 1977, entered interstellar space in 2012?",
+      "options": [
+        "Pioneer 10",
+        "Voyager 1",
+        "Cassini",
+        "New Horizons"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "space probes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_076",
+      "question": "Which Apollo mission suffered an oxygen tank failure and returned safely after looping around the Moon?",
+      "options": [
+        "Apollo 11",
+        "Apollo 12",
+        "Apollo 13",
+        "Apollo 17"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "space history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_077",
+      "question": "Who was the second person to walk on the Moon?",
+      "options": [
+        "Michael Collins",
+        "Alan Shepard",
+        "Buzz Aldrin",
+        "Pete Conrad"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "space history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_078",
+      "question": "Which Apollo 11 astronaut stayed in lunar orbit while the other two walked on the Moon?",
+      "options": [
+        "Pete Conrad",
+        "Jim Lovell",
+        "Gene Cernan",
+        "Michael Collins"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "space history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_079",
+      "question": "Triton, a large moon that orbits in the opposite direction to its planet's rotation, belongs to which planet?",
+      "options": [
+        "Neptune",
+        "Uranus",
+        "Saturn",
+        "Jupiter"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "moons",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_080",
+      "question": "Which astronomer's observations in the 1920s showed that the universe is expanding?",
+      "options": [
+        "Carl Sagan",
+        "Johannes Kepler",
+        "Edwin Hubble",
+        "Fred Hoyle"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "astronomy history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_081",
+      "question": "Which scientist discovered Jupiter's four largest moons in 1610?",
+      "options": [
+        "Isaac Newton",
+        "Tycho Brahe",
+        "Galileo Galilei",
+        "Christiaan Huygens"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "astronomy history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_082",
+      "question": "Which astronomer proposed a heliocentric model of the Solar System in the 16th century?",
+      "options": [
+        "Ptolemy",
+        "Johannes Kepler",
+        "Nicolaus Copernicus",
+        "Tycho Brahe"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "astronomy history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_083",
+      "question": "Which NASA–ESA probe studied Saturn and its moons from 2004 to 2017?",
+      "options": [
+        "Cassini",
+        "Galileo",
+        "Juno",
+        "Voyager 2"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "space probes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_084",
+      "question": "Which spacecraft flew past Pluto in 2015?",
+      "options": [
+        "New Horizons",
+        "Voyager 1",
+        "Cassini",
+        "Dawn"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "space probes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_085",
+      "question": "In which crater did the Curiosity rover land on Mars in 2012?",
+      "options": [
+        "Jezero Crater",
+        "Hellas Basin",
+        "Gale Crater",
+        "Olympia Crater"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "mars exploration",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_086",
+      "question": "What is the boundary around a black hole beyond which nothing can return called?",
+      "options": [
+        "Photosphere",
+        "Event horizon",
+        "Corona",
+        "Heliopause"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "black holes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_087",
+      "question": "What is the extremely dense remnant of a massive star's supernova often called?",
+      "options": [
+        "Red giant",
+        "Neutron star",
+        "Brown dwarf",
+        "Protostar"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "stars",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_088",
+      "question": "What do we call a rapidly rotating neutron star that emits beams of radiation?",
+      "options": [
+        "Quasar",
+        "Nebula",
+        "Red dwarf",
+        "Pulsar"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "stars",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_089",
+      "question": "Which type of star is the most common in the Milky Way?",
+      "options": [
+        "Blue giant",
+        "Red dwarf",
+        "Red supergiant",
+        "White dwarf"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "stars",
+      "type": "classification"
+    },
+    {
+      "id": "space_quality_090",
+      "question": "The Sun is currently in which stage of stellar life, fusing hydrogen into helium in its core?",
+      "options": [
+        "Red giant",
+        "Main sequence",
+        "White dwarf",
+        "Protostar"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "stars",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_091",
+      "question": "What will the Sun most likely become after it sheds its outer layers?",
+      "options": [
+        "A black hole",
+        "A white dwarf",
+        "A neutron star",
+        "A pulsar"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "stars",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_092",
+      "question": "About how old is the universe according to current estimates?",
+      "options": [
+        "About 4.6 billion years",
+        "About 13.8 billion years",
+        "About 1 billion years",
+        "About 100 billion years"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "cosmology",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_093",
+      "question": "What is the cosmic microwave background?",
+      "options": [
+        "Faint radiation left over from the early universe",
+        "Light from the Sun's corona",
+        "Radio signals from Earth",
+        "Microwaves emitted by black holes"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "cosmology",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_094",
+      "question": "Which mysterious component is thought to make up most of the matter in the universe but does not emit light?",
+      "options": [
+        "Antimatter",
+        "Plasma",
+        "Ordinary gas",
+        "Dark matter"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "cosmology",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_095",
+      "question": "The astronomical unit (AU) is roughly the average distance between which two bodies?",
+      "options": [
+        "Earth and the Moon",
+        "Sun and Jupiter",
+        "Earth and the Sun",
+        "Earth and Mars"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "astronomy units",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_096",
+      "question": "One parsec is approximately how many light-years?",
+      "options": [
+        "About 1",
+        "About 10",
+        "About 100",
+        "About 3.26"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "astronomy units",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_097",
+      "question": "The James Webb Space Telescope operates near which special point in the Sun–Earth system?",
+      "options": [
+        "The Moon's surface",
+        "The second Lagrange point (L2)",
+        "Low Earth orbit",
+        "The first Lagrange point (L1)"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "space technology",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_098",
+      "question": "What is the stream of charged particles flowing outward from the Sun called?",
+      "options": [
+        "Sunspot cycle",
+        "Corona only",
+        "Tidal wave",
+        "Solar wind"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "space weather",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_099",
+      "question": "What causes the auroras seen near Earth's polar regions?",
+      "options": [
+        "Reflections from polar ice",
+        "Moonlight scattering",
+        "Volcanic ash in the sky",
+        "Charged particles interacting with Earth's magnetic field and atmosphere"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "space weather",
+      "type": "cause/effect"
+    },
+    {
+      "id": "space_quality_100",
+      "question": "What is an equinox?",
+      "options": [
+        "A time when day and night are nearly equal in length",
+        "The shortest day of the year",
+        "A total lunar eclipse",
+        "The point where Earth is closest to the Sun"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "earth in space",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_101",
+      "question": "What is perihelion?",
+      "options": [
+        "The point in an orbit closest to the Sun",
+        "The point farthest from the Sun",
+        "The point where an eclipse occurs",
+        "The center of an orbit"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "orbits",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_102",
+      "question": "What is special about a geostationary orbit?",
+      "options": [
+        "It is the lowest orbit possible",
+        "It passes over both poles each day",
+        "It orbits the Moon",
+        "A satellite stays above the same point on the equator"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "orbits",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_103",
+      "question": "Which Apollo mission was the first to use a Lunar Roving Vehicle on the Moon?",
+      "options": [
+        "Apollo 12",
+        "Apollo 14",
+        "Apollo 15",
+        "Apollo 11"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "moon exploration",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_104",
+      "question": "What is the name of China's modular space station, assembled in low Earth orbit from 2021?",
+      "options": [
+        "Mir",
+        "Salyut",
+        "Skylab",
+        "Tiangong"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "space stations",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_105",
+      "question": "What is the approximate maximum mass of a stable white dwarf, known as the Chandrasekhar limit?",
+      "options": [
+        "About 0.1 solar masses",
+        "About 8 solar masses",
+        "About 25 solar masses",
+        "About 1.4 solar masses"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "stellar remnants",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_106",
+      "question": "What is the Schwarzschild radius?",
+      "options": [
+        "The radius of the Sun's corona",
+        "The radius of a black hole's event horizon for a given mass",
+        "The distance to the nearest star",
+        "The radius of a planet's orbit"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "black holes",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_107",
+      "question": "Which physicist predicted that black holes slowly emit radiation?",
+      "options": [
+        "Roger Penrose",
+        "Stephen Hawking",
+        "Kip Thorne",
+        "Carl Sagan"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "black holes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_108",
+      "question": "What does Hubble's law state about distant galaxies?",
+      "options": [
+        "They all move at the same speed",
+        "Closer galaxies move away faster",
+        "Their recession velocity is proportional to their distance",
+        "They do not move at all"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "cosmology",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_109",
+      "question": "Which astronomer discovered the period–luminosity relation of Cepheid variable stars, enabling distance measurements?",
+      "options": [
+        "Annie Jump Cannon",
+        "Henrietta Leavitt",
+        "Cecilia Payne",
+        "Vera Rubin"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "astronomy history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_110",
+      "question": "Observations of distant Type Ia supernovae in the 1990s revealed what about the universe's expansion?",
+      "options": [
+        "It is slowing to a stop",
+        "It is accelerating",
+        "It has already reversed",
+        "It is perfectly constant"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "cosmology",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_111",
+      "question": "What is the Roche limit?",
+      "options": [
+        "The speed needed to escape a planet",
+        "The edge of a star's atmosphere",
+        "The orbit of a geostationary satellite",
+        "The distance within which tidal forces can tear apart a satellite held together by gravity"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "orbits",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_112",
+      "question": "Why does the Moon always show nearly the same face to Earth?",
+      "options": [
+        "It does not rotate at all",
+        "It orbits in the opposite direction",
+        "It is tidally locked, rotating once per orbit",
+        "Earth's magnetic field holds it"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "moon",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_113",
+      "question": "According to Kepler's third law, how is a planet's orbital period related to its orbit's semi-major axis?",
+      "options": [
+        "The period is proportional to the axis",
+        "The period does not depend on the axis",
+        "The period is the same for all planets",
+        "The square of the period is proportional to the cube of the semi-major axis"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "orbits",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_114",
+      "question": "What is a Hohmann transfer orbit used for?",
+      "options": [
+        "Landing on a comet",
+        "Escaping the galaxy",
+        "A fuel-efficient move between two circular orbits",
+        "Keeping a satellite stationary over one spot"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "orbits",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_115",
+      "question": "What is Earth's escape velocity from its surface, approximately?",
+      "options": [
+        "About 11.2 km/s",
+        "About 1 km/s",
+        "About 3 km/s",
+        "About 300 km/s"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "orbits",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_116",
+      "question": "Approximately how fast must a satellite travel to stay in a low circular orbit around Earth?",
+      "options": [
+        "About 7.8 km/s",
+        "About 0.5 km/s",
+        "About 25 km/s",
+        "About 100 km/s"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "orbits",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_117",
+      "question": "Which Russian scientist derived the fundamental rocket equation in 1903?",
+      "options": [
+        "Konstantin Tsiolkovsky",
+        "Sergei Korolev",
+        "Robert Goddard",
+        "Hermann Oberth"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "rocketry",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_118",
+      "question": "Which engineer led the development of the Saturn V rocket at NASA?",
+      "options": [
+        "Sergei Korolev",
+        "Robert Goddard",
+        "Wernher von Braun",
+        "Gene Kranz"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "rocketry",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_119",
+      "question": "Which rocket carried the Apollo astronauts to the Moon?",
+      "options": [
+        "Saturn V",
+        "Atlas V",
+        "Titan II",
+        "Falcon Heavy"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "rocketry",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_120",
+      "question": "Who was the chief designer of the early Soviet space program, behind Sputnik and Vostok?",
+      "options": [
+        "Wernher von Braun",
+        "Valentin Glushko",
+        "Sergei Korolev",
+        "Yuri Gagarin"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "space history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_121",
+      "question": "Which orbiter flew the first Space Shuttle mission in 1981?",
+      "options": [
+        "Columbia",
+        "Challenger",
+        "Discovery",
+        "Atlantis"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "space shuttle",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_122",
+      "question": "What was wrong with the Hubble Space Telescope's primary mirror when it launched in 1990?",
+      "options": [
+        "It was cracked in half",
+        "A flaw in its shape caused spherical aberration",
+        "It was covered in dust",
+        "It was too small to collect light"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "telescopes",
+      "type": "cause/effect"
+    },
+    {
+      "id": "space_quality_123",
+      "question": "Which NASA space telescope, launched in 1999, observes the universe in X-rays?",
+      "options": [
+        "Chandra X-ray Observatory",
+        "Spitzer",
+        "Kepler",
+        "Fermi"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "telescopes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_124",
+      "question": "Which NASA space telescope found thousands of exoplanets by watching stars dim as planets crossed in front of them?",
+      "options": [
+        "Hubble",
+        "Chandra",
+        "Planck",
+        "Kepler"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "exoplanets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_125",
+      "question": "Which exoplanet, discovered in 1995, was the first found orbiting a Sun-like star?",
+      "options": [
+        "Proxima b",
+        "Kepler-22b",
+        "TRAPPIST-1e",
+        "51 Pegasi b"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "exoplanets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_126",
+      "question": "What is the habitable zone of a star?",
+      "options": [
+        "The region where gravity is zero",
+        "The range of distances where liquid water could exist on a planet's surface",
+        "The area inside the corona",
+        "The zone where planets cannot form"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "exoplanets",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_127",
+      "question": "What does the Drake equation attempt to estimate?",
+      "options": [
+        "The age of the universe",
+        "The mass of the Milky Way",
+        "The number of detectable civilizations in our galaxy",
+        "The speed of light"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "astrobiology",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_128",
+      "question": "Olbers' paradox asks why what is true of the night sky?",
+      "options": [
+        "Why the Moon is bright",
+        "Why it is dark despite countless stars",
+        "Why comets have tails",
+        "Why the Sun rises in the east"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "cosmology",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_129",
+      "question": "Which physicist proposed cosmic inflation, an extremely rapid early expansion of the universe, in 1981?",
+      "options": [
+        "Edwin Hubble",
+        "George Lemaître",
+        "Fred Hoyle",
+        "Alan Guth"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "cosmology",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_130",
+      "question": "In 2015, which observatory made the first direct detection of gravitational waves?",
+      "options": [
+        "LIGO",
+        "Hubble",
+        "ALMA",
+        "Arecibo"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "astrophysics",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_131",
+      "question": "In 2019, the Event Horizon Telescope released the first image of the shadow of the black hole in which galaxy?",
+      "options": [
+        "The Milky Way",
+        "Andromeda",
+        "The Large Magellanic Cloud",
+        "Messier 87"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "black holes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_132",
+      "question": "What is the name of the supermassive black hole at the center of the Milky Way?",
+      "options": [
+        "Sagittarius A*",
+        "Cygnus X-1",
+        "M87*",
+        "Messier 31"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "black holes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_133",
+      "question": "About how far away is the Andromeda Galaxy?",
+      "options": [
+        "About 4 light-years",
+        "About 100,000 light-years",
+        "About 13 billion light-years",
+        "About 2.5 million light-years"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "galaxies",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_134",
+      "question": "What is the Milky Way's galaxy type?",
+      "options": [
+        "Elliptical galaxy",
+        "Irregular galaxy",
+        "Barred spiral galaxy",
+        "Lenticular galaxy"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "galaxies",
+      "type": "classification"
+    },
+    {
+      "id": "space_quality_135",
+      "question": "What is a magnetar?",
+      "options": [
+        "A neutron star with an extremely strong magnetic field",
+        "A star made of antimatter",
+        "A very cold brown dwarf",
+        "A planet with a metal core"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "stellar remnants",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_136",
+      "question": "About how long is the Sun's magnetic activity cycle, seen in sunspot numbers?",
+      "options": [
+        "About 1 year",
+        "About 100 years",
+        "About 11 years",
+        "About 1,000 years"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "solar physics",
+      "type": "recognition"
+    },
+    {
+      "id": "space_quality_137",
+      "question": "What is the heliopause?",
+      "options": [
+        "The boundary where the solar wind is stopped by interstellar medium",
+        "The Sun's innermost layer",
+        "The edge of Earth's atmosphere",
+        "The point of closest approach to the Sun"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "solar physics",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_138",
+      "question": "Which spacecraft is the only one to have visited both Uranus and Neptune?",
+      "options": [
+        "Voyager 1",
+        "Cassini",
+        "Voyager 2",
+        "Pioneer 11"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "space probes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_139",
+      "question": "Which probe, carried by the Cassini spacecraft, landed on Titan in 2005?",
+      "options": [
+        "Huygens",
+        "Philae",
+        "Galileo",
+        "Pathfinder"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "space probes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_140",
+      "question": "Which ESA mission deployed the Philae lander onto comet 67P/Churyumov–Gerasimenko in 2014?",
+      "options": [
+        "Giotto",
+        "Venus Express",
+        "Mars Express",
+        "Rosetta"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "space probes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_141",
+      "question": "Which NASA mission returned a sample from the asteroid Bennu to Earth in 2023?",
+      "options": [
+        "Dawn",
+        "Lucy",
+        "Psyche",
+        "OSIRIS-REx"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "space probes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_142",
+      "question": "Which Japanese mission returned samples from the asteroid Ryugu in 2020?",
+      "options": [
+        "IKAROS",
+        "Hayabusa2",
+        "Akatsuki",
+        "SELENE"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "space probes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_143",
+      "question": "Which Chinese mission achieved the first soft landing on the far side of the Moon in 2019?",
+      "options": [
+        "Chang'e-1",
+        "Chang'e-3",
+        "Chang'e-4",
+        "Tianwen-1"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "moon exploration",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_144",
+      "question": "Which country's Chandrayaan-3 mission landed near the Moon's south pole region in 2023?",
+      "options": [
+        "Japan",
+        "India",
+        "Israel",
+        "China"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "moon exploration",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_145",
+      "question": "Which 1968 mission was the first crewed spacecraft to orbit the Moon?",
+      "options": [
+        "Apollo 7",
+        "Apollo 8",
+        "Apollo 10",
+        "Apollo 11"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "space history",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_146",
+      "question": "Which Soviet probe achieved the first successful soft landing on Venus in 1970?",
+      "options": [
+        "Venera 7",
+        "Venera 1",
+        "Luna 9",
+        "Zond 3"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "space probes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_147",
+      "question": "Which NASA probe entered Jupiter's atmosphere in 1995 to study its composition?",
+      "options": [
+        "Juno",
+        "Galileo atmospheric probe",
+        "Pioneer 10",
+        "Ulysses"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "space probes",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_148",
+      "question": "What is a coronal mass ejection (CME)?",
+      "options": [
+        "A meteor shower near Jupiter",
+        "A huge burst of plasma and magnetic field from the Sun's corona",
+        "A burst of light from a black hole",
+        "A collision between two moons"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "solar physics",
+      "type": "concept"
+    },
+    {
+      "id": "space_quality_149",
+      "question": "Which NASA mission, launched in 2018, surveys bright nearby stars for transiting exoplanets?",
+      "options": [
+        "Kepler",
+        "Spitzer",
+        "WISE",
+        "TESS"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "exoplanets",
+      "type": "identification"
+    },
+    {
+      "id": "space_quality_150",
+      "question": "Which NASA spacecraft became the first to orbit Mercury, in 2011?",
+      "options": [
+        "Mariner 10",
+        "BepiColombo",
+        "MESSENGER",
+        "Magellan"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "space probes",
+      "type": "identification"
+    }
+  ]
+}

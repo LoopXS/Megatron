@@ -1,0 +1,2108 @@
+{
+  "language": "fa",
+  "category": "games",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "games_quality_001",
+      "question": "در شطرنج کدام مهره می‌تواند به شکل حرف L حرکت کند؟",
+      "options": [
+        "اسب",
+        "فیل",
+        "رخ",
+        "وزیر"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "بازی‌های رومیزی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_002",
+      "question": "در یک دسته کارت استاندارد چند خال وجود دارد؟",
+      "options": [
+        "شش",
+        "چهار",
+        "سه",
+        "پنج"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "بازی‌های کارتی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_003",
+      "question": "در Minecraft معمولاً برای ساخت میز کاردستی از چه ماده‌ای استفاده می‌شود؟",
+      "options": [
+        "میله‌های آهنی",
+        "شن",
+        "تخته‌های چوبی",
+        "شیشه"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "بازی‌های سندباکس",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_004",
+      "question": "در مجموعه بازی‌های Super Mario، برادر ماریو معمولاً چه نام دارد؟",
+      "options": [
+        "واریو",
+        "یوشی",
+        "باوزر",
+        "لوئیجی"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "بازی‌های پلتفرمی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_005",
+      "question": "بازی سپری در اختیار بازیکن می‌گذارد که مقدار مشخصی آسیب را جذب می‌کند و سپس می‌شکند. این چه نوع مکانیکی است؟",
+      "options": [
+        "کاهش آسیب با یک منبع محدود",
+        "آسیب‌ناپذیری همیشگی",
+        "تولید تصادفی دائمی نقشه",
+        "حرکت فقط پس از احیا"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "مکانیک بازی",
+      "type": "طبقه‌بندی"
+    },
+    {
+      "id": "games_quality_006",
+      "question": "بازی راهبردی به بازیکن اجازه می‌دهد منابع را برای دفاع فوری یا پژوهش بلندمدت خرج کند. این چه نوع تصمیمی است؟",
+      "options": [
+        "تطبیق تصادفی بازیکنان",
+        "مصالحه در تخصیص منابع",
+        "تغییر کلیدهای کنترل",
+        "شخصی‌سازی صرفاً ظاهری"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "بازی‌های راهبردی",
+      "type": "استدلال"
+    },
+    {
+      "id": "games_quality_007",
+      "question": "در بازی مسابقه‌ای، بازیکن مسیر کوتاه‌تری را انتخاب می‌کند اما وارد سطحی کندتر می‌شود. برای سنجش سود مسیر میان‌بر چه چیزی را باید مقایسه کند؟",
+      "options": [
+        "فقط طول مسیر",
+        "رنگ خودرو",
+        "زمان کل طی مسیر",
+        "موسیقی منو"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "بازی‌های مسابقه‌ای",
+      "type": "کاربردی"
+    },
+    {
+      "id": "games_quality_008",
+      "question": "بازی چندنفره به بازیکنی که به هم‌تیمی‌ها کمک می‌کند، حتی بدون گرفتن ضربه نهایی، پاداش می‌دهد. سیستم چه رفتاری را تشویق می‌کند؟",
+      "options": [
+        "نادیده گرفتن اهداف",
+        "بازی کاملاً انفرادی",
+        "بی‌توجهی به هم‌تیمی‌ها",
+        "همکاری و حمایت تیمی"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "طراحی چندنفره",
+      "type": "تحلیل"
+    },
+    {
+      "id": "games_quality_009",
+      "question": "اگر یک قابلیت قدرتمند پس از استفاده زمان انتظار طولانی داشته باشد، این طراحی چه هدفی می‌تواند داشته باشد؟",
+      "options": [
+        "جلوگیری از استفاده مداوم و تشویق به انتخاب زمان مناسب",
+        "تضمین پیروزی همه بازیکنان",
+        "از بین بردن همه انتخاب‌های بازیکن",
+        "غیرفعال کردن دائمی قابلیت"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "طراحی بازی",
+      "type": "تحلیل"
+    },
+    {
+      "id": "games_quality_010",
+      "question": "دو راهبرد میانگین پاداش مشابهی دارند، اما یکی بسیار بیشتر به مهارت زمانی بازیکن وابسته است. چه ویژگی‌ای مقایسه می‌شود؟",
+      "options": [
+        "کیفیت صدا",
+        "وابستگی به مهارت",
+        "وضوح تصویر",
+        "طول داستان"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "طراحی بازی",
+      "type": "مقایسه"
+    },
+    {
+      "id": "games_quality_011",
+      "question": "بازی بدون تغییر قوانین اعلام‌شده، رفتار دشمنان را بر اساس عملکرد بازیکن تغییر می‌دهد. کدام سیستم مستقیماً درگیر است؟",
+      "options": [
+        "تغییر کنترلر",
+        "رمزنگاری فایل ذخیره",
+        "تنظیم پویای درجه سختی",
+        "فشرده‌سازی بافت"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "سامانه‌های بازی",
+      "type": "استنباط"
+    },
+    {
+      "id": "games_quality_012",
+      "question": "سیستم رتبه‌بندی یک بازی رقابتی برای شکست دادن حریفان قوی‌تر امتیاز بیشتری می‌دهد و برای باخت به حریفان ضعیف‌تر امتیاز بیشتری کم می‌کند. این سیستم چه اصلی را دنبال می‌کند؟",
+      "options": [
+        "زمان بازی صرف‌شده",
+        "کمیابی آیتم ظاهری",
+        "تعداد پاداش‌های تصادفی",
+        "عملکرد نسبی با توجه به قدرت حریف"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "سیستم‌های رقابتی",
+      "type": "استدلال"
+    },
+    {
+      "id": "games_quality_013",
+      "question": "کدام شرکت مجموعه بازی‌های Mario را ساخته است؟",
+      "options": [
+        "Sega",
+        "Sony",
+        "Nintendo",
+        "Atari"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "شرکت‌های بازی‌سازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_014",
+      "question": "در Pac-Man چه چیزی بازیکن را در پیچ‌وخم مرحله تعقیب می‌کند؟",
+      "options": [
+        "ربات‌ها",
+        "عنکبوت‌ها",
+        "اژدهاها",
+        "روح‌ها"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "آرکیدهای کلاسیک",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_015",
+      "question": "کدام بازی موجودات سبز انفجاری‌ای به نام Creeper دارد؟",
+      "options": [
+        "Terraria",
+        "Roblox",
+        "Minecraft",
+        "Fortnite"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "بازی‌های سندباکس",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_016",
+      "question": "پیکاچو در بازی‌های Pokémon از چه نوعی است؟",
+      "options": [
+        "آبی",
+        "آتشین",
+        "گیاهی",
+        "برقی"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_017",
+      "question": "سونیک خارپشت چه رنگی است؟",
+      "options": [
+        "قرمز",
+        "سبز",
+        "آبی",
+        "زرد"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_018",
+      "question": "در مجموعه The Legend of Zelda نام قهرمان اصلی چیست؟",
+      "options": [
+        "لینک",
+        "گانون",
+        "نَوی",
+        "اپونا"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_019",
+      "question": "کدام شرکت کنسول‌های PlayStation را می‌سازد؟",
+      "options": [
+        "Nintendo",
+        "Microsoft",
+        "Sega",
+        "Sony"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "کنسول‌ها",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_020",
+      "question": "کدام شرکت کنسول‌های Xbox را می‌سازد؟",
+      "options": [
+        "Microsoft",
+        "Sony",
+        "Nintendo",
+        "Apple"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "کنسول‌ها",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_021",
+      "question": "Fortnite بیشتر با کدام حالت بازی شناخته می‌شود؟",
+      "options": [
+        "شبیه‌سازی کشاورزی",
+        "نبرد با کارت",
+        "چالش ریتمیک",
+        "بتل‌رویال"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "ژانرهای بازی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_022",
+      "question": "در مونوپولی بازیکنان بیشتر چه چیزی را می‌خرند و معامله می‌کنند؟",
+      "options": [
+        "تیم‌های ورزشی",
+        "ابزارهای موسیقی",
+        "املاک",
+        "حیوانات خانگی"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "بازی‌های رومیزی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_023",
+      "question": "یک صفحه شطرنج استاندارد چند خانه دارد؟",
+      "options": [
+        "۳۲",
+        "۴۸",
+        "۶۴",
+        "۷۲"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "شطرنج",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_024",
+      "question": "در شطرنج وقتی شاه زیر حمله است و راه فراری ندارد، به آن چه می‌گویند؟",
+      "options": [
+        "مات",
+        "پات",
+        "قلعه‌روی",
+        "ارتقا"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "شطرنج",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_025",
+      "question": "هر بازیکن در شروع بازی شطرنج چند مهره دارد؟",
+      "options": [
+        "۸",
+        "۱۲",
+        "۲۰",
+        "۱۶"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "شطرنج",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_026",
+      "question": "در Among Us نقش بازیکنی که پنهانی به خدمه خرابکاری می‌زند چیست؟",
+      "options": [
+        "ایمپاستر",
+        "خدمه",
+        "مهندس",
+        "دانشمند"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "بازی‌های چندنفره",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_027",
+      "question": "در Angry Birds پرندگان می‌خواهند کدام موجودات را شکست دهند؟",
+      "options": [
+        "خوک‌های سبز",
+        "گربه‌ها",
+        "روباه‌ها",
+        "موش‌ها"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "بازی‌های موبایلی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_028",
+      "question": "در نسخه آرکید اولیه Donkey Kong، گوریل چه چیزی را از شیب‌ها پایین می‌غلتاند؟",
+      "options": [
+        "تخته‌سنگ‌ها",
+        "بشکه‌ها",
+        "چرخ‌ها",
+        "کنده‌های چوب"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "آرکیدهای کلاسیک",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_029",
+      "question": "کدام مجموعه بازی درباره سرباز زره‌پوشی به نام Master Chief است؟",
+      "options": [
+        "Gears of War",
+        "Doom",
+        "Destiny",
+        "Halo"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "مجموعه بازی‌ها",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_030",
+      "question": "کار اصلی بازیکن در Candy Crush Saga چیست؟",
+      "options": [
+        "ردیف کردن آب‌نبات‌های همنوع",
+        "رانندگی با خودرو",
+        "ساختن برج",
+        "ماهی‌گیری"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "بازی‌های موبایلی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_031",
+      "question": "در اسکرابل بازیکنان برای ساختن کلمه از چه چیزی استفاده می‌کنند؟",
+      "options": [
+        "مهره‌های حرف",
+        "دومینو",
+        "ورق بازی",
+        "سکه"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "بازی‌های رومیزی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_032",
+      "question": "در جنگا بازیکنان چه چیزی را برمی‌دارند و بالای برج می‌گذارند؟",
+      "options": [
+        "میله‌های فلزی",
+        "قطعه‌های چوبی",
+        "لیوان‌های کاغذی",
+        "تیله‌ها"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "بازی‌های میزی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_033",
+      "question": "بازی The Sims را بهتر است چه نوع بازی‌ای توصیف کرد؟",
+      "options": [
+        "تیراندازی فضایی",
+        "شبیه‌سازی زندگی",
+        "مسابقه‌ای",
+        "نبرد کارتی"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "ژانرهای بازی",
+      "type": "طبقه‌بندی"
+    },
+    {
+      "id": "games_quality_034",
+      "question": "کدام کنسول Nintendo که در سال ۲۰۱۷ عرضه شد، هم روی پایه و هم دستی قابل استفاده است؟",
+      "options": [
+        "Nintendo Switch",
+        "Wii",
+        "GameCube",
+        "Game Boy Advance"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "کنسول‌ها",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_035",
+      "question": "NPC در بازی‌های ویدیویی مخفف چیست؟",
+      "options": [
+        "شخصیت غیرقابل‌بازی",
+        "کارت بازیکن جدید",
+        "کنترل بسته شبکه",
+        "چرخه بازی عادی"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "اصطلاحات بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_036",
+      "question": "به دشمن قدرتمندی که در پایان یک مرحله با او می‌جنگند معمولاً چه می‌گویند؟",
+      "options": [
+        "همراه",
+        "ایست‌بازرسی",
+        "باس",
+        "آواتار"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "اصطلاحات بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_037",
+      "question": "در بسیاری از بازی‌ها HP معمولاً مخفف چیست؟",
+      "options": [
+        "مشت‌های سنگین",
+        "امتیاز سلامتی",
+        "موقعیت قهرمان",
+        "سرعت فوق‌العاده"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "اصطلاحات بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_038",
+      "question": "در بولینگ وقتی هر ده لات با اولین پرتاب می‌افتند، به آن چه می‌گویند؟",
+      "options": [
+        "اسپیر",
+        "ناودانی",
+        "استرایک",
+        "اسپلیت"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "بازی‌های ورزشی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_039",
+      "question": "در بازی‌های Super Mario کدام آیتم معمولاً ماریو را بزرگ‌تر می‌کند؟",
+      "options": [
+        "سکه",
+        "قارچ بزرگ‌کننده",
+        "لوله انتقال",
+        "پرچم پایان"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "بازی‌های پلتفرمی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_040",
+      "question": "ماریو معمولاً کدام شاهزاده‌خانم را از دست باوزر نجات می‌دهد؟",
+      "options": [
+        "شاهزاده زلدا",
+        "شاهزاده پیچ",
+        "شاهزاده لیا",
+        "شاهزاده فیونا"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_041",
+      "question": "کدام پوکمون آتشین در ابتدای Pokémon Red و Blue قابل انتخاب است؟",
+      "options": [
+        "اسکوارتل",
+        "بولباسور",
+        "پیجی",
+        "چارمندر"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_042",
+      "question": "نام دوست روباه دو‌دم سونیک چیست؟",
+      "options": [
+        "ناکلز",
+        "تیلز",
+        "شدو",
+        "ایمی"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_043",
+      "question": "در Tetris وقتی یک ردیف افقی کاملاً پر شود چه اتفاقی می‌افتد؟",
+      "options": [
+        "بازی از اول شروع می‌شود",
+        "قطعه‌ها نامرئی می‌شوند",
+        "رنگ صفحه برای همیشه عوض می‌شود",
+        "آن ردیف پاک می‌شود"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "بازی‌های پازل",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_044",
+      "question": "کدام بازی راهبردی باستانی با مهره‌های سیاه و سفید روی یک صفحه شبکه‌ای انجام می‌شود؟",
+      "options": [
+        "چکرز",
+        "تخته‌نرد",
+        "ماهجونگ",
+        "گو"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "بازی‌های رومیزی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_045",
+      "question": "در بازی سنگ، کاغذ، قیچی، کدام گزینه قیچی را شکست می‌دهد؟",
+      "options": [
+        "کاغذ",
+        "سنگ",
+        "آتش",
+        "آب"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "بازی‌های کلاسیک",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_046",
+      "question": "کدام شخصیت Nintendo قهرمانی گرد و صورتی است که می‌تواند دشمنان را ببلعد؟",
+      "options": [
+        "یوشی",
+        "تود",
+        "کربی",
+        "واریو"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_047",
+      "question": "کدام مجموعه بازی مسابقه‌ای شخصیت‌های Mario را نشان می‌دهد که پوسته لاک‌پشت و پوست موز پرتاب می‌کنند؟",
+      "options": [
+        "Gran Turismo",
+        "Mario Kart",
+        "Forza",
+        "Need for Speed"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "بازی‌های مسابقه‌ای",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_048",
+      "question": "واحد پول درون‌بازی در Animal Crossing چیست؟",
+      "options": [
+        "بلز",
+        "روپی",
+        "رینگ",
+        "گیل"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "بازی‌های شبیه‌سازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_049",
+      "question": "کدام بازی ساده محصول ۱۹۷۲ شرکت Atari تنیس روی میز را شبیه‌سازی می‌کند؟",
+      "options": [
+        "Pac-Man",
+        "Tetris",
+        "Pong",
+        "Asteroids"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "آرکیدهای کلاسیک",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_050",
+      "question": "در بازی دوز (tic-tac-toe) صفحه از چند خانه تشکیل شده است؟",
+      "options": [
+        "۶",
+        "۸",
+        "۱۲",
+        "۹"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "بازی‌های پازل",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_051",
+      "question": "کدام ژانر بر پریدن میان سکوها و دوری از خطرها استوار است؟",
+      "options": [
+        "بازی ریتمیک",
+        "بازی کارتی",
+        "پلتفرمر",
+        "بازی پرسش‌وپاسخ"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "ژانرهای بازی",
+      "type": "طبقه‌بندی"
+    },
+    {
+      "id": "games_quality_052",
+      "question": "در بازی رومیزی نبرد دریایی (Battleship) بازیکنان دنبال پیدا کردن چه چیزی هستند؟",
+      "options": [
+        "گنج پنهان",
+        "کلمات رمزی",
+        "کشتی‌های پنهان حریف",
+        "قطعه‌های گمشده"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "بازی‌های رومیزی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_053",
+      "question": "کلمه هدف در Wordle چند حرف دارد؟",
+      "options": [
+        "پنج",
+        "چهار",
+        "شش",
+        "هفت"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "بازی‌های پازل",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_054",
+      "question": "در جدول استاندارد سودوکو از کدام ارقام استفاده می‌شود؟",
+      "options": [
+        "۰ تا ۹",
+        "۱ تا ۸",
+        "۱ تا ۱۰",
+        "۱ تا ۹"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "بازی‌های پازل",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_055",
+      "question": "Call of Duty بیشتر به‌عنوان کدام نوع بازی شناخته می‌شود؟",
+      "options": [
+        "شبیه‌ساز کشاورزی",
+        "تیراندازی اول‌شخص",
+        "بازی پازل",
+        "بازی ریتمیک"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "ژانرهای بازی",
+      "type": "طبقه‌بندی"
+    },
+    {
+      "id": "games_quality_056",
+      "question": "بازی Wii Sports برای کدام کنسول Nintendo طراحی شد؟",
+      "options": [
+        "Xbox 360",
+        "Wii",
+        "PlayStation 3",
+        "Game Boy"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "کنسول‌ها",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_057",
+      "question": "در Pokémon از پوکه‌بال‌ها برای چه کاری استفاده می‌شود؟",
+      "options": [
+        "پرداخت پول به فروشنده",
+        "گرفتن پوکمون‌های وحشی",
+        "پختن غذا",
+        "باز کردن در"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "مکانیک بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_058",
+      "question": "کدام مجموعه بازی شیء مقدسی به نام تری‌فورس دارد؟",
+      "options": [
+        "The Legend of Zelda",
+        "Final Fantasy",
+        "Metroid",
+        "Fire Emblem"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "مجموعه بازی‌ها",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_059",
+      "question": "به قطعه‌های در حال سقوط در Tetris چه می‌گویند؟",
+      "options": [
+        "پنتومینوها",
+        "دومینوها",
+        "تترومینوها",
+        "ترومینوها"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "بازی‌های پازل",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_060",
+      "question": "در یک تاس شش‌وجهی استاندارد، مجموع اعداد روی دو وجه روبه‌روی هم چند است؟",
+      "options": [
+        "۷",
+        "۶",
+        "۸",
+        "۹"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "بازی‌های میزی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_061",
+      "question": "کدام شرکت ناشر مجموعه Grand Theft Auto است؟",
+      "options": [
+        "Ubisoft",
+        "Rockstar Games",
+        "Electronic Arts",
+        "Capcom"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_062",
+      "question": "بازی اصلی Pac-Man در کدام دهه عرضه شد؟",
+      "options": [
+        "دهه ۱۹۶۰",
+        "دهه ۱۹۸۰",
+        "دهه ۱۹۷۰",
+        "دهه ۱۹۹۰"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_063",
+      "question": "سازنده اصلی Minecraft چه کسی است؟",
+      "options": [
+        "گیب نیول",
+        "هیدئو کوجیما",
+        "مارکوس پرسون",
+        "سید مایر"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_064",
+      "question": "کدام استودیو بازی The Witcher 3: Wild Hunt را ساخته است؟",
+      "options": [
+        "BioWare",
+        "Bethesda",
+        "CD Projekt Red",
+        "Ubisoft Montreal"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_065",
+      "question": "کدام شرکت Half-Life را ساخته و پلتفرم Steam را اداره می‌کند؟",
+      "options": [
+        "Valve",
+        "Epic Games",
+        "id Software",
+        "Blizzard"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_066",
+      "question": "در Pokémon Red و Blue، شهر Pallet Town در کدام منطقه قرار دارد؟",
+      "options": [
+        "کانتو",
+        "جوهتو",
+        "هوئن",
+        "شینو"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "جهان‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_067",
+      "question": "نام پادشاهی‌ای که روایت The Legend of Zelda عمدتاً در آن می‌گذرد چیست؟",
+      "options": [
+        "هایرول",
+        "تامریل",
+        "آزروث",
+        "پادشاهی قارچ"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "جهان‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_068",
+      "question": "رِیو و کن شخصیت‌های کدام مجموعه بازی مبارزه‌ای هستند؟",
+      "options": [
+        "Mortal Kombat",
+        "Tekken",
+        "Soulcalibur",
+        "Street Fighter"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "بازی‌های مبارزه‌ای",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_069",
+      "question": "کدام شرکت سازنده مجموعه Final Fantasy است؟",
+      "options": [
+        "Capcom",
+        "Konami",
+        "Bandai Namco",
+        "Square Enix"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_070",
+      "question": "Dark Souls توسط کدام استودیوی ژاپنی ساخته شده است؟",
+      "options": [
+        "Capcom",
+        "PlatinumGames",
+        "Level-5",
+        "FromSoftware"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_071",
+      "question": "Tetris را در سال ۱۹۸۵ چه کسی ساخت؟",
+      "options": [
+        "الکسی پاجیتنوف",
+        "نولان بوشنل",
+        "رالف بائر",
+        "شیگرو میاموتو"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_072",
+      "question": "کدام مهره شطرنج می‌تواند با حرکت ویژه آن‌پاسان (en passant) مهره حریف را بگیرد؟",
+      "options": [
+        "پیاده",
+        "اسب",
+        "فیل",
+        "رخ"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "شطرنج",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_073",
+      "question": "در قلعه‌روی کدام دو مهره درگیر هستند؟",
+      "options": [
+        "شاه و وزیر",
+        "شاه و رخ",
+        "شاه و فیل",
+        "وزیر و رخ"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "شطرنج",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_074",
+      "question": "در پوکر استاندارد کدام یک از این دست‌ها بالاترین رتبه را دارد؟",
+      "options": [
+        "فول‌هاوس",
+        "رویال فلاش",
+        "چهار‌تایی",
+        "استریت"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "بازی‌های کارتی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_075",
+      "question": "کدام شرکت بازی Overwatch را ساخته است؟",
+      "options": [
+        "Riot Games",
+        "Blizzard Entertainment",
+        "Valve",
+        "Supercell"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_076",
+      "question": "بازی League of Legends به کدام ژانر تعلق دارد؟",
+      "options": [
+        "بتل‌رویال",
+        "بازی ریتمیک",
+        "موبا (MOBA)",
+        "شبیه‌ساز کشاورزی"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "ورزش‌های الکترونیکی",
+      "type": "طبقه‌بندی"
+    },
+    {
+      "id": "games_quality_077",
+      "question": "در Portal کدام هوش مصنوعی بازیکن را راهنمایی و مسخره می‌کند؟",
+      "options": [
+        "SHODAN",
+        "Cortana",
+        "GLaDOS",
+        "HAL 9000"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_078",
+      "question": "کدام استودیو بازی The Elder Scrolls V: Skyrim را ساخته است؟",
+      "options": [
+        "BioWare",
+        "Obsidian Entertainment",
+        "Rockstar North",
+        "Bethesda Game Studios"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_079",
+      "question": "ماریو اولین بار در کدام بازی ظاهر شد؟",
+      "options": [
+        "Donkey Kong",
+        "Super Mario Bros.",
+        "Metroid",
+        "Pong"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_080",
+      "question": "جوئل و الی شخصیت‌های اصلی کدام بازی هستند؟",
+      "options": [
+        "Horizon Zero Dawn",
+        "Days Gone",
+        "The Last of Us",
+        "Metro Exodus"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_081",
+      "question": "قهرمان شکارچی جایزه در مجموعه Metroid کیست؟",
+      "options": [
+        "لارا کرافت",
+        "جیل ولنتاین",
+        "سامس آران",
+        "چون‌لی"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_082",
+      "question": "در مجموعه Fallout کدام شرکت پناهگاه‌های زیرزمینی را می‌سازد؟",
+      "options": [
+        "Umbrella Corporation",
+        "Aperture Science",
+        "Vault-Tec",
+        "Weyland-Yutani"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "جهان‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_083",
+      "question": "قهرمان اصلی سه‌گانه Mass Effect کیست؟",
+      "options": [
+        "فرمانده شپرد",
+        "مستر چیف",
+        "گوردون فریمن",
+        "مارکوس فینیکس"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_084",
+      "question": "سازنده تک‌نفره Stardew Valley کیست؟",
+      "options": [
+        "اریک بارون",
+        "توبی فاکس",
+        "مارکوس پرسون",
+        "جاناتان بلو"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_085",
+      "question": "کدام استودیو بازی Among Us را ساخته است؟",
+      "options": [
+        "Mojang",
+        "Supercell",
+        "Innersloth",
+        "Valve"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_086",
+      "question": "در یک مسابقه استاندارد Counter-Strike کدام دو تیم رو‌در‌روی هم قرار می‌گیرند؟",
+      "options": [
+        "سربازان و زامبی‌ها",
+        "تروریست‌ها و ضدتروریست‌ها",
+        "دزدان دریایی و نینجاها",
+        "مهاجمان و بیگانگان"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "بازی‌های چندنفره",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_087",
+      "question": "نام چه کسی در عنوان بازی اولیه Civilization آمده است؟",
+      "options": [
+        "ویل رایت",
+        "سید مایر",
+        "پیتر مولینیو",
+        "ریچارد گاریوت"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_088",
+      "question": "کدام شرکت بازی اولیه Resident Evil را ساخته است؟",
+      "options": [
+        "Konami",
+        "Sega",
+        "Square Enix",
+        "Capcom"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_089",
+      "question": "در بازی‌های اصلی Pokémon، با احتساب نوع پری، چند نوع معمولی وجود دارد؟",
+      "options": [
+        "۱۵",
+        "۱۸",
+        "۱۶",
+        "۲۰"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "مکانیک بازی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_090",
+      "question": "در شطرنج نتیجه پات (stalemate) چیست؟",
+      "options": [
+        "برد سفید",
+        "تساوی",
+        "برد سیاه",
+        "برد بازیکنی که پات شده"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "شطرنج",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_091",
+      "question": "در نسخه استاندارد آمریکایی مونوپولی، با عبور از خانه Go چه مبلغی دریافت می‌شود؟",
+      "options": [
+        "۱۰۰ دلار",
+        "۲۰۰ دلار",
+        "۱۵۰ دلار",
+        "۵۰۰ دلار"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "بازی‌های رومیزی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_092",
+      "question": "یک بسته استاندارد انگلیسی اسکرابل چند مهره حرف دارد؟",
+      "options": [
+        "۸۰",
+        "۱۰۰",
+        "۹۰",
+        "۱۲۰"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "بازی‌های رومیزی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_093",
+      "question": "کدام یک از موارد زیر یکی از پنج منبع بازی Catan است؟",
+      "options": [
+        "پشم",
+        "طلا",
+        "نقره",
+        "نفت"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "بازی‌های رومیزی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_094",
+      "question": "در Dungeons & Dragons برای بیشتر پرتاب‌های حمله و آزمون‌های توانایی کدام تاس انداخته می‌شود؟",
+      "options": [
+        "d6",
+        "d8",
+        "d12",
+        "d20"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "بازی‌های میزی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_095",
+      "question": "کدام بازی در آمریکای شمالی و اروپا همراه Game Boy عرضه می‌شد؟",
+      "options": [
+        "Super Mario Land",
+        "Pokémon Red",
+        "Tetris",
+        "Kirby's Dream Land"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_096",
+      "question": "شهر خیالی اصلی در Grand Theft Auto V کدام است؟",
+      "options": [
+        "وایس‌سیتی",
+        "لیبرتی‌سیتی",
+        "سن‌فیرو",
+        "لس‌سانتوس"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "جهان‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_097",
+      "question": "زاگرئوس، شاهزاده دنیای زیرین، قهرمان کدام بازی است؟",
+      "options": [
+        "Hollow Knight",
+        "Hades",
+        "Dead Cells",
+        "Bastion"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_098",
+      "question": "کدام شرکت مجموعه Assassin's Creed را توسعه می‌دهد؟",
+      "options": [
+        "Capcom",
+        "Electronic Arts",
+        "Activision",
+        "Ubisoft"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_099",
+      "question": "کدام نویسنده فانتزی در جهان‌سازی Elden Ring مشارکت داشت؟",
+      "options": [
+        "نیل گیمن",
+        "برندون سندرسون",
+        "تری پراچت",
+        "جرج آر. آر. مارتین"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_100",
+      "question": "کدام شرکت در سال ۲۰۱۴ استودیوی Mojang، سازنده Minecraft، را خرید؟",
+      "options": [
+        "Microsoft",
+        "Sony",
+        "Google",
+        "Nintendo"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_101",
+      "question": "کدام یک از این‌ها یک نژاد قابل‌بازی در StarCraft است؟",
+      "options": [
+        "پروتوس",
+        "اورک‌ها",
+        "الف‌ها",
+        "کوتوله‌ها"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "جهان‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_102",
+      "question": "در World of Warcraft دو جناح اصلی بازیکنان یکی Alliance و دیگری کدام است؟",
+      "options": [
+        "Empire",
+        "Legion",
+        "Order",
+        "Horde"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "جهان‌های بازی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_103",
+      "question": "کدام کنسول دستی Nintendo در سال ۱۹۸۹ عرضه شد؟",
+      "options": [
+        "Nintendo DS",
+        "Nintendo Switch",
+        "Game Boy",
+        "Virtual Boy"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "کنسول‌ها",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_104",
+      "question": "در Super Mario Odyssey نام کلاه زنده‌ای که همراه ماریو سفر می‌کند چیست؟",
+      "options": [
+        "یوشی",
+        "لوما",
+        "تود",
+        "کپی"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_105",
+      "question": "شرکت Nintendo پیش از ساخت بازی‌های ویدیویی در ابتدا برای تولید چه چیزی تأسیس شد؟",
+      "options": [
+        "اسباب‌بازی‌های مکانیکی",
+        "تجهیزات رادیویی",
+        "دستگاه‌های پاچینکو",
+        "کارت‌های هانافودا"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_106",
+      "question": "کدام کنسول معمولاً نخستین کنسول بازی خانگی فروخته‌شده در بازار شناخته می‌شود؟",
+      "options": [
+        "Atari 2600",
+        "Magnavox Odyssey",
+        "Nintendo Famicom",
+        "Sega Genesis"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_107",
+      "question": "کدام بازی Atari 2600 به‌طور گسترده دارای نخستین راز پنهان (Easter egg) شناخته می‌شود؟",
+      "options": [
+        "Pitfall!",
+        "Adventure",
+        "Combat",
+        "Space Invaders"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_108",
+      "question": "طراح بازی اصلی Pac-Man چه کسی بود؟",
+      "options": [
+        "شیگرو میاموتو",
+        "هیدئو کوجیما",
+        "تورو ایواتانی",
+        "یو سوزوکی"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_109",
+      "question": "طراح بازی آرکید Space Invaders چه کسی بود؟",
+      "options": [
+        "گونپی یوکوی",
+        "تومو‌هیرو نیشیکادو",
+        "ماساهیرو ساکورای",
+        "یوجی ناکا"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_110",
+      "question": "Super Mario Bros. نخستین بار در چه سالی در ژاپن عرضه شد؟",
+      "options": [
+        "۱۹۸۳",
+        "۱۹۸۵",
+        "۱۹۸۷",
+        "۱۹۸۹"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_111",
+      "question": "نخستین بازی The Legend of Zelda در ژاپن در کدام سال عرضه شد؟",
+      "options": [
+        "۱۹۸۴",
+        "۱۹۸۸",
+        "۱۹۹۰",
+        "۱۹۸۶"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_112",
+      "question": "شغل گوردون فریمن در Half-Life چیست؟",
+      "options": [
+        "گروهبان تفنگداران",
+        "باستان‌شناس",
+        "فیزیک‌دان نظری",
+        "کارآگاه"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_113",
+      "question": "نام قهرمان ساکت بازی اصلی Portal چیست؟",
+      "options": [
+        "الیکس",
+        "ایو",
+        "الی",
+        "چل"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "شخصیت‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_114",
+      "question": "در Hollow Knight نام پادشاهی ویران زیرزمینی‌ای که بازیکن کاوش می‌کند چیست؟",
+      "options": [
+        "دالاران",
+        "هایرول",
+        "هالونست",
+        "لوردران"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "جهان‌های بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_115",
+      "question": "از نسخه ۱.۱۸ Minecraft Java Edition به بعد، پایین‌ترین سطح Y جهان چند است؟",
+      "options": [
+        "منفی ۶۴",
+        "منفی ۳۲",
+        "۰",
+        "منفی ۱۲۸"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "مکانیک بازی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_116",
+      "question": "در مات احمق (Fool's Mate) که سریع‌ترین مات ممکن است، طرف برنده چند حرکت انجام می‌دهد؟",
+      "options": [
+        "۲",
+        "۱",
+        "۳",
+        "۴"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "شطرنج",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_117",
+      "question": "قانون پنجاه حرکت امکان ادعای تساوی را پس از پنجاه حرکت بدون گرفتن مهره یا کدام رویداد دیگر می‌دهد؟",
+      "options": [
+        "حرکت پیاده",
+        "حرکت قلعه‌روی",
+        "کیش",
+        "پیشنهاد تساوی"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "شطرنج",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_118",
+      "question": "برنده بازی مشهور سال ۱۸۵۱ که به «بازی جاودان» معروف است چه کسی بود؟",
+      "options": [
+        "پل مورفی",
+        "ویلهلم اشتاینیتس",
+        "آدولف آندرسن",
+        "امانوئل لاسکر"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "شطرنج",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_119",
+      "question": "در چه سالی Deep Blue ساخت IBM در یک مسابقه گری کاسپاروف، قهرمان جهان، را شکست داد؟",
+      "options": [
+        "۱۹۹۷",
+        "۱۹۸۹",
+        "۱۹۹۳",
+        "۲۰۰۱"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "شطرنج",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_120",
+      "question": "نتیجه نهایی مسابقه سال ۲۰۱۶ میان AlphaGo و لی سه‌دول چه بود؟",
+      "options": [
+        "۵ بر ۰ به نفع AlphaGo",
+        "۳ بر ۲ به نفع لی سه‌دول",
+        "۴ بر ۱ به نفع AlphaGo",
+        "۳ بر ۲ به نفع AlphaGo"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "بازی‌های رومیزی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_121",
+      "question": "در بازی گو به نقطه‌های خالی مجاور یک مهره یا زنجیره چه می‌گویند؟",
+      "options": [
+        "آزادی‌ها (liberties)",
+        "قلمروها",
+        "نردبان‌ها",
+        "چشم‌ها"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "بازی‌های رومیزی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_122",
+      "question": "کدام بازی ثبت‌شده در سال ۱۹۰۴ از الیزابت مگی، نیای اولیه مونوپولی بود؟",
+      "options": [
+        "The Real Estate Race",
+        "The Landlord's Game",
+        "The Tycoon's Trail",
+        "The Property Parade"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "بازی‌های رومیزی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_123",
+      "question": "مخترع اسکرابل چه کسی بود؟",
+      "options": [
+        "آلفرد موشر باتس",
+        "چارلز دارو",
+        "میلتون برادلی",
+        "ادوین لند"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "بازی‌های رومیزی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_124",
+      "question": "طراح بازی رومیزی Catan چه کسی بود؟",
+      "options": [
+        "رایینر کنیتسیا",
+        "اووه روزنبرگ",
+        "ولفگانگ کرامر",
+        "کلاوس توبر"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "بازی‌های رومیزی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_125",
+      "question": "طراح بازی Magic: The Gathering چه کسی بود؟",
+      "options": [
+        "گری گایگکس",
+        "سید مایر",
+        "آلن مون",
+        "ریچارد گارفیلد"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "بازی‌های کارتی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_126",
+      "question": "نخستین نسخه Dungeons & Dragons در چه سالی منتشر شد؟",
+      "options": [
+        "۱۹۶۹",
+        "۱۹۷۴",
+        "۱۹۷۹",
+        "۱۹۸۴"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "بازی‌های میزی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_127",
+      "question": "چه کسی به‌عنوان خالق Pokémon شناخته می‌شود؟",
+      "options": [
+        "شیگرو میاموتو",
+        "هیدئو کوجیما",
+        "ساتوشی تاجیری",
+        "یوجی ناکا"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_128",
+      "question": "نخستین بازی‌های Pokémon در چه سالی در ژاپن عرضه شدند؟",
+      "options": [
+        "۱۹۹۳",
+        "۱۹۹۶",
+        "۱۹۹۸",
+        "۲۰۰۰"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_129",
+      "question": "بازی The Elder Scrolls V: Skyrim در تاریخ ۱۱/۱۱/۱۱ عرضه شد. این تاریخ مربوط به کدام سال است؟",
+      "options": [
+        "۲۰۰۹",
+        "۲۰۱۲",
+        "۲۰۱۳",
+        "۲۰۱۱"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_130",
+      "question": "نخستین اپیزود Doom اصلی (۱۹۹۳) چگونه به‌طور گسترده پخش شد؟",
+      "options": [
+        "به‌صورت شیرور (shareware)",
+        "فقط در سالن‌های آرکید",
+        "از طریق سرویس اشتراکی",
+        "به‌صورت کتاب چاپی"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_131",
+      "question": "شرکت Valve پلتفرم Steam را در چه سالی راه‌اندازی کرد؟",
+      "options": [
+        "۱۹۹۹",
+        "۲۰۰۱",
+        "۲۰۰۶",
+        "۲۰۰۳"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_132",
+      "question": "کدام بازی Atari 2600 اغلب با سقوط صنعت بازی در سال ۱۹۸۳ مرتبط دانسته می‌شود؟",
+      "options": [
+        "E.T. the Extra-Terrestrial",
+        "Pac-Man",
+        "Pitfall!",
+        "Missile Command"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_133",
+      "question": "آخرین کنسول خانگی Sega کدام بود؟",
+      "options": [
+        "Saturn",
+        "Master System",
+        "Genesis",
+        "Dreamcast"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "کنسول‌ها",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_134",
+      "question": "PlayStation شرکت Sony در ابتدا به‌صورت پروژه‌ای مشترک با کدام شرکت آغاز شد؟",
+      "options": [
+        "Sega",
+        "Atari",
+        "Nintendo",
+        "Philips"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_135",
+      "question": "کدام مهندس Nintendo طراحی Game Boy اصلی را رهبری کرد؟",
+      "options": [
+        "گونپی یوکوی",
+        "ساتورو ایواتا",
+        "شیگرو میاموتو",
+        "ماسایوکی اوئمورا"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_136",
+      "question": "خالق مجموعه Metal Gear چه کسی است؟",
+      "options": [
+        "شینجی میکامی",
+        "هیدتاکا میازاکی",
+        "هیدئو کوجیما",
+        "یوکو تارو"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_137",
+      "question": "سازنده Undertale چه کسی است؟",
+      "options": [
+        "توبی فاکس",
+        "اریک بارون",
+        "مارکوس پرسون",
+        "لوکاس پوپ"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_138",
+      "question": "کدام استودیو بازی ماجرایی Myst را در سال ۱۹۹۳ ساخت؟",
+      "options": [
+        "Sierra On-Line",
+        "LucasArts",
+        "Cyan",
+        "Infocom"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_139",
+      "question": "ژانر روگ‌لایک (roguelike) از نام کدام بازی ۱۹۸۰ گرفته شده است؟",
+      "options": [
+        "Rogue",
+        "Zork",
+        "Ultima",
+        "Hack"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "ژانرهای بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_140",
+      "question": "سامانه رتبه‌بندی Elo که برای رتبه‌بندی شطرنج‌بازان استفاده می‌شود را چه کسی ابداع کرد؟",
+      "options": [
+        "گری کاسپاروف",
+        "ویلهلم اشتاینیتس",
+        "کلود شانون",
+        "آرپاد الو"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "شطرنج",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_141",
+      "question": "فدراسیون جهانی شطرنج (FIDE) در چه سالی تأسیس شد؟",
+      "options": [
+        "۱۸۸۶",
+        "۱۹۵۰",
+        "۱۹۷۲",
+        "۱۹۲۴"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "شطرنج",
+      "type": "شناختی"
+    },
+    {
+      "id": "games_quality_142",
+      "question": "کدام بازی NES محصول ۱۹۸۶ نخستین بار از کد مشهور Konami استفاده کرد؟",
+      "options": [
+        "Castlevania",
+        "Gradius",
+        "Contra",
+        "Metal Gear"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_143",
+      "question": "کدام بازی سال ۲۰۱۴ سامانه Nemesis را که در آن دشمنان برخوردهای گذشته را به یاد می‌آورند، رواج داد؟",
+      "options": [
+        "Dragon Age: Inquisition",
+        "Alien: Isolation",
+        "Middle-earth: Shadow of Mordor",
+        "Dark Souls II"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "مکانیک بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_144",
+      "question": "چه کسی از سال ۲۰۰۲ تا ۲۰۱۵ رئیس Nintendo بود؟",
+      "options": [
+        "هیروشی یاماوچی",
+        "ساتورو ایواتا",
+        "تاتسومی کیمیشیما",
+        "رجی فیلز-ایمه"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_145",
+      "question": "در بازی گو «کومی» چیست؟",
+      "options": [
+        "قانون گرفتن مهره‌ها در یک حلقه",
+        "امتیاز جبرانی که برای شروع‌کردن سیاه به سفید داده می‌شود",
+        "جریمه‌ای برای پاس دادن",
+        "نام حرکت آغازین"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "بازی‌های رومیزی",
+      "type": "مفهومی"
+    },
+    {
+      "id": "games_quality_146",
+      "question": "چه کسی در سال ۱۸۸۶ نخستین قهرمان رسمی جهان در شطرنج شد؟",
+      "options": [
+        "ویلهلم اشتاینیتس",
+        "امانوئل لاسکر",
+        "خوزه رائول کاپابلانکا",
+        "الکساندر آلخین"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "شطرنج",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_147",
+      "question": "کدام برنامه DeepMind شطرنج را با بازی با خودش آموخت و در مسابقه‌ای در سال ۲۰۱۷ Stockfish را شکست داد؟",
+      "options": [
+        "AlphaFold",
+        "AlphaZero",
+        "Watson",
+        "Deep Fritz"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "شطرنج",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_148",
+      "question": "Spacewar!، یکی از نخستین بازی‌های رایانه‌ای، در سال ۱۹۶۲ روی کدام رایانه ساخته شد؟",
+      "options": [
+        "Apple II",
+        "PDP-1",
+        "Commodore 64",
+        "IBM PC"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "تاریخچه بازی‌های ویدیویی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_149",
+      "question": "خالق مجموعه نقش‌آفرینی Ultima چه کسی است؟",
+      "options": [
+        "سید مایر",
+        "جان رومرو",
+        "پیتر مولینیو",
+        "ریچارد گاریوت"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "سازندگان بازی",
+      "type": "شناسایی"
+    },
+    {
+      "id": "games_quality_150",
+      "question": "کنسول Sega Genesis در ژاپن با چه نامی شناخته می‌شد؟",
+      "options": [
+        "Master System",
+        "Saturn",
+        "Mega Drive",
+        "Neo Geo"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "کنسول‌ها",
+      "type": "شناسایی"
+    }
+  ]
+}

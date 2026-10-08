@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "sports",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "sports_quality_001",
+      "question": "How many players from one team are on the field at the start of a standard soccer match?",
+      "options": [
+        "11",
+        "12",
+        "9",
+        "10"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "football",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_002",
+      "question": "In tennis, what is the term for a score of zero?",
+      "options": [
+        "Deuce",
+        "Love",
+        "Advantage",
+        "Break"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "tennis",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_003",
+      "question": "Which sport uses a shuttlecock?",
+      "options": [
+        "Baseball",
+        "Rugby",
+        "Badminton",
+        "Hockey"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "racket sports",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_004",
+      "question": "How many rings are on the Olympic symbol?",
+      "options": [
+        "Seven",
+        "Six",
+        "Four",
+        "Five"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "olympics",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_013",
+      "question": "How many players from one team are on the court at the same time in basketball?",
+      "options": [
+        "Five",
+        "Six",
+        "Seven",
+        "Four"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "basketball",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_014",
+      "question": "Which sport is played with a puck?",
+      "options": [
+        "Field hockey",
+        "Ice hockey",
+        "Lacrosse",
+        "Polo"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "ice hockey",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_015",
+      "question": "On which surface is the Wimbledon tennis tournament played?",
+      "options": [
+        "Clay",
+        "Carpet",
+        "Grass",
+        "Concrete"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "tennis",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_016",
+      "question": "In which city were the first modern Olympic Games held in 1896?",
+      "options": [
+        "Paris",
+        "London",
+        "Rome",
+        "Athens"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "olympics",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_017",
+      "question": "Which country hosts the famous annual cycling race that ends on the Champs-Élysées in Paris?",
+      "options": [
+        "France",
+        "Italy",
+        "Spain",
+        "Belgium"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "cycling",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_018",
+      "question": "What is the approximate length of a marathon?",
+      "options": [
+        "21.1 kilometers",
+        "42.195 kilometers",
+        "50 kilometers",
+        "30 kilometers"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "athletics",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_019",
+      "question": "In which sport do players score a touchdown?",
+      "options": [
+        "Rugby league",
+        "Baseball",
+        "American football",
+        "Basketball"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "american football",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_020",
+      "question": "In which sport might a player score a birdie?",
+      "options": [
+        "Tennis",
+        "Cricket",
+        "Bowling",
+        "Golf"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "golf",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_021",
+      "question": "Which sport uses a bat, a ball, and wickets?",
+      "options": [
+        "Cricket",
+        "Baseball",
+        "Softball",
+        "Golf"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "cricket",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_022",
+      "question": "How many players from one team are on the court at the same time in standard indoor volleyball?",
+      "options": [
+        "Five",
+        "Six",
+        "Seven",
+        "Nine"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "volleyball",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_023",
+      "question": "How many players from the fielding team are on the field in baseball, including the pitcher?",
+      "options": [
+        "Eleven",
+        "Ten",
+        "Nine",
+        "Eight"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "baseball",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_024",
+      "question": "Which sport is often called \"the beautiful game\"?",
+      "options": [
+        "Basketball",
+        "Tennis",
+        "Rugby",
+        "Football (soccer)"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "football",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_025",
+      "question": "What color card does a referee show to send a player off in football?",
+      "options": [
+        "Red",
+        "Yellow",
+        "Green",
+        "Blue"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "football",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_026",
+      "question": "In which sport is a balance beam used?",
+      "options": [
+        "Swimming",
+        "Gymnastics",
+        "Fencing",
+        "Weightlifting"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "gymnastics",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_027",
+      "question": "Which sport involves shooting arrows at a target?",
+      "options": [
+        "Fencing",
+        "Shooting clay pigeons",
+        "Archery",
+        "Javelin"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "archery",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_028",
+      "question": "In which sport is a slam dunk performed?",
+      "options": [
+        "Volleyball",
+        "Handball",
+        "Netball",
+        "Basketball"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "basketball",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_029",
+      "question": "Usain Bolt is best known for which event?",
+      "options": [
+        "Sprinting",
+        "Marathon running",
+        "Pole vault",
+        "Swimming"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "athletics",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_030",
+      "question": "What is the shape of a rugby ball?",
+      "options": [
+        "Round",
+        "Oval",
+        "Square",
+        "Cylindrical"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "rugby",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_031",
+      "question": "How many holes are played in a standard round of golf?",
+      "options": [
+        "9",
+        "12",
+        "18",
+        "24"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "golf",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_032",
+      "question": "From which country does sumo wrestling originate?",
+      "options": [
+        "China",
+        "Korea",
+        "Thailand",
+        "Japan"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "martial arts",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_033",
+      "question": "From which country does judo originate?",
+      "options": [
+        "Japan",
+        "China",
+        "Korea",
+        "Mongolia"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "martial arts",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_034",
+      "question": "From which country does taekwondo originate?",
+      "options": [
+        "Japan",
+        "Korea",
+        "China",
+        "Vietnam"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "martial arts",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_035",
+      "question": "How often are the Summer Olympic Games normally held?",
+      "options": [
+        "Every two years",
+        "Every year",
+        "Every four years",
+        "Every six years"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "olympics",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_036",
+      "question": "Which medal is awarded for first place in the Olympics?",
+      "options": [
+        "Silver",
+        "Bronze",
+        "Platinum",
+        "Gold"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "olympics",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_037",
+      "question": "What shape is a boxing ring?",
+      "options": [
+        "Square",
+        "Round",
+        "Triangular",
+        "Oval"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "boxing",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_038",
+      "question": "Which player throws the ball toward the batter in baseball?",
+      "options": [
+        "The catcher",
+        "The pitcher",
+        "The shortstop",
+        "The umpire"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "baseball",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_039",
+      "question": "How often is the men's FIFA World Cup normally held?",
+      "options": [
+        "Every two years",
+        "Every year",
+        "Every four years",
+        "Every three years"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "football",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_040",
+      "question": "Where is the Olympic flame traditionally lit before the Games?",
+      "options": [
+        "Athens, Greece",
+        "Rome, Italy",
+        "Paris, France",
+        "Olympia, Greece"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "olympics",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_041",
+      "question": "Which of these is a swimming stroke?",
+      "options": [
+        "Butterfly",
+        "Gallop",
+        "Sprint",
+        "Slalom"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "swimming",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_042",
+      "question": "What do skiers hold in their hands to help balance and push?",
+      "options": [
+        "Paddles",
+        "Poles",
+        "Rackets",
+        "Clubs"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "skiing",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_043",
+      "question": "In tennis, what comes after a score of 30?",
+      "options": [
+        "35",
+        "45",
+        "40",
+        "50"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "tennis",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_044",
+      "question": "How long is a standard football (soccer) match, not counting extra time?",
+      "options": [
+        "60 minutes",
+        "80 minutes",
+        "120 minutes",
+        "90 minutes"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "football",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_045",
+      "question": "How many players from one team are on the ice at once in ice hockey, including the goalkeeper?",
+      "options": [
+        "Six",
+        "Five",
+        "Seven",
+        "Eight"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "ice hockey",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_046",
+      "question": "How high is a standard basketball hoop above the floor?",
+      "options": [
+        "About 2.5 meters",
+        "About 3.05 meters (10 feet)",
+        "About 3.5 meters",
+        "About 4 meters"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "basketball",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_047",
+      "question": "The decathlon and heptathlon are events in which sport?",
+      "options": [
+        "Swimming",
+        "Gymnastics",
+        "Athletics (track and field)",
+        "Cycling"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "athletics",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_048",
+      "question": "Which swimming stroke is generally the fastest?",
+      "options": [
+        "Breaststroke",
+        "Backstroke",
+        "Butterfly",
+        "Freestyle (front crawl)"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "swimming",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_049",
+      "question": "Lionel Messi is best known for playing which sport?",
+      "options": [
+        "Football (soccer)",
+        "Basketball",
+        "Tennis",
+        "Baseball"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "football",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_050",
+      "question": "LeBron James is best known for playing which sport?",
+      "options": [
+        "Football",
+        "Basketball",
+        "Baseball",
+        "Golf"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "basketball",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_051",
+      "question": "Roger Federer is best known for playing which sport?",
+      "options": [
+        "Golf",
+        "Squash",
+        "Tennis",
+        "Badminton"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "tennis",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_052",
+      "question": "Tiger Woods is best known for playing which sport?",
+      "options": [
+        "Tennis",
+        "Baseball",
+        "Cricket",
+        "Golf"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "golf",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_053",
+      "question": "Michael Phelps is best known for which sport?",
+      "options": [
+        "Swimming",
+        "Diving",
+        "Rowing",
+        "Sailing"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "swimming",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_054",
+      "question": "What do players hit across the net in badminton?",
+      "options": [
+        "A puck",
+        "A shuttlecock",
+        "A hockey ball",
+        "A disc"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "badminton",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_055",
+      "question": "What is the person who throws the ball to the batsman in cricket called?",
+      "options": [
+        "The pitcher",
+        "The fielder",
+        "The bowler",
+        "The umpire"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "cricket",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_056",
+      "question": "What is the player who guards the goal in football called?",
+      "options": [
+        "The striker",
+        "The defender",
+        "The midfielder",
+        "The goalkeeper"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "football",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_057",
+      "question": "Which country's rugby team is famous for performing the haka before matches?",
+      "options": [
+        "New Zealand",
+        "Australia",
+        "South Africa",
+        "Ireland"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "rugby",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_058",
+      "question": "What color is the jersey worn by the overall leader of the Tour de France?",
+      "options": [
+        "Green",
+        "Yellow",
+        "Red",
+        "Blue"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "cycling",
+      "type": "recognition"
+    },
+    {
+      "id": "sports_quality_005",
+      "question": "A runner completes 400 meters in 80 seconds. What is the average speed?",
+      "options": [
+        "5 m/s",
+        "20 m/s",
+        "8 m/s",
+        "2 m/s"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "athletics",
+      "type": "calculation"
+    },
+    {
+      "id": "sports_quality_006",
+      "question": "A basketball team shoots more accurately but takes far fewer shots than its opponent. Which statistic would help compare scoring efficiency?",
+      "options": [
+        "Number of timeouts",
+        "Field-goal percentage",
+        "Team height",
+        "Jersey number"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "basketball",
+      "type": "analysis"
+    },
+    {
+      "id": "sports_quality_007",
+      "question": "Why can a tailwind improve a sprinter's time even if the runner's own effort is unchanged?",
+      "options": [
+        "It stops air resistance completely",
+        "It changes the length of the track",
+        "It can increase the runner's ground speed relative to the finish line",
+        "It reduces the runner's mass"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "athletics",
+      "type": "cause/effect"
+    },
+    {
+      "id": "sports_quality_008",
+      "question": "A cyclist climbs a hill at a steady speed. Which statement is most accurate about the cyclist's net force along the direction of motion?",
+      "options": [
+        "There is no gravity on the hill",
+        "The net force points only downhill",
+        "The net force must equal the cyclist's weight",
+        "The net force is approximately zero"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "physics in sport",
+      "type": "concept"
+    },
+    {
+      "id": "sports_quality_059",
+      "question": "Which country won the first men's FIFA World Cup in 1930?",
+      "options": [
+        "Brazil",
+        "Uruguay",
+        "Argentina",
+        "Italy"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "football",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_060",
+      "question": "Which country has won the most men's FIFA World Cup titles?",
+      "options": [
+        "Germany",
+        "Italy",
+        "Brazil",
+        "Argentina"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "football",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_061",
+      "question": "Who scored the \"Hand of God\" goal at the 1986 World Cup?",
+      "options": [
+        "Pelé",
+        "Johan Cruyff",
+        "Zinedine Zidane",
+        "Diego Maradona"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "football",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_062",
+      "question": "Who set the 100 meters world record of 9.58 seconds in 2009?",
+      "options": [
+        "Usain Bolt",
+        "Carl Lewis",
+        "Tyson Gay",
+        "Justin Gatlin"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "athletics",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_063",
+      "question": "Which city hosted the 2012 Summer Olympic Games?",
+      "options": [
+        "Beijing",
+        "London",
+        "Rio de Janeiro",
+        "Athens"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "olympics",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_064",
+      "question": "Which city hosted the 2008 Summer Olympic Games?",
+      "options": [
+        "Athens",
+        "Sydney",
+        "Beijing",
+        "London"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "olympics",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_065",
+      "question": "Which city hosted the 2016 Summer Olympic Games?",
+      "options": [
+        "Tokyo",
+        "London",
+        "Madrid",
+        "Rio de Janeiro"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "olympics",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_066",
+      "question": "How many Grand Slam tournaments are there each year in tennis?",
+      "options": [
+        "Four",
+        "Three",
+        "Five",
+        "Six"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "tennis",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_067",
+      "question": "Which Grand Slam tournament is played on clay courts in Paris?",
+      "options": [
+        "Wimbledon",
+        "The French Open",
+        "The US Open",
+        "The Australian Open"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "tennis",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_068",
+      "question": "In which country is Wimbledon held?",
+      "options": [
+        "Australia",
+        "France",
+        "England (United Kingdom)",
+        "United States"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "tennis",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_069",
+      "question": "In which country did the sport of cricket originate?",
+      "options": [
+        "India",
+        "Australia",
+        "South Africa",
+        "England"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "cricket",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_070",
+      "question": "How many players are in a cricket team on the field?",
+      "options": [
+        "Eleven",
+        "Nine",
+        "Twelve",
+        "Fifteen"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "cricket",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_071",
+      "question": "How many strikes put a batter out in baseball?",
+      "options": [
+        "Two",
+        "Three",
+        "Four",
+        "Five"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "baseball",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_072",
+      "question": "How many players from one rugby union team are on the field at the same time?",
+      "options": [
+        "Thirteen",
+        "Eleven",
+        "Fifteen",
+        "Twelve"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "rugby",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_073",
+      "question": "What is the golf term for completing a hole one stroke under par?",
+      "options": [
+        "Eagle",
+        "Bogey",
+        "Albatross",
+        "Birdie"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "golf",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_074",
+      "question": "What is the golf term for completing a hole two strokes under par?",
+      "options": [
+        "Eagle",
+        "Birdie",
+        "Bogey",
+        "Double bogey"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "golf",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_075",
+      "question": "With which NBA team did Michael Jordan win six championships?",
+      "options": [
+        "Los Angeles Lakers",
+        "Chicago Bulls",
+        "Boston Celtics",
+        "Detroit Pistons"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "basketball",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_076",
+      "question": "Which trophy is awarded to the champion of the National Hockey League?",
+      "options": [
+        "The Lombardi Trophy",
+        "The Davis Cup",
+        "The Stanley Cup",
+        "The Ryder Cup"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "ice hockey",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_077",
+      "question": "The Davis Cup is awarded in which sport?",
+      "options": [
+        "Golf",
+        "Cricket",
+        "Rugby",
+        "Tennis"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "tennis",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_078",
+      "question": "The Ryder Cup is a team competition in which sport?",
+      "options": [
+        "Golf",
+        "Tennis",
+        "Cricket",
+        "Rowing"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "golf",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_079",
+      "question": "The Ashes is a famous series between England and which other country?",
+      "options": [
+        "India",
+        "Australia",
+        "South Africa",
+        "New Zealand"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "cricket",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_080",
+      "question": "Which swimmer has won the most Olympic gold medals in history?",
+      "options": [
+        "Mark Spitz",
+        "Ian Thorpe",
+        "Michael Phelps",
+        "Ryan Lochte"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "swimming",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_081",
+      "question": "Which country has won the most medals overall in the Summer Olympics?",
+      "options": [
+        "China",
+        "Soviet Union",
+        "Germany",
+        "United States"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "olympics",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_082",
+      "question": "Which rule in football stops an attacker from waiting behind the last defender for a pass?",
+      "options": [
+        "The offside rule",
+        "The handball rule",
+        "The advantage rule",
+        "The back-pass rule"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "football",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_083",
+      "question": "From what distance is a penalty kick taken in football?",
+      "options": [
+        "9 meters",
+        "11 meters (12 yards)",
+        "16 meters",
+        "20 meters"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "football",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_084",
+      "question": "How many players from one rugby league team are on the field?",
+      "options": [
+        "Fifteen",
+        "Eleven",
+        "Thirteen",
+        "Twelve"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "rugby",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_085",
+      "question": "Which high-jump technique, named after an American athlete, involves going over the bar backwards?",
+      "options": [
+        "The scissors jump",
+        "The Western roll",
+        "The straddle",
+        "The Fosbury flop"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "athletics",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_086",
+      "question": "Who founded the martial art of judo?",
+      "options": [
+        "Jigoro Kano",
+        "Bruce Lee",
+        "Gichin Funakoshi",
+        "Morihei Ueshiba"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "martial arts",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_087",
+      "question": "How many bases are there on a baseball diamond, including home plate?",
+      "options": [
+        "Three",
+        "Four",
+        "Five",
+        "Six"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "baseball",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_088",
+      "question": "In which US state is the Masters golf tournament played?",
+      "options": [
+        "Florida",
+        "California",
+        "Georgia",
+        "Texas"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "golf",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_089",
+      "question": "What is the length of an Olympic swimming pool?",
+      "options": [
+        "25 meters",
+        "100 meters",
+        "75 meters",
+        "50 meters"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "swimming",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_090",
+      "question": "How many sets must a man win to take a Grand Slam singles match played over five sets?",
+      "options": [
+        "Three",
+        "Two",
+        "Four",
+        "Five"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "tennis",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_091",
+      "question": "The Giro d'Italia is a major cycling race in which country?",
+      "options": [
+        "Spain",
+        "Italy",
+        "France",
+        "Belgium"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "cycling",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_092",
+      "question": "Which boxer is famous for the phrase \"float like a butterfly, sting like a bee\"?",
+      "options": [
+        "Mike Tyson",
+        "Joe Frazier",
+        "Muhammad Ali",
+        "Rocky Marciano"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "boxing",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_093",
+      "question": "From which country is tennis player Rafael Nadal?",
+      "options": [
+        "Argentina",
+        "France",
+        "Italy",
+        "Spain"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "tennis",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_094",
+      "question": "From which country is tennis player Novak Djokovic?",
+      "options": [
+        "Serbia",
+        "Croatia",
+        "Russia",
+        "Switzerland"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "tennis",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_095",
+      "question": "From which country is sprinter Usain Bolt?",
+      "options": [
+        "United States",
+        "Jamaica",
+        "Trinidad and Tobago",
+        "Kenya"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "athletics",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_096",
+      "question": "In cricket, what is a \"duck\"?",
+      "options": [
+        "A very fast delivery",
+        "A catch taken one-handed",
+        "A batter being out for zero runs",
+        "A boundary hit for six"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "cricket",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_097",
+      "question": "Which gymnast scored the first perfect 10 in Olympic gymnastics at the 1976 Montreal Games?",
+      "options": [
+        "Olga Korbut",
+        "Simone Biles",
+        "Larisa Latynina",
+        "Nadia Comăneci"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "gymnastics",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_098",
+      "question": "Which city hosted the 1936 Summer Olympic Games?",
+      "options": [
+        "Berlin",
+        "Paris",
+        "Amsterdam",
+        "Los Angeles"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "olympics",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_099",
+      "question": "Which three sports make up a triathlon?",
+      "options": [
+        "Swimming, rowing, and running",
+        "Swimming, cycling, and running",
+        "Cycling, running, and climbing",
+        "Swimming, cycling, and skiing"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "triathlon",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_100",
+      "question": "Which game is the championship game of the National Football League called?",
+      "options": [
+        "The World Series",
+        "The Stanley Cup Final",
+        "The Super Bowl",
+        "The NBA Finals"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "american football",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_101",
+      "question": "Which Chinese player, 2.29 meters tall, became an NBA star with the Houston Rockets?",
+      "options": [
+        "Wang Zhizhi",
+        "Yi Jianlian",
+        "Zhou Qi",
+        "Yao Ming"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "basketball",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_102",
+      "question": "To how many points are games in modern table tennis normally played?",
+      "options": [
+        "11",
+        "21",
+        "15",
+        "7"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "table tennis",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_103",
+      "question": "What is the maximum score in a single game of ten-pin bowling?",
+      "options": [
+        "200",
+        "300",
+        "250",
+        "350"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "bowling",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_104",
+      "question": "The Webb Ellis Cup is awarded to the winner of which sport's World Cup?",
+      "options": [
+        "Cricket",
+        "Football",
+        "Rugby union",
+        "Hockey"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "rugby",
+      "type": "identification"
+    },
+    {
+      "id": "sports_quality_009",
+      "question": "A team dominates possession but creates very few scoring chances. What does this illustrate?",
+      "options": [
+        "Possession does not necessarily measure attacking effectiveness",
+        "Scoring chances are unrelated to tactics",
+        "Possession guarantees victory",
+        "Defensive actions never affect possession"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "football tactics",
+      "type": "inference"
+    },
+    {
+      "id": "sports_quality_010",
+      "question": "A swimmer completes equal-length laps, but the second half is slower because fatigue increases drag-producing changes in technique. Which conclusion is most reasonable?",
+      "options": [
+        "Time cannot be measured in swimming",
+        "Average speed over the whole swim can hide changes in performance across segments",
+        "The swimmer must have stopped moving",
+        "Distance becomes smaller when fatigue occurs"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "performance analysis",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_011",
+      "question": "In a tournament, a player wins 3 of 5 matches against opponents with different skill levels. Why might win percentage alone be an incomplete performance measure?",
+      "options": [
+        "It cannot be calculated from match results",
+        "It measures only equipment quality",
+        "It ignores the strength of the opponents",
+        "It always exaggerates losses"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "sports statistics",
+      "type": "analysis"
+    },
+    {
+      "id": "sports_quality_012",
+      "question": "A referee applies the same rule differently depending on whether a player is famous. What principle is being violated?",
+      "options": [
+        "Training periodization",
+        "Recovery strategy",
+        "Home-field advantage",
+        "Consistent application of the rules"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "sportsmanship",
+      "type": "evaluation"
+    },
+    {
+      "id": "sports_quality_105",
+      "question": "Who scored 13 goals in a single men's World Cup tournament in 1958, a record that still stands?",
+      "options": [
+        "Pelé",
+        "Gerd Müller",
+        "Just Fontaine",
+        "Ronaldo"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "football",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_106",
+      "question": "Who is the all-time leading goalscorer in men's FIFA World Cup finals tournaments with 16 goals?",
+      "options": [
+        "Ronaldo",
+        "Gerd Müller",
+        "Pelé",
+        "Miroslav Klose"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "football",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_107",
+      "question": "Which club won the first European Cup in 1956?",
+      "options": [
+        "Real Madrid",
+        "Benfica",
+        "AC Milan",
+        "Manchester United"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "football",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_108",
+      "question": "Which country hosted and won the men's FIFA World Cup in 1966?",
+      "options": [
+        "West Germany",
+        "England",
+        "Brazil",
+        "Italy"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "football",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_109",
+      "question": "What was the 1950 World Cup final-round loss of Brazil to Uruguay at the Maracanã known as?",
+      "options": [
+        "The Miracle of Bern",
+        "The Hand of God",
+        "The Maracanazo",
+        "The Battle of Santiago"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "football",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_110",
+      "question": "Who won the first modern Olympic marathon in 1896?",
+      "options": [
+        "Pheidippides",
+        "Abebe Bikila",
+        "Emil Zátopek",
+        "Spyridon Louis"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "athletics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_111",
+      "question": "Who was the first person to run a mile in under four minutes, in 1954?",
+      "options": [
+        "Roger Bannister",
+        "John Landy",
+        "Jim Ryun",
+        "Herb Elliott"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "athletics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_112",
+      "question": "Who leapt 8.90 meters in the 1968 Olympic long jump, shattering the world record by a huge margin?",
+      "options": [
+        "Carl Lewis",
+        "Bob Beamon",
+        "Mike Powell",
+        "Jesse Owens"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "athletics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_113",
+      "question": "How many gold medals did Jesse Owens win at the 1936 Berlin Olympics?",
+      "options": [
+        "Three",
+        "Two",
+        "Four",
+        "Five"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "athletics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_114",
+      "question": "At which Olympic Games was the modern marathon distance of 26 miles 385 yards first run?",
+      "options": [
+        "1896 Athens",
+        "1924 Paris",
+        "1912 Stockholm",
+        "1908 London"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "athletics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_115",
+      "question": "Who scored 100 points in a single NBA game in 1962?",
+      "options": [
+        "Wilt Chamberlain",
+        "Michael Jordan",
+        "Kobe Bryant",
+        "Bill Russell"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "basketball",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_116",
+      "question": "Who invented basketball in 1891?",
+      "options": [
+        "William G. Morgan",
+        "James Naismith",
+        "Abner Doubleday",
+        "Pierre de Coubertin"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "basketball",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_117",
+      "question": "Who invented volleyball in 1895?",
+      "options": [
+        "James Naismith",
+        "Walter Camp",
+        "William G. Morgan",
+        "Luther Gulick"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "volleyball",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_118",
+      "question": "Who is considered the founder of the modern Olympic Games?",
+      "options": [
+        "Avery Brundage",
+        "Juan Antonio Samaranch",
+        "Demetrios Vikelas",
+        "Pierre de Coubertin"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "olympics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_119",
+      "question": "Where were the first Winter Olympic Games held in 1924?",
+      "options": [
+        "Chamonix, France",
+        "Oslo, Norway",
+        "St. Moritz, Switzerland",
+        "Lake Placid, United States"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "olympics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_120",
+      "question": "Which country led a boycott of the 1980 Moscow Olympic Games?",
+      "options": [
+        "United Kingdom",
+        "United States",
+        "France",
+        "West Germany"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "olympics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_121",
+      "question": "How many gold medals did Michael Phelps win at the 2008 Beijing Olympics?",
+      "options": [
+        "Seven",
+        "Six",
+        "Eight",
+        "Five"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "olympics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_122",
+      "question": "How many gold medals did Mark Spitz win at the 1972 Munich Olympics?",
+      "options": [
+        "Five",
+        "Eight",
+        "Six",
+        "Seven"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "olympics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_123",
+      "question": "In which year did the US basketball \"Dream Team\" first compete at the Olympics?",
+      "options": [
+        "1992",
+        "1984",
+        "1988",
+        "1996"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "olympics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_124",
+      "question": "Which country won the first Rugby World Cup in 1987?",
+      "options": [
+        "Australia",
+        "New Zealand",
+        "France",
+        "England"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "rugby",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_125",
+      "question": "Who completed the calendar-year Grand Slam in 1969, as well as in 1962?",
+      "options": [
+        "Björn Borg",
+        "Pete Sampras",
+        "Rod Laver",
+        "Rafael Nadal"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "tennis",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_126",
+      "question": "Who won all four Grand Slam singles titles and Olympic gold in 1988, the so-called \"Golden Slam\"?",
+      "options": [
+        "Martina Navratilova",
+        "Serena Williams",
+        "Chris Evert",
+        "Steffi Graf"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "tennis",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_127",
+      "question": "Approximately how long did the 2010 Wimbledon match between John Isner and Nicolas Mahut last?",
+      "options": [
+        "More than 11 hours",
+        "About 5 hours",
+        "About 8 hours",
+        "About 3 hours"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "tennis",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_128",
+      "question": "In which year did the Open Era of professional tennis begin?",
+      "options": [
+        "1950",
+        "1968",
+        "1978",
+        "1988"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "tennis",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_129",
+      "question": "Who retired with an extraordinary Test batting average of 99.94?",
+      "options": [
+        "Sachin Tendulkar",
+        "Brian Lara",
+        "Don Bradman",
+        "Viv Richards"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "cricket",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_130",
+      "question": "Who was the first cricketer to score 100 international centuries?",
+      "options": [
+        "Ricky Ponting",
+        "Virat Kohli",
+        "Jacques Kallis",
+        "Sachin Tendulkar"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "cricket",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_131",
+      "question": "What does the abbreviation LBW stand for in cricket?",
+      "options": [
+        "Leg before wicket",
+        "Left behind wicket",
+        "Long ball wide",
+        "Last ball won"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "cricket",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_132",
+      "question": "Who holds the Major League Baseball career home run record with 762?",
+      "options": [
+        "Hank Aaron",
+        "Barry Bonds",
+        "Babe Ruth",
+        "Alex Rodriguez"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "baseball",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_133",
+      "question": "What does ERA stand for in baseball statistics?",
+      "options": [
+        "Extra run advantage",
+        "Estimated runs allowed",
+        "Earned run average",
+        "Error rate average"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "baseball",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_134",
+      "question": "Which golfer won 18 major championships?",
+      "options": [
+        "Tiger Woods",
+        "Arnold Palmer",
+        "Gary Player",
+        "Jack Nicklaus"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "golf",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_135",
+      "question": "Which player is known as \"The Great One\"?",
+      "options": [
+        "Wayne Gretzky",
+        "Mario Lemieux",
+        "Gordie Howe",
+        "Bobby Orr"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "ice hockey",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_136",
+      "question": "What was Muhammad Ali's birth name?",
+      "options": [
+        "Joe Louis",
+        "Cassius Clay",
+        "Sonny Liston",
+        "Floyd Patterson"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "boxing",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_137",
+      "question": "In which city was the 1974 \"Rumble in the Jungle\" held?",
+      "options": [
+        "Manila",
+        "Las Vegas",
+        "Kinshasa",
+        "Lagos"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "boxing",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_138",
+      "question": "Who won the first Formula One World Championship in 1950?",
+      "options": [
+        "Juan Manuel Fangio",
+        "Alberto Ascari",
+        "Stirling Moss",
+        "Giuseppe Farina"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "motorsport",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_139",
+      "question": "Which three weapons are used in modern Olympic fencing?",
+      "options": [
+        "Foil, épée, and sabre",
+        "Foil, rapier, and dagger",
+        "Sabre, spear, and épée",
+        "Sword, shield, and foil"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "fencing",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_140",
+      "question": "How many events make up the decathlon?",
+      "options": [
+        "Seven",
+        "Ten",
+        "Eight",
+        "Twelve"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "athletics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_141",
+      "question": "What are the distances in an Olympic-distance triathlon?",
+      "options": [
+        "0.75 km swim, 20 km cycle, 5 km run",
+        "3.8 km swim, 180 km cycle, 42 km run",
+        "1.5 km swim, 40 km cycle, 10 km run",
+        "1 km swim, 30 km cycle, 7 km run"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "triathlon",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_142",
+      "question": "How long is the shot clock in the NBA?",
+      "options": [
+        "30 seconds",
+        "20 seconds",
+        "35 seconds",
+        "24 seconds"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "basketball",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_143",
+      "question": "Why does a figure skater spin faster when pulling the arms in close to the body?",
+      "options": [
+        "Angular momentum is conserved while the moment of inertia decreases",
+        "Friction with the ice decreases",
+        "Air resistance increases",
+        "Gravity pulls harder on the arms"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "physics in sport",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_144",
+      "question": "Which effect explains why a spinning soccer ball curves in flight?",
+      "options": [
+        "The Doppler effect",
+        "The Magnus effect",
+        "The Coriolis effect",
+        "The photoelectric effect"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "physics in sport",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_145",
+      "question": "In judo, what is the name of a full-point throw that wins the contest outright?",
+      "options": [
+        "Waza-ari",
+        "Yuko",
+        "Ippon",
+        "Koka"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "martial arts",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_146",
+      "question": "Which Ethiopian runner won the 1960 Olympic marathon in Rome running barefoot?",
+      "options": [
+        "Haile Gebrselassie",
+        "Kenenisa Bekele",
+        "Paul Tergat",
+        "Abebe Bikila"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "athletics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_147",
+      "question": "Which Czech runner won the 5,000 m, 10,000 m, and marathon at the 1952 Helsinki Olympics?",
+      "options": [
+        "Emil Zátopek",
+        "Paavo Nurmi",
+        "Lasse Virén",
+        "Vladimir Kuts"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "athletics",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_148",
+      "question": "Which country has won the most men's Cricket World Cup titles?",
+      "options": [
+        "India",
+        "Australia",
+        "West Indies",
+        "England"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "cricket",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_149",
+      "question": "What is the highest rank in professional sumo wrestling?",
+      "options": [
+        "Ozeki",
+        "Sekiwake",
+        "Yokozuna",
+        "Komusubi"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "sumo",
+      "type": "reasoning"
+    },
+    {
+      "id": "sports_quality_150",
+      "question": "How many FIFA World Cups did Pelé win as a player?",
+      "options": [
+        "Two",
+        "Four",
+        "One",
+        "Three"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "football",
+      "type": "reasoning"
+    }
+  ]
+}

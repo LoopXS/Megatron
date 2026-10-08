@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "general",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "general_quality_001",
+      "question": "Which instrument is used to measure atmospheric pressure?",
+      "options": [
+        "Barometer",
+        "Hygrometer",
+        "Anemometer",
+        "Thermometer"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "everyday knowledge",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_002",
+      "question": "What is the primary language spoken in Brazil?",
+      "options": [
+        "Italian",
+        "Portuguese",
+        "French",
+        "Spanish"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "world knowledge",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_003",
+      "question": "Which metal is liquid at room temperature?",
+      "options": [
+        "Copper",
+        "Iron",
+        "Mercury",
+        "Aluminum"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "science",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_004",
+      "question": "How many sides does a hexagon have?",
+      "options": [
+        "Eight",
+        "Seven",
+        "Five",
+        "Six"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "mathematics",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_005",
+      "question": "A recipe calls for 3 cups of flour for every 2 cups of water. How much flour is needed for 6 cups of water?",
+      "options": [
+        "9 cups",
+        "6 cups",
+        "7 cups",
+        "12 cups"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "mathematics",
+      "type": "application"
+    },
+    {
+      "id": "general_quality_006",
+      "question": "A clock gains 5 minutes every hour. After 6 real hours, how far ahead will it be?",
+      "options": [
+        "15 minutes",
+        "30 minutes",
+        "60 minutes",
+        "5 minutes"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "reasoning",
+      "type": "calculation"
+    },
+    {
+      "id": "general_quality_007",
+      "question": "A museum displays an object whose original purpose was to record time using falling sand. What is it?",
+      "options": [
+        "Sundial",
+        "Compass",
+        "Hourglass",
+        "Astrolabe"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_008",
+      "question": "Why does a metal spoon usually feel colder than a wooden spoon in the same room?",
+      "options": [
+        "Metal creates cold air around it",
+        "Wood produces heat",
+        "Wood has a lower temperature by definition",
+        "Metal conducts heat away from your hand faster"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "everyday science",
+      "type": "cause/effect"
+    },
+    {
+      "id": "general_quality_009",
+      "question": "A store reduces an item by 20% and then applies another 20% discount to the reduced price. Is the total discount 40%?",
+      "options": [
+        "No, it is 36%",
+        "Yes, because percentages always add",
+        "Yes, exactly 40%",
+        "No, it is 20%"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "mathematics",
+      "type": "reasoning"
+    },
+    {
+      "id": "general_quality_010",
+      "question": "A statement is true for every member of a group except one explicitly identified case. What kind of logical warning should you consider?",
+      "options": [
+        "Proof by contradiction",
+        "A possible exception to a generalization",
+        "A measurement error by definition",
+        "A mathematical identity"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "logic",
+      "type": "analysis"
+    },
+    {
+      "id": "general_quality_011",
+      "question": "A map uses a scale of 1:100,000. A road measures 3 cm on the map. About how long is it in reality?",
+      "options": [
+        "300 m",
+        "30 km",
+        "3 km",
+        "300 km"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "geography",
+      "type": "application"
+    },
+    {
+      "id": "general_quality_012",
+      "question": "A jar contains red and blue marbles. Without looking, you draw one marble and replace it before drawing again. Why are the two draws independent?",
+      "options": [
+        "Replacement changes the color",
+        "The jar contains only one color",
+        "The draws occur at the same time",
+        "The first marble is replaced before the second draw"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "probability",
+      "type": "concept"
+    },
+    {
+      "id": "general_quality_013",
+      "question": "What is the capital of France?",
+      "options": [
+        "Lyon",
+        "Marseille",
+        "Paris",
+        "Brussels"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "geography",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_014",
+      "question": "Which planet is closest to the Sun?",
+      "options": [
+        "Venus",
+        "Mars",
+        "Earth",
+        "Mercury"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "astronomy",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_015",
+      "question": "How many days are there in a leap year?",
+      "options": [
+        "364",
+        "365",
+        "366",
+        "367"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "calendar",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_016",
+      "question": "Which is the largest ocean on Earth?",
+      "options": [
+        "Atlantic Ocean",
+        "Indian Ocean",
+        "Arctic Ocean",
+        "Pacific Ocean"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "geography",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_017",
+      "question": "Which gas do plants absorb from the air for photosynthesis?",
+      "options": [
+        "Oxygen",
+        "Nitrogen",
+        "Carbon dioxide",
+        "Helium"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_018",
+      "question": "On which continent is Egypt located?",
+      "options": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "South America"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_019",
+      "question": "How many continents are there on Earth by the commonly taught model?",
+      "options": [
+        "Five",
+        "Six",
+        "Eight",
+        "Seven"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "geography",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_020",
+      "question": "At sea level, at what temperature in degrees Celsius does water boil?",
+      "options": [
+        "100",
+        "90",
+        "80",
+        "120"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "science",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_021",
+      "question": "Which color results from mixing blue and yellow paint?",
+      "options": [
+        "Purple",
+        "Orange",
+        "Brown",
+        "Green"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "art",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_022",
+      "question": "Which country is famous for the Great Wall?",
+      "options": [
+        "India",
+        "Mongolia",
+        "China",
+        "Japan"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "landmarks",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_023",
+      "question": "Who painted the Mona Lisa?",
+      "options": [
+        "Michelangelo",
+        "Pablo Picasso",
+        "Leonardo da Vinci",
+        "Claude Monet"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "art",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_024",
+      "question": "How many hours are there in one day?",
+      "options": [
+        "24",
+        "12",
+        "36",
+        "48"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "everyday knowledge",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_025",
+      "question": "What is the currency of Japan?",
+      "options": [
+        "Won",
+        "Yuan",
+        "Rupee",
+        "Yen"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "economics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_026",
+      "question": "Which organ pumps blood through the human body?",
+      "options": [
+        "Heart",
+        "Liver",
+        "Kidney",
+        "Stomach"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_027",
+      "question": "Which is the largest planet in the Solar System?",
+      "options": [
+        "Jupiter",
+        "Saturn",
+        "Neptune",
+        "Earth"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "astronomy",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_028",
+      "question": "How many colors are traditionally counted in a rainbow?",
+      "options": [
+        "Five",
+        "Seven",
+        "Six",
+        "Nine"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "science",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_029",
+      "question": "In the Northern Hemisphere, which season comes right after winter?",
+      "options": [
+        "Summer",
+        "Autumn",
+        "Monsoon",
+        "Spring"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "everyday knowledge",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_030",
+      "question": "What sweet substance do bees produce?",
+      "options": [
+        "Honey",
+        "Milk",
+        "Sugar syrup",
+        "Wax oil"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "nature",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_031",
+      "question": "How many sides does a stop sign usually have?",
+      "options": [
+        "Eight",
+        "Four",
+        "Six",
+        "Ten"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mathematics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_032",
+      "question": "How many letters are there in the English alphabet?",
+      "options": [
+        "24",
+        "26",
+        "25",
+        "28"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "language",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_033",
+      "question": "Which gas do humans need to breathe in to live?",
+      "options": [
+        "Carbon monoxide",
+        "Oxygen",
+        "Helium",
+        "Methane"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_034",
+      "question": "At what temperature in degrees Celsius does pure water freeze at normal pressure?",
+      "options": [
+        "0",
+        "10",
+        "-10",
+        "32"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "science",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_035",
+      "question": "In which direction does the Sun appear to rise?",
+      "options": [
+        "East",
+        "West",
+        "North",
+        "South"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "everyday knowledge",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_036",
+      "question": "In which country is the Eiffel Tower located?",
+      "options": [
+        "Italy",
+        "Spain",
+        "France",
+        "Germany"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "landmarks",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_037",
+      "question": "Which number does the Roman numeral X represent?",
+      "options": [
+        "5",
+        "10",
+        "50",
+        "100"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "mathematics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_038",
+      "question": "What is the chemical formula of water?",
+      "options": [
+        "CO2",
+        "O2",
+        "H2O",
+        "NaCl"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_039",
+      "question": "What is the smallest prime number?",
+      "options": [
+        "0",
+        "2",
+        "1",
+        "3"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "mathematics",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_040",
+      "question": "Which star is closest to Earth?",
+      "options": [
+        "Proxima Centauri",
+        "The Sun",
+        "Sirius",
+        "Polaris"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "astronomy",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_041",
+      "question": "How many degrees is a right angle?",
+      "options": [
+        "45",
+        "100",
+        "180",
+        "90"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "mathematics",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_042",
+      "question": "Which is the largest country in the world by area?",
+      "options": [
+        "Canada",
+        "Russia",
+        "China",
+        "United States"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "geography",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_043",
+      "question": "Which instrument has black and white keys?",
+      "options": [
+        "Violin",
+        "Flute",
+        "Drum",
+        "Piano"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "music",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_044",
+      "question": "Which month comes right after March?",
+      "options": [
+        "February",
+        "May",
+        "June",
+        "April"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "calendar",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_045",
+      "question": "What is the name of Earth's natural satellite?",
+      "options": [
+        "Phobos",
+        "The Moon",
+        "Titan",
+        "Europa"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "astronomy",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_046",
+      "question": "Which instrument is used to observe distant stars and planets?",
+      "options": [
+        "Microscope",
+        "Barometer",
+        "Telescope",
+        "Stethoscope"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "tools",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_047",
+      "question": "Who wrote the play Romeo and Juliet?",
+      "options": [
+        "Charles Dickens",
+        "William Shakespeare",
+        "Mark Twain",
+        "Jane Austen"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "literature",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_048",
+      "question": "Which common metal is strongly attracted to a magnet?",
+      "options": [
+        "Iron",
+        "Aluminum",
+        "Copper",
+        "Gold"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "science",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_049",
+      "question": "How many players from one team are on the field in a standard football (soccer) match?",
+      "options": [
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "sports",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_050",
+      "question": "What is the hardest naturally occurring substance?",
+      "options": [
+        "Gold",
+        "Quartz",
+        "Steel",
+        "Diamond"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "science",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_051",
+      "question": "Which of these sea animals is a mammal?",
+      "options": [
+        "Shark",
+        "Octopus",
+        "Dolphin",
+        "Jellyfish"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "nature",
+      "type": "classification"
+    },
+    {
+      "id": "general_quality_052",
+      "question": "Which part of a plant mainly absorbs water from the soil?",
+      "options": [
+        "Leaves",
+        "Flowers",
+        "Roots",
+        "Seeds"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_053",
+      "question": "Which shape has no corners and no straight sides?",
+      "options": [
+        "Circle",
+        "Square",
+        "Triangle",
+        "Rectangle"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mathematics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_054",
+      "question": "What force pulls objects toward the Earth?",
+      "options": [
+        "Magnetism",
+        "Friction",
+        "Static electricity",
+        "Gravity"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_055",
+      "question": "According to a well-known saying, which fruit a day keeps the doctor away?",
+      "options": [
+        "Banana",
+        "Apple",
+        "Orange",
+        "Grape"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "everyday knowledge",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_056",
+      "question": "Which is the largest hot desert in the world?",
+      "options": [
+        "Gobi",
+        "Sahara",
+        "Kalahari",
+        "Arabian Desert"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_057",
+      "question": "Which organs do humans use to breathe?",
+      "options": [
+        "Kidneys",
+        "Lungs",
+        "Intestines",
+        "Liver"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_058",
+      "question": "How many legs does an adult insect have?",
+      "options": [
+        "Six",
+        "Four",
+        "Eight",
+        "Ten"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "nature",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_059",
+      "question": "What is the capital of Australia?",
+      "options": [
+        "Sydney",
+        "Melbourne",
+        "Canberra",
+        "Perth"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_060",
+      "question": "What is the process called in which water vapor turns into liquid water?",
+      "options": [
+        "Condensation",
+        "Evaporation",
+        "Sublimation",
+        "Melting"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_061",
+      "question": "What is the chemical symbol for gold?",
+      "options": [
+        "Ag",
+        "Au",
+        "Gd",
+        "Go"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_062",
+      "question": "What is the largest organ of the human body?",
+      "options": [
+        "Liver",
+        "Skin",
+        "Lungs",
+        "Brain"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_063",
+      "question": "Which scientist developed the theory of general relativity?",
+      "options": [
+        "Isaac Newton",
+        "Niels Bohr",
+        "Albert Einstein",
+        "Galileo Galilei"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_064",
+      "question": "In which year did World War II end?",
+      "options": [
+        "1939",
+        "1943",
+        "1945",
+        "1950"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "world history",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_065",
+      "question": "Which country gave the Statue of Liberty to the United States?",
+      "options": [
+        "France",
+        "United Kingdom",
+        "Spain",
+        "Italy"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "landmarks",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_066",
+      "question": "How many bones does a typical adult human skeleton have?",
+      "options": [
+        "206",
+        "156",
+        "256",
+        "306"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "human body",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_067",
+      "question": "Approximately how fast does light travel in a vacuum?",
+      "options": [
+        "300,000 km per second",
+        "30,000 km per second",
+        "3,000 km per second",
+        "3,000,000 km per second"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_068",
+      "question": "Who wrote the novel Nineteen Eighty-Four?",
+      "options": [
+        "Aldous Huxley",
+        "Ray Bradbury",
+        "H. G. Wells",
+        "George Orwell"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "literature",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_069",
+      "question": "Which language has the most native speakers in the world?",
+      "options": [
+        "English",
+        "Spanish",
+        "Hindi",
+        "Mandarin Chinese"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "languages",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_070",
+      "question": "What is the currency of Switzerland?",
+      "options": [
+        "Euro",
+        "Krone",
+        "Pound",
+        "Swiss franc"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "economics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_071",
+      "question": "Which sovereign state lies entirely inside the city of Rome?",
+      "options": [
+        "Vatican City",
+        "Monaco",
+        "Malta",
+        "San Marino"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_072",
+      "question": "Which element has the atomic number 6?",
+      "options": [
+        "Carbon",
+        "Oxygen",
+        "Nitrogen",
+        "Helium"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_073",
+      "question": "Mount Everest lies on the border between Nepal and which other country?",
+      "options": [
+        "India",
+        "China",
+        "Bhutan",
+        "Pakistan"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_074",
+      "question": "Which vitamin does the skin produce when exposed to sunlight?",
+      "options": [
+        "Vitamin C",
+        "Vitamin D",
+        "Vitamin A",
+        "Vitamin K"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_075",
+      "question": "Which is the world's largest island that is not a continent?",
+      "options": [
+        "Madagascar",
+        "Greenland",
+        "Borneo",
+        "New Guinea"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_076",
+      "question": "Who was the first person to walk on the Moon?",
+      "options": [
+        "Buzz Aldrin",
+        "Yuri Gagarin",
+        "Neil Armstrong",
+        "Alan Shepard"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "space exploration",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_077",
+      "question": "Which river flows through Paris?",
+      "options": [
+        "Thames",
+        "Rhine",
+        "Seine",
+        "Danube"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_078",
+      "question": "Which cell structure is often called the powerhouse of the cell?",
+      "options": [
+        "Nucleus",
+        "Ribosome",
+        "Chloroplast",
+        "Mitochondrion"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_079",
+      "question": "Which blood type is considered the universal donor for red blood cells?",
+      "options": [
+        "O negative",
+        "AB positive",
+        "A negative",
+        "B positive"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "medicine",
+      "type": "concept"
+    },
+    {
+      "id": "general_quality_080",
+      "question": "What does GPS stand for?",
+      "options": [
+        "General Position Signal",
+        "Global Planning Software",
+        "Global Positioning System",
+        "Geographic Pointing Service"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "technology",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_081",
+      "question": "Which is the highest mountain in Africa?",
+      "options": [
+        "Mount Kenya",
+        "Mount Stanley",
+        "Mount Kilimanjaro",
+        "Atlas Mountains"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_082",
+      "question": "In which city is the Colosseum located?",
+      "options": [
+        "Athens",
+        "Milan",
+        "Rome",
+        "Naples"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "landmarks",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_083",
+      "question": "Which scientist formulated the three laws of motion?",
+      "options": [
+        "Isaac Newton",
+        "Johannes Kepler",
+        "Michael Faraday",
+        "James Maxwell"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_084",
+      "question": "How many strings does a standard violin have?",
+      "options": [
+        "Four",
+        "Three",
+        "Five",
+        "Six"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "music",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_085",
+      "question": "Which gas makes up most of Earth's atmosphere?",
+      "options": [
+        "Oxygen",
+        "Carbon dioxide",
+        "Nitrogen",
+        "Argon"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_086",
+      "question": "In which country is the ancient citadel of Machu Picchu located?",
+      "options": [
+        "Mexico",
+        "Peru",
+        "Bolivia",
+        "Colombia"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "landmarks",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_087",
+      "question": "Which is the longest bone in the human body?",
+      "options": [
+        "Tibia",
+        "Femur",
+        "Humerus",
+        "Spine"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_088",
+      "question": "The Great Barrier Reef lies off the coast of which country?",
+      "options": [
+        "Brazil",
+        "Indonesia",
+        "Philippines",
+        "Australia"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_089",
+      "question": "What is the square root of 144?",
+      "options": [
+        "10",
+        "12",
+        "14",
+        "16"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "mathematics",
+      "type": "application"
+    },
+    {
+      "id": "general_quality_090",
+      "question": "Which planet has the most prominent ring system?",
+      "options": [
+        "Mars",
+        "Saturn",
+        "Mercury",
+        "Venus"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "astronomy",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_091",
+      "question": "Who wrote Don Quixote?",
+      "options": [
+        "Federico García Lorca",
+        "Miguel de Cervantes",
+        "Dante Alighieri",
+        "Gabriel García Márquez"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "literature",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_092",
+      "question": "Which famous statue overlooks Rio de Janeiro from Corcovado mountain?",
+      "options": [
+        "Statue of Liberty",
+        "Christ the Redeemer",
+        "Motherland Calls",
+        "Great Sphinx"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "landmarks",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_093",
+      "question": "Which fruit is the main ingredient of guacamole?",
+      "options": [
+        "Avocado",
+        "Mango",
+        "Lime",
+        "Tomato"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "food",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_094",
+      "question": "Which organ produces insulin in the human body?",
+      "options": [
+        "Liver",
+        "Spleen",
+        "Kidney",
+        "Pancreas"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_095",
+      "question": "What is the sum of the interior angles of any triangle in flat geometry?",
+      "options": [
+        "90 degrees",
+        "270 degrees",
+        "180 degrees",
+        "360 degrees"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "mathematics",
+      "type": "concept"
+    },
+    {
+      "id": "general_quality_096",
+      "question": "Who painted The Starry Night?",
+      "options": [
+        "Claude Monet",
+        "Edvard Munch",
+        "Salvador Dalí",
+        "Vincent van Gogh"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "art",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_097",
+      "question": "Which element has the chemical symbol Fe?",
+      "options": [
+        "Fluorine",
+        "Iron",
+        "Lead",
+        "Tin"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_098",
+      "question": "Which city was the capital of the Inca Empire?",
+      "options": [
+        "Lima",
+        "Quito",
+        "Bogotá",
+        "Cusco"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "world history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_099",
+      "question": "What is the scientific study of weather called?",
+      "options": [
+        "Geology",
+        "Ecology",
+        "Astronomy",
+        "Meteorology"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_100",
+      "question": "Which body of water borders the lowest land point on Earth's surface?",
+      "options": [
+        "Dead Sea",
+        "Caspian Sea",
+        "Black Sea",
+        "Red Sea"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_101",
+      "question": "Who is traditionally credited with composing the Odyssey?",
+      "options": [
+        "Homer",
+        "Virgil",
+        "Sophocles",
+        "Herodotus"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "literature",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_102",
+      "question": "How many items are in a baker's dozen?",
+      "options": [
+        "11",
+        "12",
+        "14",
+        "13"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "everyday knowledge",
+      "type": "concept"
+    },
+    {
+      "id": "general_quality_103",
+      "question": "In which year did the Berlin Wall fall?",
+      "options": [
+        "1961",
+        "1975",
+        "1989",
+        "1991"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "world history",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_104",
+      "question": "In which country is the city of Marrakesh located?",
+      "options": [
+        "Tunisia",
+        "Algeria",
+        "Egypt",
+        "Morocco"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_105",
+      "question": "Which rock-cut city was the capital of the Nabataean Kingdom?",
+      "options": [
+        "Palmyra",
+        "Persepolis",
+        "Ephesus",
+        "Petra"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "ancient world",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_106",
+      "question": "What name is given to the supercontinent that existed about 300 million years ago?",
+      "options": [
+        "Rodinia",
+        "Pangaea",
+        "Laurasia",
+        "Gondwana"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_107",
+      "question": "Which element is the most abundant in the observable universe?",
+      "options": [
+        "Oxygen",
+        "Hydrogen",
+        "Helium",
+        "Carbon"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "astronomy",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_108",
+      "question": "Who discovered penicillin in 1928?",
+      "options": [
+        "Louis Pasteur",
+        "Joseph Lister",
+        "Alexander Fleming",
+        "Robert Koch"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "science history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_109",
+      "question": "Which element is the most electronegative on the Pauling scale?",
+      "options": [
+        "Oxygen",
+        "Fluorine",
+        "Chlorine",
+        "Nitrogen"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_110",
+      "question": "Which 1919 treaty formally ended World War I between Germany and the Allies?",
+      "options": [
+        "Treaty of Westphalia",
+        "Treaty of Versailles",
+        "Treaty of Vienna",
+        "Treaty of Tordesillas"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "world history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_111",
+      "question": "Which is the longest river in Europe?",
+      "options": [
+        "Danube",
+        "Rhine",
+        "Dnieper",
+        "Volga"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_112",
+      "question": "In the Fibonacci sequence 1, 1, 2, 3, 5, 8, …, what is the 10th term?",
+      "options": [
+        "34",
+        "89",
+        "55",
+        "21"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "mathematics",
+      "type": "application"
+    },
+    {
+      "id": "general_quality_113",
+      "question": "What is the SI unit of electrical resistance?",
+      "options": [
+        "Volt",
+        "Ampere",
+        "Watt",
+        "Ohm"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_114",
+      "question": "Which philosopher wrote the Critique of Pure Reason?",
+      "options": [
+        "David Hume",
+        "Friedrich Nietzsche",
+        "Immanuel Kant",
+        "René Descartes"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "philosophy",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_115",
+      "question": "Which country was formerly known as Siam?",
+      "options": [
+        "Thailand",
+        "Cambodia",
+        "Laos",
+        "Vietnam"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "world history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_116",
+      "question": "What was the capital of the Byzantine Empire?",
+      "options": [
+        "Constantinople",
+        "Alexandria",
+        "Antioch",
+        "Ravenna"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "world history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_117",
+      "question": "The Strait of Malacca separates the Malay Peninsula from which large island?",
+      "options": [
+        "Sumatra",
+        "Borneo",
+        "Java",
+        "Sulawesi"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_118",
+      "question": "Which ancient Greek mathematician is known as the author of the Elements?",
+      "options": [
+        "Archimedes",
+        "Pythagoras",
+        "Euclid",
+        "Apollonius"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "mathematics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_119",
+      "question": "Which planet in the Solar System has the shortest day?",
+      "options": [
+        "Jupiter",
+        "Earth",
+        "Venus",
+        "Neptune"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "astronomy",
+      "type": "comparison"
+    },
+    {
+      "id": "general_quality_120",
+      "question": "Who was the first woman to win a Nobel Prize?",
+      "options": [
+        "Dorothy Hodgkin",
+        "Rosalind Franklin",
+        "Marie Curie",
+        "Irène Joliot-Curie"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "science history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_121",
+      "question": "Hungarian belongs to which language family?",
+      "options": [
+        "Uralic",
+        "Slavic",
+        "Germanic",
+        "Romance"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "languages",
+      "type": "classification"
+    },
+    {
+      "id": "general_quality_122",
+      "question": "Which is the largest lake in the world by surface area?",
+      "options": [
+        "Lake Superior",
+        "Caspian Sea",
+        "Lake Victoria",
+        "Lake Baikal"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_123",
+      "question": "What is the boundary between Earth's crust and mantle called?",
+      "options": [
+        "Mohorovičić discontinuity",
+        "Gutenberg discontinuity",
+        "Lehmann discontinuity",
+        "Conrad discontinuity"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "earth science",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_124",
+      "question": "Who composed The Four Seasons?",
+      "options": [
+        "Johann Sebastian Bach",
+        "Wolfgang Amadeus Mozart",
+        "George Frideric Handel",
+        "Antonio Vivaldi"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "music",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_125",
+      "question": "Suleiman the Magnificent ruled which empire?",
+      "options": [
+        "Safavid Empire",
+        "Mughal Empire",
+        "Byzantine Empire",
+        "Ottoman Empire"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "world history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_126",
+      "question": "Which ancient Greek scholar is credited with the principle of buoyancy?",
+      "options": [
+        "Thales",
+        "Archimedes",
+        "Hipparchus",
+        "Pythagoras"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "physics history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_127",
+      "question": "Which gas is the main component of Mars' atmosphere?",
+      "options": [
+        "Oxygen",
+        "Methane",
+        "Carbon dioxide",
+        "Hydrogen"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "astronomy",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_128",
+      "question": "Who is credited with introducing movable-type printing to Europe in the 15th century?",
+      "options": [
+        "William Caxton",
+        "Johannes Gutenberg",
+        "Aldus Manutius",
+        "Martin Luther"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "inventions",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_129",
+      "question": "Which ancient wonder stood on the island of Pharos near Alexandria?",
+      "options": [
+        "The Colossus",
+        "The Hanging Gardens",
+        "The Temple of Artemis",
+        "The Lighthouse"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "ancient world",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_130",
+      "question": "Mycology is the branch of biology devoted to which group of organisms?",
+      "options": [
+        "Fungi",
+        "Plants",
+        "Bacteria",
+        "Insects"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "biology",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_131",
+      "question": "Which country has the only non-quadrilateral national flag?",
+      "options": [
+        "Bhutan",
+        "Switzerland",
+        "Sri Lanka",
+        "Nepal"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_132",
+      "question": "Which river, flowing from the Tibetan Plateau to the East China Sea, is the longest in Asia?",
+      "options": [
+        "Yangtze",
+        "Yellow River",
+        "Mekong",
+        "Ganges"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_133",
+      "question": "How many time zones does Russia span?",
+      "options": [
+        "7",
+        "9",
+        "13",
+        "11"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "geography",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_134",
+      "question": "Which physicist formulated the uncertainty principle in quantum mechanics?",
+      "options": [
+        "Max Planck",
+        "Erwin Schrödinger",
+        "Werner Heisenberg",
+        "Paul Dirac"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_135",
+      "question": "Which mountain range is traditionally considered a boundary between Europe and Asia?",
+      "options": [
+        "Ural Mountains",
+        "Alps",
+        "Caucasus Mountains",
+        "Carpathian Mountains"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "geography",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_136",
+      "question": "Which philosopher was the tutor of Alexander the Great?",
+      "options": [
+        "Plato",
+        "Socrates",
+        "Aristotle",
+        "Epicurus"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "ancient world",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_137",
+      "question": "Which halogen is a reddish-brown liquid under normal room conditions?",
+      "options": [
+        "Bromine",
+        "Chlorine",
+        "Iodine",
+        "Fluorine"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_138",
+      "question": "In which year was the Soviet Union formally dissolved?",
+      "options": [
+        "1985",
+        "1989",
+        "1991",
+        "1993"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "world history",
+      "type": "recognition"
+    },
+    {
+      "id": "general_quality_139",
+      "question": "Which city hosted the first modern Olympic Games in 1896?",
+      "options": [
+        "Athens",
+        "Paris",
+        "London",
+        "Rome"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "sports history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_140",
+      "question": "Which ancient empire built the Royal Road linking Sardis with Susa?",
+      "options": [
+        "Roman Empire",
+        "Assyrian Empire",
+        "Macedonian Empire",
+        "Achaemenid Empire"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "world history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_141",
+      "question": "Whose expedition completed the first circumnavigation of the Earth, although he died during the voyage?",
+      "options": [
+        "Christopher Columbus",
+        "Vasco da Gama",
+        "James Cook",
+        "Ferdinand Magellan"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "exploration",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_142",
+      "question": "Which country is the second largest in the world by total area?",
+      "options": [
+        "China",
+        "Canada",
+        "United States",
+        "Brazil"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "geography",
+      "type": "comparison"
+    },
+    {
+      "id": "general_quality_143",
+      "question": "Which astronomer formulated the three laws of planetary motion?",
+      "options": [
+        "Tycho Brahe",
+        "Nicolaus Copernicus",
+        "Johannes Kepler",
+        "Galileo Galilei"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "astronomy",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_144",
+      "question": "Which tiny middle-ear bone is shaped like a stirrup?",
+      "options": [
+        "Malleus",
+        "Stapes",
+        "Incus",
+        "Hyoid"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "human body",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_145",
+      "question": "Which Roman emperor introduced the tetrarchy to divide imperial rule?",
+      "options": [
+        "Augustus",
+        "Diocletian",
+        "Trajan",
+        "Constantine"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "world history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_146",
+      "question": "Which mathematician proved Fermat's Last Theorem in the 1990s?",
+      "options": [
+        "Andrew Wiles",
+        "Grigori Perelman",
+        "Terence Tao",
+        "Paul Erdős"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "mathematics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_147",
+      "question": "Which Italian city is widely regarded as the birthplace of the Renaissance?",
+      "options": [
+        "Venice",
+        "Florence",
+        "Naples",
+        "Milan"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "art history",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_148",
+      "question": "What is the SI base unit of luminous intensity?",
+      "options": [
+        "Lumen",
+        "Candela",
+        "Lux",
+        "Watt"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_149",
+      "question": "Which artifact helped scholars decipher Egyptian hieroglyphs?",
+      "options": [
+        "Behistun Inscription",
+        "Dead Sea Scrolls",
+        "Code of Hammurabi",
+        "Rosetta Stone"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "ancient world",
+      "type": "identification"
+    },
+    {
+      "id": "general_quality_150",
+      "question": "Who developed the first widely used inactivated polio vaccine in the 1950s?",
+      "options": [
+        "Albert Sabin",
+        "Edward Jenner",
+        "Jonas Salk",
+        "Louis Pasteur"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "medicine",
+      "type": "identification"
+    }
+  ]
+}

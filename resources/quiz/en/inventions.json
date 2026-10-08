@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "inventions",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "inventions_quality_001",
+      "question": "Who is widely associated with the practical development of the telephone?",
+      "options": [
+        "Alexander Graham Bell",
+        "Louis Pasteur",
+        "Isaac Newton",
+        "James Watt"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "communication",
+      "type": "recognition"
+    },
+    {
+      "id": "inventions_quality_002",
+      "question": "Which invention is used to record and display moving images electronically?",
+      "options": [
+        "Thermometer",
+        "Television",
+        "Compass",
+        "Microscope"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "media",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_003",
+      "question": "What does a simple lever allow a person to do?",
+      "options": [
+        "Remove gravity",
+        "Create electricity from nothing",
+        "Apply force more effectively by using mechanical advantage",
+        "Change an object's chemical identity"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "mechanics",
+      "type": "concept"
+    },
+    {
+      "id": "inventions_quality_004",
+      "question": "Which invention greatly expanded long-distance wireless communication in the 20th century?",
+      "options": [
+        "Water wheel",
+        "Steam shovel",
+        "Sundial",
+        "Radio"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "communication",
+      "type": "recognition"
+    },
+    {
+      "id": "inventions_quality_005",
+      "question": "A machine uses gears of different sizes to trade speed for torque. What principle is being used?",
+      "options": [
+        "Mechanical advantage",
+        "Magnetic shielding",
+        "Chemical catalysis",
+        "Optical refraction"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "mechanics",
+      "type": "application"
+    },
+    {
+      "id": "inventions_quality_006",
+      "question": "Why was the development of movable-type printing historically transformative?",
+      "options": [
+        "It prevented books from being copied",
+        "It made large-scale reproduction of texts faster and more consistent",
+        "It worked only for maps",
+        "It eliminated the need for writing"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "printing",
+      "type": "cause/effect"
+    },
+    {
+      "id": "inventions_quality_007",
+      "question": "An invention becomes useful only after a separate technology becomes cheap enough to manufacture it at scale. What does this illustrate?",
+      "options": [
+        "A purely artistic process",
+        "A law of gravity",
+        "Technological ecosystems and enabling technologies",
+        "A fixed invention timeline"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "innovation",
+      "type": "reasoning"
+    },
+    {
+      "id": "inventions_quality_008",
+      "question": "A new tool performs the same basic task as an older one but uses less energy. What improvement is being demonstrated?",
+      "options": [
+        "Obsolescence by definition",
+        "Redundancy",
+        "Randomness",
+        "Efficiency"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "engineering",
+      "type": "classification"
+    },
+    {
+      "id": "inventions_quality_009",
+      "question": "A patent protects a novel technical invention for a limited period. What is the main policy trade-off?",
+      "options": [
+        "Temporary exclusive rights in exchange for public disclosure of the invention",
+        "Free use only by one company forever",
+        "Permanent secrecy without disclosure",
+        "Automatic government ownership of every invention"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "innovation policy",
+      "type": "analysis"
+    },
+    {
+      "id": "inventions_quality_010",
+      "question": "A prototype works in a laboratory but fails when exposed to dust, vibration, and temperature changes. What stage of engineering is most clearly still needed?",
+      "options": [
+        "Naming the product",
+        "Robustness and real-world testing",
+        "Changing the logo",
+        "Deleting the prototype"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "engineering",
+      "type": "inference"
+    },
+    {
+      "id": "inventions_quality_011",
+      "question": "A new technology reduces the cost of one activity but creates demand for a complementary service. What broader pattern does this show?",
+      "options": [
+        "Lower costs always reduce total demand",
+        "Technology never changes consumer behavior",
+        "Innovation can create new markets around complementary technologies",
+        "Every invention eliminates related markets"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "innovation",
+      "type": "analysis"
+    },
+    {
+      "id": "inventions_quality_012",
+      "question": "Two inventors independently develop similar solutions because the same problem and enabling technologies exist at the same time. What concept best describes this?",
+      "options": [
+        "Mechanical failure",
+        "Random manufacturing",
+        "Copyright transfer",
+        "Independent or convergent innovation"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "history of technology",
+      "type": "concept"
+    },
+    {
+      "id": "inventions_quality_013",
+      "question": "Who is credited with developing the first commercially practical incandescent light bulb?",
+      "options": [
+        "Nikola Tesla",
+        "Benjamin Franklin",
+        "Thomas Edison",
+        "Michael Faraday"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "electricity",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_014",
+      "question": "Which brothers made the first powered, controlled airplane flight in 1903?",
+      "options": [
+        "Montgolfier brothers",
+        "Lumière brothers",
+        "Grimm brothers",
+        "Wright brothers"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_015",
+      "question": "Which instrument is used to see very small objects such as cells?",
+      "options": [
+        "Telescope",
+        "Seismograph",
+        "Microscope",
+        "Barometer"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "science tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_016",
+      "question": "Who invented the World Wide Web in 1989?",
+      "options": [
+        "Bill Gates",
+        "Steve Jobs",
+        "Vint Cerf",
+        "Tim Berners-Lee"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "internet",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_017",
+      "question": "What does a thermometer measure?",
+      "options": [
+        "Humidity",
+        "Wind speed",
+        "Temperature",
+        "Air pressure"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "science tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_018",
+      "question": "Which German engineer built the first practical gasoline-powered automobile in the 1880s?",
+      "options": [
+        "Karl Benz",
+        "Henry Ford",
+        "Rudolf Diesel",
+        "Ferdinand Porsche"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_019",
+      "question": "Which Swedish inventor created dynamite and later funded the Nobel Prizes?",
+      "options": [
+        "Anders Celsius",
+        "Carl Linnaeus",
+        "Svante Arrhenius",
+        "Alfred Nobel"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_020",
+      "question": "Which device converts sunlight directly into electricity?",
+      "options": [
+        "Solar panel",
+        "Wind turbine",
+        "Steam engine",
+        "Water wheel"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "energy",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_021",
+      "question": "Which device is used to capture still photographs?",
+      "options": [
+        "Projector",
+        "Scanner",
+        "Amplifier",
+        "Camera"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "photography",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_022",
+      "question": "Which portable device lets people make calls wirelessly through cellular networks?",
+      "options": [
+        "Walkie-talkie only",
+        "Pager",
+        "Mobile phone",
+        "Telegraph"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "communication",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_023",
+      "question": "In what form does a battery store energy?",
+      "options": [
+        "Nuclear energy",
+        "Sound energy",
+        "Chemical energy",
+        "Gravitational energy"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "energy",
+      "type": "concept"
+    },
+    {
+      "id": "inventions_quality_024",
+      "question": "Which household appliance keeps food cold and fresh?",
+      "options": [
+        "Refrigerator",
+        "Toaster",
+        "Blender",
+        "Iron"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "household inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_025",
+      "question": "Which part of a computer is often called its brain?",
+      "options": [
+        "Monitor",
+        "Keyboard",
+        "Power cable",
+        "Central processing unit (CPU)"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_026",
+      "question": "Which kitchen appliance heats food quickly using microwaves?",
+      "options": [
+        "Microwave oven",
+        "Dishwasher",
+        "Toaster",
+        "Rice cooker"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "household inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_027",
+      "question": "Which instrument do doctors use to listen to the heart and lungs?",
+      "options": [
+        "Stethoscope",
+        "Thermometer",
+        "Syringe",
+        "Scalpel"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "medicine",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_028",
+      "question": "Which vehicle runs on rails and was first powered by steam?",
+      "options": [
+        "Tractor",
+        "Locomotive",
+        "Bus",
+        "Submarine"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_029",
+      "question": "Which device prints documents from a computer onto paper?",
+      "options": [
+        "Router",
+        "Webcam",
+        "Speaker",
+        "Printer"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_030",
+      "question": "Which inventor is associated with Morse code and the telegraph in the United States?",
+      "options": [
+        "Samuel Morse",
+        "Guglielmo Marconi",
+        "Alexander Graham Bell",
+        "Thomas Edison"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "communication",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_031",
+      "question": "Which device helps a person fall slowly from an aircraft?",
+      "options": [
+        "Parachute",
+        "Propeller",
+        "Glider wing only",
+        "Life jacket"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "safety inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_032",
+      "question": "What do we call a machine that can carry out tasks automatically, often guided by programming?",
+      "options": [
+        "Lever",
+        "Robot",
+        "Pendulum",
+        "Turbine"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "robotics",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_033",
+      "question": "Which aircraft uses rotating blades to lift off vertically?",
+      "options": [
+        "Glider",
+        "Helicopter",
+        "Airship",
+        "Jet fighter"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_034",
+      "question": "Which household appliance cleans floors by sucking up dust?",
+      "options": [
+        "Vacuum cleaner",
+        "Washing machine",
+        "Air conditioner",
+        "Hair dryer"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "household inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_035",
+      "question": "Which instrument in a car shows how fast it is moving?",
+      "options": [
+        "Speedometer",
+        "Odometer",
+        "Fuel gauge",
+        "Tachometer"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "vehicle instruments",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_036",
+      "question": "Which input device is mainly used to type letters and numbers into a computer?",
+      "options": [
+        "Monitor",
+        "Joystick",
+        "Keyboard",
+        "Scanner"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_037",
+      "question": "Which type of unmanned flying device is commonly controlled remotely and often carries a camera?",
+      "options": [
+        "Hot-air balloon",
+        "Drone",
+        "Sailplane",
+        "Rocket"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "robotics",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_038",
+      "question": "Which instrument records the shaking of the ground during earthquakes?",
+      "options": [
+        "Barometer",
+        "Anemometer",
+        "Seismograph",
+        "Hygrometer"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "science tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_039",
+      "question": "Which kind of machine uses a form of radiation to produce images of bones?",
+      "options": [
+        "Microscope",
+        "X-ray machine",
+        "Thermometer",
+        "Hearing aid"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "medicine",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_040",
+      "question": "Which small kitchen appliance browns slices of bread?",
+      "options": [
+        "Blender",
+        "Toaster",
+        "Kettle",
+        "Microwave"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "household inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_041",
+      "question": "Which device converts sound into electrical signals?",
+      "options": [
+        "Loudspeaker",
+        "Headphone jack",
+        "Amplifier",
+        "Microphone"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "audio",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_042",
+      "question": "Which device converts electrical signals back into sound?",
+      "options": [
+        "Microphone",
+        "Loudspeaker",
+        "Transformer",
+        "Capacitor"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "audio",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_043",
+      "question": "Which household device warns people of a possible fire by detecting smoke?",
+      "options": [
+        "Thermostat",
+        "Fuse box",
+        "Carbon filter",
+        "Smoke detector"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "safety inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_044",
+      "question": "Which machine uses rotating blades to generate electricity from wind?",
+      "options": [
+        "Steam boiler",
+        "Diesel generator",
+        "Water pump",
+        "Wind turbine"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "energy",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_045",
+      "question": "Which vessel is designed to travel underwater?",
+      "options": [
+        "Hovercraft",
+        "Submarine",
+        "Barge",
+        "Tugboat"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_046",
+      "question": "Which powerful farm vehicle is often used to pull plows and other equipment?",
+      "options": [
+        "Bulldozer",
+        "Forklift",
+        "Tractor",
+        "Excavator"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "agriculture",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_047",
+      "question": "Which small portable device stores data and plugs into a computer's USB port?",
+      "options": [
+        "Modem",
+        "USB flash drive",
+        "Webcam",
+        "Router"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_048",
+      "question": "Who developed a system of raised dots that allows blind people to read?",
+      "options": [
+        "Louis Braille",
+        "Samuel Morse",
+        "Alexander Bell",
+        "Helen Keller"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "communication",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_049",
+      "question": "Which container keeps hot drinks hot and cold drinks cold for hours?",
+      "options": [
+        "Plastic cup",
+        "Glass jar",
+        "Vacuum flask",
+        "Tin can"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "household inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_050",
+      "question": "In which country was the magnetic compass first invented?",
+      "options": [
+        "Egypt",
+        "Greece",
+        "India",
+        "China"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "ancient inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_051",
+      "question": "Which plant was used in ancient Egypt to make a paper-like writing material?",
+      "options": [
+        "Bamboo",
+        "Cotton",
+        "Papyrus",
+        "Flax"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "ancient inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_052",
+      "question": "Which simple machine is a wheel with a groove that guides a rope or cable?",
+      "options": [
+        "Wedge",
+        "Inclined plane",
+        "Pulley",
+        "Screw"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "mechanics",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_053",
+      "question": "Which simple machine is made of an inclined plane wrapped around a cylinder?",
+      "options": [
+        "Screw",
+        "Lever",
+        "Pulley",
+        "Wheel and axle"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "mechanics",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_054",
+      "question": "Which device turns mechanical motion into electricity using magnets and coils?",
+      "options": [
+        "Battery",
+        "Resistor",
+        "Switch",
+        "Generator"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "electricity",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_055",
+      "question": "Which machine is used to stitch fabric together quickly?",
+      "options": [
+        "Loom",
+        "Sewing machine",
+        "Spinning wheel",
+        "Typewriter"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "household inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_056",
+      "question": "Which invention is worn to correct blurred vision?",
+      "options": [
+        "Hearing aid",
+        "Eyeglasses",
+        "Face mask",
+        "Helmet"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "medicine",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_057",
+      "question": "Which invention carries people up and down between floors of a building?",
+      "options": [
+        "Escalator only",
+        "Elevator",
+        "Crane",
+        "Conveyor belt"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_058",
+      "question": "Which two-wheeled vehicle is powered by the rider pedaling?",
+      "options": [
+        "Bicycle",
+        "Scooter engine",
+        "Rickshaw engine",
+        "Moped"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_059",
+      "question": "Which English physician developed the first successful smallpox vaccine in 1796?",
+      "options": [
+        "Joseph Lister",
+        "William Harvey",
+        "Edward Jenner",
+        "Alexander Fleming"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "medicine",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_060",
+      "question": "Which chemist created Bakelite, the first fully synthetic plastic, in 1907?",
+      "options": [
+        "Leo Baekeland",
+        "Wallace Carothers",
+        "Charles Goodyear",
+        "Alexander Parkes"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "materials",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_061",
+      "question": "Which brothers launched the first public hot-air balloon flight in France in 1783?",
+      "options": [
+        "Wright brothers",
+        "Montgolfier brothers",
+        "Lumière brothers",
+        "Farman brothers"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_062",
+      "question": "Which brothers held one of the first public film screenings in Paris in 1895?",
+      "options": [
+        "Montgolfier brothers",
+        "Lumière brothers",
+        "Wright brothers",
+        "Marx brothers"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "media",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_063",
+      "question": "Which inventor created the phonograph, an early device for recording and playing back sound, in 1877?",
+      "options": [
+        "Emile Berliner",
+        "Alexander Graham Bell",
+        "Thomas Edison",
+        "Guglielmo Marconi"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "audio",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_064",
+      "question": "What manufacturing innovation did Henry Ford's company introduce in 1913 to cut the time needed to build cars?",
+      "options": [
+        "Interchangeable pistons",
+        "Electric starter",
+        "Moving assembly line",
+        "Steel chassis"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "industry",
+      "type": "cause/effect"
+    },
+    {
+      "id": "inventions_quality_065",
+      "question": "What does the acronym LASER stand for?",
+      "options": [
+        "Light Amplification by Stimulated Emission of Radiation",
+        "Linear Amplified Signal Energy Receiver",
+        "Light Absorption by Stored Electron Radiation",
+        "Long-range Atomic Spectrum Emission Reader"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "physics",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_066",
+      "question": "Which Hungarian journalist is credited with inventing the modern ballpoint pen?",
+      "options": [
+        "László Bíró",
+        "Ernő Rubik",
+        "John Loud",
+        "Lewis Waterman"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "everyday inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_067",
+      "question": "Which Italian instrument maker invented the piano around 1700?",
+      "options": [
+        "Bartolomeo Cristofori",
+        "Antonio Stradivari",
+        "Andrea Amati",
+        "Adolphe Sax"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "music",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_068",
+      "question": "Which Italian physicist invented the first electric battery, known as the voltaic pile, around 1800?",
+      "options": [
+        "Luigi Galvani",
+        "Galileo Galilei",
+        "Enrico Fermi",
+        "Alessandro Volta"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "electricity",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_069",
+      "question": "Which scientist discovered electromagnetic induction in 1831?",
+      "options": [
+        "James Clerk Maxwell",
+        "Hans Christian Ørsted",
+        "André-Marie Ampère",
+        "Michael Faraday"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "electricity",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_070",
+      "question": "Which country is traditionally credited with the invention of paper?",
+      "options": [
+        "Egypt",
+        "Greece",
+        "Persia",
+        "China"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "ancient inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_071",
+      "question": "Which inventor is associated with the alternating-current induction motor?",
+      "options": [
+        "Nikola Tesla",
+        "Thomas Edison",
+        "George Westinghouse",
+        "Michael Faraday"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "electricity",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_072",
+      "question": "Which inventor is credited with developing practical long-distance radio telegraphy?",
+      "options": [
+        "Guglielmo Marconi",
+        "Samuel Morse",
+        "Heinrich Hertz",
+        "Lee de Forest"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "communication",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_073",
+      "question": "Which Scottish inventor demonstrated a working mechanical television system in 1926?",
+      "options": [
+        "Philo Farnsworth",
+        "John Logie Baird",
+        "Vladimir Zworykin",
+        "Charles Jenkins"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "media",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_074",
+      "question": "Which Frenchman announced the daguerreotype photographic process in 1839?",
+      "options": [
+        "Nicéphore Niépce",
+        "Louis Daguerre",
+        "Auguste Lumière",
+        "George Eastman"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "photography",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_075",
+      "question": "Which 1969 research network is considered a direct ancestor of the Internet?",
+      "options": [
+        "Ethernet",
+        "ARPANET",
+        "Usenet",
+        "Wi-Fi"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_076",
+      "question": "Which semiconductor device, invented at Bell Labs in 1947, largely replaced vacuum tubes?",
+      "options": [
+        "Diode lamp",
+        "Capacitor",
+        "Transistor",
+        "Relay"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "electronics",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_077",
+      "question": "Which American inventor patented the cotton gin in 1794?",
+      "options": [
+        "Samuel Slater",
+        "Cyrus McCormick",
+        "Eli Whitney",
+        "Robert Fulton"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "industrial revolution",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_078",
+      "question": "Who invented the spinning jenny, which let one worker spin several threads at once?",
+      "options": [
+        "Richard Arkwright",
+        "Samuel Crompton",
+        "John Kay",
+        "James Hargreaves"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "industrial revolution",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_079",
+      "question": "Which Victorian mathematician designed the Analytical Engine, an early concept of a general-purpose computer?",
+      "options": [
+        "Charles Babbage",
+        "Alan Turing",
+        "Ada Lovelace",
+        "George Boole"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_080",
+      "question": "Which French mathematician built an early mechanical calculator called the Pascaline in the 17th century?",
+      "options": [
+        "René Descartes",
+        "Pierre de Fermat",
+        "Blaise Pascal",
+        "Gottfried Leibniz"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_081",
+      "question": "Which American statesman invented the lightning rod?",
+      "options": [
+        "Thomas Jefferson",
+        "Samuel Morse",
+        "Benjamin Franklin",
+        "Joseph Henry"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "electricity",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_082",
+      "question": "Which German physicist introduced the mercury thermometer and a temperature scale in the early 18th century?",
+      "options": [
+        "Anders Celsius",
+        "Lord Kelvin",
+        "Daniel Gabriel Fahrenheit",
+        "René Réaumur"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "science tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_083",
+      "question": "Which explosive mixture, first developed in China, was used for fireworks and later in weapons?",
+      "options": [
+        "Gunpowder",
+        "Greek fire",
+        "Dynamite",
+        "Nitroglycerin"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "ancient inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_084",
+      "question": "Which French scientist developed the process of heating liquids to kill harmful microbes, later named after him?",
+      "options": [
+        "Louis Pasteur",
+        "Robert Koch",
+        "Claude Bernard",
+        "Antoine Lavoisier"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "food technology",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_085",
+      "question": "Whose engineering firm built the Eiffel Tower for the 1889 World's Fair?",
+      "options": [
+        "Ferdinand de Lesseps",
+        "Georges-Eugène Haussmann",
+        "Gustave Eiffel",
+        "Charles Garnier"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "architecture",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_086",
+      "question": "Which Hungarian architecture professor invented a famous 3D puzzle cube in 1974?",
+      "options": [
+        "László Bíró",
+        "Ernő Rubik",
+        "Edwin Land",
+        "Béla Bartók"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "toys and puzzles",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_087",
+      "question": "Who is credited with developing modern air conditioning in 1902?",
+      "options": [
+        "Thomas Midgley",
+        "Willis Carrier",
+        "Frederick Jones",
+        "Nikola Tesla"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "household inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_088",
+      "question": "Which Dutch scientist invented the pendulum clock in 1656?",
+      "options": [
+        "Antonie van Leeuwenhoek",
+        "Willebrord Snellius",
+        "Hendrik Lorentz",
+        "Christiaan Huygens"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "timekeeping",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_089",
+      "question": "What does a Geiger counter detect?",
+      "options": [
+        "Sound waves",
+        "Ionizing radiation",
+        "Magnetic fields",
+        "Air humidity"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "science tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_090",
+      "question": "Which synthetic fiber, introduced by DuPont in 1935, was the first fully synthetic fiber?",
+      "options": [
+        "Polyester",
+        "Nylon",
+        "Rayon",
+        "Acrylic"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "materials",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_091",
+      "question": "What is the main function of an electrical transformer?",
+      "options": [
+        "Storing direct current",
+        "Changing the voltage of alternating current",
+        "Producing light",
+        "Measuring resistance"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "electricity",
+      "type": "concept"
+    },
+    {
+      "id": "inventions_quality_092",
+      "question": "Which Italian scientist invented the mercury barometer in 1643?",
+      "options": [
+        "Galileo Galilei",
+        "Evangelista Torricelli",
+        "Blaise Pascal",
+        "Robert Boyle"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "science tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_093",
+      "question": "Which scientist built the first practical reflecting telescope around 1668?",
+      "options": [
+        "Isaac Newton",
+        "Galileo Galilei",
+        "Johannes Kepler",
+        "Edmond Halley"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "astronomy tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_094",
+      "question": "Which technology transmits data as pulses of light through thin glass strands?",
+      "options": [
+        "Coaxial cable",
+        "Copper twisted pair",
+        "Radio relay",
+        "Fiber optics"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "communication",
+      "type": "concept"
+    },
+    {
+      "id": "inventions_quality_095",
+      "question": "Which chemist at DuPont invented the strong fiber Kevlar in the 1960s?",
+      "options": [
+        "Wallace Carothers",
+        "Roy Plunkett",
+        "Stephanie Kwolek",
+        "Leo Baekeland"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "materials",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_096",
+      "question": "Which Sony product, introduced in 1979, popularized portable personal music players?",
+      "options": [
+        "Discman",
+        "Betamax",
+        "Trinitron",
+        "Walkman"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "audio",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_097",
+      "question": "In which ancient region were the first known wheeled vehicles developed around 3500 BC?",
+      "options": [
+        "Ancient Egypt",
+        "Mesopotamia",
+        "Indus Valley",
+        "Ancient China"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "ancient inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_098",
+      "question": "Who invented basketball in 1891?",
+      "options": [
+        "Abner Doubleday",
+        "William Morgan",
+        "Walter Camp",
+        "James Naismith"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "sports",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_099",
+      "question": "Which Swedish engineer developed the modern three-point seat belt, introduced by Volvo in 1959?",
+      "options": [
+        "Gideon Sundback",
+        "Per Georg Scheutz",
+        "Gustaf Dalén",
+        "Nils Bohlin"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "safety inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_100",
+      "question": "Who is credited with inventing the first commercially successful mechanical dishwasher in the 1880s?",
+      "options": [
+        "Josephine Cochrane",
+        "Margaret Knight",
+        "Ada Lovelace",
+        "Mary Anderson"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "household inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_101",
+      "question": "Which Swiss engineer invented Velcro after observing burrs stuck to his dog's fur?",
+      "options": [
+        "George de Mestral",
+        "Jacques Piccard",
+        "Auguste Piccard",
+        "Albert Hofmann"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "everyday inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_102",
+      "question": "Which Englishman built an early atmospheric steam engine for pumping water from mines in 1712?",
+      "options": [
+        "James Watt",
+        "Richard Trevithick",
+        "Thomas Savery",
+        "Thomas Newcomen"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "industrial revolution",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_103",
+      "question": "Which engineer designed the steam locomotive Rocket in 1829?",
+      "options": [
+        "Isambard Kingdom Brunel",
+        "Richard Trevithick",
+        "George Stephenson",
+        "Thomas Telford"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_104",
+      "question": "Which Dutch scientist used handmade lenses to observe microorganisms in the 17th century?",
+      "options": [
+        "Christiaan Huygens",
+        "Robert Hooke",
+        "Hans Lippershey",
+        "Antonie van Leeuwenhoek"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "science tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_105",
+      "question": "Who built the Z3, widely regarded as the first working programmable digital computer, in 1941?",
+      "options": [
+        "Alan Turing",
+        "John von Neumann",
+        "Howard Aiken",
+        "Konrad Zuse"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_106",
+      "question": "Which mathematician designed the Bombe, the machine used at Bletchley Park to help break Enigma messages, together with Gordon Welchman?",
+      "options": [
+        "Konrad Zuse",
+        "Alan Turing",
+        "Tommy Flowers",
+        "John Mauchly"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_107",
+      "question": "Which American inventor transmitted the first fully electronic television image in 1927?",
+      "options": [
+        "John Logie Baird",
+        "Philo Farnsworth",
+        "Vladimir Zworykin",
+        "Allen DuMont"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "media",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_108",
+      "question": "Which German chemist developed the process for synthesizing ammonia from nitrogen and hydrogen, later scaled up with Carl Bosch?",
+      "options": [
+        "Justus von Liebig",
+        "Friedrich Wöhler",
+        "Fritz Haber",
+        "Otto Hahn"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "chemistry",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_109",
+      "question": "Which German engineer invented the compression-ignition engine patented in the 1890s?",
+      "options": [
+        "Nikolaus Otto",
+        "Rudolf Diesel",
+        "Gottlieb Daimler",
+        "Wilhelm Maybach"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "engines",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_110",
+      "question": "Who built the first practical four-stroke internal combustion engine in 1876?",
+      "options": [
+        "Rudolf Diesel",
+        "Nikolaus Otto",
+        "Karl Benz",
+        "Felix Wankel"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "engines",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_111",
+      "question": "Which French inventor created a loom controlled by punched cards in the early 1800s?",
+      "options": [
+        "Eli Whitney",
+        "Samuel Crompton",
+        "Edmund Cartwright",
+        "Joseph Marie Jacquard"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "textiles",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_112",
+      "question": "Which German engineer developed the rotary engine named after him in the 1950s?",
+      "options": [
+        "Nikolaus Otto",
+        "Rudolf Diesel",
+        "Felix Wankel",
+        "Ferdinand Porsche"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "engines",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_113",
+      "question": "Which Englishman developed a process in the 1850s that made mass production of steel cheap?",
+      "options": [
+        "Abraham Darby",
+        "Henry Cort",
+        "Andrew Carnegie",
+        "Henry Bessemer"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "metallurgy",
+      "type": "cause/effect"
+    },
+    {
+      "id": "inventions_quality_114",
+      "question": "Which engineer at Texas Instruments demonstrated the first working integrated circuit in 1958?",
+      "options": [
+        "Robert Noyce",
+        "Gordon Moore",
+        "Jack Kilby",
+        "William Shockley"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "electronics",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_115",
+      "question": "Which Russian-American engineer developed the VS-300, an early practical single-rotor helicopter?",
+      "options": [
+        "Igor Sikorsky",
+        "Paul Cornu",
+        "Juan de la Cierva",
+        "Louis Breguet"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_116",
+      "question": "Which inventor developed the vulcanization of rubber, making it durable and elastic?",
+      "options": [
+        "Charles Goodyear",
+        "Charles Macintosh",
+        "Alexander Parkes",
+        "Leo Baekeland"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "materials",
+      "type": "cause/effect"
+    },
+    {
+      "id": "inventions_quality_117",
+      "question": "Which American entrepreneur popularized roll film and the Kodak camera for the general public?",
+      "options": [
+        "George Eastman",
+        "Edwin Land",
+        "Louis Daguerre",
+        "Ansel Adams"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "photography",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_118",
+      "question": "Which German physicist built the first electron microscope in 1931 with Max Knoll?",
+      "options": [
+        "Heinrich Rohrer",
+        "Max Planck",
+        "Ernst Ruska",
+        "Walter Schottky"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "science tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_119",
+      "question": "Which American engineer invented wideband frequency modulation (FM) radio?",
+      "options": [
+        "Edwin Howard Armstrong",
+        "Lee de Forest",
+        "Reginald Fessenden",
+        "Guglielmo Marconi"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "communication",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_120",
+      "question": "Which Hollywood actress co-developed a frequency-hopping communication method patented in 1942?",
+      "options": [
+        "Katharine Hepburn",
+        "Greta Garbo",
+        "Hedy Lamarr",
+        "Marlene Dietrich"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "communication",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_121",
+      "question": "Which Indian scientist invented the crescograph to measure plant growth?",
+      "options": [
+        "Jagadish Chandra Bose",
+        "C. V. Raman",
+        "Homi Bhabha",
+        "Satyendra Nath Bose"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "science tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_122",
+      "question": "Who invented the spinning mule in 1779, combining features of earlier spinning machines?",
+      "options": [
+        "James Hargreaves",
+        "Samuel Crompton",
+        "Richard Arkwright",
+        "Edmund Cartwright"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "industrial revolution",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_123",
+      "question": "Who patented the power loom in 1785?",
+      "options": [
+        "Edmund Cartwright",
+        "John Kay",
+        "Samuel Crompton",
+        "Eli Whitney"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "industrial revolution",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_124",
+      "question": "Which German-born inventor created the Linotype machine in the 1880s?",
+      "options": [
+        "Johannes Gutenberg",
+        "Tolbert Lanston",
+        "Friedrich Koenig",
+        "Ottmar Mergenthaler"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "printing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_125",
+      "question": "Which American engineer built the differential analyzer, a mechanical analog computer, at MIT around 1931?",
+      "options": [
+        "Claude Shannon",
+        "Norbert Wiener",
+        "John Atanasoff",
+        "Vannevar Bush"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_126",
+      "question": "Which British engineer invented the hovercraft in the 1950s?",
+      "options": [
+        "Frank Whittle",
+        "Christopher Cockerell",
+        "Barnes Wallis",
+        "Isambard Brunel"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_127",
+      "question": "Which pair of American engineers built ENIAC, one of the first general-purpose electronic computers, in the 1940s?",
+      "options": [
+        "Howard Aiken and Grace Hopper",
+        "John Atanasoff and Clifford Berry",
+        "John Mauchly and J. Presper Eckert",
+        "Claude Shannon and Vannevar Bush"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_128",
+      "question": "Who designed the original Ferris wheel for the 1893 World's Columbian Exposition?",
+      "options": [
+        "Gustave Eiffel",
+        "George Washington Gale Ferris Jr.",
+        "John Roebling",
+        "Elisha Otis"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "amusement technology",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_129",
+      "question": "Which American physicist invented the cyclotron, an early particle accelerator, in the 1930s?",
+      "options": [
+        "Robert Oppenheimer",
+        "Enrico Fermi",
+        "Glenn Seaborg",
+        "Ernest Lawrence"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "physics tools",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_130",
+      "question": "Which Englishman invented the retroreflective road stud known as the 'cat's eye' in 1934?",
+      "options": [
+        "Percy Shaw",
+        "Frank Whittle",
+        "John Loudon McAdam",
+        "Harry Ferguson"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "road safety",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_131",
+      "question": "Which Danish engineer invented the telegraphone, an early magnetic sound recorder, in 1898?",
+      "options": [
+        "Thomas Edison",
+        "Oberlin Smith",
+        "Fritz Pfleumer",
+        "Valdemar Poulsen"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "audio",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_132",
+      "question": "Which English chemist invented a safety lamp for miners in 1815?",
+      "options": [
+        "Humphry Davy",
+        "Michael Faraday",
+        "Joseph Priestley",
+        "John Dalton"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "mining safety",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_133",
+      "question": "Which two British inventors patented the first commercial electric telegraph in 1837?",
+      "options": [
+        "Samuel Morse and Alfred Vail",
+        "Joseph Henry and Michael Faraday",
+        "Alexander Bain and David Brewster",
+        "William Cooke and Charles Wheatstone"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "communication",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_134",
+      "question": "Which German count developed the rigid airships that took his name?",
+      "options": [
+        "Hugo Eckener",
+        "Alberto Santos-Dumont",
+        "Ferdinand von Zeppelin",
+        "Henri Giffard"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_135",
+      "question": "Which Russian inventor created the theremin, an instrument played without physical contact, in the 1920s?",
+      "options": [
+        "Leon Theremin",
+        "Robert Moog",
+        "Les Paul",
+        "Laurens Hammond"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "music technology",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_136",
+      "question": "Which Han dynasty polymath built an early seismoscope in AD 132?",
+      "options": [
+        "Cai Lun",
+        "Sima Qian",
+        "Zhang Heng",
+        "Liu Hui"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "ancient inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_137",
+      "question": "Whose Book of Optics, written around 1011–1021, gave an influential account of the camera obscura?",
+      "options": [
+        "Ibn al-Haytham",
+        "Al-Khwarizmi",
+        "Avicenna",
+        "Al-Biruni"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "medieval science",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_138",
+      "question": "Which engineer wrote the 1206 Book of Knowledge of Ingenious Mechanical Devices?",
+      "options": [
+        "Ibn Sina",
+        "Al-Farabi",
+        "Al-Jazari",
+        "Omar Khayyam"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "medieval science",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_139",
+      "question": "Which ancient Greek engineer of Alexandria described the aeolipile, an early steam-powered device?",
+      "options": [
+        "Hero of Alexandria",
+        "Ctesibius",
+        "Archimedes",
+        "Philo of Byzantium"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "ancient inventions",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_140",
+      "question": "Which Chinese artisan is credited with inventing movable type made of clay around 1040?",
+      "options": [
+        "Cai Lun",
+        "Su Song",
+        "Zhang Heng",
+        "Bi Sheng"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "printing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_141",
+      "question": "Which Song dynasty official built a famous astronomical clock tower in 1088?",
+      "options": [
+        "Shen Kuo",
+        "Bi Sheng",
+        "Zhu Xi",
+        "Su Song"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "timekeeping",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_142",
+      "question": "Which engineer invented the modern steam turbine in 1884?",
+      "options": [
+        "James Watt",
+        "Charles Parsons",
+        "Gustaf de Laval",
+        "Thomas Newcomen"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "energy",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_143",
+      "question": "Which American inventor developed xerography, the dry photocopying process, in 1938?",
+      "options": [
+        "Thomas Edison",
+        "Edwin Land",
+        "Chester Carlson",
+        "Gary Starkweather"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "office technology",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_144",
+      "question": "Which American engineer's tabulating machines processed data for the 1890 US census?",
+      "options": [
+        "Charles Babbage",
+        "Herman Hollerith",
+        "Vannevar Bush",
+        "Thomas Watson"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "computing",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_145",
+      "question": "Which American engineer co-developed the first fully implantable cardiac pacemaker around 1958–1960?",
+      "options": [
+        "Willem Kolff",
+        "Wilson Greatbatch",
+        "Christiaan Barnard",
+        "Rune Elmqvist"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "medicine",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_146",
+      "question": "Which English clockmaker built marine chronometers that allowed sailors to determine longitude at sea?",
+      "options": [
+        "John Harrison",
+        "Christiaan Huygens",
+        "Thomas Mudge",
+        "Robert Hooke"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "navigation",
+      "type": "cause/effect"
+    },
+    {
+      "id": "inventions_quality_147",
+      "question": "Which Welsh scientist demonstrated the first fuel cell in 1839?",
+      "options": [
+        "Michael Faraday",
+        "William Grove",
+        "Humphry Davy",
+        "James Joule"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "energy",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_148",
+      "question": "Which American inventor demonstrated a safety elevator at the 1853 New York exhibition by cutting its rope?",
+      "options": [
+        "Alexander Miles",
+        "Elisha Otis",
+        "Otto Lilienthal",
+        "Samuel Colt"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "transportation",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_149",
+      "question": "Which Englishman patented linoleum floor covering in the 1860s?",
+      "options": [
+        "Alexander Parkes",
+        "Henry Bessemer",
+        "John Wesley Hyatt",
+        "Frederick Walton"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "materials",
+      "type": "identification"
+    },
+    {
+      "id": "inventions_quality_150",
+      "question": "Which American inventor created the Segway personal transporter?",
+      "options": [
+        "Elon Musk",
+        "Steve Wozniak",
+        "Dean Kamen",
+        "Trevor Baylis"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "transportation",
+      "type": "identification"
+    }
+  ]
+}

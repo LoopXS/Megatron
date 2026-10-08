@@ -1,0 +1,2108 @@
+{
+  "language": "en",
+  "category": "literature",
+  "version": "4.0",
+  "question_count": 150,
+  "questions": [
+    {
+      "id": "literature_quality_001",
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "options": [
+        "Jane Austen",
+        "Mary Shelley",
+        "Virginia Woolf",
+        "Emily Brontë"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "recognition"
+    },
+    {
+      "id": "literature_quality_002",
+      "question": "Which epic poem is traditionally attributed to Homer?",
+      "options": [
+        "The Divine Comedy",
+        "The Odyssey",
+        "Paradise Lost",
+        "Don Quixote"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "epic literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_003",
+      "question": "What is a metaphor?",
+      "options": [
+        "A repeated punctuation mark",
+        "A direct quotation from a source",
+        "A comparison that describes one thing in terms of another without using 'like' or 'as'",
+        "A list of characters"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "literary devices",
+      "type": "concept"
+    },
+    {
+      "id": "literature_quality_004",
+      "question": "Which Shakespeare play features Prince Hamlet?",
+      "options": [
+        "The Tempest",
+        "Othello",
+        "Macbeth",
+        "Hamlet"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "drama",
+      "type": "recognition"
+    },
+    {
+      "id": "literature_quality_005",
+      "question": "A narrator knows the thoughts of several characters and can move freely between them. What point of view is this?",
+      "options": [
+        "Third-person omniscient",
+        "Objective first-person",
+        "Second-person",
+        "First-person limited"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "narrative",
+      "type": "classification"
+    },
+    {
+      "id": "literature_quality_006",
+      "question": "A poem repeatedly returns to the same line at the end of several stanzas. What is this repeated line called?",
+      "options": [
+        "Prologue",
+        "Refrain",
+        "Footnote",
+        "Aside"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_007",
+      "question": "A story places an apparently harmless object early in the plot and later reveals that it was crucial to the conflict. What device is this?",
+      "options": [
+        "A title page",
+        "Random filler",
+        "Foreshadowing or setup",
+        "A bibliography"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "narrative",
+      "type": "analysis"
+    },
+    {
+      "id": "literature_quality_008",
+      "question": "A character says one thing while the audience understands that the opposite meaning is intended. Which device is most closely involved?",
+      "options": [
+        "Meter",
+        "Alliteration",
+        "Onomatopoeia",
+        "Irony"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "literary devices",
+      "type": "concept"
+    },
+    {
+      "id": "literature_quality_009",
+      "question": "A novel alternates between two timelines and gradually reveals that events in the past explain the present conflict. What structural effect is being used?",
+      "options": [
+        "Nonlinear narrative with delayed context",
+        "A glossary structure",
+        "A single static scene",
+        "Purely chronological narration"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "narrative structure",
+      "type": "analysis"
+    },
+    {
+      "id": "literature_quality_010",
+      "question": "A poem uses the same consonant sound at the beginnings of nearby words to create a rhythmic effect. What device is this?",
+      "options": [
+        "Paradox",
+        "Alliteration",
+        "Personification",
+        "Hyperbole"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "poetry",
+      "type": "recognition"
+    },
+    {
+      "id": "literature_quality_011",
+      "question": "A character's actions contradict what they claim to believe, and the contradiction drives the plot. What does this create?",
+      "options": [
+        "A rhyme scheme",
+        "A change of narrator",
+        "Character conflict or irony",
+        "A setting description"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "characterization",
+      "type": "inference"
+    },
+    {
+      "id": "literature_quality_012",
+      "question": "A literary critic distinguishes between what a narrator says and what the text implies through evidence. What skill is the critic applying?",
+      "options": [
+        "Counting paragraphs",
+        "Memorizing publication dates only",
+        "Ignoring context",
+        "Close reading and inference"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "literary criticism",
+      "type": "analysis"
+    },
+    {
+      "id": "literature_quality_013",
+      "question": "Who wrote the Harry Potter series?",
+      "options": [
+        "Suzanne Collins",
+        "Roald Dahl",
+        "J. K. Rowling",
+        "C. S. Lewis"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "children's literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_014",
+      "question": "Which Persian poet composed the Shahnameh?",
+      "options": [
+        "Hafez",
+        "Saadi",
+        "Rumi",
+        "Ferdowsi"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_015",
+      "question": "Which Persian poet wrote the Gulistan and the Bustan?",
+      "options": [
+        "Ferdowsi",
+        "Nizami",
+        "Saadi",
+        "Attar"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_016",
+      "question": "Who wrote the novel A Tale of Two Cities?",
+      "options": [
+        "Thomas Hardy",
+        "William Thackeray",
+        "George Eliot",
+        "Charles Dickens"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_017",
+      "question": "Who wrote the novella The Little Prince?",
+      "options": [
+        "Victor Hugo",
+        "Albert Camus",
+        "Antoine de Saint-Exupéry",
+        "Jules Verne"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_018",
+      "question": "Who wrote The Lord of the Rings?",
+      "options": [
+        "J. R. R. Tolkien",
+        "C. S. Lewis",
+        "George R. R. Martin",
+        "T. H. White"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "fantasy",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_019",
+      "question": "Who wrote The Adventures of Tom Sawyer?",
+      "options": [
+        "Jack London",
+        "Herman Melville",
+        "Nathaniel Hawthorne",
+        "Mark Twain"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_020",
+      "question": "Which fictional detective, created by Arthur Conan Doyle, lived at 221B Baker Street?",
+      "options": [
+        "Sherlock Holmes",
+        "Hercule Poirot",
+        "Miss Marple",
+        "Philip Marlowe"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "characters",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_021",
+      "question": "Which ancient Greek storyteller is traditionally credited with fables such as The Tortoise and the Hare?",
+      "options": [
+        "Homer",
+        "Sophocles",
+        "Herodotus",
+        "Aesop"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "fables",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_022",
+      "question": "What is the name of the wizarding school that Harry Potter attends?",
+      "options": [
+        "Beauxbatons",
+        "Durmstrang",
+        "Hogwarts",
+        "Ilvermorny"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "children's literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_023",
+      "question": "Who wrote Alice's Adventures in Wonderland?",
+      "options": [
+        "Edward Lear",
+        "Kenneth Grahame",
+        "Lewis Carroll",
+        "A. A. Milne"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "children's literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_024",
+      "question": "Which Persian poet is famous for his Divan of ghazals and is often associated with Shiraz?",
+      "options": [
+        "Hafez",
+        "Ferdowsi",
+        "Nizami",
+        "Jami"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_025",
+      "question": "Who wrote the Gothic novel Frankenstein?",
+      "options": [
+        "Bram Stoker",
+        "Emily Brontë",
+        "Ann Radcliffe",
+        "Mary Shelley"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_026",
+      "question": "Who wrote The Old Man and the Sea?",
+      "options": [
+        "Ernest Hemingway",
+        "John Steinbeck",
+        "William Faulkner",
+        "F. Scott Fitzgerald"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_027",
+      "question": "Who created the character Peter Pan?",
+      "options": [
+        "J. M. Barrie",
+        "Roald Dahl",
+        "Beatrix Potter",
+        "Enid Blyton"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "children's literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_028",
+      "question": "Who wrote Charlie and the Chocolate Factory?",
+      "options": [
+        "Dr. Seuss",
+        "Roald Dahl",
+        "Lemony Snicket",
+        "Eric Carle"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "children's literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_029",
+      "question": "What is a poem with fourteen lines called?",
+      "options": [
+        "Haiku",
+        "Limerick",
+        "Ballad",
+        "Sonnet"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_030",
+      "question": "What do we call a book in which a person tells the story of his or her own life?",
+      "options": [
+        "Autobiography",
+        "Biography",
+        "Novel",
+        "Anthology"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "nonfiction",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_031",
+      "question": "From which country does the short poetic form haiku originate?",
+      "options": [
+        "Japan",
+        "China",
+        "Korea",
+        "India"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_032",
+      "question": "Who wrote Les Misérables?",
+      "options": [
+        "Alexandre Dumas",
+        "Victor Hugo",
+        "Gustave Flaubert",
+        "Honoré de Balzac"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_033",
+      "question": "What is the name of the hobbit who is the hero of The Hobbit?",
+      "options": [
+        "Frodo Baggins",
+        "Bilbo Baggins",
+        "Samwise Gamgee",
+        "Peregrin Took"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "characters",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_034",
+      "question": "Who wrote Moby-Dick?",
+      "options": [
+        "Herman Melville",
+        "Mark Twain",
+        "Edgar Allan Poe",
+        "Nathaniel Hawthorne"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_035",
+      "question": "Which Russian author wrote War and Peace?",
+      "options": [
+        "Leo Tolstoy",
+        "Fyodor Dostoevsky",
+        "Anton Chekhov",
+        "Ivan Turgenev"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_036",
+      "question": "Which two German brothers collected folk and fairy tales such as Hansel and Gretel?",
+      "options": [
+        "The Brothers Karamazov",
+        "The Brontë brothers",
+        "The Brothers Grimm",
+        "The Wright brothers"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "fairy tales",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_037",
+      "question": "Who wrote The Chronicles of Narnia?",
+      "options": [
+        "J. R. R. Tolkien",
+        "C. S. Lewis",
+        "Philip Pullman",
+        "Roald Dahl"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "children's literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_038",
+      "question": "Who wrote Little Women?",
+      "options": [
+        "Jane Austen",
+        "Harriet Beecher Stowe",
+        "Louisa May Alcott",
+        "Emily Dickinson"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_039",
+      "question": "What kind of animal is Winnie-the-Pooh?",
+      "options": [
+        "A rabbit",
+        "A bear",
+        "A donkey",
+        "A tiger"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "characters",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_040",
+      "question": "In the fairy tale Cinderella, what does she lose at the ball?",
+      "options": [
+        "A golden crown",
+        "A glass slipper",
+        "A silver necklace",
+        "A red cloak"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "fairy tales",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_041",
+      "question": "Who wrote Charlotte's Web?",
+      "options": [
+        "Beverly Cleary",
+        "Roald Dahl",
+        "Judy Blume",
+        "E. B. White"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "children's literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_042",
+      "question": "What do we call the main character of a story?",
+      "options": [
+        "Antagonist",
+        "Protagonist",
+        "Narrator only",
+        "Editor"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "literary terms",
+      "type": "concept"
+    },
+    {
+      "id": "literature_quality_043",
+      "question": "Who wrote The Diary of a Young Girl, recording her years in hiding during World War II?",
+      "options": [
+        "Helen Keller",
+        "Malala Yousafzai",
+        "Marie Curie",
+        "Anne Frank"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "nonfiction",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_044",
+      "question": "Which Persian poet is famous for his quatrains called the Rubaiyat?",
+      "options": [
+        "Saadi",
+        "Rumi",
+        "Hafez",
+        "Omar Khayyam"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_045",
+      "question": "Which Persian poet wrote the Masnavi, a long spiritual poem in six books?",
+      "options": [
+        "Attar",
+        "Rumi",
+        "Jami",
+        "Ferdowsi"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_046",
+      "question": "What is the name of the great lion in The Chronicles of Narnia?",
+      "options": [
+        "Simba",
+        "Mufasa",
+        "Aslan",
+        "Scar"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "characters",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_047",
+      "question": "What is the name of Dorothy's dog in The Wonderful Wizard of Oz?",
+      "options": [
+        "Rex",
+        "Toto",
+        "Buster",
+        "Pongo"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "characters",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_048",
+      "question": "Which author created Mowgli, the boy raised by wolves in The Jungle Book?",
+      "options": [
+        "Rudyard Kipling",
+        "Robert Louis Stevenson",
+        "Charles Kingsley",
+        "H. Rider Haggard"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "characters",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_049",
+      "question": "Who wrote the adventure novel Treasure Island?",
+      "options": [
+        "Daniel Defoe",
+        "Jonathan Swift",
+        "Robert Louis Stevenson",
+        "Joseph Conrad"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_050",
+      "question": "Who wrote The Great Gatsby?",
+      "options": [
+        "Ernest Hemingway",
+        "John Steinbeck",
+        "William Faulkner",
+        "F. Scott Fitzgerald"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_051",
+      "question": "Who wrote The Catcher in the Rye?",
+      "options": [
+        "Jack Kerouac",
+        "Kurt Vonnegut",
+        "J. D. Salinger",
+        "Harper Lee"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_052",
+      "question": "Who wrote To Kill a Mockingbird?",
+      "options": [
+        "Toni Morrison",
+        "Maya Angelou",
+        "Harper Lee",
+        "Flannery O'Connor"
+      ],
+      "answer": 2,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_053",
+      "question": "Who wrote the picture book The Gruffalo?",
+      "options": [
+        "Julia Donaldson",
+        "Roald Dahl",
+        "Eric Carle",
+        "Michael Rosen"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "children's literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_054",
+      "question": "Which Swedish author created Pippi Longstocking?",
+      "options": [
+        "Selma Lagerlöf",
+        "Tove Jansson",
+        "Hans Christian Andersen",
+        "Astrid Lindgren"
+      ],
+      "answer": 3,
+      "difficulty": "easy",
+      "topic": "children's literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_055",
+      "question": "Which Danish author wrote The Ugly Duckling and The Little Mermaid?",
+      "options": [
+        "The Brothers Grimm",
+        "Hans Christian Andersen",
+        "Charles Perrault",
+        "Astrid Lindgren"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "fairy tales",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_056",
+      "question": "Who wrote the novel The Alchemist?",
+      "options": [
+        "Gabriel García Márquez",
+        "Paulo Coelho",
+        "Isabel Allende",
+        "Jorge Luis Borges"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_057",
+      "question": "Who wrote The Hunger Games trilogy?",
+      "options": [
+        "Veronica Roth",
+        "Suzanne Collins",
+        "Stephenie Meyer",
+        "J. K. Rowling"
+      ],
+      "answer": 1,
+      "difficulty": "easy",
+      "topic": "young adult fiction",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_058",
+      "question": "Who wrote and illustrated The Cat in the Hat under a famous pen name?",
+      "options": [
+        "Dr. Seuss",
+        "Eric Carle",
+        "Maurice Sendak",
+        "Shel Silverstein"
+      ],
+      "answer": 0,
+      "difficulty": "easy",
+      "topic": "children's literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_059",
+      "question": "Which Iranian writer is the author of the novel The Blind Owl?",
+      "options": [
+        "Bozorg Alavi",
+        "Jalal Al-e Ahmad",
+        "Sadegh Hedayat",
+        "Sadeq Chubak"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_060",
+      "question": "Which Iranian poet wrote the collection Tavallodi Digar (Another Birth)?",
+      "options": [
+        "Forough Farrokhzad",
+        "Simin Behbahani",
+        "Parvin E'tesami",
+        "Sohrab Sepehri"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_061",
+      "question": "Which poet is widely regarded as the father of modern Persian poetry, known for pioneering free verse?",
+      "options": [
+        "Ahmad Shamlou",
+        "Nima Yooshij",
+        "Mehdi Akhavan-Sales",
+        "Fereydoon Moshiri"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_062",
+      "question": "Which hero of the Shahnameh is the great champion of Zabulistan and Sistan?",
+      "options": [
+        "Esfandiyar",
+        "Rostam",
+        "Siavash",
+        "Kaveh"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_063",
+      "question": "Approximately how many couplets does the Shahnameh contain?",
+      "options": [
+        "About 5,000",
+        "About 20,000",
+        "About 50,000",
+        "About 200,000"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "Persian literature",
+      "type": "recognition"
+    },
+    {
+      "id": "literature_quality_064",
+      "question": "Which Persian poet wrote The Conference of the Birds (Mantiq al-Tayr)?",
+      "options": [
+        "Saadi",
+        "Jami",
+        "Attar of Nishapur",
+        "Nasir Khusraw"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_065",
+      "question": "Which Persian poet from Ganja composed the Khamsa, or Five Treasures?",
+      "options": [
+        "Nizami Ganjavi",
+        "Amir Khusrau",
+        "Khaqani",
+        "Anvari"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_066",
+      "question": "Who wrote Crime and Punishment?",
+      "options": [
+        "Fyodor Dostoevsky",
+        "Leo Tolstoy",
+        "Nikolai Gogol",
+        "Ivan Turgenev"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_067",
+      "question": "Who wrote One Hundred Years of Solitude?",
+      "options": [
+        "Gabriel García Márquez",
+        "Mario Vargas Llosa",
+        "Julio Cortázar",
+        "Isabel Allende"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_068",
+      "question": "Who wrote The Metamorphosis, in which Gregor Samsa wakes up transformed into a giant insect?",
+      "options": [
+        "Thomas Mann",
+        "Hermann Hesse",
+        "Robert Musil",
+        "Franz Kafka"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_069",
+      "question": "Who wrote Wuthering Heights?",
+      "options": [
+        "Charlotte Brontë",
+        "Anne Brontë",
+        "George Eliot",
+        "Emily Brontë"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_070",
+      "question": "Who wrote Jane Eyre?",
+      "options": [
+        "Emily Brontë",
+        "Elizabeth Gaskell",
+        "Jane Austen",
+        "Charlotte Brontë"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_071",
+      "question": "Who wrote The Picture of Dorian Gray?",
+      "options": [
+        "Oscar Wilde",
+        "Bram Stoker",
+        "Robert Louis Stevenson",
+        "George Bernard Shaw"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_072",
+      "question": "Who wrote Brave New World?",
+      "options": [
+        "Aldous Huxley",
+        "George Orwell",
+        "Ray Bradbury",
+        "H. G. Wells"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_073",
+      "question": "Who wrote The Count of Monte Cristo?",
+      "options": [
+        "Victor Hugo",
+        "Alexandre Dumas",
+        "Honoré de Balzac",
+        "Stendhal"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_074",
+      "question": "Who wrote Madame Bovary?",
+      "options": [
+        "Émile Zola",
+        "Gustave Flaubert",
+        "Guy de Maupassant",
+        "Marcel Proust"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_075",
+      "question": "Who wrote the novel The Stranger (L'Étranger)?",
+      "options": [
+        "Jean-Paul Sartre",
+        "Albert Camus",
+        "André Gide",
+        "Simone de Beauvoir"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_076",
+      "question": "Who wrote the poem The Waste Land?",
+      "options": [
+        "Ezra Pound",
+        "W. B. Yeats",
+        "T. S. Eliot",
+        "Wallace Stevens"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_077",
+      "question": "Who wrote the poetry collection Leaves of Grass?",
+      "options": [
+        "Emily Dickinson",
+        "Robert Frost",
+        "Walt Whitman",
+        "Henry Wadsworth Longfellow"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_078",
+      "question": "Who wrote the poem The Raven?",
+      "options": [
+        "Robert Frost",
+        "Lord Byron",
+        "John Keats",
+        "Edgar Allan Poe"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_079",
+      "question": "Which ancient Greek playwright wrote Oedipus Rex?",
+      "options": [
+        "Sophocles",
+        "Euripides",
+        "Aeschylus",
+        "Aristophanes"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "drama",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_080",
+      "question": "Who wrote Things Fall Apart?",
+      "options": [
+        "Wole Soyinka",
+        "Ngũgĩ wa Thiong'o",
+        "Chinua Achebe",
+        "Chimamanda Ngozi Adichie"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_081",
+      "question": "What is the traditional syllable pattern of a haiku?",
+      "options": [
+        "3–5–3",
+        "7–5–7",
+        "5–7–5",
+        "6–6–6"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "poetry",
+      "type": "concept"
+    },
+    {
+      "id": "literature_quality_082",
+      "question": "How many syllables are in a line of iambic pentameter?",
+      "options": [
+        "Eight",
+        "Twelve",
+        "Ten",
+        "Fourteen"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "poetry",
+      "type": "concept"
+    },
+    {
+      "id": "literature_quality_083",
+      "question": "What do we call a story in which characters and events symbolize abstract ideas such as virtue or greed?",
+      "options": [
+        "Allegory",
+        "Satire",
+        "Epigraph",
+        "Soliloquy"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "literary devices",
+      "type": "concept"
+    },
+    {
+      "id": "literature_quality_084",
+      "question": "Which of these phrases is an example of an oxymoron?",
+      "options": [
+        "Deafening silence",
+        "Silent night",
+        "Bright light",
+        "Loud noise"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "literary devices",
+      "type": "classification"
+    },
+    {
+      "id": "literature_quality_085",
+      "question": "What is a bildungsroman?",
+      "options": [
+        "A poem about nature",
+        "A play performed without dialogue",
+        "A novel about a character's growth from youth to adulthood",
+        "A collection of letters"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "literary forms",
+      "type": "concept"
+    },
+    {
+      "id": "literature_quality_086",
+      "question": "What is it called when human qualities are given to animals, objects, or ideas?",
+      "options": [
+        "Simile",
+        "Personification",
+        "Alliteration",
+        "Onomatopoeia"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "literary devices",
+      "type": "concept"
+    },
+    {
+      "id": "literature_quality_087",
+      "question": "What do we call a short story that teaches a moral lesson, often featuring animals as characters?",
+      "options": [
+        "Novella",
+        "Fable",
+        "Epic",
+        "Elegy"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "literary forms",
+      "type": "concept"
+    },
+    {
+      "id": "literature_quality_088",
+      "question": "Which author created the detective Hercule Poirot?",
+      "options": [
+        "Dorothy L. Sayers",
+        "Arthur Conan Doyle",
+        "Ngaio Marsh",
+        "Agatha Christie"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_089",
+      "question": "Who wrote the Divine Comedy?",
+      "options": [
+        "Petrarch",
+        "Dante Alighieri",
+        "Giovanni Boccaccio",
+        "Virgil"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_090",
+      "question": "Who wrote the epic poem Paradise Lost?",
+      "options": [
+        "John Donne",
+        "John Milton",
+        "Edmund Spenser",
+        "William Blake"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_091",
+      "question": "Who wrote The Canterbury Tales?",
+      "options": [
+        "William Langland",
+        "Geoffrey Chaucer",
+        "John Gower",
+        "Thomas Malory"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_092",
+      "question": "Which Romantic poet wrote Ode to a Nightingale?",
+      "options": [
+        "Lord Byron",
+        "John Keats",
+        "Percy Bysshe Shelley",
+        "William Wordsworth"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_093",
+      "question": "Who wrote the science fiction novel Dune?",
+      "options": [
+        "Frank Herbert",
+        "Isaac Asimov",
+        "Arthur C. Clarke",
+        "Philip K. Dick"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "science fiction",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_094",
+      "question": "Who wrote Fahrenheit 451?",
+      "options": [
+        "Isaac Asimov",
+        "Robert Heinlein",
+        "Kurt Vonnegut",
+        "Ray Bradbury"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "science fiction",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_095",
+      "question": "Who wrote Slaughterhouse-Five?",
+      "options": [
+        "Joseph Heller",
+        "Thomas Pynchon",
+        "Kurt Vonnegut",
+        "Philip Roth"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_096",
+      "question": "Who wrote Beloved, which won the Pulitzer Prize in 1988?",
+      "options": [
+        "Alice Walker",
+        "Maya Angelou",
+        "Zora Neale Hurston",
+        "Toni Morrison"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_097",
+      "question": "Who wrote Midnight's Children?",
+      "options": [
+        "Arundhati Roy",
+        "Salman Rushdie",
+        "V. S. Naipaul",
+        "Vikram Seth"
+      ],
+      "answer": 1,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_098",
+      "question": "Who wrote The Kite Runner?",
+      "options": [
+        "Orhan Pamuk",
+        "Salman Rushdie",
+        "Amin Maalouf",
+        "Khaled Hosseini"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_099",
+      "question": "Who wrote and illustrated the graphic memoir Persepolis?",
+      "options": [
+        "Azar Nafisi",
+        "Shirin Neshat",
+        "Simin Daneshvar",
+        "Marjane Satrapi"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "graphic novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_100",
+      "question": "Who wrote Gone with the Wind?",
+      "options": [
+        "Margaret Mitchell",
+        "Harper Lee",
+        "Pearl S. Buck",
+        "Edith Wharton"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_101",
+      "question": "Who wrote The Grapes of Wrath?",
+      "options": [
+        "John Steinbeck",
+        "Ernest Hemingway",
+        "Sinclair Lewis",
+        "Upton Sinclair"
+      ],
+      "answer": 0,
+      "difficulty": "medium",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_102",
+      "question": "What do we call a story told within another story, as in One Thousand and One Nights?",
+      "options": [
+        "Prologue",
+        "Flashback",
+        "Epilogue",
+        "Frame story"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "literary forms",
+      "type": "concept"
+    },
+    {
+      "id": "literature_quality_103",
+      "question": "Which collection of Middle Eastern and South Asian folk tales is framed by the storyteller Scheherazade?",
+      "options": [
+        "The Panchatantra",
+        "Kalila and Dimna",
+        "One Thousand and One Nights",
+        "The Canterbury Tales"
+      ],
+      "answer": 2,
+      "difficulty": "medium",
+      "topic": "folk literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_104",
+      "question": "Who wrote the play Waiting for Godot?",
+      "options": [
+        "Harold Pinter",
+        "Eugène Ionesco",
+        "Tom Stoppard",
+        "Samuel Beckett"
+      ],
+      "answer": 3,
+      "difficulty": "medium",
+      "topic": "drama",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_105",
+      "question": "Which Seljuk vizier wrote the Siyasatnama, a classic Persian book on statecraft?",
+      "options": [
+        "Khwaja Abdullah Ansari",
+        "Rashid al-Din Hamadani",
+        "Abu'l-Fazl Bayhaqi",
+        "Nizam al-Mulk"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_106",
+      "question": "Who wrote Tarikh-e Bayhaqi, a landmark of classical Persian prose history?",
+      "options": [
+        "Ata-Malik Juvayni",
+        "Abu'l-Fazl Bayhaqi",
+        "Hamdallah Mustawfi",
+        "Minhaj al-Siraj"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_107",
+      "question": "Which Iranian author wrote the novel Savushun?",
+      "options": [
+        "Forough Farrokhzad",
+        "Simin Daneshvar",
+        "Shahrnush Parsipur",
+        "Moniru Ravanipur"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_108",
+      "question": "Which Iranian novelist wrote the multi-volume novel Kelidar?",
+      "options": [
+        "Ali-Mohammad Afghani",
+        "Houshang Golshiri",
+        "Mahmoud Dolatabadi",
+        "Gholam-Hossein Saedi"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_109",
+      "question": "Who wrote the 1921 short-story collection Yeki Bud Yeki Nabud (Once Upon a Time), often seen as a beginning of modern Persian short fiction?",
+      "options": [
+        "Sadegh Hedayat",
+        "Mohammad-Ali Jamalzadeh",
+        "Bozorg Alavi",
+        "Jalal Al-e Ahmad"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_110",
+      "question": "Which 11th-century poet composed the romance Vis and Ramin?",
+      "options": [
+        "Ferdowsi",
+        "Fakhruddin As'ad Gurgani",
+        "Nizami Ganjavi",
+        "Asadi Tusi"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_111",
+      "question": "Which Iranian poet wrote the long poem Hasht Ketab (Eight Books)?",
+      "options": [
+        "Ahmad Shamlou",
+        "Mehdi Akhavan-Sales",
+        "Houshang Ebtehaj",
+        "Sohrab Sepehri"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "Persian literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_112",
+      "question": "Who wrote Ulysses, a 1922 novel that follows one day in Dublin?",
+      "options": [
+        "Samuel Beckett",
+        "W. B. Yeats",
+        "James Joyce",
+        "Oscar Wilde"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_113",
+      "question": "Who wrote In Search of Lost Time?",
+      "options": [
+        "André Gide",
+        "Gustave Flaubert",
+        "Marcel Pagnol",
+        "Marcel Proust"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_114",
+      "question": "Who wrote The Sound and the Fury?",
+      "options": [
+        "Ernest Hemingway",
+        "F. Scott Fitzgerald",
+        "William Faulkner",
+        "Flannery O'Connor"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_115",
+      "question": "Who wrote Heart of Darkness?",
+      "options": [
+        "Joseph Conrad",
+        "Rudyard Kipling",
+        "Henry James",
+        "D. H. Lawrence"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_116",
+      "question": "Which Russian author wrote The Master and Margarita?",
+      "options": [
+        "Mikhail Bulgakov",
+        "Boris Pasternak",
+        "Vladimir Nabokov",
+        "Nikolai Gogol"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_117",
+      "question": "Which author wrote Doctor Zhivago?",
+      "options": [
+        "Boris Pasternak",
+        "Aleksandr Solzhenitsyn",
+        "Mikhail Sholokhov",
+        "Maxim Gorky"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_118",
+      "question": "Who wrote the 1952 novel Invisible Man?",
+      "options": [
+        "James Baldwin",
+        "Richard Wright",
+        "Ralph Ellison",
+        "Langston Hughes"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_119",
+      "question": "Which Argentine writer wrote the story collection Ficciones?",
+      "options": [
+        "Jorge Luis Borges",
+        "Julio Cortázar",
+        "Gabriel García Márquez",
+        "Pablo Neruda"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "short stories",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_120",
+      "question": "Which Heian-era court lady is credited with writing The Tale of Genji?",
+      "options": [
+        "Sei Shōnagon",
+        "Izumi Shikibu",
+        "Murasaki Shikibu",
+        "Ono no Komachi"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "classical literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_121",
+      "question": "Who is traditionally credited as the author of the Chinese novel Dream of the Red Chamber?",
+      "options": [
+        "Cao Xueqin",
+        "Luo Guanzhong",
+        "Wu Cheng'en",
+        "Shi Nai'an"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "classical literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_122",
+      "question": "Which Bengali writer won the 1913 Nobel Prize in Literature for Gitanjali?",
+      "options": [
+        "Muhammad Iqbal",
+        "Rabindranath Tagore",
+        "Sarojini Naidu",
+        "Bankim Chandra Chatterjee"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_123",
+      "question": "Who became the first Black African to win the Nobel Prize in Literature, in 1986?",
+      "options": [
+        "Wole Soyinka",
+        "Chinua Achebe",
+        "Nadine Gordimer",
+        "Naguib Mahfouz"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "Nobel Prize",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_124",
+      "question": "Who wrote The Tin Drum?",
+      "options": [
+        "Heinrich Böll",
+        "Thomas Mann",
+        "Hermann Hesse",
+        "Günter Grass"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_125",
+      "question": "Who wrote The Magic Mountain?",
+      "options": [
+        "Hermann Hesse",
+        "Franz Kafka",
+        "Robert Musil",
+        "Thomas Mann"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_126",
+      "question": "Which Beat poet wrote Howl?",
+      "options": [
+        "Jack Kerouac",
+        "Allen Ginsberg",
+        "William S. Burroughs",
+        "Lawrence Ferlinghetti"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_127",
+      "question": "Which Portuguese writer left behind The Book of Disquiet, published after his death?",
+      "options": [
+        "José Saramago",
+        "Luís de Camões",
+        "Fernando Pessoa",
+        "Eça de Queirós"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_128",
+      "question": "Which Mexican author wrote the short novel Pedro Páramo?",
+      "options": [
+        "Carlos Fuentes",
+        "Juan Rulfo",
+        "Octavio Paz",
+        "Roberto Bolaño"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_129",
+      "question": "Which Sudanese author wrote Season of Migration to the North?",
+      "options": [
+        "Naguib Mahfouz",
+        "Ahlam Mosteghanemi",
+        "Ngũgĩ wa Thiong'o",
+        "Tayeb Salih"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_130",
+      "question": "Which Egyptian author won the 1988 Nobel Prize in Literature and wrote the Cairo Trilogy?",
+      "options": [
+        "Naguib Mahfouz",
+        "Taha Hussein",
+        "Tawfiq al-Hakim",
+        "Tayeb Salih"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "Nobel Prize",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_131",
+      "question": "Which Turkish novelist, winner of the 2006 Nobel Prize in Literature, wrote Snow and My Name Is Red?",
+      "options": [
+        "Yaşar Kemal",
+        "Elif Shafak",
+        "Nâzım Hikmet",
+        "Orhan Pamuk"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "Nobel Prize",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_132",
+      "question": "Who won the 2017 Nobel Prize in Literature?",
+      "options": [
+        "Kazuo Ishiguro",
+        "Haruki Murakami",
+        "Ian McEwan",
+        "Salman Rushdie"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "Nobel Prize",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_133",
+      "question": "Which ancient Greek comic playwright wrote Lysistrata and The Frogs?",
+      "options": [
+        "Menander",
+        "Euripides",
+        "Sophocles",
+        "Aristophanes"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "drama",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_134",
+      "question": "Which Roman poet wrote the Aeneid?",
+      "options": [
+        "Ovid",
+        "Horace",
+        "Virgil",
+        "Lucretius"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "classical literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_135",
+      "question": "Which Roman poet wrote the Metamorphoses?",
+      "options": [
+        "Ovid",
+        "Virgil",
+        "Catullus",
+        "Juvenal"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "classical literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_136",
+      "question": "Which French Renaissance writer created the giants Gargantua and Pantagruel?",
+      "options": [
+        "Michel de Montaigne",
+        "Pierre de Ronsard",
+        "François Rabelais",
+        "Molière"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "Renaissance literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_137",
+      "question": "Who wrote The Decameron, a collection of 100 tales told during a plague?",
+      "options": [
+        "Giovanni Boccaccio",
+        "Dante Alighieri",
+        "Petrarch",
+        "Geoffrey Chaucer"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "medieval literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_138",
+      "question": "Who wrote the satirical novella Candide?",
+      "options": [
+        "Jean-Jacques Rousseau",
+        "Denis Diderot",
+        "Voltaire",
+        "Montesquieu"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "Enlightenment literature",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_139",
+      "question": "Which German author wrote the dramatic work Faust?",
+      "options": [
+        "Johann Wolfgang von Goethe",
+        "Friedrich Schiller",
+        "Heinrich Heine",
+        "Rainer Maria Rilke"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_140",
+      "question": "Which Victorian poet wrote In Memoriam A.H.H. after the death of his friend Arthur Hallam?",
+      "options": [
+        "Robert Browning",
+        "Matthew Arnold",
+        "Gerard Manley Hopkins",
+        "Alfred, Lord Tennyson"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_141",
+      "question": "Which poet co-published Lyrical Ballads in 1798 with Samuel Taylor Coleridge?",
+      "options": [
+        "Lord Byron",
+        "John Keats",
+        "William Blake",
+        "William Wordsworth"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "poetry",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_142",
+      "question": "In which year was Shakespeare's First Folio published?",
+      "options": [
+        "1599",
+        "1623",
+        "1609",
+        "1642"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "drama",
+      "type": "recognition"
+    },
+    {
+      "id": "literature_quality_143",
+      "question": "Who wrote Gulliver's Travels?",
+      "options": [
+        "Daniel Defoe",
+        "Henry Fielding",
+        "Jonathan Swift",
+        "Samuel Richardson"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_144",
+      "question": "Who wrote Robinson Crusoe?",
+      "options": [
+        "Jonathan Swift",
+        "Daniel Defoe",
+        "Laurence Sterne",
+        "Tobias Smollett"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_145",
+      "question": "Who narrates the events of The Great Gatsby?",
+      "options": [
+        "Jay Gatsby",
+        "Nick Carraway",
+        "Tom Buchanan",
+        "Jordan Baker"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "characters",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_146",
+      "question": "In which Dickens novel does the character Miss Havisham appear?",
+      "options": [
+        "Great Expectations",
+        "Oliver Twist",
+        "David Copperfield",
+        "Bleak House"
+      ],
+      "answer": 0,
+      "difficulty": "hard",
+      "topic": "characters",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_147",
+      "question": "In which Shakespeare tragedy does the villain Iago appear?",
+      "options": [
+        "King Lear",
+        "Othello",
+        "Macbeth",
+        "Julius Caesar"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "drama",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_148",
+      "question": "Which family's multiple generations are chronicled in One Hundred Years of Solitude?",
+      "options": [
+        "The Karamazov family",
+        "The Buendía family",
+        "The Compson family",
+        "The Forsyte family"
+      ],
+      "answer": 1,
+      "difficulty": "hard",
+      "topic": "characters",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_149",
+      "question": "Which Tolstoy novel opens with the line about happy families all being alike?",
+      "options": [
+        "War and Peace",
+        "The Death of Ivan Ilyich",
+        "Resurrection",
+        "Anna Karenina"
+      ],
+      "answer": 3,
+      "difficulty": "hard",
+      "topic": "novels",
+      "type": "identification"
+    },
+    {
+      "id": "literature_quality_150",
+      "question": "Which musician was awarded the 2016 Nobel Prize in Literature?",
+      "options": [
+        "Leonard Cohen",
+        "Paul Simon",
+        "Bob Dylan",
+        "Joni Mitchell"
+      ],
+      "answer": 2,
+      "difficulty": "hard",
+      "topic": "Nobel Prize",
+      "type": "identification"
+    }
+  ]
+}
