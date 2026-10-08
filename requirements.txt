@@ -16,3 +16,4 @@ pytgcalls==3.0.0.dev24
 git+https://github.com/ToxygenX/floor.git
 git+https://github.com/ToxygenX/floorT.git
 nudenet
+tzdata

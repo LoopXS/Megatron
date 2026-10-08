@@ -9,26 +9,32 @@ Inline usage
 @AssisXBot time Iran
 @AssisXBot time Chicago
 @AssisXBot time New York
+@AssisXBot time Asia/Tehran
+@AssisXBot time US/Eastern
 @AssisXBot time Tehran vs Chicago
 @AssisXBot time Tehran | Tokyo
+@AssisXBot time compare London and Dubai
 
 Features
 --------
 
 • Global city / country lookup.
-• IANA timezone support (e.g. Europe/Tehran, America/Chicago).
+• IANA timezone support (e.g. Asia/Tehran, America/Chicago),
+  including common legacy aliases such as US/Eastern.
 • Exact local time with DST-aware UTC offset.
 • Time difference between two locations.
 • "Search Again" inline button under every result.
 • "Compare" button for quick two-location comparison.
-• Short-lived in-memory caches to reduce API traffic.
+• Bounded TTL/LRU caches to reduce API traffic.
 • No API key required.
 • Uses the project's existing `async_searcher` and `in_pattern`
   infrastructure; it does not create a second Telegram inline client.
 
 The geocoding provider is Open-Meteo. Its public geocoding API returns
 IANA timezone names for locations and is suitable for non-commercial use
-without an API key.
+without an API key. Country names are resolved against the static,
+keyless ISO 3166 dataset published as mledoze/countries on GitHub,
+which maps every country to its capital(s).
 """
 
 from __future__ import annotations
@@ -36,15 +42,12 @@ from __future__ import annotations
 import html
 import re
 import time
+from collections import OrderedDict
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
-from urllib.parse import quote
+from typing import Optional
 from zoneinfo import ZoneInfo
 
-from telethon import Button
-
-from . import LOGS, async_searcher
-from CythonX._misc._assistant import in_pattern
+from . import LOGS, Button, async_searcher, in_pattern
 
 
 # ============================================================================
@@ -53,22 +56,28 @@ from CythonX._misc._assistant import in_pattern
 
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 
-# Used only for country-name queries, so we can resolve a country to its
-# capital instead of accidentally selecting an unrelated city with the same
-# name. No API key is required.
-COUNTRY_URL = "https://restcountries.com/v3.1/name/{name}"
+# Static country dataset (ISO 3166 names, capitals and alternative
+# spellings) used to resolve a country query to its capital. No API
+# key is required and the data changes rarely, so it is only fetched
+# once a day.
+COUNTRIES_DATA_URL = (
+    "https://raw.githubusercontent.com/mledoze/countries/master/countries.json"
+)
+COUNTRY_DATA_TTL = 86400
 
-CACHE_TTL = 600
+CACHE_TTL = 600  # successful lookups are cached for 10 minutes
+NEGATIVE_TTL = 60  # failed lookups are retried after 1 minute
+CACHE_MAX_SIZE = 256  # hard bound on cached entries per cache
 MAX_QUERY_LENGTH = 100
 MAX_RESULTS = 5
-
-_GEOCODE_CACHE: Dict[str, Tuple[float, List[dict]]] = {}
-_COUNTRY_CACHE: Dict[str, Tuple[float, List[dict]]] = {}
+MAX_TITLE_LENGTH = 255  # Telegram inline result title limit
+BUTTON_QUERY_LIMIT = 48  # keep switch_inline queries comfortably short
 
 
 # ============================================================================
 # SMALL, SAFE HELPERS
 # ============================================================================
+
 
 def _clean(value: object, limit: int = 160) -> str:
     """Return a bounded, single-line Telegram-safe string."""
@@ -115,9 +124,130 @@ def _ordinal_offset(seconds: int) -> str:
     return " ".join(parts)
 
 
+# ============================================================================
+# TIMEZONE NAMING
+# ============================================================================
+
+# Abbreviations that are unambiguous across regions.
+_UNAMBIGUOUS_ZONES = {
+    "ACDT": "Australian Central Daylight Time",
+    "ACST": "Australian Central Standard Time",
+    "AEDT": "Australian Eastern Daylight Time",
+    "AEST": "Australian Eastern Standard Time",
+    "AKDT": "Alaska Daylight Time",
+    "AKST": "Alaska Standard Time",
+    "ART": "Argentina Standard Time",
+    "AWST": "Australian Western Standard Time",
+    "AZT": "Azerbaijan Time",
+    "BRT": "Brasilia Standard Time",
+    "CAT": "Central Africa Time",
+    "CEST": "Central European Summer Time",
+    "CET": "Central European Time",
+    "CLST": "Chile Summer Time",
+    "CLT": "Chile Standard Time",
+    "CVT": "Cape Verde Time",
+    "EAT": "East Africa Time",
+    "EDT": "Eastern Daylight Time",
+    "EEST": "Eastern European Summer Time",
+    "EET": "Eastern European Time",
+    "EST": "Eastern Standard Time",
+    "GET": "Georgia Standard Time",
+    "GMT": "Greenwich Mean Time",
+    "GST": "Gulf Standard Time",
+    "HKT": "Hong Kong Time",
+    "HST": "Hawaii Standard Time",
+    "ICT": "Indochina Time",
+    "IDT": "Israel Daylight Time",
+    "IRST": "Iran Standard Time",
+    "JST": "Japan Standard Time",
+    "KST": "Korea Standard Time",
+    "MDT": "Mountain Daylight Time",
+    "MSK": "Moscow Standard Time",
+    "MST": "Mountain Standard Time",
+    "MYT": "Malaysia Time",
+    "NPT": "Nepal Time",
+    "NST": "Newfoundland Standard Time",
+    "NZDT": "New Zealand Daylight Time",
+    "NZST": "New Zealand Standard Time",
+    "PDT": "Pacific Daylight Time",
+    "PHT": "Philippine Time",
+    "PKT": "Pakistan Standard Time",
+    "PST": "Pacific Standard Time",
+    "SAST": "South Africa Standard Time",
+    "SGT": "Singapore Time",
+    "UZT": "Uzbekistan Time",
+    "WEST": "Western European Summer Time",
+    "WET": "Western European Time",
+    "WIT": "Western Indonesian Time",
+}
+
+# Country/zone hints that identify the Arabian (UTC+3) "AST" zones as
+# opposed to the Canadian/Greenlandian Atlantic "AST" zones.
+_ARABIA_HINTS = ("saudi", "yemen", "kuwait", "bahrain", "qatar", "iraq", "arabia")
+
+# POSIX-style tznames such as "+0330" are offsets, not abbreviations.
+_POSIX_TZNAME = re.compile(r"^[+-]\d{2,4}$")
+
+
+def _disambiguate(
+    abbreviation: str,
+    zone_name: str,
+    country: str,
+) -> Optional[str]:
+    """
+    Several regions share these abbreviations; pick the right one
+    using the country name and the IANA zone as hints.
+    """
+    country_l = (country or "").casefold()
+    zone_l = (zone_name or "").lower()
+
+    if abbreviation == "IST":
+        if "india" in country_l or zone_l in {"asia/kolkata", "asia/calcutta"}:
+            return "India Standard Time"
+        if "israel" in country_l or "jerusalem" in zone_l:
+            return "Israel Standard Time"
+        return "Irish Standard Time"
+
+    if abbreviation == "BST":
+        if "bangladesh" in country_l or "dhaka" in zone_l:
+            return "Bangladesh Standard Time"
+        if "bhutan" in country_l or "thimphu" in zone_l:
+            return "Bhutan Standard Time"
+        return "British Summer Time"
+
+    if abbreviation == "CST":
+        if "china" in country_l or "shanghai" in zone_l:
+            return "China Standard Time"
+        if "cuba" in country_l or "havana" in zone_l:
+            return "Cuba Standard Time"
+        return "Central Standard Time"
+
+    if abbreviation == "CDT":
+        if "cuba" in country_l or "havana" in zone_l:
+            return "Cuba Daylight Time"
+        return "Central Daylight Time"
+
+    if abbreviation == "AST":
+        if any(hint in country_l for hint in _ARABIA_HINTS):
+            return "Arabia Standard Time"
+        return "Atlantic Standard Time"
+
+    if abbreviation == "ADT":
+        return "Atlantic Daylight Time"
+
+    if abbreviation == "AMT":
+        if "armenia" in country_l or "yerevan" in zone_l:
+            return "Armenia Standard Time"
+        if "brazil" in country_l or "manaus" in zone_l:
+            return "Amazon Time"
+        return "Armenia Standard Time"
+
+    return None
+
+
 def _timezone_display_name(
     zone_name: str,
-    abbreviation: str,
+    abbreviation: Optional[str],
     country: str,
 ) -> str:
     """
@@ -127,55 +257,49 @@ def _timezone_display_name(
     localized long name. Common abbreviations are expanded here; other
     zones use the country name as a stable fallback.
     """
-    names = {
-        "EST": "Eastern Standard Time",
-        "EDT": "Eastern Daylight Time",
-        "CST": "Central Standard Time",
-        "CDT": "Central Daylight Time",
-        "MST": "Mountain Standard Time",
-        "MDT": "Mountain Daylight Time",
-        "PST": "Pacific Standard Time",
-        "PDT": "Pacific Daylight Time",
-        "AKST": "Alaska Standard Time",
-        "AKDT": "Alaska Daylight Time",
-        "HST": "Hawaii Standard Time",
-        "GMT": "Greenwich Mean Time",
-        "BST": "British Summer Time",
-        "CET": "Central European Time",
-        "CEST": "Central European Summer Time",
-        "EET": "Eastern European Time",
-        "EEST": "Eastern European Summer Time",
-        "WET": "Western European Time",
-        "WEST": "Western European Summer Time",
-        "IST": (
-            "India Standard Time"
-            if country.casefold() == "india"
-            else "Irish Standard Time"
-        ),
-        "JST": "Japan Standard Time",
-        "KST": "Korea Standard Time",
-        "AEST": "Australian Eastern Standard Time",
-        "AEDT": "Australian Eastern Daylight Time",
-        "ACST": "Australian Central Standard Time",
-        "ACDT": "Australian Central Daylight Time",
-        "AWST": "Australian Western Standard Time",
-        "NZST": "New Zealand Standard Time",
-        "NZDT": "New Zealand Daylight Time",
-    }
-
-    if abbreviation in names:
-        return names[abbreviation]
+    if abbreviation:
+        name = _disambiguate(abbreviation, zone_name, country)
+        if name:
+            return name
+        name = _UNAMBIGUOUS_ZONES.get(abbreviation)
+        if name:
+            return name
 
     if country:
         return f"{_clean(country, 60)} Time"
 
-    leaf = zone_name.rsplit("/", 1)[-1].replace("_", " ")
-    return f"{leaf} Time"
+    leaf = (zone_name or "").rsplit("/", 1)[-1].replace("_", " ")
+    return f"{leaf} Time" if leaf else "Local Time"
+
+
+def _zone_abbreviation(now: datetime) -> Optional[str]:
+    """
+    Return the timezone abbreviation, or None when the host's tzdata
+    only provides a POSIX-style offset string such as "+0330".
+    """
+    abbreviation = now.tzname()
+    if not abbreviation or _POSIX_TZNAME.match(abbreviation):
+        return None
+    return abbreviation
+
+
+def _zone_line(zone_name: str, abbreviation: Optional[str], offset_seconds: int) -> str:
+    """Render the timezone/abbreviation/offset block shared by both layouts."""
+    if abbreviation:
+        return (
+            f"🗺️ <code>{_esc(zone_name, 100)}</code> · "
+            f"<code>{_esc(abbreviation, 30)}</code> · "
+            f"<code>{_fmt_offset(offset_seconds)}</code>"
+        )
+    return f"🗺️ <code>{_esc(zone_name, 100)}</code> · <code>{_fmt_offset(offset_seconds)}</code>"
 
 
 def _location_label(location: dict) -> str:
-    """Build 'City, Admin, Country' without duplicated fields."""
-    parts: List[str] = []
+    """Build 'City, Admin, Country' (or the IANA zone) without duplicates."""
+    if location.get("_direct_timezone"):
+        return _clean(location.get("timezone"), 100)
+
+    parts: list[str] = []
 
     for key in ("name", "admin1", "country"):
         value = _clean(location.get(key), 70)
@@ -186,7 +310,10 @@ def _location_label(location: dict) -> str:
 
 
 def _location_title(location: dict) -> str:
-    """Build a compact city/country title."""
+    """Build a compact city/country title (or the IANA zone)."""
+    if location.get("_direct_timezone"):
+        return _clean(location.get("timezone"), 60)
+
     city = _clean(location.get("name"), 60)
     country = _clean(
         location.get("_queried_country") or location.get("country"),
@@ -199,18 +326,91 @@ def _location_title(location: dict) -> str:
     return city or country or "Unknown Location"
 
 
-def _is_expired(
-    entry: Optional[Tuple[float, object]],
-    ttl: int,
-) -> bool:
-    return not entry or (time.time() - entry[0] >= ttl)
+# ============================================================================
+# BOUNDED TTL/LRU CACHE
+# ============================================================================
+
+
+class _TTLCache:
+    """
+    Bounded TTL cache with LRU eviction.
+
+    The bot runs on a single asyncio loop, so plain dicts are safe
+    here; the bound keeps long-running deployments from growing
+    without limit as distinct queries accumulate.
+    """
+
+    def __init__(self, ttl: int, maxsize: int = CACHE_MAX_SIZE) -> None:
+        self._ttl = ttl
+        self._maxsize = maxsize
+        self._data: OrderedDict[str, tuple[float, object]] = OrderedDict()
+
+    def get(self, key: str) -> Optional[object]:
+        entry = self._data.get(key)
+        if entry is None:
+            return None
+
+        expires_at, value = entry
+        if time.time() >= expires_at:
+            self._data.pop(key, None)
+            return None
+
+        self._data.move_to_end(key)
+        return value
+
+    def set(self, key: str, value: object, ttl: Optional[int] = None) -> None:
+        self._data[key] = (time.time() + (ttl if ttl is not None else self._ttl), value)
+        self._data.move_to_end(key)
+
+        while len(self._data) > self._maxsize:
+            self._data.popitem(last=False)
+
+    def evict_expired(self) -> None:
+        now = time.time()
+        expired = [
+            key for key, (expires_at, _) in self._data.items() if now >= expires_at
+        ]
+        for key in expired:
+            self._data.pop(key, None)
+
+    def clear(self) -> None:
+        self._data.clear()
+
+
+_GEOCODE_CACHE = _TTLCache(CACHE_TTL)
+_COUNTRY_CACHE = _TTLCache(CACHE_TTL)
+_COUNTRY_DATA_CACHE = _TTLCache(COUNTRY_DATA_TTL)
 
 
 # ============================================================================
 # LOCATION LOOKUP
 # ============================================================================
 
-async def _geocode(query: str) -> List[dict]:
+# Legacy IANA aliases that may be missing from reduced system tzdata
+# (slim Docker images, Termux, ...). Only consulted for explicit
+# slash-based or UTC-like queries, so bare country names such as
+# "Iran" still reach the country resolver first.
+_LEGACY_ZONE_ALIASES = {
+    "uct": "UTC",
+    "gmt0": "Etc/GMT",
+    "us/eastern": "America/New_York",
+    "us/central": "America/Chicago",
+    "us/mountain": "America/Denver",
+    "us/pacific": "America/Los_Angeles",
+    "us/alaska": "America/Anchorage",
+    "us/hawaii": "Pacific/Honolulu",
+    "us/arizona": "America/Phoenix",
+    "us/michigan": "America/Detroit",
+    "us/indiana": "America/Indiana/Indianapolis",
+}
+
+
+def _looks_like_timezone(query: str) -> bool:
+    """Heuristic for queries that are meant as IANA timezones."""
+    return "/" in query or query.upper() in {"UTC", "GMT", "UCT", "GMT0"}
+
+
+async def _geocode(query: str) -> list[dict]:
     """
     Resolve a city/place to an Open-Meteo location.
 
@@ -233,8 +433,8 @@ async def _geocode(query: str) -> List[dict]:
     key = query.casefold()
     cached = _GEOCODE_CACHE.get(key)
 
-    if not _is_expired(cached, CACHE_TTL):
-        return cached[1]
+    if cached is not None:
+        return cached  # type: ignore[return-value]
 
     data = await async_searcher(
         GEOCODING_URL,
@@ -247,7 +447,6 @@ async def _geocode(query: str) -> List[dict]:
             "name": query,
             "count": MAX_RESULTS,
             "language": "en",
-            "format": "json",
         },
     )
 
@@ -264,58 +463,111 @@ async def _geocode(query: str) -> List[dict]:
         and item.get("name")
     ]
 
-    _GEOCODE_CACHE[key] = (time.time(), results)
+    _GEOCODE_CACHE.set(key, results)
     return results
 
 
-async def _country_capital(country_query: str) -> List[dict]:
+async def _load_country_dataset() -> list[dict]:
     """
-    Resolve a country name to its capital.
+    Fetch the static country dataset (at most once a day).
 
-    Country lookup is a second-stage resolver. Normal city searches remain
-    entirely handled by Open-Meteo.
+    The dataset is a plain JSON list of ISO 3166 entries with
+    common/official names, alternative spellings and capitals.
     """
-    query = _clean(country_query, MAX_QUERY_LENGTH).strip()
-    if not query:
-        return []
+    cached = _COUNTRY_DATA_CACHE.get("dataset")
 
-    key = query.casefold()
-    cached = _COUNTRY_CACHE.get(key)
-
-    if not _is_expired(cached, CACHE_TTL):
-        return cached[1]
-
-    url = COUNTRY_URL.format(name=quote(query, safe=""))
+    if cached is not None:
+        return cached  # type: ignore[return-value]
 
     try:
         data = await async_searcher(
-            url,
+            COUNTRIES_DATA_URL,
             headers={
                 "Accept": "application/json",
                 "User-Agent": "Megatron-Time-Plugin/1.0",
             },
             re_json=True,
+            retries=2,
         )
     except Exception:
-        _COUNTRY_CACHE[key] = (time.time(), [])
+        # A transient outage must not block country resolution
+        # for the whole TTL, so failures are retried after a
+        # minute and the plain geocoder takes over meanwhile.
+        _COUNTRY_DATA_CACHE.set("dataset", [], ttl=NEGATIVE_TTL)
         return []
 
     if not isinstance(data, list):
-        data = []
+        _COUNTRY_DATA_CACHE.set("dataset", [], ttl=NEGATIVE_TTL)
+        return []
 
-    candidates: List[dict] = []
+    _COUNTRY_DATA_CACHE.set("dataset", data)
+    return data
 
-    for country in data[:5]:
-        if not isinstance(country, dict):
+
+def _match_countries(dataset: list[dict], query: str) -> list[dict]:
+    """
+    Match a country query against the static dataset.
+
+    Priority: exact common name, alternative spelling
+    (e.g. "USA", "UK"), official name, then fuzzy matches.
+    """
+    if not dataset:
+        return []
+
+    exact: list[dict] = []
+    alt: list[dict] = []
+    official: list[dict] = []
+    fuzzy: list[dict] = []
+
+    for entry in dataset:
+        if not isinstance(entry, dict):
             continue
 
-        capitals = country.get("capital")
-        if not isinstance(capitals, list):
+        name = entry.get("name")
+        if not isinstance(name, dict):
             continue
 
-        country_name = country.get("name") or {}
-        if not isinstance(country_name, dict):
-            country_name = {}
+        common = _clean(name.get("common"), 80)
+
+        if not common:
+            continue
+
+        common_l = common.casefold()
+
+        if common_l == query:
+            exact.append(entry)
+            continue
+
+        alt_spellings = entry.get("altSpellings")
+
+        if isinstance(alt_spellings, list) and any(
+            _clean(spelling, 80).casefold() == query
+            for spelling in alt_spellings
+        ):
+            alt.append(entry)
+            continue
+
+        if _clean(name.get("official"), 120).casefold() == query:
+            official.append(entry)
+            continue
+
+        if query in common_l or common_l.startswith(query):
+            fuzzy.append(entry)
+
+    matches = (exact or alt or official or fuzzy)[:3]
+
+    candidates: list[dict] = []
+
+    for entry in matches:
+        capitals = entry.get("capital")
+
+        if not isinstance(capitals, list) or not capitals:
+            continue
+
+        country_name = _clean(
+            (entry.get("name") or {}).get("common"),
+            80,
+        )
 
         for capital in capitals[:2]:
             capital = _clean(capital, 80)
@@ -326,23 +578,44 @@ async def _country_capital(country_query: str) -> List[dict]:
             candidates.append(
                 {
                     "capital": capital,
-                    "country": _clean(
-                        country_name.get("common"),
-                        80,
-                    ),
+                    "country": country_name,
                 }
             )
 
-    _COUNTRY_CACHE[key] = (time.time(), candidates)
     return candidates
 
 
-async def resolve_locations(query: str) -> List[dict]:
+async def _country_candidates(country_query: str) -> list[dict]:
+    """
+    Resolve a country name to its capital(s).
+
+    Country lookup is a second-stage resolver. Normal city
+    searches remain entirely handled by Open-Meteo.
+    """
+    query = _clean(country_query, MAX_QUERY_LENGTH).strip()
+
+    if not query:
+        return []
+
+    key = query.casefold()
+    cached = _COUNTRY_CACHE.get(key)
+
+    if cached is not None:
+        return cached  # type: ignore[return-value]
+
+    dataset = await _load_country_dataset()
+    candidates = _match_countries(dataset, key)
+
+    _COUNTRY_CACHE.set(key, candidates)
+    return candidates
+
+
+async def resolve_locations(query: str) -> list[dict]:
     """
     Resolve a user query.
 
     Priority:
-      1. Direct IANA timezone.
+      1. Explicit IANA timezone (or common legacy alias).
       2. Country -> capital.
       3. Normal global geocoding.
     """
@@ -354,36 +627,34 @@ async def resolve_locations(query: str) -> List[dict]:
     # Advanced users can enter an IANA timezone directly.
     #
     # Important: zoneinfo contains legacy aliases such as ``Iran`` and
-    # ``US/Eastern``. A bare country name must therefore be allowed to reach
-    # the country resolver first. Slash-based IANA names are unambiguous.
-    is_explicit_timezone = (
-        "/" in query
-        or query.upper() in {"UTC", "GMT", "UCT", "GMT0"}
-    )
+    # ``US/Eastern``. A bare country name must therefore be allowed to
+    # reach the country resolver first. Slash-based IANA names and the
+    # UTC family are unambiguous.
+    if _looks_like_timezone(query):
+        zone_name = _LEGACY_ZONE_ALIASES.get(query.casefold(), query)
 
-    if is_explicit_timezone:
         try:
-            ZoneInfo(query)
-
+            ZoneInfo(zone_name)
+        except Exception:
+            pass
+        else:
             return [
                 {
-                    "name": query.rsplit("/", 1)[-1].replace("_", " "),
+                    "name": zone_name.rsplit("/", 1)[-1].replace("_", " "),
                     "admin1": "",
                     "country": "",
-                    "timezone": query,
+                    "timezone": zone_name,
                     "country_code": "",
                     "latitude": None,
                     "longitude": None,
                     "_direct_timezone": True,
                 }
             ]
-        except Exception:
-            pass
 
-    country_candidates = await _country_capital(query)
+    country_candidates = await _country_candidates(query)
 
     if country_candidates:
-        resolved: List[dict] = []
+        resolved: list[dict] = []
 
         for item in country_candidates[:3]:
             locations = await _geocode(item["capital"])
@@ -407,19 +678,25 @@ async def resolve_locations(query: str) -> List[dict]:
 # TIME CALCULATION
 # ============================================================================
 
-def _now_for_location(location: dict) -> Tuple[datetime, str, str]:
+
+def _now_for_location(location: dict) -> tuple[datetime, Optional[str], str]:
     """
     Return local datetime, timezone abbreviation and long display name.
 
     ZoneInfo handles DST transitions and current UTC offsets using the
-    operating system's IANA tzdata.
+    operating system's IANA tzdata (with the tzdata package as a
+    fallback on hosts with reduced system data).
     """
     zone_name = _clean(location.get("timezone"), 100)
 
     if not zone_name:
         raise ValueError("Location has no timezone.")
 
-    zone = ZoneInfo(zone_name)
+    try:
+        zone = ZoneInfo(zone_name)
+    except Exception as exc:
+        raise ValueError(f"Unknown timezone: {zone_name}") from exc
+
     now = datetime.now(zone)
 
     country = _clean(
@@ -427,7 +704,7 @@ def _now_for_location(location: dict) -> Tuple[datetime, str, str]:
         80,
     )
 
-    abbreviation = now.tzname() or zone_name
+    abbreviation = _zone_abbreviation(now)
 
     long_name = _timezone_display_name(
         zone_name,
@@ -453,25 +730,33 @@ def _format_single(location: dict) -> str:
         80,
     )
 
-    if location.get("_direct_timezone"):
-        label = zone_name
-        title = zone_name
-
-    # datetime.strftime("%-d") is Linux-specific.  This project is deployed
-    # on Linux, but using day as an integer keeps the formatter portable too.
+    # datetime.strftime("%-d") is Linux-specific.  Using the day as an
+    # integer keeps the formatter portable across platforms.
     date_text = (
         f"{now.strftime('%A, %B')} "
         f"{now.day}, {now.year}"
     )
+
+    if abbreviation:
+        zone_block = (
+            f"🗺️ <b>Timezone:</b> <code>{_esc(zone_name, 100)}</code>\n"
+            f"⏱️ <b>Zone:</b> <code>{_esc(abbreviation, 30)}</code> · "
+            f"<code>{_fmt_offset(offset_seconds)}</code>"
+        )
+    else:
+        # The host's tzdata only provides a POSIX-style offset
+        # string (e.g. "+0330"), which is not a real abbreviation.
+        zone_block = (
+            f"🗺️ <b>Timezone:</b> <code>{_esc(zone_name, 100)}</code>\n"
+            f"⏱️ <b>UTC Offset:</b> <code>{_fmt_offset(offset_seconds)}</code>"
+        )
 
     return (
         f"🌍 <b>{_esc(title)} Time</b> 🌎\n\n"
         f"🕓 <b>{now.strftime('%I:%M:%S %p')}</b> "
         f"<i>{_esc(long_name)}</i>\n"
         f"📆 <b>{_esc(date_text)}</b>\n\n"
-        f"🗺️ <b>Timezone:</b> <code>{_esc(zone_name, 100)}</code>\n"
-        f"⏱️ <b>Zone:</b> <code>{_esc(abbreviation, 30)}</code> · "
-        f"<code>{_fmt_offset(offset_seconds)}</code>\n"
+        f"{zone_block}\n"
         f"📍 <b>Location:</b> {_esc(label or title, 150)}"
         + (
             f"\n🏳️ <b>Country:</b> {_esc(country, 80)}"
@@ -519,15 +804,11 @@ def _format_comparison(first: dict, second: dict) -> str:
         f"📍 <b>{_esc(first_title)}</b>\n"
         f"🕓 <code>{first_now.strftime('%I:%M:%S %p')}</code> · "
         f"<i>{_esc(first_long)}</i>\n"
-        f"🗺️ <code>{_esc(first_zone)}</code> · "
-        f"<code>{_esc(first_abbr)}</code> · "
-        f"<code>{_fmt_offset(first_offset)}</code>\n\n"
+        f"{_zone_line(first_zone, first_abbr, first_offset)}\n\n"
         f"📍 <b>{_esc(second_title)}</b>\n"
         f"🕓 <code>{second_now.strftime('%I:%M:%S %p')}</code> · "
         f"<i>{_esc(second_long)}</i>\n"
-        f"🗺️ <code>{_esc(second_zone)}</code> · "
-        f"<code>{_esc(second_abbr)}</code> · "
-        f"<code>{_fmt_offset(second_offset)}</code>\n\n"
+        f"{_zone_line(second_zone, second_abbr, second_offset)}\n\n"
         f"↔️ {relation}\n"
         f"⏱️ <b>Difference:</b> <code>{_ordinal_offset(difference)}</code>"
     )
@@ -537,33 +818,51 @@ def _format_comparison(first: dict, second: dict) -> str:
 # QUERY PARSING
 # ============================================================================
 
-def _parse_query(query: str) -> Tuple[str, Optional[str]]:
+_COMPARISON_PREFIX = re.compile(
+    r"^(?:diff|difference|compare)(?:\s+between)?\s+",
+    re.IGNORECASE,
+)
+
+_UNIVERSAL_SEPARATORS = (
+    r"\s+(?:vs\.?|versus|to)\s+",
+    r"\s*(?:\||<>|->|—|–)\s*",
+)
+
+_AND_SEPARATOR = r"\s+and\s+"
+
+
+def _parse_query(query: str) -> tuple[str, Optional[str]]:
     """
+    Split a query into (first, second) for comparison.
+
     Supported comparison syntax:
 
       time Tehran vs Chicago
-      time Tehran | Chicago
+      time Tehran | Tokyo
       time Tehran <> Chicago
       time Tehran -> Chicago
+      time Tehran to Chicago
       time diff Tehran | Chicago
       time compare London and Dubai
+
+    "and" only separates when an explicit compare/diff keyword was used,
+    so that single places whose names contain " and " (e.g. Wallis and
+    Futuna) keep working as one location.
     """
     query = _clean(query, MAX_QUERY_LENGTH).strip()
 
     if not query:
         return "", None
 
-    query = re.sub(
-        r"^(?:diff|difference|compare)\s+",
-        "",
-        query,
-        flags=re.IGNORECASE,
-    ).strip()
+    prefix = _COMPARISON_PREFIX.match(query)
+    explicit_compare = prefix is not None
 
-    separators = (
-        r"\s+(?:vs\.?|versus|to|and)\s+",
-        r"\s*(?:\||<>|->|—|–)\s*",
-    )
+    if explicit_compare:
+        query = query[prefix.end() :].strip()
+
+    separators = list(_UNIVERSAL_SEPARATORS)
+    if explicit_compare:
+        separators.append(_AND_SEPARATOR)
 
     for separator in separators:
         parts = re.split(
@@ -583,9 +882,23 @@ def _parse_query(query: str) -> Tuple[str, Optional[str]]:
     return query, None
 
 
+def _not_found_message(query: str, role: Optional[str] = None) -> str:
+    """Pick a helpful error message for a query that resolved to nothing."""
+    if _looks_like_timezone(query):
+        detail = f"unknown timezone: {_clean(query, 60)}"
+    else:
+        detail = "no matching city, country or timezone was found"
+
+    if role:
+        return f"The {role} location could not be found: {detail}."
+
+    return detail[0].upper() + detail[1:] + "."
+
+
 # ============================================================================
 # INLINE UI
 # ============================================================================
+
 
 async def _help_result(event):
     return await event.builder.article(
@@ -599,7 +912,8 @@ async def _help_result(event):
             "• <code>time Iran</code>\n"
             "• <code>time Chicago</code>\n"
             "• <code>time New York</code>\n"
-            "• <code>time Asia/Tehran</code>\n\n"
+            "• <code>time Asia/Tehran</code>\n"
+            "• <code>time US/Eastern</code>\n\n"
             "<b>Compare two locations:</b>\n"
             "• <code>time Tehran vs Chicago</code>\n"
             "• <code>time Tehran | Tokyo</code>\n"
@@ -628,7 +942,7 @@ async def _help_result(event):
 async def _error_result(event, query: str, message: str):
     return await event.builder.article(
         title="❌ Time Search",
-        description=message,
+        description=_clean(message, 200),
         text=(
             "❌ <b>Time lookup failed</b>\n\n"
             f"🔎 <b>Search:</b> <code>{_esc(query, 100)}</code>\n\n"
@@ -649,8 +963,18 @@ async def _error_result(event, query: str, message: str):
     )
 
 
+def _button_seed(location: dict) -> str:
+    """Short seed used for the per-result switch_inline queries."""
+    if location.get("_direct_timezone"):
+        seed = _clean(location.get("timezone"), BUTTON_QUERY_LIMIT)
+    else:
+        seed = _clean(_location_title(location), BUTTON_QUERY_LIMIT)
+
+    return seed or "time"
+
+
 def _single_buttons(location: dict):
-    title = _location_title(location)
+    seed = _button_seed(location)
 
     return [
         [
@@ -661,14 +985,14 @@ def _single_buttons(location: dict):
             ),
             Button.switch_inline(
                 "↔️ Compare",
-                query=f"time diff {title} | ",
+                query=f"time diff {seed} | ",
                 same_peer=True,
             ),
         ],
         [
             Button.switch_inline(
                 "📍 Search This Place",
-                query=f"time {title}",
+                query=f"time {seed}",
                 same_peer=True,
             ),
         ],
@@ -676,6 +1000,9 @@ def _single_buttons(location: dict):
 
 
 def _compare_buttons(first: str, second: str):
+    first = _clean(first, BUTTON_QUERY_LIMIT)
+    second = _clean(second, BUTTON_QUERY_LIMIT)
+
     return [
         [
             Button.switch_inline(
@@ -699,7 +1026,13 @@ def _compare_buttons(first: str, second: str):
     ]
 
 
-async def _candidate_results(event, locations: List[dict]):
+def _comparison_title(first: dict, second: dict) -> str:
+    """Telegram caps inline result titles at 255 characters."""
+    title = f"↔️ {_location_title(first)} ↔ {_location_title(second)}"
+    return _clean(title, MAX_TITLE_LENGTH)
+
+
+async def _candidate_results(event, locations: list[dict]):
     results = []
 
     for location in locations[:MAX_RESULTS]:
@@ -711,13 +1044,16 @@ async def _candidate_results(event, locations: List[dict]):
             offset = now.utcoffset()
             seconds = int(offset.total_seconds()) if offset else 0
 
+            description = (
+                f"{now.strftime('%I:%M:%S %p')} · "
+                f"{abbreviation or _timezone_display_name(location.get('timezone', ''), None, '')} · "
+                f"{_fmt_offset(seconds)}"
+            )
+
             results.append(
                 await event.builder.article(
-                    title=f"🌍 {title}",
-                    description=(
-                        f"{now.strftime('%I:%M:%S %p')} · "
-                        f"{abbreviation} · {_fmt_offset(seconds)}"
-                    ),
+                    title=f"🌍 {_clean(title, 200)}",
+                    description=_clean(description, 200),
                     text=_format_single(location),
                     parse_mode="html",
                     buttons=_single_buttons(location),
@@ -733,8 +1069,9 @@ async def _candidate_results(event, locations: List[dict]):
 # INLINE HANDLER
 # ============================================================================
 
+
 @in_pattern(
-    r"(?i)^time(?:\s+(.+))?$",
+    r"(?i)^time(?:\s+(.*))?$",
 )
 async def time_inline(event):
     """
@@ -744,16 +1081,18 @@ async def time_inline(event):
     Each inline result is self-contained.
     """
     try:
-        raw = event.text or ""
+        raw = (event.text or "").strip()
 
-        match = re.match(
-            r"(?i)^time(?:\s+(.+))?$",
-            raw.strip(),
+        # Telethon already matched the decorator pattern; keep a manual
+        # fallback so the query extraction never depends on event internals.
+        match = event.pattern_match or re.match(
+            r"(?i)^time(?:\s+(.*))?$",
+            raw,
         )
 
         query = (
-            match.group(1).strip()
-            if match and match.group(1)
+            (match.group(1) or "").strip()
+            if match
             else ""
         )
 
@@ -779,10 +1118,10 @@ async def time_inline(event):
                         await _error_result(
                             event,
                             first_query,
-                            "The first location could not be found.",
+                            _not_found_message(first_query, role="first"),
                         )
                     ],
-                    cache_time=5,
+                    cache_time=10,
                 )
 
             if not second_locations:
@@ -791,20 +1130,17 @@ async def time_inline(event):
                         await _error_result(
                             event,
                             second_query,
-                            "The second location could not be found.",
+                            _not_found_message(second_query, role="second"),
                         )
                     ],
-                    cache_time=5,
+                    cache_time=10,
                 )
 
             first = first_locations[0]
             second = second_locations[0]
 
             result = await event.builder.article(
-                title=(
-                    f"↔️ {_location_title(first)} "
-                    f"↔ {_location_title(second)}"
-                ),
+                title=_comparison_title(first, second),
                 description=(
                     "Compare current local times and UTC offsets."
                 ),
@@ -833,7 +1169,7 @@ async def time_inline(event):
                     await _error_result(
                         event,
                         first_query,
-                        "No matching city, country or timezone was found.",
+                        _not_found_message(first_query),
                     )
                 ],
                 cache_time=10,
@@ -872,7 +1208,7 @@ async def time_inline(event):
                 [
                     await _error_result(
                         event,
-                        getattr(event, "text", "time"),
+                        getattr(event, "text", "") or "time",
                         "The time service is temporarily unavailable.",
                     )
                 ],
@@ -887,16 +1223,8 @@ async def time_inline(event):
 # CACHE MAINTENANCE
 # ============================================================================
 
+
 def cleanup_time_caches() -> None:
-    """Optional cleanup hook for future global plugin maintenance."""
-    now = time.time()
-
-    for cache in (_GEOCODE_CACHE, _COUNTRY_CACHE):
-        expired = [
-            key
-            for key, value in cache.items()
-            if now - value[0] >= CACHE_TTL
-        ]
-
-        for key in expired:
-            cache.pop(key, None)
+    """Drop expired entries from the plugin's lookup caches."""
+    _GEOCODE_CACHE.evict_expired()
+    _COUNTRY_CACHE.evict_expired()
