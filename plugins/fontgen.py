@@ -628,7 +628,7 @@ characters remain unchanged rather than being corrupted.
 """
 
 
-@cipherx_cmd(pattern=r"(?:font|fonts)(?:\s+(.+))?$")
+@heartless_cmd(pattern=r"(?:font|fonts)(?:\s+(.+))?$")
 async def font_handler(e):
     raw = (e.pattern_match.group(1) or "").strip()
     reply = await e.get_reply_message()
