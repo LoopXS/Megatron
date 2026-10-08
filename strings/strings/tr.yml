@@ -1,0 +1,660 @@
+name: "Turkish"
+natively: "Türkçe"
+
+authors:
+  - Heartless
+
+# CythonX
+py_c1: "Hatalı string session. Doğru şekilde kopyalayıp yapıştırın!"
+py_c2: "String Session bulunamadı. Çıkılıyor..."
+py_c3: "VC_SESSION süreniz doldu. VC_SESSION Redis üzerinden siliniyor...\nSesli/görüntülü sohbeti VC hesabından kullanmak içiçinde yenileyin/değiştirin..."
+py_d1: "`Bu komutu şu anda kullanamazsınız. Botun sahibiyle iletişime geçin!`"
+py_d2: "`Tam Sudo Kullanıcısı gerekli...`"
+py_d3: "`Bunu grup/kanalda kullanın.`"
+py_d4: "**⚠️ Developer Restricted!**\nBu ayarın ne yaptığını biliyor ve devam etmek istiyorsanız\n`{}setdb I_DEV True`.\n\nBu işlem tehlikeli olabilir."
+py_d5: "`Yönetici değilim.`"
+py_d6: "Bu komut bot tarafından kullanılamaz!"
+py_d7: "Konuşma zaten açık. Lütfen biraz bekleyip tekrar deneyin."
+py_d8: "`Bu sohbette medya veya çıkartma göndermek yasaktır.`"
+
+# instagram
+instagram_1: "{p} **{} Başarıyla indirildi**"
+
+# commons
+com_1: "{p} **İşleniyor...**"
+com_2: "{p} **Aranıyor...**"
+com_3: "`Geçersiz giriş`"
+com_4: "`UnSupported Media..`"
+com_5: "{p} **İndiriliyor...**"
+com_6: "{p} **Yükleniyor...**"
+com_7: "`Bir şeyler ters gitti.`"
+
+#chatactions
+can_1: "#GBanned_User Katıldı.\n\n**Kullanıcı** : {}\n**Neden**: {}\n\n`Kullanıcı yasaklandı.`"
+can_2: "∆ #UsernameUpdate\n\n@{} kullanıcı adını şu şekilde değiştirdi: @{}"
+can_3: "∆ #UsernameUpdate\n\n{} kullanıcı adını kaldırdı. (@{})"
+can_4: "∆ #UsernameUpdate\n\n{}adlı kullanıcının yeni kullanıcı adı --> @{}"
+
+# help
+help_1: "`{}` geçerli bir eklenti değil!"
+help_2: "bot, inline sorguya yanıt vermedi.\nŞunu kullanmayı deneyin: `{}restart`"
+help_3: "`Botunuz için inline modunu şuradan etkinleştirin:` @Botfather."
+help_4: "• Eklentiler"
+help_5: "Ek eklentiler •"
+help_6: "•• Sesli Sohbet"
+help_7: "Inline Eklentiler ••"
+help_8: "••• Sahip Araçları"
+help_9: "Ayarlar •••"
+help_10: "✗ Kᴀᴘᴀᴛ ✗"
+help_11: "Eklenti Adı-{}\n✘ Kullanılabilir komutlar -\n\n"
+help_12: "Sesli Sohbet Botu etkin değil! Etkinleştirmek içiçinde .setdb VCBOT True kullanın!"
+help_13: "Şunu çalıştırın: '{}setdb ADDONS True' resmî ek eklentileri yüklemek içiçinde"
+
+# userlogs
+userlogs_1: "Tag Logger'da ayarladığınız sohbet kimliği yanlış, lütfen düzeltin"
+userlogs_2: "Etiketleri kaydetmek içiçinde beni Tag Logger sohbetinize ekleyin"
+userlogs_3: "Sohbetten ayrıl"
+userlogs_4: "Asistan botunuz Tag Log sohbetinde mesaj gönderemiyor.\nEtiket günlüklerinizi almak içiçinde onu ekleyin.."
+userlogs_5: "Ayrıldı `{}`"
+
+# admintools
+adm_1: "`Kullanıcının kim olduğunu belirleyemedim!`"
+adm_2: "`Hmm... Görünüşe göre burada gerekli yetkilere sahip değilim!`"
+adm_3: "`Lütfen bir süre de belirtin..`"
+pro_1: "`Yükseltmek için bir kullanıcıya yanıt verin!`"
+pro_2: "{} artık {} sohbetinde {} unvanıyla yönetici."
+de_1: "`Yetkisini düşürmek için bir kullanıcıya yanıt verin!`"
+de_2: "{} artık {} sohbetinde yönetici değil."
+ban_1: "`Yasaklamak için bir kullanıcıya yanıt verin veya kullanıcı adı belirtin!`"
+ban_2: " `Üzgünüm, geliştiricimi yasaklayamam 😂`"
+ban_3: "`Bir kullanıcıyı yasaklamak için gerekli yetkiye sahip değilim.`"
+ban_4: "{} **tarafından yasaklandı:** {} **içinde** `{}`"
+ban_5: "\n**Neden**: `{}`"
+tban_1: "`Birine yanıt verin veya kullanıcı kimliğini belirtin...`"
+tban_2: "`Başarıyla yasaklandı` {} `in {} for {}`"
+unban_1: "`Yasağını kaldırmak için bir kullanıcıya yanıt verin veya kullanıcı adı belirtin!`"
+unban_2: "`Bir kullanıcının yasağını kaldırmak için gerekli yetkiye sahip değilim.`"
+unban_3: "{} **yasağı kaldırıldı:** {} **içinde** `{}`"
+kick_1: "`Bir kullanıcıyı gruptan atmak için gerekli yetkiye sahip değilim.`"
+kick_2: " `Sorry, but I can't Kick my Developer`😂"
+kick_3: "`Onu hiçbir zaman gruptan atamam...`"
+kick_4: "{} **tarafından atıldı:** {} **içinde** `{}`"
+pin_1: "`Sabitlemek için bir mesaja yanıt verin!`"
+pinned_1: "Sabitlenmiş mesaj bulunamadı!"
+pinned_2: "Mevcut sohbetteki sabitlenmiş mesaj [burada] [burada]({})."
+unpin_1: "Either yanıt -e bir mesaj, veya, kullan `{}unpin all`"
+listpin_1: "Bu grupta sabitlenmiş mesaj yok!"
+purge_1: "`Silinecek mesajı belirtmek için bir mesaja yanıt verin.`"
+purgeall_1: "`Silmek için birinin mesajına yanıt verin.`"
+purgeall_2: "Şu kullanıcının tüm mesajları başarıyla temizlendi: {}"
+
+# akinator
+aki_1: "Oyun sonlandırıldı...."
+aki_2: "Oyunu Başlat"
+aki_3: "Zaman aşımı!"
+
+# antiflood
+antiflood_1: "`Antiflood ayarları devre dışı`"
+antiflood_2: "`Bu sohbette flood sınırı yok.`"
+antiflood_3: "`Susturuldunuz.`"
+antiflood_4: "`Bu sohbette antiflood ayarları {} olarak başarıyla güncellendi.`"
+antiflood_5: "`Bu sohbetin flood sınırı {}.`"
+
+# ascii
+ascii_1: "`Bir görsele yanıt verin.`"
+ascii_2: "`HTML'ye dönüştürülüyor...`"
+
+# audiotools
+audiotools_1: "Ses veya videoya yanıt verin.."
+audiotools_2: "Başarıyla indirildi, şimdi sese dönüştürülüyor"
+audiotools_3: "`Kırpma süresini uygun formatta belirtin`"
+audiotools_4: "`Incorrect Data`"
+audiotools_5: "`İndirilmeye çalışılıyor...`"
+audiotools_6: "`Hatalı kırpma süresi`"
+audiotools_7: "Ses şu aralıktan kırpıldı: `{}` ile `{}`"
+audiotools_8: "`Bir video dosyasına yanıt verin..`"
+audiotools_9: "`Ses bulunamadı...`"
+audiotools_10: "`Videodan ses çıkarıldı...`"
+
+# asstcmd
+asstcmd_1: "`Bir komutu kullanmak için bu komutu bir mesaja yanıt vererek ve kelimeyle birlikte kullanın.`"
+asstcmd_2: "`Kaldırmak istediğiniz komutu belirtin.`"
+asstcmd_3: "Tamamlandı, komut: `/{}` kaldırıldı."
+asstcmd_4: "Tamamlandı, komut : `/{}` kaydedildi."
+asstcmd_5: "Komut bulunamadı"
+asstcmd_6: "**TÜM ASİSTAN KOMUTLARI**\n\n"
+
+# autocorrect
+act_1: "AUTOCORRECT özelliği AÇIK"
+act_2: "AUTOCORRECT özelliği KAPALI"
+
+# autopic
+autopic_1: "`Aranacak bir şey belirtin...`"
+autopic_2: "Şunun içiçinde sonuç bulunamadı: `{}`"
+autopic_3: "Bir koleksiyon bulundu `{}` aramayla ilgili !\nAutopic başlatılıyor!"
+autopic_4: "AUTOPIC kullanımda değildi!!"
+autopic_5: "AUTOPIC durduruldu!"
+
+# inline
+inline_1: "**✨ {} Özel bot ✨\n\n✵ Eklentiler ~ {}**"
+inline_2: "**✨ {} Özel bot ✨\n\n✵ Ek eklentiler ~ {}**"
+inline_3: "**✨ {} Özel bot ✨\n\n✵ Ek eklentiler ~ {}\n\n**`.setdb ADDONS True`** ᴀɴᴅ ʀᴇsᴛᴀʀᴛ ᴛᴏ ɢᴇᴛ ᴀᴅᴅᴏɴs.**"
+inline_4: "**✨ {} Özel bot ✨\n\n✵ Ana Menü\n\n✵ Eklentiler ~ {}\n✵ Ek eklentiler ~ {}\n✵ Toplam Komut ~ {}**"
+inline_5: "**✨ Menü Kapatıldı**"
+inline_6: "**Sesli Sohbet Help Menu süreyle {}**\n**Kullanılabilir Komutlar:** `{}`\n\n✗ @DarkPentester"
+inline_7: "Komut listesini almak için .yardım {} komutunu kullanın ve komutları listeleyin."
+inline_8: "Güncellemek içiçinde aşağıdaki düğmeye tıklayın!"
+inline_9: "Zaten en son sürümdesiniz"
+
+# tagnotif
+tagnot_1: "{} sizi şu sohbette etiketledi: {}\n\n```{}```\n\n[📨Mesaj📨]({})"
+tagnot_2: "{} sizi şu sohbette etiketledi: {}\n\n [📨Mesaj📨]({})"
+
+# whisper
+wspr_1: "@{} Ⲋⲉⲥʀⲉⲧ ⲙⲉⲋⲋⲁⳋⲉ ϝⲟʀ ⲩⲟυ.\n\nᴅᴇʟᴇᴛᴇ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ᴀғᴛᴇʀ ʀᴇᴀᴅɪɴɢ.\n\n✨ ⲏⲉⲁʀⲧⳑⲉⲋⲋ ⲉⲭⲥⳑυⲋⲓⳳⲉ ⲃⲟⲧ ✨"
+wspr_2: "Gizli mesaj silindi!"
+wspr_3: "Bir kimlik veya kullanıcı adı da ekleyin"
+wspr_4: "Kullanıcı {} bulunamadı\nTekrar arayın"
+wspr_5: "Bunu yapmanıza izin verilmiyor 😒"
+
+# afk
+afk_1: "**Artık AFK değil**\n\nŞu kadar süre uzaktaydı: ~ `{}`"
+afk_2: "#AFK\nAFK modu kapatıldı.\nAFK başlangıcı: ~ `{}`"
+afk_3: "**✨__Heartless  çevrimdışı__✨**\n✨Son görülme `{}` önce.\n✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵\n**✨Neden:** {}"
+afk_4: "**✨__Heartless  çevrimdışı__✨**\n✨Son görülme `{}` önce."
+afk_5: "**✨__Heartless  going çevrimdışı__✨**\n\n**✨Neden:** {}"
+afk_6: "**✨__Heartless  going çevrimdışı__✨**"
+
+
+
+
+# bot
+bot_1: "Hey, hayattayım."
+bot_2: "İstatistikler"
+bot_3: "• Repo •"
+bot_4: "Destek"
+bot_5: "• `Restarting...`"
+alive_1: "• ɦᥱᥲrᴛᥣᥱss ᥱ᥊ᥴᥣᥙsi᥎ᥱ ᥙsᥱrδ᧐ᴛ •**\n✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵✵\n╔════❰ Ⲃⲟⲧ Ⲓⲛϝⲟʀⲙⲁⲧⲓⲟⲛ ❱═❍⊱❁۪۪۪\n║╭━━━━━━━━━━━━━━━➣ \n║┣⪼ **Ⲟⲱⲛⲉʀ** - `{}` \n║┣⪼ **Ⲋⲧⲁⲧυⲋ** - `Ⲟⲛⳑⲓⲛⲉ`\n║┣⪼ **Ⲃⲟⲧ Ⳳⲉʀⲋⲓⲟⲛ** - `{}`\n║┣⪼ **Ⳑⲓⲃʀⲁʀⲩ Ⳳⲉʀⲋⲓⲟⲛ** - `{}` \n║┣⪼ **Ⲟⲋ** - `Ⲕⲁⳑⲓ Ⳑⲓⲛυⲭ 𝟸𝟶𝟸𝟶.𝟺`\n║┣⪼ **Ⳙⲣⲧⲓⲙⲉ** - `{}` \n║┣⪼ **Ⲣⲩⲧⲏⲟⲛ** - `{}` \n║┣⪼ **Ⲧⲉⳑⲉⲧⲏⲟⲛ** - `{}` \n║┣⪼ **✨ heartless ⲓⲋ ⲧⲏⲉ ⲃⲉⲋⲧ ✨**\n║╰━━━━━━━━━━━━━━━➣ ╚══════════════════❍⊱❁۪۪۪"
+log: "~ Günlükler\nYapıştırıldı [burada]({}) too!"
+ping: "**█▀█ █ █▄░█ █▀▀ █ \n█▀▀ █ █░▀█ █▄█ ▄**\n\n{p} **Sunucu Ping** - `{}ms`\n\n{p} **bot Ⳙⲣⲧⲓⲙⲉ** - `{}`"
+usage: "`Ⳙⲋⲁⳋⲉ ⲟϝ` **bot** Ⲋⲉʀⳳⲉʀ:\n\n• ⲏⲟυʀⲋ Ⳙⲋⲉⲇ: **{}h**  **{}m |** `[{}%]`\n• ⲏⲟυʀⲋ Rⲉⲙⲁⲛⲓⲛⳋ: **{}h**  **{}m |** `[{}%]`\n**Ⲧⲟⲧⲁⳑ Ⲇⲓⲋⲕ Ⲋⲣⲁⲥⲉ**: `{}`\n**\n**Ⳙⲋⲉⲇ**: `{}`\n**Ϝʀⲉⲉ**: `{}`\n**📊Ⲇⲁⲧⲁ Ⳙⲋⲁⳋⲉ📊\n**Ⳙⲣⳑⲟⲁⲇ**: `{}`\n**Ⲇⲟⲱⲛⳑⲟⲁⲇ**: `{}`\n**ⲤⲢⳘ**: `{}%`\n**RⲀⲘ**: `{}%`\n**ⲆⲒⲊⲔ**: `{}%`"
+usage_simple: "**Ⲧⲟⲧⲁⳑ Ⲇⲓⲋⲕ Ⲋⲣⲁⲥⲉ**: `{}`\n**Ⳙⲋⲉⲇ**: `{}`\n**Ϝʀⲉⲉ**: `{}`\n\n**📊Ⲇⲁⲧⲁ Ⳙⲋⲁⳋⲉ📊**\n**Ⳙⲣⳑⲟⲁⲇ**: `{}`\n**Ⲇⲟⲱⲛⳑⲟⲁⲇ**: `{}`\n\n**ⲤⲢⳘ**: `{}%`\n**RⲀⲘ**: `{}%`\n**ⲆⲒⲊⲔ**: `{}%`"
+shutdown: "Hoşça kal {}.\n`Shutting down...`"
+
+# blacklist
+blk_1: "`Kara listeye eklenecek kelimeyi belirtin..`"
+blk_2: "Tamamlandı: `{}` burada kara listeye eklendi."
+blk_3: "`Kara listeden kaldırılacak kelimeyi belirtin..`"
+blk_4: "Tamamlandı: `{}` Kara listeden kaldırıldı."
+blk_5: "Bu sohbetlerde bulunan kara liste kelimeleri:\n\n"
+blk_6: "Burada kara liste kelimesi bulunamadı"
+
+# broadcast
+bd_1: "`Veritabanına ekleniyor...`"
+bd_2: "`Tüm yönetici kanalları veritabanına eklenmeye çalışılıyor...`"
+bd_3: "**Tamamlandı.**\nVeritabanındaki mevcut sohbetler: {}\nYeni eklenenler: {}"
+bd_4: "Kanallar eklendi!"
+bd_5: "`Veritabanına eklendi!`"
+bd_6: "`Kanal zaten veritabanında!`"
+bd_7: "Veritabanından kaldırıldı"
+bd_8: "`Removing...`"
+bd_9: "Kanal zaten veritabanından kaldırılmış. "
+
+# calculator
+calc_1: "• Ⲏⲉⲁʀⲧⳑⲉⲋⲋ Ⲓⲛⳑⲓⲛⲉ Ⲥⲁⳑⲥυⳑⲁⲧⲟʀ •"
+calc_2: "≼ Ⲟⲣⲉⲛ Ⲥⲁⳑⲥυⳑⲁⲧⲟʀ Ⲁⳋⲁⲓⲛ ≽"
+
+# channel hacks
+cha_1: "Geçersiz kanal belirtildi"
+cha_2: "Kaynak başarıyla eklendi"
+cha_3: "Kaynak kanal zaten eklenmiş"
+cha_4: "Kaynak veritabanı temizlendi."
+cha_5: "Kaynak veritabanından kaldırıldı"
+cha_6: "kaynak kanal  already kaldırıldı -den veritabanı."
+cha_7: "Veritabanındaki hedef kanallar:"
+cha_8: "Veritabanındaki kaynak kanallar:"
+
+# carbon
+carbon_1: "Şunun tarafından Carbon ile oluşturuldu: [{}](tg://kullanıcı?kimlik={})"
+carbon_2: "`Bir mesaja veya okunabilir dosyaya yanıt verin..`"
+carbon_3: "`Carbon oluşturmak için özel bir renk belirtin...`"
+
+# chat_bot
+chab_1: "AI ChatBot eklemek içiçinde kullanıcıya yanıt verin veya kimliğini/kullanıcı adını verin!"
+chab_2: "`Yapay zekâ eklenmiş kullanıcı yok.`"
+chab_3: "**Bu sohbette AI etkin kullanıcıların tam listesi:**\n\n"
+
+# chats
+chats_1: "`Bu sohbet silinemiyor`"
+chats_2: "`Yönetici değilim`"
+chats_3: "#Silindi\nSilindi {}"
+chats_4: "Sizin [{}]({}) grubunuz Boss yapıldı!"
+chats_5: "✨ Katılın @PentesterX"
+chats_6: "Sizin {} Grup/Kanal oluşturuldu!"
+
+# clean action
+clan_1: "Bu sohbet içiçinde temizle Action ayarı eklendi"
+clan_2: "Bu sohbet içiçinde temizle Action ayarı kaldırıldı"
+clan_3: "`Geçersiz kimlik`"
+clan_4: "`Eklenmiş sohbet yok`"
+clan_5: "temizle Action bu sohbette zaten etkin."
+
+# converter
+cvt_1: "`Herhangi bir medya/dosya belgesine yanıt verin.`"
+cvt_2: "Dosyanın adını ve uzantısını belirtin"
+cvt_3: "`Bir medyaya yanıt verin..`"
+cvt_4: "`Küçük resmi olan bir görsele veya dosyaya yanıt verin.`"
+cvt_5: "Yanıtlanan dosyanın küçük resmi yok.`"
+cvt_6: "[Bu]({}) özel küçük resminiz olarak eklendi"
+cvt_7: "`Okunabilir bir dosyaya yanıt verin`"
+cvt_8: "`Okunabilir bir dosya değil.`"
+
+# eventsofday
+eod_1: "🎊 **Günün Etkinlikleri**\n\n"
+eod_2: "• **Etkinlikler: {}/2022**\n\n"
+
+# core
+core_1: "Modül bulundu"
+core_2: "{}.py kullan .yapıştır -e yapıştır içinde neko ve raw.."
+core_3: "Tekrar aransın mı..?"
+core_4: "Module {} Bulundu"
+core_5: "{}.py kullan .yapıştır -e yapıştır içinde neko ve raw.."
+core_6: "{} .py modülü bulunamadı"
+core_7: "Böyle bir modül yok"
+core_8: "{} .py adlı modül bulunamadı"
+core_9: "`Kaldırmak istediğiniz eklentinin adını belirtin`"
+core_10: "**KALDIRILDI** `{}` **BAŞARIYLA.**"
+core_11: "**Yᴏᴜ Cᴀɴ'ᴛ Uɴʟᴏᴀᴅ Oғғɪᴄɪᴀʟ Eklentiler**"
+core_12: "**Nᴏ Pʟᴜɢɪɴ Nᴀᴍᴇᴅ** `{}`"
+core_13: "`Kaldırmak istediğiniz eklentinin adını belirtin`"
+core_14: "**Uɴɪɴsᴛᴀʟʟᴇᴅ** `{}` **BAŞARIYLA.**"
+core_15: "**Yᴏᴜ Cᴀɴ'ᴛ Uɴɪɴsᴛᴀʟʟ Oғғɪᴄɪᴀʟ Eklentiler**"
+core_16: "`Yüklemek istediğiniz eklentinin adını belirtin`"
+core_17: "**BAŞARIYLA Lᴏᴀᴅᴇᴅ** `{}`"
+core_18: "**Yüklenemedi** `{}` **aşağıdaki hata nedeniyle.**\n`{}`"
+
+# devtools
+devs_1: "`Komut belirtilmedi`"
+devs_2: "`Bir Python komutu belirtin`"
+devs_3: "`Bir C++ kodu belirtin..`"
+
+# dm
+dm_1: "`Gönderim yapılacak sohbetin kullanıcı adını veya kimliğini belirtin.`"
+dm_2: "`Gönderilecek metni belirtin veya bir mesaja yanıt verin`"
+dm_3: "`⚜️ Mesaj gönderildi ⚜️`"
+dm_4: "Hata: {}\nKullanım için bakın: `{}help dm`"
+dm_5: "`Özel mesajları kontrol edin.`"
+dm_6: "`Gönderilecek mesaj bulunamadı :(`"
+
+# echo
+echo_1: "**Kullanıcılar için Echo etkinleştirildi:**\n\n"
+
+# fake action
+fka_1: "{} saniyelik sahte işlem başlatılıyor."
+
+# fedutils
+sf_1: "Toplu FedBan başlatılıyor..."
+sf_2: "`Kullanıcı belirtilmedi!`"
+sf_3: "Geliştiricimi yasaklayamazsın acemi!!"
+sf_4: "`Görünüşe göre Rose yanıt vermiyor veya eklenti düzgün çalışmıyor`"
+sf_5: "Fed komutlarını yalnızca 5 dakikada bir kullanabilirsiniz"
+sf_6: "5 dakika sonra tekrar deneyin."
+sf_7: "FedAdminList alınamadı. Tekrar deneniyor ({}/3)..."
+sf_8: "Hata"
+sf_9: "FedAdminList alınamadı."
+sf_10: "FBaning içinde {} feds."
+sf_11: "Belirtilen FBan grup kimliği yanlış."
+sf_12: "{} Hariç tutuldu."
+sf_13: "FedAdmin dosyası kaldırılırken hata oluştu.\n{}"
+sf_14: "SuperFBan tamamlandı.\nToplam fed - {}.\nHariç tutulan - {}.\n Etkilenen fed {} feds.\n#TB"
+sf_15: "Toplu Un-FedBan başlatılıyor..."
+sf_16: "SuperUnFBan tamamlandı.\nToplam fed - {}.\nHariç tutulan - {}.\n Etkilenen fed {} feds.\n#TB"
+sf_17: "`Fedstat bilgilerini kontrol etmek içiçinde birinin kimliğini belirtin veya mesajına yanıt verin.`"
+sf_18: "Liste içindeki fed {} yasaklandı.\n\nHeartless UserBot kullanılarak toplandı"
+sf_19: "**Hata**\n `@MissRose_Bot` engelini kaldırın ve tekrar deneyin!"
+sf_20: "`Extracting information...`"
+sf_21: "\n\nFedInfo Extracted by Heartless UserBot"
+sf_22: "Kullanıcı belirtilmedi."
+sf_23: "**Hata**\n `@MissRose_Bot` engelini kaldırın ve tekrar deneyin!"
+
+# filter
+flr_1: "`Filtre olarak ayarlamak içiçinde bu komutu kelimeyle birlikte kullanın ve bir mesaja yanıt verin...`"
+flr_2: "Bu sohbetlerde bulunan filtreler\n\n"
+flr_3: "`Kaldırılacak filtreyi belirtin..`"
+flr_4: "Tamamlandı: Filtre `{}` kaydedildi."
+flr_5: "Tamamlandı: Filtre `{}` kaldırıldı."
+flr_6: "Burada filtre bulunamadı"
+
+# fontgen
+fgn_1: "**Kullanılabilir yazı tipleri**\n\n"
+
+# force subscribe
+fsub_1: "Kullanıcının katılmasını istediğiniz kanalı belirtin!"
+fsub_2: "Doğru kanal kullanıcı adını veya kimliğini belirtin"
+fsub_3: "ForceSub bu sohbette etkin değil!"
+fsub_4: "Kanala Katıl"
+fsub_5: "Sessizimi Kaldır"
+fsub_6: "Lütfen o kanala katılın!\nSonra bu düğmeye tıklayın!"
+fsub_7: "Bu mesaj sizin için değil"
+fsub_8: "Katıldığınız için teşekkürler! "
+
+# extra
+ex_1: "`Bir mesaja yanıt verin..`"
+
+# gdrive
+gdrive_1: "`Google Drive ile zaten yetkilendirildiniz`"
+gdrive_2: "Go [burada](https://console.developers.google.com/flows/enableapi?apiid=drive) ve al sizin `GDRIVE_CLIENT_kimlik` ve `GDRIVE_CLIENT_SECRET`\n\nGönder sizin GDRIVE_CLIENT_ID ve GDRIVE_CLIENT_SECRET as bu.\n`GDRIVE_CLIENT_kimlik GDRIVE_CLIENT_SECRET` separated by boşluk."
+gdrive_3: "`Hatalı Client kimlik`"
+gdrive_4: "`Bir şeyler ters gitti! `/auth` komutunu tekrar gönderin.\nAynı sorun devam ederse `@DarkPentesterBot` ile iletişime geçin."
+gdrive_5: "`Başarılı!\nArtık Google Drive'ı Heartless UserBot ile kullanabilirsiniz.`"
+gdrive_6: "`Şuraya gidin: `t.me/{}?start=set` ve G-Drive'ı ayarlayın`"
+gdrive_7: "Başarıyla yüklendi [{}]({}) üzerinde G-Drive"
+
+# get addons
+gas_1: "Lütfen ham bir bağlantı sağlayın!"
+
+# greetings
+grt_1: "`Welcome note saved`"
+grt_2: "Lütfen bunu özel mesajda değil, bir grupta kullanın!"
+grt_3: "`Hoş geldin mesajı olarak ayarlamak istediğiniz mesaja yanıt verin`"
+grt_4: "`Hoş geldin mesajı ayarlanmamış!`"
+grt_5: "`Welcome Note Deleted`"
+grt_6: "`Güle güle mesajı ayarlanmamış!`"
+grt_7: "`Güle güle mesajı olarak ayarlamak istediğiniz mesaja yanıt verin`"
+
+# glitch
+glitch_1: "`Glitching...`"
+
+# mediainfo
+mdi_1: "Daha ayrıntılı bilgi"
+
+# nightmode
+nightm_1: "Süreyi doğru formatta belirtin"
+nightm_2: "Süre başarıyla ayarlandı"
+nightm_3: "Tamamlandı, mevcut sohbet Gece Moduna eklendi"
+nightm_4: "Tamamlandı, mevcut sohbet Gece Modundan kaldırıldı"
+nightm_5: "Bir şeyler ters gitti"
+
+# pmpermit
+pmperm_1: "➰ Lütfen onaylayana kadar bekleyin!\n➰ Gelen kutusuna spam göndermeyin, aksi halde\n➰ engellenir ve raporlanırsınız."
+pmperm_2: "`• Spam algılandı!\n• Engellendiniz ve raporlandınız.\n• Özel mesajlarda spam yaptığınız için.\n• Lütfen tekrar spam yapmayın :)`"
+pmperm_3: "Birinin mesajına yanıt verin veya bu komutu özel sohbette deneyin."
+
+# schedule_msg
+schdl_1: "`Scheduled msg Succesfully`"
+schdl_2: "`Incorrect Format`"
+
+# searches
+srch_1: "`Kimi arıyorsunuz? Bir kullanıcı adı belirtin!!`"
+srch_2: "`Böyle bir kullanıcı bulunamadı...`"
+srch_3: "`Şarkı bulunamadı...`"
+
+# snip
+snip_1: "Snip olarak ayarlamak içiçinde bir kelime verin ve bir mesaja yanıt verin."
+snip_2: "Kaldırılacak kelimeyi belirtin..."
+snip_3: "Burada Snip bulunamadı."
+
+# specialtools
+spcltool_1: "Yanıt ver ile ses veya video"
+spcltool_2: "`Tamam.. Şimdi bu sesi eklemek istediğiniz videoya yanıt verin`"
+spcltool_3: "Videoya yanıt verin"
+spcltool_4: "`Önce bir ses mesajına .raw ile yanıt verin`"
+spcltool_5: "Başarıyla indirildi, şimdi sesiniz videoya ekleniyor"
+spcltool_6: "`Tarihi gg/aa/yyyy formatında girin`"
+spcltool_7: "`Doğum günün kutlu olsun! 🎉🎊`"
+spcltool_8: "Aramak içiçinde bir şey belirtin.."
+spcltool_9: "Hiçbir şey bulunamadı"
+
+# sudo
+sudo_1: "`Bir mesaja yanıt verin veya kimliğini/kullanıcı adını belirtin.`"
+sudo_2: "Kendinizi Sudo kullanıcısı olarak ekleyemezsiniz..."
+sudo_3: "`Atanmış SUDO kullanıcısı yok...`"
+sudo_4: "`Botlar Sudo kullanıcısı olarak eklenemez.`"
+
+# unsplash
+unspl_1: "Sonuç bulunamadı!"
+
+# updater
+upd_1: "`Güncellemeler kontrol ediliyor, lütfen bekleyin....`"
+upd_2: "`Hata.. Güncelleyici bazı sorunlar nedeniyle devam edemiyor.`\n\n**LOGTRACE:**\n"
+upd_3: "**Yeni GÜNCELLEME mevcut süreyle [[{}]]({}/tree/{}):\n\nDEĞİŞİKLİK GÜNLÜĞÜ**\n\n{}"
+upd_4: "`Değişiklik günlüğü çok büyük; görmek için dosyayı açın.`"
+upd_5: "Güncellemek içiçinde aşağıdaki düğmeye tıklayın."
+upd_6: "\n`Bot` **güncel** `ve` **[[{}]]({}/tree/{})**"
+upd_7: "`Fast Soft Updating...`"
+
+# upload download
+udl_1: "`İndirmek istediğiniz dosya/medyaya yanıt verin...`"
+udl_2: "{p} **Dosya başarıyla indirildi.**\n\n{p} **Yol -** `{}`\n\n{p} **Tahmini süre:** `{}`"
+udl_3: "`Dosyanın tam yolunu belirtin`"
+udl_4: "{p} **İndirilmeye çalışılıyor...**"
+udl_5: "`Bağlantı vermeyi unuttunuz :(`"
+udl_6: "`Bu dizin boş.`"
+udl_7: "`Bunu yapamazsınız!`"
+udl_8: "{p} **Dosya başarıyla indirildi.**\n\n{p} **Dosya adı -** `{}`\n\n{p} Tahmini süre: `{}`"
+udl_9: "{p} **Dosya başarıyla yüklendi.**\n\n{p} **Yol -** `{}`\n\n{p} **Tahmini süre:** `{}`"
+
+# vctools
+vct_1: "`Voice Chat Started...`"
+vct_2: "**VC başlığı başarıyla değiştirildi:** `{}`"
+vct_3: "`Üyeler sesli sohbete davet ediliyor...`"
+vct_4: "`Voice Chat Stopped...`"
+vct_5: "`Invited {} Users`"
+vct_6: "Girdi bulunamadı!"
+
+# words
+wrd_1: "• **Kelime:** `{}`\n• **Anlam:** __{}__\n\n• **Örnek:** __{}__"
+wrd_2: "**Word** - `{}`\n\n**Eş anlamlılar** - \n"
+wrd_3: "**Word** - `{}`\n\n**Zıt anlamlılar** - \n"
+wrd_4: "`Anlamını bulmak istediğiniz kelimeyi belirtin..`"
+wrd_5: "Eş anlamlılar"
+wrd_6: "Zıt anlamlılar"
+wrd_7: "Eş anlamlı bulunamadı!!\n\n`{}`"
+wrd_8: "Zıt anlamlı bulunamadı!!\n\n`{}`"
+
+# profanitY
+prof_1: "`Bu sohbet küfür filtresine eklendi!`"
+prof_2: "`Bu sohbet küfür filtresinden kaldırıldı!`"
+
+# notes
+notes_1: "`Not kullanmak için bu komutu bir mesaja yanıt vererek ve kelimeyle birlikte kullanın.`"
+notes_2: "Not tamamlandı: `#{}` kaydedildi."
+notes_3: "`Kaldırmak istediğiniz not işleyicisini belirtin.`"
+notes_4: "Bu sohbetlerde bulunan notlar\n\n"
+notes_5: "Burada not bulunamadı"
+
+# spotify
+spotify_1: "**Başlık:** {} | {} {p}\n**Süre:** {}\n**Albüm:** {}\n**Yayınlanma:** {}\n**Sanatçı:** {}"
+spotify_2: "`Dᴏᴡɴʟᴏᴀᴅɪɴɢ ᴘʟᴀʏʟɪsᴛ ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ...`"
+spotify_3: "`Uᴘʟᴏᴀᴅɪɴɢ Sᴏɴɢ...`"
+spotify_4: "{p}`Uᴘʟᴏᴀᴅɪɴɢ Cᴏᴍᴘʟᴇᴛᴇ`{p}"
+spotify_5: "Lütfen aç.spotify.com adresinden bir çalma listesi veya albüm bağlantısı sağlayın"
+
+# stickertools
+sts_1: "`Herhangi bir metin yazmadınız; Waifu gidiyor.`"
+sts_2: "`Animasyonlu bir çıkartmaya yanıt verin...`"
+sts_3: "**Şunlardan birini seçiçinde: {} **"
+sts_4: "`Animasyonsuz bir çıkartmaya yanıt verin.`"
+sts_5: "**Paket başarıyla Kanglendi**.\n**Kanglenen paket:** [bağlantı]({})"
+sts_6: "`Bir mesaja/medyaya yanıt verin...`"
+sts_7: "`Çıkartma farklı bir pakete eklendi!\nBu paket yeni oluşturuldu!\nPaketinizi` [burada](t.me/addstickers/{}) `bulabilirsiniz.`"
+sts_8: "`Çıkartma eklenemedi; manuel olarak eklemek için` @Stickers `botunu kullanın.`"
+sts_9: "`Ooo Animated Sticker 👀...`"
+sts_10: "`Herhangi bir medyaya yanıt verin...`"
+sts_11: "Bu çıkartma Kangleniyor..."
+sts_12: "`Ⲕⲁⲛⳋⲉⲇ`\n`Ⲉⲙⲟⳗⲓ` : {}\n`Ⲋⲧⲓⲥⲕⲉʀ Ⲣⲁⲥⲕ` [burada](t.me/addstickers/{})"
+sts_13: "`Yetersiz alan nedeniyle {} paketine geçiliyor`"
+
+# whichsong
+whs_1: "<• Yanıt ver -e ses dosya •>"
+whs_2: "`Şarkı tanımlanmaya çalışılıyor....`"
+whs_3: "Şarkı tanımlanamadı :("
+whs_4: "**Şarkı tanındı!**\nAd: __{}__"
+
+# webupload
+wbl_1: "`Lütfen bir dosya adı belirtin..`"
+
+# writer
+writer_1: "`Lütfen metin de belirtin`"
+
+# webshot
+wbs_1: "`Lütfen bir URL belirtin!`"
+wbs_2: "Geçersiz URL!"
+wbs_3: "**WebShot oluşturuldu**\n**URL**: {}"
+
+# youtube
+youtube_1: "Ses indirmek içiçinde bir (youtube) URLsi verin!"
+youtube_2: "`İndirmek için doğrudan bir ses bağlantısı belirtin`"
+youtube_3: "Ver me bir (youtube) URL -e indirme video -den!"
+youtube_4: "`İndirmek için doğrudan bir video bağlantısı belirtin`"
+youtube_5: "Ver me bir (youtube) arama sorgusu -e indirme ses -den!"
+youtube_6: "`Downloading audio song...`"
+youtube_7: "Ver me bir (youtube) arama sorgusu -e indirme video -den!"
+youtube_8: "`Downloading video song...`"
+
+# ziptools
+zip_1: "Herhangi bir medya/belgeye yanıt verin."
+zip_2: "First ekle tümü dosyalar Via `{}addzip` sonra doZip -e zip tümü dosyalar at one."
+zip_3: "`Yalnızca ZIP dosyasına yanıt verin`"
+
+# file share
+fsh_1: "**Depolanan dosyaların listesi:**"
+fsh_2: "**Dosya kaydedildi!**\n\n**Shareable bağlantı:** {}"
+fsh_3: "`Paylaşılabilir bağlantı oluşturmak için bir mesaja yanıt verin!`"
+fsh_4: "**Kayıtlı dosya yok!**"
+
+# getmsgs
+gms_1: "belirt bir valid mesaj bağlantı!"
+ls1: "`Dosya mevcut değil veya yol hatalı!`"
+th_1: "`Küçük resmini indirmek için bir dosyaya yanıt verin!`"
+th_2: "`Yanıtlanan dosyanın küçük resmi yok.`"
+
+# ------------------------- assistant --------------------------#
+
+ast_1: "seç which API siz want -e ayarla."
+ast_2: "**kaldır.bg API**\nEnter sizin API anahtar -den kaldır.bg.\n\nUse /cancel -e terminate  operation."
+ast_3: "Hey {}. Lütfen browse through  seçenekler"
+ast_4: "Liste Of Mevcut Languages."
+
+# inlinestuff
+instu_1: "App ara. Enter app ad!"
+instu_2: "Recent Searches.."
+instu_3: "Enter Query -e Ara"
+instu_4: "Başarılı"
+
+# games
+games_1: "Oyunu seçiçinde 🎮"
+games_2: "seç Category!"
+games_3: "seç Difficulty Level"
+games_4: "Soru sayısını seçiçinde.."
+games_5: "seç süre Interval..."
+games_6: "**• Starting Quiz içinde 5 secs.** \n**• Level :** {}\n**• Qs :** {}"
+
+# callbackstuffs
+clst_1: "`Bot dyno derlemesi devam ediyor, lütfen tamamlanmasını bekleyin.`"
+clst_2: "`Başarıyla güncellendi!\nYeniden başlatılıyor, lütfen bekleyin...`"
+clst_3: "■ Generating Changelogs..."
+clst_4: "Bir şeyler ters gitti..."
+clst_5: "tamamlandı!"
+
+# pmbot
+pmbot_1: "**Asistanı kullanabilmek için aşağıdaki sohbet(ler)e katılmanız gerekir.\n\n**"
+pmbot_2: "Lütfen yanıt -e birisi -e yasakla him."
+pmbot_3: "Kullanıcı zaten yasaklı!"
+pmbot_4: "`Güle güle! Yasaklandınız.`\n**Bundan sonra gönderdiğiniz mesajlar iletilmeyecek.**"
+pmbot_5: "Lütfen yanıt -e birisi -e yasağı kaldır him."
+pmbot_6: "Kullanıcı hiç yasaklanmamış!"
+pmbot_7: "`Tebrikler! Yasağınız kaldırıldı.`"
+
+# -------------------------- VcBot ------------------------------- #
+
+vcbot_1: "`Sesli sohbetten ayrıldı.`"
+vcbot_2: "**HATA:**\n{}"
+vcbot_3: "• Volume Changed ile `{}%` •"
+vcbot_4: "`Lütfen 1 ile 200 arasında bir ses seviyesi belirtin!`"
+vcbot_5: "`Bu sesli sohbete yeniden katılınıyor.`"
+vcbot_6: "Henüz bir sesli sohbete bağlanmadınız!"
+vcbot_7: "`Keep patience... It'll take some time.`"
+vcbot_8: "Ver yalnızca youtube çalma listesi"
+vcbot_9: "Şaka mı yapıyorsun?\nNe oynayayım?"
+vcbot_10: "kaldırıldı sohbet -den VC AUTH Groups!"
+vcbot_11: "`Getting Voice Chat Bot Users List...`"
+vcbot_12: "`Bu sohbette oynatma sessize alındı.`"
+vcbot_13: "`Bu sohbette oynatma sürdürüldü.`"
+vcbot_14: "`Bu sohbette oynatma duraklatıldı.`"
+vcbot_15: "Lütfen specify bir şarkı ad veya yanıt -e bir video dosya !"
+vcbot_16: "Sohbet VC yetkilendirme listesinde değil..."
+vcbot_17: "`Kullanıcının mesajına yanıt verin veya kimliğini/kullanıcı adını belirtin...`"
+vcbot_18: "• Vc Auth Liste  boş.."
+vcbot_19: "Bu sohbet zaten yetkilendirilmiş!"
+vcbot_20: "`Downloading & Converting...`"
+vcbot_21: "• hiçbir şey içinde queue!"
+vcbot_22: "`Sohbetteki tüm kuyruklar temizlendi`"
+
+# Help Menus
+
+cmda: "✘ Kullanılabilir komutlar"
+help_admintools: "-\n\n• `.promote <reply to user/userid/username>`\n• `.demote`\n    yükselt/yetkisini düşür  kullanıcı içinde  sohbet.\n\n• `.ban <reply to user/userid/username> <reason>`\n• `.unban`\n    yasakla/yasağı kaldır  kullanıcı -den  sohbet.\n\n• `.kick <reply to user/userid/username> <reason>`\n    at  kullanıcı -den  sohbet.\n\n• `.pin <reply to message>`\n    sabitle  mesaj içinde  sohbet\n• `.tpin <time> <temp pin message>`\n• `.unpin (all) <reply to message>`\n    sabitlemeyi kaldır  mesajlar içinde  sohbet.\n\n• `.pinned`\n   Al pinned mesaj içinde  mevcut sohbet.\n• `.listpinned`\n   Al tümü pinned mesajlar içinde mevcut sohbet\n\n• `.autodelete <24h/7d/1m/off>`\n   etkinleştir Auto Sil mesajlar içinde sohbet.\n\n• `.purge <reply to message>`\n    Purge tümü mesajlar -den  replied mesaj.\n\n• `.purgeme <reply to message>`\n    Purge yalnızca sizin mesajlar -den  replied mesaj.\n\n• `.purgeall`\n    Sil tümü msgs -içinde replied kullanıcı.\n\n• `.mypurge`\n    Sil tümü sizin msgs .\n"
+help_afk: " -\n\n• `{i}afk <optional reason>`\n    AFK means away -den keyboard,\n    After bu  activated, eğer birisi tags veya mesajlar siz, he/she would al bir automated yanıt -den  bot.\n\n    (Note : Ayarla bir medya dosya içinde afk mesajlar by replying -e herhangi bir medya ile `{i}afk <reason>`).\n\n"
+help_antiflood: " -\n\n• `{i}setflood <integer>`\n    Ayarla flood limit içinde bir sohbet.\n\n• `{i}remflood`\n    Kaldır flood limit -den bir sohbet.\n\n• `{i}getflood`\n    Al flood limit -içinde bir sohbet.\n"
+help_asstcmd: " -\n\n•`{i}addcmd <new cmd> <reply>`\n   It will ayarla yeni cmd süreyle sizin assistant bot ile o yanıt mesaj.\n\n•`{i}remcmd <cmd name>`\n   It will kaldır sizin cmd.\n\n•`{i}listcmd`\n   ile Al listele -içinde tümü sizin özel cmd.\n"
+help_audiotools: "✘ Kullanılabilir komutlar - \n`.makevoice <reply to audio>`\n   creates bir ses not -den ses.\n\n`.atrim <from time> - <to time>`\n   trim ses as başına verilen zaman.\n   zaman must be içinde saniye. `.atrim 50-70`\n\n`.extractaudio <reply to media>`\n   ile extract  ses -den it.\n\n"
+help_autoban: "\n\n• `{i}autokick <on/off>`\n    üzerinde - ile etkinleştir.\n    off - ile devre dışı bırak.\n    Automatically at yeni katıldı kullanıcılar -den  grup.\n"
+help_beautify: " -\n\n• `{i}carbon <text/reply to msg/reply to document>`\n    Carbonise  metin ile varsayılan ayarlar.\n\n• `{i}rcarbon <text/reply to msg/reply to document>`\n    Carbonise  metin, ile rastgele bg colours.\n\n• `{i}ccarbon <color ><text/reply to msg/reply to document>`\n    Carbonise  metin, ile özel bg colours.\n\n• `{i}rayso <opt-theme> <text>/<reply to message>`\n  `{i}rayso list` - `Get list of themes.`\n"
+help_blacklist: " -\n\n• `{i}blacklist <word/all words with a space>`\n    blacklist  choosen kelime içinde o sohbet.\n\n• `{i}remblacklist <word>`\n    Kaldır  kelime -den blacklist..\n\n• `{i}listblacklist`\n    listele tümü blacklisted kelimeler.\n\n  'eğer bir person uses blacklist Word his/her msg will be deleted'\n  've u Must be yönetici içinde o sohbet'\n"
+help_bot: "\n\n• `{i}alive` | `{i}alive inline`\n    Check eğer sizin bot  çalışıyor.\n\n• `{i}ping`\n    Check bot response zaman.\n\n• `{i}update`\n    See changelogs eğer herhangi bir güncelle  mevcut.\n\n• `{i}cmds`\n    görüntüle tümü eklenti names.\n\n• `{i}restart`\n    ile yeniden başlat sizin bot.\n\n• `{i}logs (sys)`\n    Al  full terminal logs.\n• `{i}logs carbon`\n    Al  carbonized sys logs.\n• `{i}logs heroku`\n   Al  en son 100 lines -içinde heroku logs.\n\n• `{i}shutdown`\n    Turn off sizin bot.\n"
+help_broadcast: "\n\n• `{i}addch <id/reply to list/none>`\n    ekle sohbet -e veritabanı. Adds mevcut sohbet eğer yok kimlik belirtilen.\n\n• `{i}remch <all/id/none>`\n    Removes  belirtilen sohbet (mevcut sohbet eğer none belirtilen), veya tümü chats.\n\n• `{i}broadcast <reply to msg>`\n    Gönder  replied mesaj -e tümü chats içinde veritabanı.\n\n• `{i}forward <reply to msg>`\n     ilet  mesaj -e tümü chats içinde veritabanı.\n\n• `{i}listchannels`\n    ile al listele -içinde tümü eklendi chats.\n"
+help_button: " -\n\n• `{i}button <text with button format`\n   oluştur düğme u -ebilir yanıt -e pic also\n\nFormat:- `{i}button Hey There! @DarkPentesterBot 😎.\n[DarkPentesterBot | t.me/DarkPentesterBot][Support | t.me/DarkPentesterBot | same]\n[DarkPentesterBot | t.me/DarkPentesterBot]`\n"
+help_calculator: " -\n\n•`{i}calc` - Inline Calculator\n\n"
+help_channelhacks: "\n\n🔹 `{i}shift <from channel> | <to channel>`\n     bu will transfer tümü eski post -den kanal bir -e kanal B.\n      (u -ebilir kullan kullanıcı adı veya kimlik -içinde kanal too)\n      örnek : `{i}shift @abc | @xyz`\n      [not - bu (' | ') sign  nessesary]\n\n🔹 için auto-gönderme/iletme tümü yeni mesaj -den herhangi bir kaynak kanal -e herhangi bir hedef kanal.\n\n   `{i}asource <channel username or id>`\n      bu ekle kaynak kanal -e veritabanı\n   `{i}dsource <channel username or id>`\n      bu kaldır kaynak kanallar -den veritabanı\n   `{i}listsource <channel username or id>`\n      göster listele -içinde kaynak kanallar\n\n\n   `{i}adest <channel username or id>`\n      bu ekle Ur kanallar -e veritabanı\n   `{i}ddest <channel username or id>`\n      bu Kaldır Ur kanallar -den veritabanı\n   `{i}listdest <channel username or id>`\n      göster Liste -içinde Ur kanallar\n\n   'siz -ebilir ayarla many kanallar içinde veritabanı'\n   'için activating auto-post kullan `{i}setdb AUTOPOST True` '\n"
+help_chatbot: " -\n\n• `{i}addai <reply to user/give username/userid>`\n   ekle bir AI ChatBot -e yanıt -e o kullanıcı.\n\n• `{i}remai <reply to user/give username/userid>`\n   Kaldır  AI ChatBot.\n\n• `{i}repai <reply to user/give a message>`\n   Yanıt ver -e  kullanıcı ile bir mesaj by bir AI.\n\n• `{i}listai`\n   Liste  şu anda AI eklendi kullanıcılar.\n"
+help_chats: " -\n\n• `{i}delchat <optional- username/id>`\n    Sil  grup bu cmd  kullanılan içinde.\n\n• `{i}getlink`\n• `{i}getlink r` - `create link with admin approval`\n• `{i}getlink r title_here` - `admin approval with link title`\n• `{i}getlink 10` - `usage limit in new link`\n    Al bağlantı -içinde grup bu cmd  kullanılan içinde.\n\n• `{i}create (g|b|c) <group_name> ; <optional-username>`\n    oluştur grup woth bir specific ad.\n    g - megagroup/supergroup\n    b - small grup\n    c - kanal\n\n• `{i}setgpic <reply to Photo><chat username>`\n    Ayarla profil fotoğraf -içinde grup.\n\n• `{i}delgpic <chat username -optional>`\n    Sil profil fotoğraf -içinde grup.\n\n• `{i}unbanall`\n    yasağı kaldır tümü üyeler -içinde bir grup.\n\n• `{i}rmusers`\n    Kaldır kullanıcılar specifically.\n"
+help_cleanaction: " -\n\n•`{i}addclean`\n    temizle tümü Upcoming işlem msg içinde eklendi sohbet gibi birisi katıldı/ayrıldı/sabitle etc.\n\n•`{i}remclean`\n    Kaldır sohbet -den veritabanı.\n\n•`{i}listclean`\n   ile al listele -içinde tümü chats burada its activated.\n\n"
+help_converter: " -\n\n• `{i}convert <gif/img/sticker/webm>`\n    Yanıt ver -e medya -e dönüştür it into gif / görsel / webm / normal çıkartma.\n\n• `{i}doc <filename.ext>`\n    Yanıt ver -e bir metin msg -e kaydet it içinde bir dosya.\n\n• `{i}open`\n    Yanıt ver -e bir dosya -e reveal it's metin.\n\n• `{i}rename <file name with extension>`\n    yeniden adlandır  dosya\n\n• `{i}thumbnail <reply to image/thumbnail file>`\n    Yükle Sizin dosya ile sizin özel küçük resim.\n"
+help_core: " -\n\n• `{i}install <reply to plugin>`\n    ile kur  eklenti,\n  `{i}install f`\n    ile force kur.\n\n• `{i}uninstall <plugin name>`\n    ile kaldır ve kaldır  eklenti.\n\n• `{i}load <plugin name>`\n    ile yükle kaldırıldı unofficial eklenti.\n\n• `{i}unload <plugin name>`\n    ile kaldır unofficial eklenti.\n\n• `{i}help <plugin name>`\n    Shows siz bir yardım menu (gibi bu) süreyle every eklenti.\n\n• `{i}getaddons <raw link to code>`\n    yükle Eklentiler -den  verilen raw bağlantı.\n"
+help_database: " -\n\n• **veritabanı komutlar, do not kullan eğer siz don't know what it .**\n\n• `{i}setdb key | value`\n    Ayarla değer içinde veritabanı.\n    e.g :\n    `{i}setdb hi there`\n    `{i}setdb hi there | heartless here`\n    `{i}setdb --extend variable value` veya `{i}setdb -e variable value` -e ekle  değer -e  exiting values içinde db.\n\n• `{i}deldb key`\n    Sil anahtar -den DB.\n\n• `{i}rendb old keyname | new keyname`\n    güncelle anahtar ad\n"
+help_devtools: " -\n\n• `{i}bash <cmds>`\n• `{i}bash -c <cmds>` Carbon görsel as komut output.\n    Run linux komutlar üzerinde telegram.\n\n• `{i}eval <code>`\n    Evaluate python komutlar üzerinde telegram.\n    Shortcuts:\n        client = bot = event.client\n        e = event\n        p = print\n        yanıt = await event.al_yanıt_mesaj()\n        sohbet = event.sohbet_kimlik\n\n• `{i}cpp <code>`\n    Run c++ code -den Telegram.\n\n• `{i}sysinfo`\n    Shows System bilgi.\n"
+help_downloadupload: " -\n\n• `{i}ul <path/to/file>`\n    Yükle dosyalar üzerinde telegram.\n    kullan following arguments before veya after filename as başına requirement:\n      `--stream` -e yükleme as stream.\n      `--delete` -e sil dosya after yükleniyor.\n      `--no-thumb` -e yükleme olmadan küçük resim.\n\n• `{i}dl <filename(optional)>`\n    Yanıt ver -e dosya -e indirme.\n\n• `{i}download <DDL> (| filename)`\n    İndir kullanarak DDL. Will autogenerate filename eğer not verilen.\n"
+help_echo: "\n\n•`{i}addecho <reply to anyone>`\n   Başlat Auto Echo mesaj -içinde Replied kullanıcı.\n\n•`{i}remecho <reply to anyone>`\n   Turn It off\n\n•`{i}listecho <reply to anyone>`\n   ile Al listele.\n"
+help_extra: " -\n\n• `{i}del <reply to message>`\n    Sil  replied mesaj.\n\n• `{i}edit <new message>`\n    Edit sizin last mesaj veya replied msg.\n\n• `{i}copy <reply to message>`\n    kopyala replied mesaj / medya.\n\n• `{i}reply`\n    Yanıt ver  last sent msg -e replied kullanıcı.\n"
+help_fakeaction: " -\n\n<b>Fake Actions</b>\n\n• `{i}ftyping [time]`\n• `{i}faudio [time]`\n• `{i}fvideo [time]`\n• `{i}fgame [time]`\n• `{i}fsticker [time]`\n• `{i}flocation [time]`\n• `{i}fcontact [time]`\n• `{i}fround [time]`\n• `{i}fphoto [time]`\n• `{i}fdocument [time]`\n    `Show the selected Telegram action for the specified duration.`\n\n<b>süre</b>\n    `<number>` = saniye\n    `<number>s` = saniye\n    `<number>m` = dakika\n    `<number>h` = saat\n    `<number>d` = gün\n\n    `Examples:`\n    `{i}ftyping 10`\n    `{i}ftyping 30s`\n    `{i}ftyping 5m`\n    `{i}ftyping 2h`\n    `{i}ftyping 1d`\n\n<b>Target</b>\n    `Actions can be sent to the current chat or a specific user/chat.`\n\n    `{i}ftyping @username 10`\n    `{i}ftyping 123456789 10`\n    `{i}ftyping 10 @username`\n    `{i}ftyping 10 123456789`\n\n    `Username and numeric Telegram ID are supported.`\n\n<b>varsayılan süre</b>\n    `{i}ftyping`\n    `If no duration is specified, the default duration is used.`\n\n<b>Durdur Normal Action</b>\n    `{i}ftyping off`\n    `{i}ftyping off @username`\n    `{i}ftyping off 123456789`\n    `Use off to stop an active fake action.`\n\n<b>tümü Mode</b>\n    `{i}all ftyping 10`\n    `Run Fake Typing automatically whenever a new incoming message is received.`\n\n    `{i}all ftyping 10h`\n    `Keep the fake action active for 10 hours whenever a new message triggers it.`\n\n    `{i}all ftyping @username 10`\n    `{i}all ftyping 10 @username`\n    `Only messages from the specified user trigger the action.`\n\n    `{i}all ftyping 123456789 10`\n    `A numeric user ID can also be used as the trigger target.`\n\n<b>Durdur tümü Mode</b>\n    `{i}all ftyping off`\n    `{i}all faudio off`\n    `{i}all fvideo off`\n    `The same format works with every Fake Action.`\n\n<b>FSeen</b>\n    `{i}fseen`\n    `In a private chat, automatically mark new messages from that user as read.`\n\n    `{i}fseen @username`\n    `{i}fseen 123456789`\n    `Monitor a specific user by username or numeric ID.`\n\n    `In groups, reply to the user's message and use {i}fseen.`\n\n<b>FSeen tümü Mode</b>\n    `{i}all fseen`\n    `{i}all fseen @username`\n    `{i}all fseen 123456789`\n    `Automatically mark new messages from the selected user as read.`\n\n    `ALL mode only reacts to messages received after activation.`\n\n<b>Durdur FSeen</b>\n    `{i}fseen off`\n    `{i}fseen off @username`\n    `{i}fseen off 123456789`\n    `Stops automatic read acknowledgement for the selected user.`\n\n<b>Durdur FSeen tümü Mode</b>\n    `{i}all fseen off`\n    `{i}all fseen off @username`\n    `{i}all fseen off 123456789`\n    `Stops the selected FSeen ALL watcher.`\n\n<b>Notes</b>\n    `• ALL mode applies only to messages received after activation.`\n    `• A new message in the same chat replaces the previous fake-action task.`\n    `• Fake Telegram actions are chat-wide and cannot be displayed to only one member of a group.`\n    `• FSeen uses Telegram's read acknowledgement system.`\n    `• Numeric IDs may require the account to have previously encountered or have access to the target entity.`\n    `• Each Fake Action can have its own independent ALL mode.`\n"
+help_fedutils: " -\n\n• `{i}superfban <reply to user/userid/username>`\n    FBan  person across tümü feds içinde which siz  yönetici.\n\n• `{i}superunfban <reply to user/userid/username>`\n    Un-FBan  person across tümü feds içinde which siz  yönetici.\n\nSpecify FBan grup ve Feds -e exclude içinde  assistant.\n\n• `{i}fstat <username/id/reply to user>`\n    Collect fed stat -içinde  person içinde Rose.\n\n• `{i}fedinfo <(fedid)>`\n    Collect federation bilgi -içinde  verilen fed kimlik, veya -içinde  fed siz own, -den Rose.\n"
+help_fileshare: " -\n\n• `{i}fs <query>`\n    `Search your saved/shared files by name.`\n\n• `{i}fileshare <query>`\n    `Same as fs. Search and share files inline.`\n\n• `{i}fs`\n    `Open the Fileshare inline interface and browse your available files.`\n\n**Inline Mode:**\n    `All Fileshare operations are designed to work inline.`\n\n    `Type the command followed by your query and choose a result from the inline list.`\n\n    `Example:`\n    `{i}fs song`\n    `{i}fs movie`\n    `{i}fs document`\n\n**Ara:**\n    `{i}fs <name>`\n    `Search files by their filename or stored title.`\n\n    `{i}fs pdf`\n    `{i}fs photo`\n    `{i}fs myfile`\n\n    `The search is case-insensitive and supports partial names.`\n\n**dosya Types:**\n    `Files can be searched and displayed according to their media type.`\n\n    `Supported categories may include:`\n    `Documents, Photos, Videos, Audio, Voice, Archives and other files.`\n\n**Pagination:**\n    `If more files are available than can be displayed at once, use the navigation buttons in the inline interface to load the next or previous page.`\n\n    `Pagination prevents large file collections from slowing down the inline search.`\n\n<**dosya bilgi:**\n    `Each result can display useful information about the file, including:`\n    `Filename, file type, size, duration when available, and other available metadata.`\n\n**Sharing:**\n    `Select any file from the inline results to send/share it in the current chat.`\n\n    `Files are shared using Telegram's stored media whenever possible, avoiding unnecessary re-uploads.`\n\n**Inline Ara örnekler:**\n    `{i}fs linux`\n    `{i}fs tutorial`\n    `{i}fs mp3`\n    `{i}fs .zip`\n    `{i}fs 1080p`\n\n**Exact Ara:**\n    `Use the complete filename when you want to find a specific file.`\n\n    `{i}fs Ubuntu 24.04.iso`\n    `{i}fs My Document.pdf`\n\n**Partial Ara:**\n    `You can also provide only a part of the filename.`\n\n    `{i}fs Ubuntu`\n    `{i}fs Document`\n    `{i}fs tutorial`\n\n**Media Filtering:**\n    `Use a media type or extension as part of the search query to narrow the results.`\n\n    `{i}fs mp4`\n    `{i}fs mp3`\n    `{i}fs pdf`\n    `{i}fs zip`\n    `{i}fs jpg`\n\n**dosya Management:**\n    `Files stored by Fileshare can be managed without manually searching through Telegram messages.`\n\n    `The inline interface provides the available management actions for supported files.`\n\n**Sil:**\n    `Use the delete option available in the file's inline controls to remove a stored file when supported.`\n\n    `Deletion requires confirmation to prevent accidental removal.`\n\n**Cleanup:**\n    `The cleanup option can be used to remove obsolete or unwanted stored entries when supported by the plugin.`\n\n    `Use cleanup carefully because removed entries may no longer appear in Fileshare search results.`\n\n**dosya ayrıntılar:**\n    `Open the details option from an inline result to inspect the stored information before sharing or managing the file.`\n\n**Quick Usage:**\n    `1. Open any Telegram chat.`\n    `2. Start the Fileshare inline command.`\n    `3. Enter the filename or part of the filename.`\n    `4. Select the desired file from the results.`\n    `5. Telegram sends the selected file to the current chat.`\n\n**Performance:**\n    `Fileshare uses indexed/searchable stored information so large collections can be searched without loading every file into memory for every request.`\n\n    `Pagination and controlled result limits are used to keep inline responses fast.`\n\n**Notes:**\n    `Search results depend on the files available to Fileshare and the metadata stored for each file.`\n    `A file that has been deleted from the underlying Telegram storage may no longer be shareable.`\n    `Very large files may be subject to Telegram's own file and account limitations.`\n    `Inline results are generated dynamically and may be cached according to the plugin configuration.`\n    `If a result becomes invalid, refresh the inline search and try again.`\n"
+help_filter: " -\n\n• `{i}addfilter <word><reply to a message>`\n    ekle  kullanılan kelime as filtre relating -e replied mesaj.\n\n• `{i}remfilter <word>`\n    Kaldır  filtered kullanıcı..\n\n• `{i}listfilter`\n    listele tümü filtreler.\n"
+help_fontgen: "\n• `{i}font <font name> : <text>`\n    oluştur farklı yazı tipleri süreyle  metin.\n\n• `{i}font`\n    ile al listele -içinde yazı tipleri\n"
+help_giftools: "\n\n•`{i}invertgif`\n  Make Gif Inverted(negative).\n\n•`{i}bwgif`\n  Make Gif black ve white\n\n•`{i}rvgif`\n  Reverse bir gif\n\n•`{i}vtog`\n  Yanıt ver ile video , It will oluştur Gif\n  video -e Gif\n\n•`{i}gif <query>`\n   Gönder video regarding -e sorgu.\n"
+help_globaltools: " -\n\n• `{i}gban <reply user/ username>`\n• `{i}ungban`\n    yasakla/yasağı kaldır Globally.\n\n• `{i}gstat <reply to user/userid/username>`\n   Check eğer kullanıcı  GBanned.\n\n• `{i}listgban` : Liste tümü GBanned kullanıcılar.\n\n• `{i}gmute` | `{i}ungmute` <yanıt kullanıcı/ kullanıcı adı>\n    sustur/susturmayı kaldır Globally.\n\n• `{i}gkick <reply/username>` `Globally Kick User`\n• `{i}gcast <text/reply>` `Globally Send msg in all grps`\n\n• `{i}gadmincast <text/reply>` `Globally broadcast in your admin chats`\n• `{i}gucast <text/reply>` `Globally send msg in all pm users`\n\n• `{i}gblacklist <chat id/username/nothing (for current chat)`\n   ekle sohbet -e blacklist ve ignores global broadcast.\n• `{i}ungblacklist` `Remove the chat from blacklist.`\n\n• `{i}gpromote <reply to user> <channel/group/all> <rank>`\n    globally yükselt kullanıcı burada siz  yönetici\n    - Ayarla whether ile yükselt yalnızca içinde groups/kanallar/tümü.\n    Eg- `gpromote group boss` ~ promotes kullanıcı içinde tümü grps.\n        `gpromote @username all sar` ~ yükselt  kullanıcı içinde tümü grup & kanal\n• `{i}gdemote` - `demote user globally`\n"
+help_greetings: " -\n\n---- Welcomes ----\n• `{i}setwelcome <message/reply to message>`\n    Ayarla welcome mesaj içinde  mevcut sohbet.\n\n• `{i}clearwelcome`\n    Sil  welcome içinde  mevcut sohbet.\n\n• `{i}getwelcome`\n    Al  welcome mesaj içinde  mevcut sohbet.\n\n---- GoodByes ----\n• `{i}setgoodbye <message/reply to message>`\n    Ayarla goodbye mesaj içinde  mevcut sohbet.\n\n• `{i}cleargoodbye`\n    Sil  goodbye içinde  mevcut sohbet.\n\n• `{i}getgoodbye`\n    Al  goodbye mesaj içinde  mevcut sohbet.\n\n• `{i}thankmembers on/off`\n    Gönder bir thank siz çıkartma üzerinde hitting bir üyeler count -içinde 100*x içinde sizin groups.\n"
+help_imagetools: " -\n\n• `{i}border <reply to photo/sticker>`\n    ile oluştur border around o medya..\n    Ex - `{i}border 12,22,23`\n       - `{i}border 12,22,23 ; width (in number)`\n\n• `{i}grey <reply to any media>`\n    ile make it black nd white.\n\n• `{i}color <reply to any Black nd White media>`\n    ile make it Colorfull.\n\n• `{i}toon <reply to any media>`\n    ile make it toon.\n\n• `{i}danger <reply to any media>`\n    ile make it look Danger.\n\n• `{i}negative <reply to any media>`\n    ile make negative görsel.\n\n• `{i}blur <reply to any media>`\n    ile make it blurry.\n\n• `{i}quad <reply to any media>`\n    oluştur bir Vortex.\n\n• `{i}mirror <reply to any media>`\n    ile oluştur mirror pic.\n\n• `{i}flip <reply to any media>`\n    ile make it flip.\n\n• `{i}sketch <reply to any media>`\n    ile draw its sketch.\n\n• `{i}blue <reply to any media>`\n    just cool.\n\n• `{i}csample <color name /color code>`\n   örnek : `{i}csample red`\n             `{i}csample #ffffff`\n\n• `{i}pixelator <reply image>`\n    oluştur bir Pixelated görsel..\n"
+help_instagram: " -\n\n• `{i}ig <Instagram Url>`\n  `Download Instagram posts, reels, TV, or stories`\n\n• isteğe bağlı: ayarla `IG_COOKIES` (cookie dosya yol) süreyle özel/restricted medya\n"
+help_locks: " -\n\n• `{i}lock <msgs/media/sticker/gif/games/inline/polls/invites/pin/changeinfo>`\n    Lock  Used ayar içinde Used grup.\n\n• `{i}unlock <msgs/media/sticker/gif/games/inline/polls/invites/pin/changeinfo>`\n    UNLOCK  Used ayar içinde Used grup.\n"
+help_logo: " -\n\n• `{i}logo <text>`\n   oluştur bir logo -içinde  verilen metin\n   veya Yanıt ver ile görsel , -e yaz ur metin üzerinde it.\n   veya Yanıt ver ile Font dosya, ile yaz ile o yazı tipi.\n\n"
+help_mediatools: " -\n\n• `{i}mediainfo <reply to media>`\n   ile al bilgi hakkında it.\n\n• `{i}rotate <degree/angle> <reply to media>`\n   Rotate herhangi bir video/fotoğraf/medya..\n   Note : süreyle video it should be açı -içinde 90's\n"
+help_misc: " -\n\n• `{i}eod`\n    `Get Event of the Today`\n\n• `{i}pntrst <link/id>`\n    İndir ve gönder pinterest pins\n\n• `{i}gadget <search query>`\n    Gadget Ara -den Telegram.\n\n• `{i}randomuser`\n   oluştur ayrıntılar hakkında bir rastgele kullanıcı.\n\n• `{i}ascii <reply image>`\n    Convert replied görsel into html.\n"
+help_mute: " -\n\n• `{i}mute <reply to msg/ user id>`\n    sustur kullanıcı içinde mevcut sohbet.\n\n• `{i}unmute <reply to msg/ user id>`\n    susturmayı kaldır kullanıcı içinde mevcut sohbet.\n\n• `{i}dmute <reply to msg/ user id>`\n    sustur kullanıcı içinde mevcut sohbet by deleting msgs.\n\n• `{i}undmute <reply to msg/ use id>`\n    susturmayı kaldır dmuted kullanıcı içinde mevcut sohbet.\n\n• `{i}tmute <time> <reply to msg/ use id>`\n    s- saniye\n    m- dakika\n    h- saat\n    d- gün\n    sustur kullanıcı içinde mevcut sohbet ile zaman.\n"
+help_notes: " -\n\n• `{i}addnote <word><reply to a message>`\n    ekle not içinde  kullanılan sohbet ile replied mesaj ve choosen kelime.\n\n• `{i}remnote <word>`\n    Kaldır  not -den kullanılan sohbet.\n\n• `{i}listnote`\n    listele tümü notlar.\n\n• kullan :\n   ayarla notlar içinde grup so tümü -ebilir kullan it.\n   tür `#(Keyword of note)` -e al it\n"
+help_other: " -\n\n• `{i}send <username/id> <reply/type>`\n    gönder mesaj -e kullanıcı/sohbet.\n\n• `{i}fwdreply <reply to msg>`\n    Yanıt ver -e birinin mesajı by iletme it içinde özel.\n\n• `{i}save <reply message>`\n    Kaydet o replied msg -e ur saved mesajlar box.\n\n• `{i}fsave <reply message>`\n    ilet o replied msg -e ur saved mesajlar.\n"
+help_pmpermit: " -\n\n• `{i}a` veya `{i}approve`\n    onayla birisi -e PM.\n\n• `{i}da` veya `{i}disapprove`\n    Disapprove birisi -e PM.\n\n• `{i}block`\n    engelle birisi.\n\n• `{i}unblock` | `{i}unblock all`\n    engeli kaldır birisi.\n\n• `{i}nologpm`\n    Durdur logging mesajlar -den  kullanıcı.\n\n• `{i}logpm`\n    Başlat logging mesajlar -den  kullanıcı.\n\n• `{i}startarchive`\n    Archive yeni PMs.\n\n• `{i}stoparchive`\n    Don't arşivle yeni PMs.\n\n• `{i}cleararchive`\n    Unarchive tümü chats.\n\n• `{i}listapproved`\n   Liste tümü approved PMs.\n"
+help_polls: " -\n\n• `{i}poll <question> ; <option> ; <option>`\n    Al  Anonymous Poll ile verilen seçenekler\n\n• `{i}poll <question> ; <option> ; <option> | <type>`\n    Al  anket belirtilen ile desired tür!\n    tür should be herhangi bir -içinde  `public`,  `multiple` veya `quiz`\n\n• `{i}poll <question> ; <option> ; <option> | quiz_<answerno>`\n    Al  quiz anket burada answerno   sayı -içinde seçenek which  doğru\n\n"
+help_profanityfilter: " -\n\n•`{i}addprofanity`\n   eğer birisi sends bad kelime içinde bir sohbet, ardından bot will sil o mesaj.\n\n•`{i}remprofanity`\n   -den sohbet -den Profanity listele.\n\n"
+help_profile: " -\n\n• `{i}setname <first name // last name>`\n    değiştir sizin profil ad.\n\n• `{i}setbio <bio>`\n    değiştir sizin profil bio.\n\n• `{i}setpic <reply to pic>`\n    değiştir sizin profil pic.\n\n• `{i}delpfp <n>(optional)`\n    Sil one profil pic, eğer yok değer verilen, else sil n sayı -içinde pics.\n\n• `{i}poto <username>`\n    Yükle  fotoğraf -içinde sohbet/kullanıcı eğer Mevcut.\n"
+help_qrcode: " -\n\n• `{i}qrcode <text/reply to text>`\n   `Makes qrcode of text`\n\n• `{i}addqr <reply image> <text>`\n   `Makes qr of text and add it to image.`\n\n• `{i}qrdecode <reply to qrcode>`\n   `It decodes the qrcode.`\n"
+help_resize: " -\n\n•`{i}size <reply to media>`\n   ile al boyut -içinde it.\n\n•`{i}resize <number> <number>`\n   ile yeniden boyutlandır görsel üzerinde x, y axis.\n   eg. `{i}resize 690 960`\n"
+help_schedulemsg: " -\n\n•`{i}schedule <text/reply to msg> <time>`\n    içinde zaman u -ebilir kullan saniye as sayı, veya gibi 1h veya 1m\n    eg. `{i}schedule Hello 100` It deliver msg after 100 sec.\n    eg. `{i}schedule Hello 1h` It deliver msg after bir saat.\n"
+help_search: " -\n\n• `{i}saavn <search query>`\n    İndir şarkılar -den Saavn.\n\n• `{i}google <query>`\n    için doing google ara.\n\n• `{i}github <username>`\n    Al full bilgi -içinde  kullanıcılar github profil.\n\n• `{i}img <query>`\n  `{i}img <query> ; <no of results>`\n    için doing Images ara.\n\n• `{i}reverse`\n    Yanıt ver bir görsel veya çıkartma -e find its sauce.\n"
+help_snips: " -\n\n• `{i}addsnip <word><reply to a message>`\n    ekle  kullanılan kelime as snip relating -e replied mesaj.\n\n• `{i}remsnip <word>`\n    Kaldır  snip kelime..\n\n• `{i}listsnip`\n    listele tümü snips.\n\n• kullan :\n    tür `$(ur snip word)` al setted yanıt.\n"
+help_specialtools: " -\n\n• `{i}wspr <username>`\n    Gönder secret mesaj..\n\n• `{i}q <color-optional>`\n• `{i}q @username`\n• `{i}q r <color-optional>`\n• `{i}q count` : `multiple quotes`\n    oluştur quotes..\n\n• `{i}sticker <query>`\n    Ara Stickers as Per ur Wish..\n\n• `{i}getaudio <reply to an audio>`\n    İndir ses ile put içinde ur Desired video/Gif.\n\n• `{i}addaudio <reply to Video/gif>`\n    It will put  yukarıdaki ses -e  replied video/gif.\n\n• `{i}dob <date of birth>`\n    Put içinde dd/mm/yy biçim yalnızca(eg .dob 01/01/1999).\n\n• `{i}wall <query>`\n    Ara Hd Wallpaper as Per ur Wish..\n"
+help_stickertools: " -\n\n• `{i}destroy <reply to animated sticker>`\n    ile destroy  çıkartma.\n\n• `{i}tiny <reply to media>`\n    ile oluştur Tiny stickers.\n\n• `{i}kang <reply to image/sticker>`\n    Kang  çıkartma (ekle -e sizin paket).\n\n• `{i}packkang <pack name>`\n    Kang  Complete çıkartma seti (ile özel ad).\n\n• `{i}round <reply to any media>`\n    ile extract yuvarlak çıkartma.\n"
+help_sudo: " -\n\n• `{i}addsudo`\n    ekle Sudo kullanıcılar by replying -e kullanıcı veya kullanarak <boşluk> separated kullanıcı kimliği(s)\n\n• `{i}delsudo`\n    Kaldır Sudo kullanıcılar by replying -e kullanıcı veya kullanarak <boşluk> separated kullanıcı kimliği(s)\n\n• `{i}listsudo`\n    Liste tüm Sudo kullanıcıları.\n"
+help_tag: " -\n\n• `{i}tagall`\n    Tag Top 100 üyeler -içinde sohbet.\n\n• `{i}tagadmins`\n    Tag yöneticiler -içinde o sohbet.\n\n• `{i}tagowner`\n    Tag sahip -içinde o sohbet\n\n• `{i}tagbots`\n    Tag Botlar -içinde o sohbet.\n\n• `{i}tagrec`\n    Tag yakın zamanda etkin üyeler.\n\n• `{i}tagon`\n    Tag çevrimiçi üyeler(work yalnızca eğer gizlilik kapalı).\n\n• `{i}tagoff`\n    Tag çevrimdışı üyeler(work yalnızca eğer gizlilik kapalı).\n"
+help_tools: " -\n\n• `{i}circle`\n    Yanıt ver -e bir ses şarkı veya gif -e al video mesajı.\n\n• `{i}ls`\n    Al tümü  dosyalar inside bir dizin.\n\n• `{i}bots`\n    Shows  sayı -içinde bots içinde  mevcut sohbet ile their kalıcı bağlantı.\n\n• `{i}hl <a link> <text-optional>`\n    Embeds  bağlantı ile bir boşluk as mesaj.\n\n• `{i}id`\n    Yanıt ver bir çıkartma -e Al Its kimlik\n    Yanıt ver bir kullanıcı -e Al His kimlik\n    olmadan Replying siz Will Al  sohbet's kimlik\n\n• `{i}sg <reply to a user><username/id>`\n    Al His ad geçmiş -içinde  replied kullanıcı.\n\n• `{i}tr <dest lang code> <(reply to) a message>`\n    Al çevrilmiş mesaj.\n\n• `{i}webshot <url>`\n    Al bir ekran görüntüsü -içinde  web sayfası.\n\n• `{i}shorturl <url> <id-optional>`\n    kısalt herhangi bir URL...\n"
+help_unsplash: " -\n\n• {i}unsplash <arama sorgusu> ; <görsel sayısı>\n    Unsplash görsel Ara.\n"
+help_usage: "\n\n• `{i}usage`\n    Al genel kullanım.\n\n• `{i}usage heroku`\n   Al heroku istatistikler.\n\n• `{i}usage db`\n   Al veritabanı depolama kullanımı.\n"
+help_utilities: " -\n\n• `{i}kickme` : Leaves  grup.\n\n• `{i}date` : göster Calender.\n\n• `{i}listreserved`\n    Liste tümü usernames (kanallar/groups) siz own.\n\n• `{i}stats` : See sizin profil istatistikleri.\n\n• `{i}paste` - `Include long text / Reply to text file.`\n\n• `{i}info <username/userid/chatid>`\n    Yanıt ver -e birinin mesajı.\n\n• `{i}invite <username/userid>`\n    ekle kullanıcı -e  sohbet.\n\n• `{i}rmbg <reply to pic>`\n    Kaldır arka plan -den o picture.\n\n• `{i}telegraph <reply to media/text>`\n    Yükle medya/metin -e Telegraph.\n\n• `{i}json <reply to msg>`\n    Al  JSON kodlaması -içinde  mesaj.\n\n• `{i}suggest <reply to message> or <poll title>`\n    oluştur bir Evet/Hayır anketi süreyle  replied suggestion.\n\n• `{i}ipinfo <ipAddress>` : Al bilgi hakkında o IP adresi.\n\n• `{i}cpy <reply to message>`\n   kopyala  replied mesaj, ile formatting. Expires içinde 24hrs.\n• `{i}pst`\n   yapıştır  copied mesaj, ile formatting.\n\n• `{i}thumb <reply file>` : İndir  küçük resim -içinde  replied dosya.\n\n• `{i}getmsg <message link>`\n  Al mesajlar -den chats ile ilet/kopyala kısıtlamalar.\n"
+help_variables: " -\n\n• `{i}get var <variable name>`\n   Al değer -içinde  verilen değişken ad.\n\n• `{i}get type <variable name>`\n   Al değişken tür.\n\n• `{i}get db <key>`\n   Al db değer -içinde  verilen anahtar.\n\n• `{i}get keys`\n   Al tümü Redis anahtarları.\n"
+help_vctools: " -\n\n• `{i}startvc`\n    Başlat grup Call içinde bir grup.\n\n• `{i}stopvc`\n    Durdur grup Call içinde bir grup.\n\n• `{i}vctitle <title>`\n    değiştir  başlık grup arama.\n\n• `{i}vcinvite`\n    Invite tümü üyeler -içinde grup içinde grup Call.\n    (Katılmış olmanız gerekir)\n"
+help_videotools: " -\n\n•`{i}sample <duration in seconds>`\n   Creates kısa örnek -içinde video..\n\n• `{i}vshots <number of shots>`\n   Creates ekran görüntüsü -içinde video..\n\n• `{i}vtrim <start time> - <end time> in seconds`\n    Crop bir Lengthy video..\n"
+help_warn: "\n\n•`{i}warn <reply to user> <reason>`\n    Gives Warn.\n\n•`{i}resetwarn <reply to user>`\n    ile sıfırla tümü Warns.\n\n•`{i}warns <reply to user>`\n   ile Al Liste -içinde uyarılar -içinde bir kullanıcı.\n\n•`{i}setwarn <warn count> | <ban/mute/kick>`\n   Ayarla sayı içinde uyarı sayısı süreyle uyarılar\n   After putting ' | ' mark put işlem gibi yasakla/sustur/at\n   Its varsayılan 3 at\n   Örnek: `setwarn 5 | mute`\n\n"
+help_webupload: " -\n\n• `{i}webupload`\n    Yükle dosyalar üzerinde başka bir sunucu.\n"
+help_words: " -\n\n• `{i}meaning <word>`\n    Al  anlam -içinde  kelime.\n\n• `{i}synonym <word>`\n    Al tüm eş anlamlılar.\n\n• `{i}antonym <word>`\n    Al tüm zıt anlamlılar.\n\n• `{i}ud <word>`\n    Fetch kelime defenition -den urbandictionary.\n"
+help_ziptools: "\n\n• `{i}zip <reply to file>`\n    zip  replied dosya\n    ile ayarla şifre üzerinde zip: `{i}zip <password>` yanıt -e dosya\n\n• `{i}unzip <reply to zip file>`\n    zip aç  replied dosya.\n\n• `{i}azip <reply to file>`\n   ekle dosya -e toplu süreyle toplu yükleme zip\n\n• `{i}dozip`\n   yükleme toplu zip  dosyalar u eklendi -den `{i}azip`\n   ile ayarla Password: `{i}dozip <password>`\n\n"
