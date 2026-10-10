@@ -1,38 +1,85 @@
 """
-🔑 **AUTHENTICATION**
-`{i}gentoken SESSION` — Generate token.
-`{i}buytoken YOUR_TOKEN` — Set token / restart monitors.
-`{i}b` — Show MRKT hard balance (TON).
-`{i}nfts` — Show your listed MRKT NFTs + model floors.
-`{i}add <id|@username>` — Allow a user for assistant `/gift` & `/p`.
-`{i}rm <id|@username>` — Remove a user from that allow-list.
+✘ Commands Available -
+
+• `{i}gentoken SESSION`
+   Generate MRKT token from session.
+
+• `{i}buytoken YOUR_TOKEN`
+   Set token / restart monitors.
+
+• `{i}b`
+   Show MRKT hard balance (TON).
+
+• `{i}nfts`
+   Show your listed MRKT NFTs + model floors.
+
+• `{i}add <id|@username>`
+   Allow a user for assistant `/gift` `/p` `/order` `/ordertop`.
+
+• `{i}rm <id|@username>`
+   Remove a user from that allow-list.
+
+• `{i}buy Collection, Model, Backdrop, MIN-MAX`
+   Auto buy (owner) — without transfer lock only.
+
+• `{i}buys` | `{i}buycancel N` | `{i}buycancel all`
+   List / cancel auto-buy monitors.
+
+• `{i}gift Collection`
+   Collection floors only.
+
+• `{i}gift Collection, Model`
+   Floors + quick sells + up to 5 cheapest MRKT listings.
+
+• `{i}gift Collection, Model, Backdrop`
+   Floors + quick sells + cheapest listings + latest sales.
+
+• `{i}gift https://t.me/nft/Name-123`
+   Floors + backdrop rarity + listings + latest sales.
+
+• `{i}p usdt` | `{i}p ton` | `{i}p stars`
+   Convert 1 unit (+ Tomans & USDT).
+
+• `{i}p 5 usdt` | `{i}p 5 ton` | `{i}p 50 stars`
+   Convert an amount (+ Tomans & USDT).
+
+• `{i}p 50 ton stars` | `{i}p 1000 stars ton`
+   Explicit conversion direction.
+
+• `{i}order Collection`
+   Offer count + highest + top 5 ranges.
+
+• `{i}order Collection, Model`
+   Orders for a specific model.
+
+• `{i}order Collection, Model, Backdrop`
+   Orders for model + backdrop.
+
+• `{i}ordertop Collection`
+   Top 10 highest orders across all models.
+
+• `{i}orders`
+   List your active orders.
+
+• `{i}ordernew Collection, Model, Backdrop, QTY, MIN-MAX`
+   Create a new order (qty + price range).
+
+• `{i}ordernew Collection, Model, Backdrop, MIN-MAX`
+   Create a new order (price range).
+
+• `{i}ordernew Collection, Model, MIN-MAX`
+   Create a new order for model only.
+
+• `{i}orderup N`
+   Cancel + recreate order N at top+0.01.
+
+• `{i}orderupall`
+   Orderup every active order that is not already top.
+
+• `{i}orderdel N` | `{i}orderdelall`
+   Delete one / all orders.
+
 Auto: missing/expired token regenerates from DB `SESSIONMRKT`.
-
-✅ **AUTO BUY** (owner)
-`{i}buy Collection, Model, Backdrop, MIN-MAX`
-`{i}buys` / `{i}buycancel N` / `{i}buycancel all`
-
-ℹ️ **GIFT INFO**
-`{i}gift Collection` — collection floors only
-`{i}gift Collection, Model` — floors + quick sells + up to 5 cheapest MRKT listings
-`{i}gift Collection, Model, Backdrop` — floors + quick sells + cheapest listings + latest sales
-`{i}gift https://t.me/nft/Name-123` — floors + backdrop rarity + listings + latest sales
-
-💱 **PRICE**
-`{i}p usdt` / `{i}p ton` / `{i}p stars` — 1 unit conversion (+ Tomans & USDT)
-`{i}p 5 usdt` / `{i}p 5 ton` / `{i}p 50 stars` — amount conversion (+ Tomans & USDT)
-`{i}p 50 ton stars` / `{i}p 1000 stars ton` — explicit direction
-`{i}p 5 usdt ton` / `{i}p 5 usdt stars` — USDT conversion
-
-🏪 **ORDERS** (owner)
-`{i}orders`
-`{i}ordernew Collection, Model, Backdrop, QTY, MIN-MAX`
-`{i}ordernew Collection, Model, Backdrop, MIN-MAX`
-`{i}ordernew Collection, Model, MIN-MAX`
-`{i}orderup N` — cancel + recreate at top+0.01
-`{i}orderupall` — orderup every active order that is not already top
-`{i}orderdel N`
-`{i}orderdelall`
 """
 
 import io
@@ -50,7 +97,6 @@ from zoneinfo import ZoneInfo
 import aiohttp
 from TelegramGifts import TelegramGifts
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
-from telethon import events
 from telethon.utils import get_display_name
 
 from artemis import MRKTClient
@@ -58,7 +104,7 @@ from artemis.exceptions import TradingError, RequestError, AuthError
 from artemis.utils import ton_to_nano, nano_to_ton
 
 from . import (
-    heartless_cmd,
+    cipherx_cmd,
     asst_cmd,
     LOGS,
     cipherx_bot,
@@ -110,6 +156,7 @@ TG_PHOTOS_BASE = (
 # Gift Changes API — stickers + gift/model metadata/rarity
 # thanks to @GiftChanges for this API (api.changes.tg)
 CHANGES_API = "https://api.changes.tg"
+GIFT_CHANGES_CREDIT = "thanks to @GiftChanges for this API"
 
 TEHRAN_TZ = ZoneInfo("Asia/Tehran")
 FRAGMENT_GIFT_TGS = "https://nft.fragment.com/gift/{slug}.tgs"
@@ -226,11 +273,15 @@ def _nft_user_allowed(user_id):
     return uid in _get_nftids()
 
 
-def _asst_gift_p_ok(event):
-    """Assistant /gift & /p: private chat + allow-list (or owner)."""
+def _asst_nft_ok(event):
+    """Assistant NFT cmds: private chat + allow-list (or owner)."""
     if getattr(event, "is_group", False) or not getattr(event, "is_private", True):
         return False
     return _nft_user_allowed(getattr(event, "sender_id", None))
+
+
+# Back-compat alias used by /gift and /p handlers.
+_asst_gift_p_ok = _asst_nft_ok
 
 
 def _user_profile_link(entity):
@@ -1731,7 +1782,7 @@ def _fmt_stars(amount):
 
 async def _price_convert_message(amount, src, dst=None):
     """
-    Convert / price amount in ton or stars.
+    Convert / price amount in ton, stars, or usdt.
 
     - src can be ton, stars, or usdt.
     - dst is None (`.p ton`, `.p 50 stars`, `.p 1 usdt`): IRT + USDT only
@@ -1749,10 +1800,14 @@ async def _price_convert_message(amount, src, dst=None):
     star_usd = _star_usd_rate()
     ton_toman = ton_usd * usdt_toman
 
-    def _value_block(irt, usdt):
+    def _value_block(irt, usdt, show_usdt=True):
+        if show_usdt:
+            return (
+                f"🇮🇷 <b>IRT:</b> <code>{_fmt_toman(irt)}</code> Tomans\n"
+                f"💲 <b>USDT:</b> <code>{_fmt_usdt(usdt)}</code> $"
+            )
         return (
-            f"🇮🇷 <b>IRT:</b> <code>{_fmt_toman(irt)}</code> Tomans\n"
-            f"💲 <b>USDT:</b> <code>{_fmt_usdt(usdt)}</code> $"
+            f"🇮🇷 <b>IRT:</b> <code>{_fmt_toman(irt)}</code> Tomans"
         )
 
     if src == "ton":
@@ -1821,21 +1876,21 @@ async def _price_convert_message(amount, src, dst=None):
             return (
                 "💱 <b>Price Convert</b>\n\n"
                 f"💲 <b>{_fmt_usdt(amount)} USDT</b>\n\n"
-                f"{_value_block(irt, usdt)}"
+                f"{_value_block(irt, usdt, show_usdt=False)}"
             )
         if dst == "ton":
             return (
                 "💱 <b>Price Convert</b>\n\n"
                 f"💲 <b>{_fmt_usdt(amount)} USDT</b> → "
                 f"💎 <b>{_fmt_amount(tons)} TON</b>\n\n"
-                f"{_value_block(irt, usdt)}"
+                f"{_value_block(irt, usdt, show_usdt=False)}"
             )
         if dst == "stars":
             return (
                 "💱 <b>Price Convert</b>\n\n"
                 f"💲 <b>{_fmt_usdt(amount)} USDT</b> → "
                 f"⭐ <b>{_fmt_stars(stars_i)} Stars</b>\n\n"
-                f"{_value_block(irt, usdt)}"
+                f"{_value_block(irt, usdt, show_usdt=False)}"
             )
         raise ValueError("Supported: usdt→ton/stars only.")
 
@@ -1845,9 +1900,9 @@ async def _price_convert_message(amount, src, dst=None):
 def _parse_price_query(raw):
     """
     Parse:
-      ton / stars
-      5 ton / 50 stars
-      50 ton stars / 1000 stars ton
+      ton / stars / usdt
+      5 ton / 50 stars / 5 usdt
+      50 ton stars / 1000 stars ton / 5 usdt ton
     Returns (amount: Decimal, src, dst|None).
     """
     parts = [p for p in str(raw or "").strip().split() if p]
@@ -1866,14 +1921,14 @@ def _parse_price_query(raw):
             return "usdt"
         return None
 
-    # ton / stars  → amount 1
+    # ton / stars / usdt  → amount 1
     if len(parts) == 1:
         unit = _unit(parts[0])
         if not unit:
             raise ValueError("bad")
         return Decimal("1"), unit, None
 
-    # 5 ton / 50 stars
+    # 5 ton / 50 stars / 5 usdt
     if len(parts) == 2:
         # either AMOUNT UNIT or UNIT UNIT (invalid) or UNIT AMOUNT
         u0, u1 = _unit(parts[0]), _unit(parts[1])
@@ -1892,7 +1947,7 @@ def _parse_price_query(raw):
             return amount, u1, None
         raise ValueError("bad")
 
-    # 50 ton stars / 1000 stars ton
+    # 50 ton stars / 1000 stars ton / 5 usdt ton
     if len(parts) == 3:
         u1, u2 = _unit(parts[1]), _unit(parts[2])
         if not u1 or not u2 or u1 == u2:
@@ -1917,6 +1972,464 @@ async def _top_order(client, order_or_filter):
             "symbolName": order_or_filter.get("symbolName") or None,
         },
     )
+
+
+def _parse_order_filter(raw):
+    """Parse `.order Collection[, Model[, Backdrop]]`."""
+    parts = [part.strip() for part in str(raw or "").split(",")]
+    parts = [p for p in parts if p]
+    if len(parts) == 1:
+        return parts[0], None, None
+    if len(parts) == 2:
+        return parts[0], parts[1], None
+    if len(parts) == 3:
+        collection, model, backdrop = parts
+        if backdrop.lower() in ("any", "none", "null", "*", "-"):
+            backdrop = None
+        return collection, model, backdrop
+    raise ValueError(
+        "Usage:\n"
+        f"{_h('order')} Collection\n"
+        f"{_h('order')} Collection, Model\n"
+        f"{_h('order')} Collection, Model, Backdrop"
+    )
+
+
+def _orders_list_payload(data):
+    """Normalize POST /orders response into (orders, cursor, total_hint)."""
+    if data is None:
+        return [], "", None
+    if isinstance(data, list):
+        return data, "", len(data)
+    if not isinstance(data, dict):
+        return [], "", None
+    orders = data.get("orders")
+    if orders is None:
+        orders = data.get("items") or data.get("data") or []
+    if not isinstance(orders, list):
+        orders = []
+    cursor = data.get("cursor") or ""
+    total_hint = None
+    for key in ("totalCount", "total", "totalOrders", "ordersCount"):
+        if key in data and data.get(key) is not None:
+            try:
+                total_hint = int(data.get(key))
+                break
+            except Exception:
+                pass
+    return orders, cursor, total_hint
+
+
+async def _fetch_filter_orders_page(
+    client,
+    collection,
+    model=None,
+    backdrop=None,
+    *,
+    count=20,
+    cursor="",
+    low_to_high=False,
+):
+    """
+    Public buy-order book for a filter.
+
+    Artemis SDK has no orders.list — use MRKT POST /orders directly
+    (same route as tgmrkts Orders.list).
+    """
+    body = {
+        "collectionNames": [collection] if collection else [],
+        "modelNames": [model] if model else [],
+        "backdropNames": [backdrop] if backdrop else [],
+        "symbolNames": [],
+        "availableForStaking": None,
+        "minPrice": None,
+        "maxPrice": None,
+        "ordering": "Price",
+        "lowToHigh": bool(low_to_high),
+        "query": None,
+        "cursor": cursor or "",
+        "count": int(count),
+    }
+    return await client.request("POST", "/orders", json=body)
+
+
+async def _fetch_filter_order_book(
+    client,
+    collection,
+    model=None,
+    backdrop=None,
+    *,
+    top_n=5,
+):
+    """
+    Return (total_count, top_order, top_n_orders) for a gift filter.
+
+    Highest first via ordering=Price, lowToHigh=False.
+    """
+    filt = {
+        "collectionName": collection,
+        "modelName": model,
+        "backdropName": backdrop,
+        "symbolName": None,
+    }
+    top_task = asyncio.create_task(_top_order(client, filt))
+    first_task = asyncio.create_task(
+        _fetch_filter_orders_page(
+            client,
+            collection,
+            model=model,
+            backdrop=backdrop,
+            count=max(int(top_n), 5),
+            cursor="",
+            low_to_high=False,
+        )
+    )
+    top, first = await asyncio.gather(top_task, first_task)
+    orders, cursor, total_hint = _orders_list_payload(first)
+    top_orders = list(orders[:top_n])
+
+    if total_hint is not None and (
+        not cursor or total_hint <= len(orders)
+    ):
+        return total_hint, top, top_orders
+
+    total = len(orders)
+    # Paginate remaining pages for an accurate offer count.
+    while cursor:
+        page = await _fetch_filter_orders_page(
+            client,
+            collection,
+            model=model,
+            backdrop=backdrop,
+            count=20,
+            cursor=cursor,
+            low_to_high=False,
+        )
+        batch, cursor, page_total = _orders_list_payload(page)
+        if page_total is not None and page_total >= total:
+            return page_total, top, top_orders
+        total += len(batch)
+        if not cursor or len(batch) < 20:
+            break
+    if total_hint is not None and total_hint > total:
+        total = total_hint
+    return total, top, top_orders
+
+
+def _format_order_book_message(
+    collection,
+    model,
+    backdrop,
+    total,
+    top,
+    top_orders,
+):
+    label_parts = [collection]
+    if model:
+        label_parts.append(model)
+    if backdrop:
+        label_parts.append(backdrop)
+    label = ", ".join(label_parts)
+    highest = _order_range(top) if top else "—"
+    lines = [
+        f"📊 <b>Order book</b>",
+        f"📦 <code>{html.escape(label)}</code>",
+        "",
+        f"🔢 <b>Total offers:</b> <code>{total}</code>",
+        f"🏆 <b>Highest:</b> <code>{highest} TON</code>",
+        "",
+        "🔝 <b>Top 5</b>",
+    ]
+    if not top_orders:
+        lines.append("   —")
+    else:
+        for i, order in enumerate(top_orders[:5], 1):
+            qty = (
+                order.get("remainingQuantity")
+                if order.get("remainingQuantity") is not None
+                else (
+                    order.get("quantity")
+                    or order.get("totalQuantity")
+                )
+            )
+            qty_bit = (
+                f" · qty {qty}" if qty not in (None, "") else ""
+            )
+            lines.append(
+                f"   {i}. <code>{_order_range(order)} TON</code>"
+                f"{qty_bit}"
+            )
+    return "\n".join(lines)
+
+
+def _order_model_backdrop_label(order):
+    """Model + backdrop for collection-wide top lists."""
+    if not isinstance(order, dict):
+        return "?, ?"
+    model = order.get("modelName") or order.get("modelTitle") or "ANY"
+    backdrop = (
+        order.get("backdropName")
+        or order.get("backdropTitle")
+        or "ANY"
+    )
+    return f"{model}, {backdrop}"
+
+
+async def _list_collection_model_names(client, collection):
+    """All model names for a collection from MRKT /gifts/models."""
+    try:
+        data = await client.request(
+            "POST",
+            "/gifts/models",
+            json={"collections": [collection]},
+        )
+    except Exception as e:
+        LOGS.warning("ordertop models fetch failed: %s", e)
+        return []
+    names = []
+    seen = set()
+    for row in data or []:
+        if not isinstance(row, dict):
+            continue
+        name = row.get("modelName") or row.get("name")
+        if not name:
+            continue
+        key = _loose_key(name)
+        if key in seen:
+            continue
+        seen.add(key)
+        names.append(name)
+    return names
+
+
+def _order_is_active_open(order):
+    """True when the order is still open (not finished / fully filled)."""
+    if not isinstance(order, dict) or not order:
+        return False
+    if _order_finished(order):
+        return False
+    if _order_max_nano(order) <= 0:
+        return False
+    remaining = order.get("remainingQuantity")
+    if remaining is not None:
+        try:
+            if int(remaining) <= 0:
+                return False
+        except Exception:
+            pass
+    return True
+
+
+# Throttle ordertop fan-out so MRKT does not 429 the whole scan.
+_ORDERTOP_LOCK = asyncio.Lock()
+_ORDERTOP_NEXT_AT = 0.0
+_ORDERTOP_MIN_INTERVAL = 0.45  # ~2 req/s
+_ORDERTOP_CONCURRENCY = 2
+_ORDERTOP_RETRIES = 5
+
+
+def _is_rate_limited(exc):
+    if getattr(exc, "status_code", None) == 429:
+        return True
+    text = str(exc or "").lower()
+    return "429" in text or "too many requests" in text
+
+
+async def _ordertop_acquire_slot():
+    """Serialize ordertop API calls with a minimum spacing."""
+    global _ORDERTOP_NEXT_AT
+    async with _ORDERTOP_LOCK:
+        now = time.monotonic()
+        wait = _ORDERTOP_NEXT_AT - now
+        if wait > 0:
+            await asyncio.sleep(wait)
+        _ORDERTOP_NEXT_AT = time.monotonic() + _ORDERTOP_MIN_INTERVAL
+
+
+async def _ordertop_request(factory):
+    """
+    Run one ordertop MRKT call with slotting + 429 backoff.
+    factory: zero-arg async callable that performs the request.
+    """
+    last = None
+    for attempt in range(_ORDERTOP_RETRIES):
+        await _ordertop_acquire_slot()
+        try:
+            return await factory()
+        except Exception as e:
+            last = e
+            if not _is_rate_limited(e) or attempt >= _ORDERTOP_RETRIES - 1:
+                raise
+            delay = min(8.0, (2 ** attempt) * 0.6)
+            await asyncio.sleep(delay)
+    raise last
+
+
+async def _highest_active_order_for_model(client, collection, model):
+    """
+    Highest active buy order for collection + model (any backdrop).
+    Uses POST /orders (model filter) so model/backdrop/qty are present —
+    collection-only /orders returns wildcard ANY/ANY bids.
+    """
+    async def _list():
+        return await _fetch_filter_orders_page(
+            client,
+            collection,
+            model=model,
+            backdrop=None,
+            count=10,
+            cursor="",
+            low_to_high=False,
+        )
+
+    data = await _ordertop_request(_list)
+    orders, _, _ = _orders_list_payload(data)
+    for order in orders:
+        if not _order_is_active_open(order):
+            continue
+        oname = order.get("modelName") or order.get("modelTitle")
+        # Skip collection-wide wildcards that ignore the model filter.
+        if not oname:
+            order = dict(order)
+            order["modelName"] = model
+        elif not _match_attr(oname, model):
+            continue
+        return order
+
+    async def _top():
+        return await _top_order(
+            client,
+            {
+                "collectionName": collection,
+                "modelName": model,
+                "backdropName": None,
+                "symbolName": None,
+            },
+        )
+
+    top = await _ordertop_request(_top)
+    if not _order_is_active_open(top):
+        return None
+    if not (top.get("modelName") or top.get("modelTitle")):
+        top = dict(top)
+        top["modelName"] = model
+    return top
+
+
+async def _fetch_collection_top_orders(client, collection, *, top_n=10):
+    """
+    Top N highest active offers across all models of a collection.
+
+    For each model, take its highest open order, then rank those globally.
+    Rate-limited to avoid MRKT HTTP 429 storms.
+    """
+    models = await _list_collection_model_names(client, collection)
+    if not models:
+        return []
+
+    sem = asyncio.Semaphore(_ORDERTOP_CONCURRENCY)
+    skipped_429 = 0
+    skipped_other = 0
+
+    async def _one(model):
+        nonlocal skipped_429, skipped_other
+        async with sem:
+            try:
+                return await _highest_active_order_for_model(
+                    client, collection, model,
+                )
+            except Exception as e:
+                if _is_rate_limited(e):
+                    skipped_429 += 1
+                else:
+                    skipped_other += 1
+                    LOGS.debug(
+                        "ordertop highest for %s / %s failed: %s",
+                        collection, model, e,
+                    )
+                return None
+
+    results = await asyncio.gather(*[_one(m) for m in models])
+    if skipped_429 or skipped_other:
+        LOGS.info(
+            "ordertop %s: scanned %s models, skipped 429=%s other=%s",
+            collection,
+            len(models),
+            skipped_429,
+            skipped_other,
+        )
+
+    best = []
+    seen = set()
+    for order in results:
+        if not order:
+            continue
+        oid = order.get("id")
+        if oid:
+            key = ("id", str(oid))
+        else:
+            key = (
+                "mb",
+                _loose_key(order.get("modelName") or ""),
+                _loose_key(order.get("backdropName") or ""),
+                _order_max_nano(order),
+            )
+        if key in seen:
+            continue
+        seen.add(key)
+        best.append(order)
+
+    best.sort(key=_order_max_nano, reverse=True)
+    return best[:top_n]
+
+
+def _order_qty_text(order):
+    """Human qty for public order rows (remaining/total when known)."""
+    if not isinstance(order, dict):
+        return "—"
+    total = int(
+        order.get("totalQuantity")
+        or order.get("quantity")
+        or 0
+    )
+    done = int(order.get("completedQuantity") or 0)
+    remaining = order.get("remainingQuantity")
+    if remaining is not None:
+        try:
+            rem = int(remaining)
+        except Exception:
+            rem = None
+    else:
+        rem = max(total - done, 0) if total else None
+    if total and rem is not None:
+        return f"{rem}/{total}"
+    if rem is not None:
+        return str(rem)
+    if total:
+        return str(total)
+    return "—"
+
+
+def _format_ordertop_message(collection, orders):
+    lines = [
+        "🏆 <b>Top 10 orders</b>",
+        "",
+        f"📦 <b>Collection:</b> {html.escape(collection)}",
+        "",
+    ]
+    if not orders:
+        lines.append("   —")
+        return "\n".join(lines)
+    for i, order in enumerate(orders[:10], 1):
+        combo = html.escape(_order_model_backdrop_label(order))
+        price = _order_range(order)
+        qty = _order_qty_text(order)
+        lines.append(
+            f"<b>{i}.</b> <code>{combo}</code>\n"
+            f"    💰 <code>{price} TON</code>\n"
+            f"    🔢 Qty: <code>{qty}</code>"
+        )
+    return "\n".join(lines)
 
 
 async def _create_order(
@@ -2031,7 +2544,170 @@ async def _edit_chunks(status, event, text, parse_mode="html"):
     return status
 
 
-@heartless_cmd(owner_only=True, pattern=r"orders$")
+async def _artemis_ordertop_handler(event):
+    """Top 10 highest buy offers across all models of a collection."""
+    raw = (event.pattern_match.group(1) or "").strip()
+    if not raw:
+        return await event.eor(
+            "Usage:\n"
+            f"<code>{_h('ordertop')} Collection</code>\n\n"
+            "Example:\n"
+            f"<code>{_h('ordertop')} Liberty Figure</code>",
+            parse_mode="html",
+        )
+    # Collection only — ignore accidental commas.
+    collection = raw.split(",")[0].strip()
+    if not collection:
+        return await event.eor(
+            f"❌ Collection name is required.\n"
+            f"Usage: <code>{_h('ordertop')} Collection</code>",
+            parse_mode="html",
+        )
+
+    status = None
+    try:
+        status = await event.eor(
+            "<b>Fetching top offers...</b>",
+            parse_mode="html",
+        )
+
+        async def work(client):
+            coll, _, _ = await _resolve_gift_names(
+                client, collection, None, None,
+            )
+            if not coll:
+                raise ValueError(
+                    "Could not resolve collection name on MRKT."
+                )
+            orders = await _fetch_collection_top_orders(
+                client, coll, top_n=10,
+            )
+            return _format_ordertop_message(coll, orders)
+
+        message, status = await _with_mrkt(event, status, work)
+        return await _edit_chunks(status, event, message)
+    except ValueError as e:
+        if status:
+            return await status.edit(
+                f"❌ <b>{html.escape(str(e))}</b>",
+                parse_mode="html",
+            )
+        return await event.eor(
+            f"❌ <b>{html.escape(str(e))}</b>",
+            parse_mode="html",
+        )
+    except (TradingError, RequestError, AuthError) as e:
+        LOGS.warning("Artemis .ordertop request error: %s", e)
+        if status:
+            return await status.edit(
+                f"❌ <b>Artemis request failed.</b>\n\n<code>{e}</code>",
+                parse_mode="html",
+            )
+        return await event.eor(
+            f"❌ <b>Artemis request failed.</b>\n\n<code>{e}</code>",
+            parse_mode="html",
+        )
+    except Exception as e:
+        LOGS.exception("Artemis .ordertop failed: %s", e)
+        if status:
+            return await status.edit(
+                f"❌ <b>Failed to fetch top offers.</b>\n\n<code>{e}</code>",
+                parse_mode="html",
+            )
+        return await event.eor(
+            f"❌ <b>Failed to fetch top offers.</b>\n\n<code>{e}</code>",
+            parse_mode="html",
+        )
+
+
+async def _artemis_order_book_handler(event):
+    """Public MRKT order book for a collection / model / backdrop filter."""
+    raw = event.pattern_match.group(1)
+    if not raw:
+        return await event.eor(
+            "Usage:\n"
+            f"<code>{_h('order')} Collection</code>\n"
+            f"<code>{_h('order')} Collection, Model</code>\n"
+            f"<code>{_h('order')} Collection, Model, Backdrop</code>",
+            parse_mode="html",
+        )
+    try:
+        collection, model, backdrop = _parse_order_filter(raw.strip())
+    except ValueError as e:
+        return await event.eor(
+            f"❌ <code>{html.escape(str(e))}</code>",
+            parse_mode="html",
+        )
+
+    status = None
+    try:
+        status = await event.eor(
+            "<b>Fetching order book...</b>",
+            parse_mode="html",
+        )
+
+        async def work(client):
+            coll, mod, back = await _resolve_gift_names(
+                client, collection, model, backdrop,
+            )
+            if not coll:
+                raise ValueError("Could not resolve collection name on MRKT.")
+            if model and not mod:
+                raise ValueError("Could not resolve model name on MRKT.")
+            total, top, top_orders = await _fetch_filter_order_book(
+                client, coll, model=mod, backdrop=back, top_n=5,
+            )
+            return _format_order_book_message(
+                coll, mod, back, total, top, top_orders,
+            )
+
+        message, status = await _with_mrkt(event, status, work)
+        return await _edit_chunks(status, event, message)
+    except ValueError as e:
+        if status:
+            return await status.edit(
+                f"❌ <b>{html.escape(str(e))}</b>",
+                parse_mode="html",
+            )
+        return await event.eor(
+            f"❌ <b>{html.escape(str(e))}</b>",
+            parse_mode="html",
+        )
+    except (TradingError, RequestError, AuthError) as e:
+        LOGS.warning("Artemis .order request error: %s", e)
+        if status:
+            return await status.edit(
+                f"❌ <b>Artemis request failed.</b>\n\n<code>{e}</code>",
+                parse_mode="html",
+            )
+        return await event.eor(
+            f"❌ <b>Artemis request failed.</b>\n\n<code>{e}</code>",
+            parse_mode="html",
+        )
+    except Exception as e:
+        LOGS.exception("Artemis .order failed: %s", e)
+        if status:
+            return await status.edit(
+                f"❌ <b>Failed to fetch order book.</b>\n\n<code>{e}</code>",
+                parse_mode="html",
+            )
+        return await event.eor(
+            f"❌ <b>Failed to fetch order book.</b>\n\n<code>{e}</code>",
+            parse_mode="html",
+        )
+
+
+@cipherx_cmd(owner_only=True, pattern=r"ordertop(?:\s+(.+))?$")
+async def artemis_ordertop(event):
+    await _artemis_ordertop_handler(event)
+
+
+@cipherx_cmd(owner_only=True, pattern=r"order(?:\s+(.+))?$")
+async def artemis_order_book(event):
+    await _artemis_order_book_handler(event)
+
+
+@cipherx_cmd(owner_only=True, pattern=r"orders$")
 async def artemis_orders(event):
     global ORDER_CACHE
     status = None
@@ -2200,7 +2876,7 @@ async def _orderup_one(client, order):
         }
 
 
-@heartless_cmd(owner_only=True, pattern=r"orderupall$")
+@cipherx_cmd(owner_only=True, pattern=r"orderupall$")
 async def artemis_orderupall(event):
     global ORDER_CACHE
     try:
@@ -2287,7 +2963,7 @@ async def artemis_orderupall(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"orderup(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"orderup(?:\s+(.+))?$")
 async def artemis_orderup(event):
     global ORDER_CACHE
     try:
@@ -2357,7 +3033,7 @@ async def artemis_orderup(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"orderdelall$")
+@cipherx_cmd(owner_only=True, pattern=r"orderdelall$")
 async def artemis_orderdelall(event):
     global ORDER_CACHE
     try:
@@ -2407,7 +3083,7 @@ async def artemis_orderdelall(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"orderdel(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"orderdel(?:\s+(.+))?$")
 async def artemis_orderdel(event):
     global ORDER_CACHE
     try:
@@ -2452,7 +3128,7 @@ async def artemis_orderdel(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"ordernew(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"ordernew(?:\s+(.+))?$")
 async def artemis_ordernew(event):
     global ORDER_CACHE
     raw = event.pattern_match.group(1)
@@ -2534,7 +3210,7 @@ async def artemis_ordernew(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"gentoken(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"gentoken(?:\s+(.+))?$")
 async def artemis_gentoken(event):
     session = event.pattern_match.group(1)
     if not session or not session.strip():
@@ -4025,6 +4701,87 @@ async def _build_gift_info(
 # MONITOR / BUY
 # ============================================================
 
+def _gift_without_transfer_lock(gift):
+    """
+    True when a listing has no Telegram transfer lock.
+    Mirrors MRKT order filter isTransferable=True.
+    """
+    raw = getattr(gift, "raw", None)
+    if not isinstance(raw, dict):
+        raw = _get_raw(gift) if gift is not None else {}
+    if "isTransferable" in raw:
+        return bool(raw.get("isTransferable"))
+    if getattr(gift, "is_locked", False) or raw.get("isLocked"):
+        return False
+    ntd = getattr(gift, "next_transfer_date", None)
+    if ntd is None:
+        ntd = raw.get("nextTransferDate")
+    if not ntd:
+        return True
+    try:
+        if isinstance(ntd, (int, float)):
+            ts = float(ntd)
+            if ts > 1e12:
+                ts /= 1000.0
+            return ts <= time.time()
+        text = str(ntd).strip()
+        if text.endswith("Z"):
+            text = text[:-1] + "+00:00"
+        dt = datetime.fromisoformat(text)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.timestamp() <= time.time()
+    except Exception:
+        return True
+
+
+async def _monitor_search(client, collection, model, backdrop, min_ton, max_ton):
+    """
+    Autobuy listing search — without transfer lock by default
+    (isTransferable=True, same as .ordernew).
+    """
+    search_kwargs = {
+        "collection_names": [collection],
+        "model_names": [model],
+        "ordering": "Price",
+        "low_to_high": True,
+        "min_price": float(min_ton),
+        "max_price": float(max_ton),
+        "count": 20,
+        "is_transferable": True,
+    }
+    if backdrop:
+        search_kwargs["backdrop_names"] = [backdrop]
+    try:
+        return await client.market.search(**search_kwargs)
+    except TypeError:
+        # Older artemis builds without is_transferable on search.
+        from artemis.models import MRKTGift, GiftPage
+
+        body = {
+            "collectionNames": [collection],
+            "modelNames": [model],
+            "backdropNames": [backdrop] if backdrop else [],
+            "symbolNames": [],
+            "ordering": "Price",
+            "lowToHigh": True,
+            "maxPrice": ton_to_nano(float(max_ton)),
+            "minPrice": ton_to_nano(float(min_ton)),
+            "mintable": None,
+            "number": None,
+            "count": 20,
+            "cursor": "",
+            "query": None,
+            "isPremarket": False,
+            "promotedFirst": False,
+            "isTransferable": True,
+        }
+        data = await client.request("POST", "/gifts/saling", json=body)
+        raw = data if isinstance(data, dict) else {}
+        items = [MRKTGift(x) for x in raw.get("gifts") or []]
+        return GiftPage(items, raw.get("cursor"), raw)
+
+
 async def _monitor_worker(monitor_id):
     monitor = BUY_MONITORS.get(monitor_id)
     if not monitor:
@@ -4047,21 +4804,14 @@ async def _monitor_worker(monitor_id):
                 return
             async with MRKTClient(token=token) as client:
                 try:
-                    search_kwargs = {
-                        "collection_names": [collection],
-                        "model_names": [model],
-                        "ordering": "Price",
-                        "low_to_high": True,
-                        "min_price": float(min_ton),
-                        "max_price": float(max_ton),
-                        "count": 20,
-                    }
-                    if backdrop:
-                        search_kwargs["backdrop_names"] = [backdrop]
-                    page = await client.market.search(**search_kwargs)
+                    page = await _monitor_search(
+                        client, collection, model, backdrop, min_ton, max_ton,
+                    )
                     for gift in page.items:
                         if monitor_id not in BUY_MONITORS:
                             return
+                        if not _gift_without_transfer_lock(gift):
+                            continue
                         price_nano = getattr(gift, "price_nano", None) or 0
                         if not (min_nano <= price_nano <= max_nano):
                             continue
@@ -4186,7 +4936,7 @@ async def _restart_all_monitors():
         new_monitor["task"] = task
 
 
-@heartless_cmd(owner_only=True, pattern=r"buytoken(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"buytoken(?:\s+(.+))?$")
 async def artemis_buytoken(event):
     token = event.pattern_match.group(1)
     if not token or not token.strip():
@@ -4220,7 +4970,7 @@ async def artemis_buytoken(event):
     )
 
 
-@heartless_cmd(owner_only=True, pattern=r"b$")
+@cipherx_cmd(owner_only=True, pattern=r"b$")
 async def artemis_balance(event):
     """Show MRKT hard balance in TON."""
     status = None
@@ -4407,7 +5157,7 @@ async def _listed_nfts_message(client):
     return "\n".join(lines).rstrip()
 
 
-@heartless_cmd(owner_only=True, pattern=r"nfts$")
+@cipherx_cmd(owner_only=True, pattern=r"nfts$")
 async def artemis_nfts(event):
     """Show your currently listed MRKT NFTs with model floors."""
     status = None
@@ -4448,7 +5198,7 @@ async def artemis_nfts(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"buy(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"buy(?:\s+(.+))?$")
 async def artemis_buy(event):
     try:
         await _ensure_artemis_token(event)
@@ -4496,7 +5246,7 @@ async def artemis_buy(event):
     )
 
 
-@heartless_cmd(owner_only=True, pattern=r"buys$")
+@cipherx_cmd(owner_only=True, pattern=r"buys$")
 async def artemis_buys(event):
     if not BUY_MONITORS:
         return await event.eor(
@@ -4524,7 +5274,7 @@ async def artemis_buys(event):
     await event.eor("\n".join(lines), parse_mode="html")
 
 
-@heartless_cmd(owner_only=True, pattern=r"buycancel(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"buycancel(?:\s+(.+))?$")
 async def artemis_buycancel(event):
     target = event.pattern_match.group(1)
     if not target:
@@ -4565,7 +5315,7 @@ async def artemis_buycancel(event):
     )
 
 
-@heartless_cmd(owner_only=True, pattern=r"gift(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"gift(?:\s+(.+))?$")
 async def artemis_gift(event):
     await _artemis_gift_handler(event)
 
@@ -4594,7 +5344,7 @@ async def _notify_owner_asst_cmd(event):
 
 @asst_cmd(pattern=r"gift(?:\s+(.+))?$", func=lambda e: e.is_private)
 async def artemis_gift_asst(event):
-    if not _asst_gift_p_ok(event):
+    if not _asst_nft_ok(event):
         return
     await _notify_owner_asst_cmd(event)
     await _artemis_gift_handler(event)
@@ -4602,38 +5352,25 @@ async def artemis_gift_asst(event):
 
 @asst_cmd(pattern=r"p(?:\s+(.+))?$", func=lambda e: e.is_private)
 async def artemis_price_asst(event):
-    if not _asst_gift_p_ok(event):
+    if not _asst_nft_ok(event):
         return
     await _artemis_price_handler(event)
 
 
-@asst.on(
-    events.NewMessage(
-        func=lambda e: bool(e.is_private and getattr(e, "raw_text", None))
-    )
-)
-async def artemis_nftlink_asst(event):
-    """Allow allow-listed users to send only an NFT link (or +<link>)."""
-    if not _asst_gift_p_ok(event):
-        return
-    raw = (getattr(event, "raw_text", "") or "").strip()
-    if raw.startswith("/"):
-        return
-    candidate = raw[1:].strip() if raw.startswith("+") else raw
-    if len(candidate.split()) != 1:
-        return
-    lowered = candidate.lower()
-    if ("t.me/nft/" not in lowered) or not (
-        lowered.startswith("https://")
-        or lowered.startswith("http://")
-        or lowered.startswith("t.me/")
-        or lowered.startswith("www.t.me/")
-    ):
+@asst_cmd(pattern=r"ordertop(?:\s+(.+))?$", func=lambda e: e.is_private)
+async def artemis_ordertop_asst(event):
+    if not _asst_nft_ok(event):
         return
     await _notify_owner_asst_cmd(event)
-    # Reuse the normal gift handler by giving it the same capture it expects.
-    event.pattern_match = re.match(r"(?:gift(?:\s+(.+))?)", f"gift {candidate}")
-    await _artemis_gift_handler(event)
+    await _artemis_ordertop_handler(event)
+
+
+@asst_cmd(pattern=r"order(?:\s+(.+))?$", func=lambda e: e.is_private)
+async def artemis_order_asst(event):
+    if not _asst_nft_ok(event):
+        return
+    await _notify_owner_asst_cmd(event)
+    await _artemis_order_book_handler(event)
 
 
 async def _artemis_gift_handler(event):
@@ -4807,6 +5544,7 @@ async def _artemis_price_handler(event):
         "❌ <b>Usage:</b>\n"
         f"<code>{_h('p')} ton</code>\n"
         f"<code>{_h('p')} stars</code>\n"
+        f"<code>{_h('p')} usdt</code>\n"
         f"<code>{_h('p')} 5 ton</code>\n"
         f"<code>{_h('p')} 50 stars</code>\n"
         f"<code>{_h('p')} 5 usdt</code>\n"
@@ -4840,12 +5578,12 @@ async def _artemis_price_handler(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"p(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"p(?:\s+(.+))?$")
 async def artemis_price(event):
     await _artemis_price_handler(event)
 
 
-@heartless_cmd(owner_only=True, pattern=r"add(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"add(?:\s+(.+))?$")
 async def artemis_add_nftid(event):
     """Append a Telegram user (id or username) to the assistant allow-list."""
     raw = (event.pattern_match.group(1) or "").strip()
@@ -4870,7 +5608,7 @@ async def artemis_add_nftid(event):
     )
 
 
-@heartless_cmd(owner_only=True, pattern=r"rm(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"rm(?:\s+(.+))?$")
 async def artemis_rm_nftid(event):
     """Remove a Telegram user (id or username) from the assistant allow-list."""
     raw = (event.pattern_match.group(1) or "").strip()
