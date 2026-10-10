@@ -25,3 +25,30 @@ async def setit(event, name, value):
 
 def get_back_button(name):
     return [Button.inline("« Bᴀᴄᴋ", data=f"{name}")]
+
+
+async def deliver_inline_apk(event, file_obj, caption, buttons=None):
+    """
+    Put an APK into the chat where the inline Download button was pressed.
+
+    For inline messages the bot never gets a normal chat id for send_file
+    (that is why files were landing in the assistant PM). Editing the
+    inline message with the document updates it in-place in that chat.
+    """
+    if isinstance(file_obj, tuple):
+        file_obj = file_obj[0]
+
+    try:
+        return await event.edit(
+            caption,
+            file=file_obj,
+            buttons=buttons,
+            force_document=True,
+            link_preview=False,
+        )
+    except Exception as er:
+        LOGS.exception("Inline APK edit failed: %s", er)
+        raise RuntimeError(
+            "Could not attach APK to this chat message. "
+            f"Try sending the inline result again, then press Download. ({er})"
+        ) from er
