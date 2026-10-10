@@ -19,10 +19,9 @@ if run_as_module:
 
 
 try:
-    from aiohttp import ClientSession as aiohttp_client, ClientTimeout as aiohttp_timeout
+    from aiohttp import ClientSession as aiohttp_client
 except ImportError:
     aiohttp_client = None
-    aiohttp_timeout = None
     try:
         import requests
     except ImportError:
@@ -70,6 +69,7 @@ from ..version import heartless_version
 from .FastTelethon import download_file as downloadable
 from .FastTelethon import upload_file as uploadable
 
+
 def run_async(function):
     @wraps(function)
     async def wrapper(*args, **kwargs):
@@ -79,8 +79,10 @@ def run_async(function):
         )
 
     return wrapper
-
+    
+    
 # ~~~~~~~~~~~~~~~~~~~~ Markdown ~~~~~~~~~~~~~~~~~~~~ #
+
 
 def Markdown(text):
     entities = []
@@ -144,43 +146,6 @@ def Markdown(text):
             offset_change += length_after - length_before
     return text, entities
 
-# ~~~~~~~~~~~~~~~~~~~~ small funcs ~~~~~~~~~~~~~~~~~~~~ #
-
-
-class KEEP_SAFE:
-    """Patterns to scan for in plugins before allowing installation."""
-
-    All = [
-        r"os\.system",
-        r"subprocess\.(run|call|Popen|check_output)",
-        r"exec\s*\(",
-        r"eval\s*\(",
-        r"__import__\s*\(",
-        r"open\s*\(.*['\"]w['\"]",
-        r"shutil\.(rmtree|move|copy)",
-        r"session\.string",
-        r"get_me\(\)",
-        r"api_id",
-        r"api_hash",
-    ]
-
-def make_mention(user, custom=None):
-    if user.username:
-        return f"@{user.username}"
-    return inline_mention(user, custom=custom)
-
-
-def inline_mention(user, custom=None, html=False):
-    mention_text = get_display_name(user) or "Deleted Account" if not custom else custom
-    if isinstance(user, types.User):
-        if html:
-            return f'<a href="tg://user?id={user.id}">{mention_text}</a>'
-        return f"[{mention_text}](tg://user?id={user.id})"
-    if isinstance(user, types.Channel) and user.username:
-        if html:
-            return f'<a href="https://t.me/{user.username}">{mention_text}</a>'
-        return f"[{mention_text}](https://t.me/{user.username})"
-    return mention_text
 
 # ~~~~~~~~~~~~~~~~~~~~ Error Handle ~~~~~~~~~~~~~~~~~~~~ #
 
@@ -200,6 +165,29 @@ def ErrInfo(exception, full=False):
         LOGS.info(
             f"{exception_message} {exception_type} {filename}, Line {exception_traceback.tb_lineno}"
         )
+
+
+# ~~~~~~~~~~~~~~~~~~~~ small funcs ~~~~~~~~~~~~~~~~~~~~ #
+
+
+def make_mention(user, custom=None):
+    if user.username:
+        return f"@{user.username}"
+    return inline_mention(user, custom=custom)
+
+
+def inline_mention(user, custom=None, html=False):
+    mention_text = get_display_name(user) or "Deleted Account" if not custom else custom
+    if isinstance(user, types.User):
+        if html:
+            return f"<a href=tg://user?id={user.id}>{mention_text}</a>"
+        return f"[{mention_text}](tg://user?id={user.id})"
+    if isinstance(user, types.Channel) and user.username:
+        if html:
+            return f"<a href=https://t.me/{user.username}>{mention_text}</a>"
+        return f"[{mention_text}](https://t.me/{user.username})"
+    return mention_text
+
 
 # ----------------- Load \\ Unloader ---------------- #
 
@@ -328,7 +316,7 @@ if run_as_module:
 
     async def def_logs(ult, file):
         await ult.respond(
-            "**UserBot Logs**",
+            "**CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ Logs**",
             file=file,
             thumb=ULTConfig.thumb,
         )
@@ -493,7 +481,7 @@ async def async_searcher(
 ):
     if not aiohttp_client:
         raise DependencyMissingError("install 'aiohttp' to use this.")
-        
+
     kwargs.setdefault("timeout", aiohttp.ClientTimeout(total=20))
     last_exc = None
 
@@ -505,7 +493,7 @@ async def async_searcher(
                 if evaluate:
                     return await evaluate(data)
                 if re_json:
-                    return await data.json(content_type=None)
+                    return await data.json()
                 if re_content:
                     return await data.read()
                 if head or object:
@@ -515,7 +503,7 @@ async def async_searcher(
             last_exc = e
             await asyncio.sleep(1.5 * (attempt + 1))
     raise last_exc
-
+    
 # ~~~~~~~~~~~~~~~~~~~~DDL Downloader~~~~~~~~~~~~~~~~~~~~
 
 
@@ -532,12 +520,21 @@ async def download_file(link, name, validate=False):
     return await async_searcher(link, evaluate=_download)
 
 
-async def fast_download(download_url, filename=None, progress_callback=None):
+async def fast_download(
+    download_url, filename=None, progress_callback=None, headers=None
+):
     if not aiohttp_client:
         return await download_file(download_url, filename)[0], None
-    _timeout = aiohttp_timeout(total=None) if aiohttp_timeout else None
-    async with aiohttp_client(timeout=_timeout) as session:
-        async with session.get(download_url) as response:
+    async with aiohttp_client(headers=headers) as session:
+        async with session.get(download_url, timeout=None, allow_redirects=True) as response:
+            if response.status >= 400:
+                raise aiohttp.ClientResponseError(
+                    response.request_info,
+                    response.history,
+                    status=response.status,
+                    message=f"Download failed with HTTP {response.status}",
+                    headers=response.headers,
+                )
             if not filename:
                 filename = unquote(download_url.rpartition("/")[-1])
             total_size = int(response.headers.get("content-length", 0)) or None
@@ -800,11 +797,11 @@ def get_pstring(string: str, *emojis: str) -> Any:
         if not (get_string(string)).startswith("Warning"):
             string_result = get_string(string)
             new_string = string_result.replace("{p}", "")
-            return new_string
+            return new_string 
         else:
             string_result = string
             new_string = string_result.replace("{p}", "")
-            return new_string
+            return new_string 
     else:
         if not (get_string(string)).startswith("Warning"):
             string_result = get_string(string)
