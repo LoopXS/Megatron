@@ -188,7 +188,7 @@ _MONOCHROME_CACHE_TTL = 120.0
 
 
 def _h(*parts):
-    """Command usage with the active heartless handler."""
+    """Command usage with the active Ultroid handler."""
     return f"{HNDLR}{''.join(str(p) for p in parts)}"
 
 
@@ -1520,7 +1520,7 @@ async def _fetch_my_orders(client):
 
 
 def _store_artemis_token(token):
-    """Persist token in memory + heartless DB."""
+    """Persist token in memory + Ultroid DB."""
     global ARTEMIS_TOKEN
     token = str(token or "").strip()
     if not token:
@@ -1537,7 +1537,7 @@ async def _generate_token_from_session(session):
         raise ValueError("SESSIONMRKT is empty.")
     if not MRKT_API_ID or not MRKT_API_HASH:
         raise ValueError(
-            "api_id / api_hash are missing from heartless DB."
+            "api_id / api_hash are missing from Ultroid DB."
         )
     async with MRKTClient() as client:
         token = await client.auth.login(
