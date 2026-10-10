@@ -105,7 +105,7 @@ ALIASES = {
     "russian": "ru", "روسی": "ru", "german": "de", "آلمانی": "de",
     "french": "fr", "فرانسوی": "fr", "spanish": "es", "اسپانیایی": "es",
     "italian": "it", "ایتالیایی": "it", "portuguese": "pt", "پرتغالی": "pt",
-    "hindi": "hi", "هندی": "ur", "urdu": "ur", "اردو": "ur",
+    "hindi": "hi", "هندی": "hi", "urdu": "ur", "اردو": "ur",
     "chinese": "zh-CN", "چینی": "zh-CN", "simplified chinese": "zh-CN",
     "traditional chinese": "zh-TW", "japanese": "ja", "ژاپنی": "ja",
     "korean": "ko", "کره ای": "ko", "کره‌ای": "ko", "dutch": "nl",
@@ -125,13 +125,15 @@ MAX_SHARE_QUERY_BYTES = 256
 MAX_TELEGRAM_TEXT = 3950
 CACHE_SIZE = 256
 CACHE_TTL = 15 * 60
-REQUEST_TIMEOUT = 5.0
+# Session-level total timeout must be >= the slowest per-request timeout.
+REQUEST_TIMEOUT = 8.0
 FAST_TIMEOUT = 4.5
 SLOW_TIMEOUT = 7.0
 CONCURRENCY = 8
 TRANSLATION_DEADLINE = 7.5
 
-_CACHE: OrderedDict[str, tuple[float, str, str]] = OrderedDict()
+_CACHE: "OrderedDict[str, tuple[float, str, str]]" = OrderedDict()
+_CACHE_LOCK = asyncio.Lock()
 _SEMAPHORE = asyncio.Semaphore(CONCURRENCY)
 _SESSION: Optional[aiohttp.ClientSession] = None
 _SESSION_LOCK = asyncio.Lock()
@@ -166,23 +168,25 @@ def _cache_key(text: str, source: str, target: str) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
-def _cache_get(key: str):
-    item = _CACHE.get(key)
-    if not item:
-        return None
-    created, translated, detected = item
-    if time.monotonic() - created >= CACHE_TTL:
-        _CACHE.pop(key, None)
-        return None
-    _CACHE.move_to_end(key)
-    return translated, detected
+async def _cache_get(key: str):
+    async with _CACHE_LOCK:
+        item = _CACHE.get(key)
+        if not item:
+            return None
+        created, translated, detected = item
+        if time.monotonic() - created >= CACHE_TTL:
+            _CACHE.pop(key, None)
+            return None
+        _CACHE.move_to_end(key)
+        return translated, detected
 
 
-def _cache_put(key: str, translated: str, detected: str) -> None:
-    _CACHE[key] = (time.monotonic(), translated, detected)
-    _CACHE.move_to_end(key)
-    while len(_CACHE) > CACHE_SIZE:
-        _CACHE.popitem(last=False)
+async def _cache_put(key: str, translated: str, detected: str) -> None:
+    async with _CACHE_LOCK:
+        _CACHE[key] = (time.monotonic(), translated, detected)
+        _CACHE.move_to_end(key)
+        while len(_CACHE) > CACHE_SIZE:
+            _CACHE.popitem(last=False)
 
 
 def _valid_translation(value: object, original: str) -> str:
@@ -235,10 +239,12 @@ async def _session() -> aiohttp.ClientSession:
 
 
 async def _close_session() -> None:
+    """Close the shared HTTP session. Call on shutdown to release resources."""
     global _SESSION
-    if _SESSION is not None and not _SESSION.closed:
-        await _SESSION.close()
-    _SESSION = None
+    async with _SESSION_LOCK:
+        if _SESSION is not None and not _SESSION.closed:
+            await _SESSION.close()
+        _SESSION = None
 
 
 async def _request_text(method: str, url: str, *, timeout: float = FAST_TIMEOUT, **kwargs):
@@ -250,12 +256,15 @@ async def _request_text(method: str, url: str, *, timeout: float = FAST_TIMEOUT,
     tens of seconds. Provider fallback now happens at the orchestration layer;
     individual requests deliberately have no retry loop.
     """
+    # Clamp per-request timeout to the session-level budget so the session's
+    # total timeout never silently cuts off a legitimately slower provider.
+    effective_timeout = min(timeout, REQUEST_TIMEOUT)
     session = await _session()
     request_timeout = aiohttp.ClientTimeout(
-        total=timeout,
-        connect=min(2.5, timeout),
-        sock_connect=min(2.5, timeout),
-        sock_read=min(max(timeout - 0.5, 1.0), 4.0),
+        total=effective_timeout,
+        connect=min(2.5, effective_timeout),
+        sock_connect=min(2.5, effective_timeout),
+        sock_read=min(max(effective_timeout - 0.5, 1.0), 4.0),
     )
     try:
         async with session.request(method, url, timeout=request_timeout, **kwargs) as response:
@@ -264,7 +273,7 @@ async def _request_text(method: str, url: str, *, timeout: float = FAST_TIMEOUT,
                 raise RuntimeError(f"HTTP {response.status}")
             return body
     except (aiohttp.ClientError, asyncio.TimeoutError) as exc:
-        raise RuntimeError(type(exc).__name__) from exc
+        raise RuntimeError(f"{type(exc).__name__}: {exc}") from exc
 
 
 # ---------------------------------------------------------------------------
@@ -286,7 +295,7 @@ _ARABIC_WORDS = {
 
 def _guess_source(text: str) -> str:
     """Return a conservative source code for providers that cannot auto-detect."""
-    words = set(re.findall(r"[\u0600-\u06FF]+", text))
+    words = set(re.findall(r"[؀-ۿ]+", text))
 
     # Persian has letters that are not used in standard Arabic. Check these
     # before the general Arabic-script test.
@@ -294,27 +303,27 @@ def _guess_source(text: str) -> str:
         return "fa"
     if words & _ARABIC_WORDS:
         return "ar"
-    if re.search(r"[\u0400-\u04FF]", text):
+    if re.search(r"[Ѐ-ӿ]", text):
         return "ru"
-    if re.search(r"[\u0370-\u03FF]", text):
+    if re.search(r"[Ͱ-Ͽ]", text):
         return "el"
-    if re.search(r"[\u3040-\u30FF]", text):
+    if re.search(r"[぀-ヿ]", text):
         return "ja"
-    if re.search(r"[\uAC00-\uD7AF]", text):
+    if re.search(r"[가-힯]", text):
         return "ko"
-    if re.search(r"[\u4E00-\u9FFF]", text):
+    if re.search(r"[一-鿿]", text):
         return "zh-CN"
-    if re.search(r"[\u0900-\u097F]", text):
+    if re.search(r"[ऀ-ॿ]", text):
         return "hi"
-    if re.search(r"[\u0980-\u09FF]", text):
+    if re.search(r"[ঀ-৿]", text):
         return "bn"
-    if re.search(r"[\u0B80-\u0BFF]", text):
+    if re.search(r"[஀-௿]", text):
         return "ta"
-    if re.search(r"[\u0C00-\u0C7F]", text):
+    if re.search(r"[ఀ-౿]", text):
         return "te"
-    if re.search(r"[\u0D00-\u0D7F]", text):
+    if re.search(r"[ഀ-ൿ]", text):
         return "ml"
-    if re.search(r"[\u0E00-\u0E7F]", text):
+    if re.search(r"[฀-๿]", text):
         return "th"
     return "en"
 
@@ -324,14 +333,21 @@ def _guess_source(text: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-async def _google_cloud(text: str, target: str, source: str):
+def _get_api_key() -> Optional[str]:
+    """Resolve the Google Cloud API key from env or the persistent database."""
     api_key = os.getenv("GOOGLE_TRANSLATE_API_KEY")
-    if not api_key:
-        try:
-            from . import udB
-            api_key = udB.get_key("GOOGLE_TRANSLATE_API_KEY")
-        except Exception:
-            api_key = None
+    if api_key:
+        return api_key
+    try:
+        from . import udB
+        api_key = udB.get_key("GOOGLE_TRANSLATE_API_KEY")
+    except Exception:
+        api_key = None
+    return api_key
+
+
+async def _google_cloud(text: str, target: str, source: str):
+    api_key = _get_api_key()
     if not api_key:
         raise RuntimeError("API key not configured")
 
@@ -444,12 +460,15 @@ async def _mymemory(text: str, target: str, source: str):
 
 
 async def _legacy_core(text: str, target: str, source: str):
+    """Legacy fallback using the project's original translate helper."""
     from CythonX.fns.tools import translate as legacy_translate
+
     detected = source if source != "auto" else _guess_source(text)
-    value = await asyncio.wait_for(
-        asyncio.to_thread(legacy_translate, text, lang_tgt=target, lang_src=detected, timeout=5),
-        timeout=6,
-    )
+
+    def _call():
+        return legacy_translate(text, lang_tgt=target, lang_src=detected, timeout=5)
+
+    value = await asyncio.wait_for(asyncio.to_thread(_call), timeout=6)
     if isinstance(value, tuple):
         value = value[0]
     return _valid_translation(value, text), detected
@@ -471,17 +490,22 @@ async def _first_success(tasks, timeout: float):
             if not done:
                 break
             for task in done:
+                if task.cancelled():
+                    continue
                 try:
                     result = task.result()
                     if result and result[0]:
                         return result
                 except asyncio.CancelledError:
-                    raise
+                    # A cancelled task is not a failure; ignore it and
+                    # continue waiting for the remaining candidates.
+                    continue
                 except Exception as exc:
-                    errors.append(str(exc))
+                    errors.append(f"{type(exc).__name__}: {exc}")
     finally:
         for task in pending:
-            task.cancel()
+            if not task.done():
+                task.cancel()
         if pending:
             await asyncio.gather(*pending, return_exceptions=True)
     raise RuntimeError("; ".join(errors) or "translation timeout")
@@ -502,7 +526,7 @@ async def _translate(text: str, target: str, source: str = "auto", *, fast_only:
         return text, source
 
     key = _cache_key(text, source, target)
-    cached = _cache_get(key)
+    cached = await _cache_get(key)
     if cached:
         return cached
 
@@ -516,7 +540,7 @@ async def _translate(text: str, target: str, source: str = "auto", *, fast_only:
             ("MyMemory", _mymemory(text, target, detected)),
             ("Lingva", _lingva(text, target, detected)),
         ]
-        if os.getenv("GOOGLE_TRANSLATE_API_KEY"):
+        if _get_api_key():
             candidates.insert(0, ("Google Cloud", _google_cloud(text, target, source)))
 
         tasks = [asyncio.create_task(coro) for _, coro in candidates]
@@ -541,6 +565,7 @@ async def _translate(text: str, target: str, source: str = "auto", *, fast_only:
                 for task in fallback_tasks:
                     if not task.done():
                         task.cancel()
+                await asyncio.gather(*fallback_tasks, return_exceptions=True)
         finally:
             for task in tasks:
                 if not task.done():
@@ -549,7 +574,7 @@ async def _translate(text: str, target: str, source: str = "auto", *, fast_only:
 
     actual_source = _normalise_code(actual_source) or detected
     translated = _valid_translation(translated, text)
-    _cache_put(key, translated, actual_source)
+    await _cache_put(key, translated, actual_source)
     return translated, actual_source
 
 
@@ -563,12 +588,16 @@ def _parse_request(raw: str, default_target: str = "en"):
     if not raw:
         return default_target, "auto", ""
 
-    pair = re.match(r"^([^\s:>]+)\s*(?:->|>|:)\s*([^\s]+)(?:\s+|$)(.*)$", raw, flags=re.S)
+    # Language pair, e.g. "fa>en text", "fa -> en text", "fa:en text".
+    # Allow an optional space after the separator so "fa>en text" and
+    # "fa>entext" both parse; the target code must still be a known code.
+    pair = re.match(r"^([^\s:>]+)\s*(?:->|>|:)\s*([^\s]+)(?:\s+(.*))?$", raw, flags=re.S)
     if pair:
         source = _normalise_code(pair.group(1))
         target = _normalise_code(pair.group(2))
         if source and target:
-            return target, source, pair.group(3).strip()
+            rest = (pair.group(3) or "").strip()
+            return target, source, rest
 
     parts = raw.split(maxsplit=1)
     target = _normalise_code(parts[0])
@@ -597,7 +626,7 @@ def _format_result(original: str, translated: str, source: str, target: str, *, 
         "<b>🌐 Translation</b>\n\n"
         f"{_flag(source)} <b>{_escape(_display_name(source))}</b> (<code>{source}</code>) "
         f"→ {_flag(target)} <b>{_escape(_display_name(target))}</b> (<code>{target}</code>)"
-        f"<b>{detected_line}</b>\n\n"
+        f"{detected_line}\n\n"
         "<b>📝 Original Text</b>\n"
         f"{_escape(original)}\n\n"
         "<b>✨ Translation Result</b>\n"
@@ -758,6 +787,7 @@ def _button_copy(text: str):
         # callers simply omit the button rather than breaking translation.
         return None
 
+    # Prefer the keyword form; fall back to positional for older TL layers.
     try:
         return constructor(text="📋 Copy Translation", copy_text=text)
     except TypeError:
@@ -765,8 +795,6 @@ def _button_copy(text: str):
             return constructor("📋 Copy Translation", text)
         except Exception:
             return None
-    except Exception:
-        return None
 
 
 def _share_query(query: str) -> Optional[str]:
@@ -791,11 +819,7 @@ def _translation_buttons(target: str, source: str, original: str, translated: st
 
     copy_button = _button_copy(translated)
     if share_query is not None:
-        share_query = share_query.strip()
-        if not share_query.startswith("tr "):
-            share_query = f"tr {share_query}"
-        if len(share_query.encode("utf-8")) > MAX_SHARE_QUERY_BYTES:
-            share_query = None
+        share_query = _share_query(share_query)
 
     action_row = []
     if copy_button is not None:
