@@ -39,7 +39,10 @@ async def cd(e):
     if reply and (reply.sticker or reply.photo):
         cimg = await reply.download_media()
     elif heartless_bot.me.photo and not heartless_bot.me.photo.has_video:
-        cimg = (await e.client.get_profile_photos(heartless_bot.uid, limit=1))[0]
+        # get_profile_photos() returns a Telethon Photo object, not a file.
+        # Download it so Image.open() receives a real path/file.
+        photo = (await e.client.get_profile_photos(heartless_bot.uid, limit=1))[0]
+        cimg = await e.client.download_media(photo)
 
     kk = await e.eor(get_pstring("com_1", "load"))
     img = cimg or default
@@ -64,6 +67,8 @@ async def cd(e):
 async def qrwater(e):
     msg = e.pattern_match.group(1).strip()
     r = await e.get_reply_message()
+    if not (r and r.media):
+        return await e.eor("`Reply Any Media and Give Text`", time=5)
     dl = await e.client.download_media(
         r, thumb=-1 if isinstance(r.media, doc) else None
     )
@@ -74,7 +79,9 @@ async def qrwater(e):
     qr = qrcode.QRCode(box_size=5)
     qr.add_data(msg)
     qr.make()
-    img_qr = qr.make_image()
+    # make_image() returns a mode "1" bitmap; convert to RGB so paste()
+    # can determine the region size from a 2-tuple position.
+    img_qr = qr.make_image().convert("RGB")
     pos = (img_bg.size[0] - img_qr.size[0], img_bg.size[1] - img_qr.size[1])
     img_bg.paste(img_qr, pos)
     img_bg.save(dl)
@@ -88,6 +95,8 @@ async def decod(e):
     r = await e.get_reply_message()
     if not (r and r.media):
         return await e.eor("`Reply to Qrcode Media`", time=5)
+    if cv2 is None:
+        return await e.eor("`'opencv-python' is not installed`", time=5)
     kk = await e.eor(get_pstring("com_1", "load"))
     dl = await e.client.download_media(
         r, thumb=-1 if isinstance(r.media, doc) else None
