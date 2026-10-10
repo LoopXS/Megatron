@@ -24,9 +24,6 @@
 • `{i}sg <username>` or `{i}sgu <username>`
     Get Name History of the user.
 
-• `{i}tr <dest lang code> <(reply to) a message>`
-    Get translated message.
-
 • `{i}webshot <url>`
     Get a screenshot of the webpage.
 
