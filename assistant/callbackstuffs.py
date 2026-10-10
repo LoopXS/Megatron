@@ -4,6 +4,7 @@ import re
 import sys
 import time
 from asyncio.exceptions import TimeoutError as AsyncTimeOut
+import os
 from os import execl, remove
 from random import choice
 
@@ -18,7 +19,7 @@ from telethon import Button, events
 from telethon.tl.types import MessageMediaWebPage
 from telethon.utils import get_peer_id
 
-from CythonX.fns.helper import fast_download, progress
+from CythonX.fns.helper import fast_download
 from CythonX.fns.tools import Carbon, async_searcher, get_paste, telegraph_client
 from CythonX.startup.loader import Loader
 
@@ -43,7 +44,7 @@ def text_to_url(event):
 
 _buttons = {
     "otvars": {
-        "text": "Other Variables to set for assistant:",
+        "text": "Other Variables to set for assistant",
         "buttons": [
             [
                 Button.inline("Tᴀɢ Lᴏɢɢᴇʀ", data="taglog"),
@@ -314,7 +315,7 @@ async def update(eve):
             await eve.edit(f"`Here is the error log:\n{error}`")
             repo.__del__()
             return
-        await eve.edit("`Suᴄᴄᴇssfully Uᴩdᴀᴛᴇd\nRestarting...`")
+        await eve.edit("`Suᴄᴄᴇssfully Uᴩdᴀᴛᴇd\nRestarting UserBot...`")
     else:
         await eve.edit(get_string("clst_1"))
         call_back()
@@ -1285,61 +1286,163 @@ async def media(event):
 FD_MEDIA = {}
 
 
-@callback(re.compile("fd(.*)"), owner=True)
-async def fdroid_dler(event):
-    uri = event.data_match.group(1).decode("utf-8")
-    if FD_MEDIA.get(uri):
-        return await event.edit(file=FD_MEDIA[uri])
-    await event.answer("• Starting Download •", alert=True)
-    await event.edit("• Downloading.. •")
-    URL = f"https://f-droid.org/packages/{uri}"
-    conte = await async_searcher(URL, re_content=True)
-    BSC = bs(conte, "html.parser", from_encoding="utf-8")
-    dl_ = BSC.find("p", "package-version-download").find("a")["href"]
-    title = BSC.find("h3", "package-name").text.strip()
-    thumb = BSC.find("img", "package-icon")["src"]
-    if thumb.startswith("/"):
-        thumb = f"https://f-droid.org{thumb}"
-    thumb, _ = await fast_download(thumb, filename=f"{uri}.png")
-    s_time = time.time()
-    file, _ = await fast_download(
-        dl_,
-        filename=f"{title}.apk",
-        progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-            progress(
-                d,
-                t,
-                event,
-                s_time,
-                "Downloading...",
-            )
-        ),
-    )
+@callback(re.compile(r"gpa(.+)"), owner=True)
+async def play_store_apk(event):
+    app_id = event.data_match.group(1).decode("utf-8").strip()
+    if not app_id or "/" in app_id or " " in app_id:
+        return await event.answer("Invalid Play Store package.", alert=True)
 
-    time.time()
-    n_file = await event.client.fast_uploader(
-        file, show_progress=True, event=event, message="Uploading...", to_delete=True
-    )
-    buttons = Button.switch_inline("Search Back", query="fdroid", same_peer=True)
+    await event.answer("• Starting Download •")
     try:
-        msg = await event.edit(
-            f"**• [{title}]({URL}) •**", file=n_file, thumb=thumb, buttons=buttons
+        await event.edit("• Resolving APK source… •")
+    except Exception:
+        pass
+
+    from .apk_helpers import PLAY_APK_MEDIA, download_and_upload_play_apk
+
+    if PLAY_APK_MEDIA.get(app_id):
+        try:
+            return await event.edit(file=PLAY_APK_MEDIA[app_id])
+        except Exception:
+            PLAY_APK_MEDIA.pop(app_id, None)
+
+    try:
+        await download_and_upload_play_apk(event, app_id)
+    except Exception as exc:
+        LOGS.exception("Play Store APK upload failed")
+        try:
+            await event.edit(
+                f"**Download failed:** `{exc}`",
+                buttons=Button.switch_inline(
+                    "Mᴏʀᴇ Aᴘᴘs", query="app ", same_peer=True
+                ),
+            )
+        except Exception:
+            await event.answer(f"Download failed: {exc}", alert=True)
+
+
+async def _fdroid_resolve_apk(package):
+    """
+    Resolve F-Droid APK URL + title.
+    Prefer the JSON API (stable); fall back to package page HTML.
+    """
+    title = package
+    apk_url = None
+
+    try:
+        meta = await async_searcher(
+            f"https://f-droid.org/api/v1/packages/{package}",
+            re_json=True,
         )
+        if isinstance(meta, dict):
+            version_codes = [
+                p.get("versionCode")
+                for p in (meta.get("packages") or [])
+                if p.get("versionCode") is not None
+            ]
+            suggested = meta.get("suggestedVersionCode")
+            version_code = (
+                suggested
+                if suggested is not None
+                else (version_codes[0] if version_codes else None)
+            )
+            if version_code is not None:
+                apk_url = f"https://f-droid.org/repo/{package}_{version_code}.apk"
+    except Exception as er:
+        LOGS.info("F-Droid API resolve failed for %s: %s", package, er)
+
+    page_url = f"https://f-droid.org/packages/{package}/"
+    try:
+        conte = await async_searcher(page_url, re_content=True)
+        soup = bs(conte, "html.parser", from_encoding="utf-8")
+        title_el = soup.find("h3", class_="package-name") or soup.find(
+            "h4", class_="package-name"
+        )
+        if title_el:
+            title = title_el.text.strip() or package
+        if not apk_url:
+            version_block = soup.find("p", class_="package-version-download")
+            if version_block:
+                link = version_block.find("a", href=True)
+                if link and str(link["href"]).endswith(".apk"):
+                    apk_url = link["href"]
+            if not apk_url:
+                for anchor in soup.select("a[href$='.apk']"):
+                    href = anchor.get("href") or ""
+                    if "/repo/" in href:
+                        apk_url = href
+                        break
+    except Exception as er:
+        LOGS.info("F-Droid HTML resolve failed for %s: %s", package, er)
+
+    if not apk_url:
+        raise RuntimeError("APK download link not found on F-Droid.")
+    if apk_url.startswith("/"):
+        apk_url = "https://f-droid.org" + apk_url
+
+    safe_title = (
+        "".join(ch if ch.isalnum() or ch in " ._-" else "_" for ch in title) or package
+    )
+    return apk_url, safe_title, page_url
+
+
+@callback(re.compile(r"fd(.+)"), owner=True)
+async def fdroid_dler(event):
+    uri = event.data_match.group(1).decode("utf-8").strip().rstrip("/")
+    if not uri or "/" in uri:
+        return await event.answer("Invalid F-Droid package.", alert=True)
+
+    await event.answer("• Starting Download •")
+    try:
+        await event.edit("• Resolving APK… •")
+    except Exception:
+        pass
+
+    from .apk_helpers import format_apk_panel
+
+    page = f"https://f-droid.org/packages/{uri}/"
+    buttons = [
+        [
+            Button.url("F-Droid Pᴀɢᴇ", page),
+            Button.switch_inline("Sᴇᴀʀᴄʜ Aɢᴀɪɴ", query="fdroid ", same_peer=True),
+        ],
+    ]
+    apk_path = None
+    try:
+        dl_, title, page_url = await _fdroid_resolve_apk(uri)
+        try:
+            await event.edit(f"• Downloading `{title}`… •")
+        except Exception:
+            pass
+
+        apk_path, _ = await fast_download(dl_, filename=f"{title}.apk")
+        try:
+            await event.edit(f"• Uploading `{title}`… •")
+        except Exception:
+            pass
+        n_file, _ = await event.client.fast_uploader(
+            apk_path,
+            filename=f"{title}.apk",
+            show_progress=False,
+            to_delete=True,
+        )
+        apk_path = None
+        caption = format_apk_panel(title, uri, page_url, "F-Droid")
+        msg = await deliver_inline_apk(event, n_file, caption, buttons=buttons)
+        if msg and getattr(msg, "media", None):
+            FD_MEDIA.update({uri: msg.media})
     except Exception as er:
         LOGS.exception(er)
         try:
-            msg = await event.client.edit_message(
-                await event.get_input_chat(),
-                event.message_id,
-                f"**• [{title}]({URL}) •**",
-                buttons=buttons,
-                thumb=thumb,
-                file=n_file,
-            )
-        except Exception as er:
-            os.remove(thumb)
-            LOGS.exception(er)
-            return await event.edit(f"**ERROR**: `{er}`", buttons=buttons)
-    if msg and hasattr(msg, "media"):
-        FD_MEDIA.update({uri: msg.media})
-    os.remove(thumb)
+            await event.edit(f"**ERROR**: `{er}`", buttons=buttons)
+        except Exception:
+            try:
+                await event.answer(f"Download failed: {er}", alert=True)
+            except Exception:
+                pass
+    finally:
+        if apk_path and os.path.exists(apk_path):
+            try:
+                os.remove(apk_path)
+            except OSError:
+                pass
