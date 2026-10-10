@@ -104,10 +104,10 @@ from artemis.exceptions import TradingError, RequestError, AuthError
 from artemis.utils import ton_to_nano, nano_to_ton
 
 from . import (
-    cipherx_cmd,
+    heartless_cmd,
     asst_cmd,
     LOGS,
-    cipherx_bot,
+    heartless_bot,
     asst,
     udB,
     HNDLR,
@@ -188,7 +188,7 @@ _MONOCHROME_CACHE_TTL = 120.0
 
 
 def _h(*parts):
-    """Command usage with the active Ultroid handler."""
+    """Command usage with the active heartless handler."""
     return f"{HNDLR}{''.join(str(p) for p in parts)}"
 
 
@@ -1112,9 +1112,9 @@ async def _resolve_nft_gift(client, raw, tg_client=None):
     model = backdrop = None
     model_rarity = backdrop_rarity = None
 
-    # Prefer the chat client, then fall back to cipherx_bot.
+    # Prefer the chat client, then fall back to heartless_bot.
     tg_clients = []
-    for candidate in (tg_client, cipherx_bot):
+    for candidate in (tg_client, heartless_bot):
         if candidate is not None and candidate not in tg_clients:
             tg_clients.append(candidate)
 
@@ -1263,7 +1263,7 @@ async def _send_purchase_log(client, gift, monitor_id):
         f"📡 <b>Log:</b> <code>{LOG_CHAT_ID}</code>"
     )
     try:
-        await cipherx_bot.send_message(
+        await heartless_bot.send_message(
             LOG_CHAT_ID, text, parse_mode="html",
         )
     except Exception:
@@ -1520,7 +1520,7 @@ async def _fetch_my_orders(client):
 
 
 def _store_artemis_token(token):
-    """Persist token in memory + Ultroid DB."""
+    """Persist token in memory + heartless DB."""
     global ARTEMIS_TOKEN
     token = str(token or "").strip()
     if not token:
@@ -1537,7 +1537,7 @@ async def _generate_token_from_session(session):
         raise ValueError("SESSIONMRKT is empty.")
     if not MRKT_API_ID or not MRKT_API_HASH:
         raise ValueError(
-            "api_id / api_hash are missing from Ultroid DB."
+            "api_id / api_hash are missing from heartless DB."
         )
     async with MRKTClient() as client:
         token = await client.auth.login(
@@ -2697,17 +2697,17 @@ async def _artemis_order_book_handler(event):
         )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"ordertop(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"ordertop(?:\s+(.+))?$")
 async def artemis_ordertop(event):
     await _artemis_ordertop_handler(event)
 
 
-@cipherx_cmd(owner_only=True, pattern=r"order(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"order(?:\s+(.+))?$")
 async def artemis_order_book(event):
     await _artemis_order_book_handler(event)
 
 
-@cipherx_cmd(owner_only=True, pattern=r"orders$")
+@heartless_cmd(owner_only=True, pattern=r"orders$")
 async def artemis_orders(event):
     global ORDER_CACHE
     status = None
@@ -2876,7 +2876,7 @@ async def _orderup_one(client, order):
         }
 
 
-@cipherx_cmd(owner_only=True, pattern=r"orderupall$")
+@heartless_cmd(owner_only=True, pattern=r"orderupall$")
 async def artemis_orderupall(event):
     global ORDER_CACHE
     try:
@@ -2963,7 +2963,7 @@ async def artemis_orderupall(event):
         )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"orderup(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"orderup(?:\s+(.+))?$")
 async def artemis_orderup(event):
     global ORDER_CACHE
     try:
@@ -3033,7 +3033,7 @@ async def artemis_orderup(event):
         )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"orderdelall$")
+@heartless_cmd(owner_only=True, pattern=r"orderdelall$")
 async def artemis_orderdelall(event):
     global ORDER_CACHE
     try:
@@ -3083,7 +3083,7 @@ async def artemis_orderdelall(event):
         )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"orderdel(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"orderdel(?:\s+(.+))?$")
 async def artemis_orderdel(event):
     global ORDER_CACHE
     try:
@@ -3128,7 +3128,7 @@ async def artemis_orderdel(event):
         )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"ordernew(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"ordernew(?:\s+(.+))?$")
 async def artemis_ordernew(event):
     global ORDER_CACHE
     raw = event.pattern_match.group(1)
@@ -3210,7 +3210,7 @@ async def artemis_ordernew(event):
         )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"gentoken(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"gentoken(?:\s+(.+))?$")
 async def artemis_gentoken(event):
     session = event.pattern_match.group(1)
     if not session or not session.strip():
@@ -4936,7 +4936,7 @@ async def _restart_all_monitors():
         new_monitor["task"] = task
 
 
-@cipherx_cmd(owner_only=True, pattern=r"buytoken(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"buytoken(?:\s+(.+))?$")
 async def artemis_buytoken(event):
     token = event.pattern_match.group(1)
     if not token or not token.strip():
@@ -4970,7 +4970,7 @@ async def artemis_buytoken(event):
     )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"b$")
+@heartless_cmd(owner_only=True, pattern=r"b$")
 async def artemis_balance(event):
     """Show MRKT hard balance in TON."""
     status = None
@@ -5157,7 +5157,7 @@ async def _listed_nfts_message(client):
     return "\n".join(lines).rstrip()
 
 
-@cipherx_cmd(owner_only=True, pattern=r"nfts$")
+@heartless_cmd(owner_only=True, pattern=r"nfts$")
 async def artemis_nfts(event):
     """Show your currently listed MRKT NFTs with model floors."""
     status = None
@@ -5198,7 +5198,7 @@ async def artemis_nfts(event):
         )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"buy(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"buy(?:\s+(.+))?$")
 async def artemis_buy(event):
     try:
         await _ensure_artemis_token(event)
@@ -5246,7 +5246,7 @@ async def artemis_buy(event):
     )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"buys$")
+@heartless_cmd(owner_only=True, pattern=r"buys$")
 async def artemis_buys(event):
     if not BUY_MONITORS:
         return await event.eor(
@@ -5274,7 +5274,7 @@ async def artemis_buys(event):
     await event.eor("\n".join(lines), parse_mode="html")
 
 
-@cipherx_cmd(owner_only=True, pattern=r"buycancel(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"buycancel(?:\s+(.+))?$")
 async def artemis_buycancel(event):
     target = event.pattern_match.group(1)
     if not target:
@@ -5315,7 +5315,7 @@ async def artemis_buycancel(event):
     )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"gift(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"gift(?:\s+(.+))?$")
 async def artemis_gift(event):
     await _artemis_gift_handler(event)
 
@@ -5578,12 +5578,12 @@ async def _artemis_price_handler(event):
         )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"p(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"p(?:\s+(.+))?$")
 async def artemis_price(event):
     await _artemis_price_handler(event)
 
 
-@cipherx_cmd(owner_only=True, pattern=r"add(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"add(?:\s+(.+))?$")
 async def artemis_add_nftid(event):
     """Append a Telegram user (id or username) to the assistant allow-list."""
     raw = (event.pattern_match.group(1) or "").strip()
@@ -5608,7 +5608,7 @@ async def artemis_add_nftid(event):
     )
 
 
-@cipherx_cmd(owner_only=True, pattern=r"rm(?:\s+(.+))?$")
+@heartless_cmd(owner_only=True, pattern=r"rm(?:\s+(.+))?$")
 async def artemis_rm_nftid(event):
     """Remove a Telegram user (id or username) from the assistant allow-list."""
     raw = (event.pattern_match.group(1) or "").strip()
