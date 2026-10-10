@@ -67,7 +67,8 @@ async def writer(e):
     font = ImageFont.truetype("resources/fonts/DancingScript-Regular.ttf", 60)
     x, y = 150, 140
     lines = text_set(text)
-    line_height = font.getsize("hg")[1]
+    # Pillow 10+ removed FreeTypeFont.getsize(); use font metrics instead.
+    line_height = sum(font.getmetrics())
     for line in lines:
         draw.text((x, y), line, fill=(1, 22, 55), font=font)
         y = y + line_height - 5

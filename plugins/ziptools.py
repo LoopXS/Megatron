@@ -18,6 +18,7 @@
 """
 
 import os
+import shlex
 import time
 
 from . import (
@@ -42,22 +43,30 @@ async def zipp(event):
         await event.eor(get_string("zip_1"))
         return
     xx = await event.eor(get_pstring("com_1", "load"))
+    file = None
     if reply.media:
         if hasattr(reply.media, "document"):
-            file = reply.media.document
             image = await downloader(
                 reply.file.name, reply.media.document, xx, t, get_pstring("com_5", "load")
             )
             file = image.name
         else:
             file = await event.download_media(reply)
-    inp = file.replace(file.split(".")[-1], "zip")
-    if event.pattern_match.group(1).strip():
+    if not file or not os.path.isfile(file):
+        await xx.edit(get_string("zip_1"))
+        return
+    base, _ = os.path.splitext(file)
+    inp = base + ".zip"
+    password = event.pattern_match.group(1).strip()
+    if password:
         await bash(
-            f"zip -r --password {event.pattern_match.group(1).strip()} {inp} {file}"
+            f"zip -r --password {shlex.quote(password)} {shlex.quote(inp)} {shlex.quote(file)}"
         )
     else:
-        await bash(f"zip -r {inp} {file}")
+        await bash(f"zip -r {shlex.quote(inp)} {shlex.quote(file)}")
+    if not os.path.isfile(inp):
+        await xx.edit("`Failed to create zip archive. Is 'zip' installed?`")
+        return
     k = time.time()
     xxx = await uploader(inp, inp, k, xx, get_pstring("com_6", "load"))
     await event.client.send_file(
@@ -145,12 +154,17 @@ async def do_zip(event):
     if not os.path.isdir("zip"):
         return await event.eor(get_string("zip_2").format(HNDLR))
     xx = await event.eor(get_pstring("com_1", "load"))
-    if event.pattern_match.group(1).strip():
+    password = event.pattern_match.group(1).strip()
+    if password:
         await bash(
-            f"zip -r --password {event.pattern_match.group(1).strip()} heartless.zip zip/*"
+            f"zip -r --password {shlex.quote(password)} heartless.zip zip/*"
         )
     else:
         await bash("zip -r heartless.zip zip/*")
+    if not os.path.isfile("heartless.zip"):
+        await bash("rm -rf zip")
+        await xx.edit("`Failed to create zip archive. Is 'zip' installed?`")
+        return
     k = time.time()
     xxx = await uploader("heartless.zip", "heartless.zip", k, xx, get_pstring("com_6", "load"))
     await event.client.send_file(
