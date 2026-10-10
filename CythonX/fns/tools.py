@@ -371,7 +371,7 @@ async def get_paste(data: str, extension: str = "txt"):
 
 
 # --------------------------------------
-# All Credits Belong to ToxygenX/CipherX
+# All Credits Belong to DarkPentester
 
 
 async def get_google_images(query):
@@ -416,7 +416,7 @@ async def get_google_images(query):
 
 
 # --------------------------------------
-# All Credits Belong to TrueSaiyan & ToxygenX/CipherX
+# All Credits Belong to DarkPentester
 
 
 def picgenx(api_url, item_query, timeout=10):
@@ -725,7 +725,7 @@ def telegraph_client():
     if TELEGRAPH:
         return TELEGRAPH[0]
 
-    from .. import udB, cipherx_bot
+    from .. import udB, heartless_bot
 
     token = udB.get_key("_TELEGRAPH_TOKEN")
     TELEGRAPH_DOMAIN = udB.get_key("GRAPH_DOMAIN")
@@ -733,12 +733,12 @@ def telegraph_client():
     if token:
         TELEGRAPH.append(TelegraphClient)
         return TelegraphClient
-    gd_name = cipherx_bot.full_name
+    gd_name = heartless_bot.full_name
     short_name = gd_name[:30]
     profile_url = (
-        f"https://t.me/{cipherx_bot.me.username}"
-        if cipherx_bot.me.username
-        else "https://t.me/CipherXBot"
+        f"https://t.me/{heartless_bot.me.username}"
+        if heartless_bot.me.username
+        else "https://t.me/DarkPentester"
     )
     try:
         TelegraphClient.create_account(
@@ -747,7 +747,7 @@ def telegraph_client():
     except Exception as er:
         if "SHORT_NAME_TOO_LONG" in str(er):
             TelegraphClient.create_account(
-                short_name="cipherxuser", author_name=gd_name, author_url=profile_url
+                short_name="heartless", author_name=gd_name, author_url=profile_url
             )
         else:
             LOGS.exception(er)
@@ -770,7 +770,7 @@ def make_html_telegraph(title, html=""):
 async def Carbon(
     code,
     base_url="https://carbonara.solopov.dev/api/cook",
-    file_name="cipherx",
+    file_name="heartless",
     download=False,
     rayso=False,
     **kwargs,
