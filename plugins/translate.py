@@ -883,7 +883,7 @@ def _language_list() -> str:
 # ---------------------------------------------------------------------------
 
 
-@heartless_cmd(pattern=r"tr(?:\s+(.*)|$)")
+@heartless_cmd(pattern=r"tr(?:\s+([\s\S]*)|$)")
 async def translation_command(event):
     args = (event.pattern_match.group(1) or "").strip()
 
@@ -968,7 +968,7 @@ async def translation_command(event):
 # ---------------------------------------------------------------------------
 
 
-@in_pattern(r"tr(?:\s+(.*)|$)")
+@in_pattern(r"tr(?:\s+([\s\S]*)|$)")
 async def translation_inline(event):
     query = (event.pattern_match.group(1) or "").strip()
 
