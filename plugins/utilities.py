@@ -49,6 +49,7 @@
 import calendar
 import html
 import io
+import mimetypes
 import os
 import re
 import tempfile
@@ -59,6 +60,8 @@ import jdatetime
 from pytz import timezone
 from datetime import datetime as dt
 
+import requests
+
 try:
     from PIL import Image
 except ImportError:
@@ -67,11 +70,6 @@ except ImportError:
 from CythonX._misc._assistant import asst_cmd
 from CythonX.dB.gban_mute_db import is_gbanned
 from CythonX.fns.tools import get_chat_and_msgid
-
-try:
-    from telegraph import upload_file as uf
-except ImportError:
-    uf = None
 
 from telethon.errors.rpcerrorlist import (
     ChatForwardsRestrictedError,
@@ -551,6 +549,31 @@ async def abs_rmbg(event):
     await xx.delete()
 
 
+def _telegraph_upload(path):
+    """Upload a file to Telegraph and return the hosted URL.
+
+    The Telegraph upload endpoint has been observed to respond with
+    either a list of ``{"src": ...}`` dicts or a bare list of path
+    strings.  The deprecated ``telegraph.upload_file`` helper only
+    understands the former and crashes on the latter with
+    ``'str' object has no attribute 'get'``, so the upload is
+    performed directly here and both response shapes are handled.
+    """
+    mimetype = mimetypes.MimeTypes().guess_type(path)[0]
+    with open(path, "rb") as f:
+        response = requests.post(
+            "https://telegra.ph/upload",
+            files=[("file", (os.path.basename(path), f, mimetype))],
+        ).json()
+
+    if isinstance(response, list) and response:
+        item = response[0]
+        src = item.get("src") if isinstance(item, dict) else item
+        if src:
+            return f"https://graph.org{src}"
+    return None
+
+
 @heartless_cmd(pattern="telegraph( (.*)|$)", assistant=True, manager=True)
 async def telegraphcmd(event):
     xx = await event.eor(get_pstring("com_1", "load"))
@@ -575,8 +598,12 @@ async def telegraphcmd(event):
             getit = file
         if "document" not in dar:
             try:
-                nn = f"https://graph.org{uf(getit)[0]}"
-                amsg = f"Uploaded to [Telegraph]({nn}) !"
+                nn = _telegraph_upload(getit)
+                amsg = (
+                    f"Uploaded to [Telegraph]({nn}) !"
+                    if nn
+                    else "`Failed to upload to Telegraph`"
+                )
             except Exception as e:
                 amsg = f"Error : {e}"
             os.remove(getit)
