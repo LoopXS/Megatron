@@ -446,6 +446,9 @@ wrd_5: "Eş anlamlılar"
 wrd_6: "Zıt anlamlılar"
 wrd_7: "Eş anlamlı bulunamadı!!\n\n`{}`"
 wrd_8: "Zıt anlamlı bulunamadı!!\n\n`{}`"
+wrd_9: "`{}` için tanım bulunamadı."
+wrd_10: "`Aranacak bir kelime verin...`"
+wrd_11: "• **Kelime:** `{}`\n\n**Anlamlar:**\n{}"
 
 # profanitY
 prof_1: "`Bu sohbet küfür filtresine eklendi!`"

@@ -231,21 +231,24 @@ async def get_random_user_data():
 # Dictionary (Synonyms and Antonyms)
 
 
-async def get_synonyms_or_antonyms(word, type_of_words):
-    if type_of_words not in ["synonyms", "antonyms"]:
-        return "Dude! Please give a corrent type of words you want."
-    s = await async_searcher(
-        f"https://tuna.thesaurus.com/pageData/{word}", re_json=True
+async def get_synonyms_or_antonyms(word, type_of_words, limit=30):
+    """Fetch up to ``limit`` synonyms or antonyms for ``word``.
+
+    ``type_of_words`` must be either ``"synonyms"`` or ``"antonyms"``.
+    Uses the Datamuse API and returns a (possibly empty) list of terms.
+    """
+    if type_of_words not in ("synonyms", "antonyms"):
+        return []
+    rel = "syn" if type_of_words == "synonyms" else "ant"
+    data = await async_searcher(
+        "https://api.datamuse.com/words",
+        params={"rel_" + rel: word, "max": limit},
+        re_json=True,
+        retries=2,
     )
-    li_1 = [
-        y
-        for x in [
-            s["data"]["definitionData"]["definitions"][0][type_of_words],
-            s["data"]["definitionData"]["definitions"][1][type_of_words],
-        ]
-        for y in x
-    ]
-    return [y["term"] for y in li_1]
+    if not isinstance(data, list):
+        return []
+    return [item["word"] for item in data if isinstance(item, dict) and item.get("word")]
 
 
 # Quotly
