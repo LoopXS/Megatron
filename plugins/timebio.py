@@ -1710,7 +1710,17 @@ try:
     # Do not block plugin import.
     #
     # The project already has an active asyncio loop when plugins are loaded.
-    _restore_task = asyncio.create_task(
+    _loop = asyncio.get_running_loop()
+
+except RuntimeError:
+    # Happens only if the plugin is imported before an event loop exists.
+    # The commands themselves remain fully functional.
+    LOGS.debug("timebio: asyncio loop not ready during plugin import.")
+
+else:
+    # Build the coroutine only once a running loop is available so that it is
+    # always wrapped in a task and never left un-awaited.
+    _restore_task = _loop.create_task(
         _restore_saved_tasks(),
         name="timebio:restore",
     )
@@ -1733,11 +1743,4 @@ try:
                 else None
             )
         )
-    )
-
-except RuntimeError:
-    # Happens only if the plugin is imported before an event loop exists.
-    # The commands themselves remain fully functional.
-    LOGS.debug(
-        "timebio: asyncio loop not ready during plugin import."
     )

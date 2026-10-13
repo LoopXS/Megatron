@@ -3,22 +3,57 @@ from io import FileIO
 from logging import WARNING
 from mimetypes import guess_type
 
-from apiclient.http import LOGGER, MediaFileUpload, MediaIoBaseDownload
-from googleapiclient.discovery import build, logger
-from httplib2 import Http
-from oauth2client.client import OOB_CALLBACK_URN, OAuth2WebServerFlow
-from oauth2client.client import logger as _logger
-from oauth2client.file import Storage
-
 from .. import udB
 from .helper import humanbytes, time_formatter
 
-for log in [LOGGER, logger, _logger]:
-    log.setLevel(WARNING)
+_gdrive_client_loaded = False
+
+
+def _load_gdrive_client():
+    """Import the Google API client libraries lazily.
+
+    ``google-api-core`` (pulled in by ``googleapiclient``) emits a
+    FutureWarning on Python versions older than 3.11.  Importing these
+    lazily keeps that warning out of the startup logs and only pays the
+    import cost when a GDrive command is actually used.
+    """
+    global _gdrive_client_loaded
+    if _gdrive_client_loaded:
+        return
+
+    from apiclient.http import (
+        LOGGER,
+        MediaFileUpload,
+        MediaIoBaseDownload,
+    )
+    from googleapiclient.discovery import build, logger
+    from httplib2 import Http
+    from oauth2client.client import OOB_CALLBACK_URN, OAuth2WebServerFlow
+    from oauth2client.client import logger as _logger
+    from oauth2client.file import Storage
+
+    for log in (LOGGER, logger, _logger):
+        log.setLevel(WARNING)
+
+    # Expose the lazily imported names to the rest of the module.
+    globals().update(
+        LOGGER=LOGGER,
+        MediaFileUpload=MediaFileUpload,
+        MediaIoBaseDownload=MediaIoBaseDownload,
+        build=build,
+        logger=logger,
+        Http=Http,
+        OOB_CALLBACK_URN=OOB_CALLBACK_URN,
+        OAuth2WebServerFlow=OAuth2WebServerFlow,
+        _logger=_logger,
+        Storage=Storage,
+    )
+    _gdrive_client_loaded = True
 
 
 class GDriveManager:
     def __init__(self):
+        _load_gdrive_client()
         self._flow = {}
         self.gdrive_creds = {
             "oauth_scope": [
