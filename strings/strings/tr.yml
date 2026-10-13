@@ -88,11 +88,6 @@ purge_1: "`Silinecek mesajı belirtmek için bir mesaja yanıt verin.`"
 purgeall_1: "`Silmek için birinin mesajına yanıt verin.`"
 purgeall_2: "Şu kullanıcının tüm mesajları başarıyla temizlendi: {}"
 
-# akinator
-aki_1: "Oyun sonlandırıldı...."
-aki_2: "Oyunu Başlat"
-aki_3: "Zaman aşımı!"
-
 # antiflood
 antiflood_1: "`Antiflood ayarları devre dışı`"
 antiflood_2: "`Bu sohbette flood sınırı yok.`"
@@ -542,14 +537,6 @@ instu_2: "Recent Searches.."
 instu_3: "Enter Query -e Ara"
 instu_4: "Başarılı"
 
-# games
-games_1: "Oyunu seçiçinde 🎮"
-games_2: "seç Category!"
-games_3: "seç Difficulty Level"
-games_4: "Soru sayısını seçiçinde.."
-games_5: "seç süre Interval..."
-games_6: "**• Starting Quiz içinde 5 secs.** \n**• Level :** {}\n**• Qs :** {}"
-
 # callbackstuffs
 clst_1: "`Bot dyno derlemesi devam ediyor, lütfen tamamlanmasını bekleyin.`"
 clst_2: "`Başarıyla güncellendi!\nYeniden başlatılıyor, lütfen bekleyin...`"
@@ -636,7 +623,6 @@ help_notes: " -\n\n• `{i}addnote <word><reply to a message>`\n    ekle not iç
 help_other: " -\n\n• `{i}send <username/id> <reply/type>`\n    gönder mesaj -e kullanıcı/sohbet.\n\n• `{i}fwdreply <reply to msg>`\n    Yanıt ver -e birinin mesajı by iletme it içinde özel.\n\n• `{i}save <reply message>`\n    Kaydet o replied msg -e ur saved mesajlar box.\n\n• `{i}fsave <reply message>`\n    ilet o replied msg -e ur saved mesajlar.\n"
 help_pmpermit: " -\n\n• `{i}a` veya `{i}approve`\n    onayla birisi -e PM.\n\n• `{i}da` veya `{i}disapprove`\n    Disapprove birisi -e PM.\n\n• `{i}block`\n    engelle birisi.\n\n• `{i}unblock` | `{i}unblock all`\n    engeli kaldır birisi.\n\n• `{i}nologpm`\n    Durdur logging mesajlar -den  kullanıcı.\n\n• `{i}logpm`\n    Başlat logging mesajlar -den  kullanıcı.\n\n• `{i}startarchive`\n    Archive yeni PMs.\n\n• `{i}stoparchive`\n    Don't arşivle yeni PMs.\n\n• `{i}cleararchive`\n    Unarchive tümü chats.\n\n• `{i}listapproved`\n   Liste tümü approved PMs.\n"
 help_polls: " -\n\n• `{i}poll <question> ; <option> ; <option>`\n    Al  Anonymous Poll ile verilen seçenekler\n\n• `{i}poll <question> ; <option> ; <option> | <type>`\n    Al  anket belirtilen ile desired tür!\n    tür should be herhangi bir -içinde  `public`,  `multiple` veya `quiz`\n\n• `{i}poll <question> ; <option> ; <option> | quiz_<answerno>`\n    Al  quiz anket burada answerno   sayı -içinde seçenek which  doğru\n\n"
-help_profanityfilter: " -\n\n•`{i}addprofanity`\n   eğer birisi sends bad kelime içinde bir sohbet, ardından bot will sil o mesaj.\n\n•`{i}remprofanity`\n   -den sohbet -den Profanity listele.\n\n"
 help_profile: " -\n\n• `{i}setname <first name // last name>`\n    değiştir sizin profil ad.\n\n• `{i}setbio <bio>`\n    değiştir sizin profil bio.\n\n• `{i}setpic <reply to pic>`\n    değiştir sizin profil pic.\n\n• `{i}delpfp <n>(optional)`\n    Sil one profil pic, eğer yok değer verilen, else sil n sayı -içinde pics.\n\n• `{i}poto <username>`\n    Yükle  fotoğraf -içinde sohbet/kullanıcı eğer Mevcut.\n"
 help_qrcode: " -\n\n• `{i}qrcode <text/reply to text>`\n   `Makes qrcode of text`\n\n• `{i}addqr <reply image> <text>`\n   `Makes qr of text and add it to image.`\n\n• `{i}qrdecode <reply to qrcode>`\n   `It decodes the qrcode.`\n"
 help_resize: " -\n\n•`{i}size <reply to media>`\n   ile al boyut -içinde it.\n\n•`{i}resize <number> <number>`\n   ile yeniden boyutlandır görsel üzerinde x, y axis.\n   eg. `{i}resize 690 960`\n"

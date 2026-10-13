@@ -88,11 +88,6 @@ purge_1: "`Reply to a message to purge from.`"
 purgeall_1: "`Reply to someone's msg to delete.`"
 purgeall_2: "Successfully Purged All Messages from {}"
 
-# akinator
-aki_1: "Game has been Terminated...."
-aki_2: "Start Game"
-aki_3: "Timeout !"
-
 # antiflood
 antiflood_1: "`Antiflood Settings Disabled`"
 antiflood_2: "`No flood limits in this chat.`"
@@ -547,14 +542,6 @@ instu_2: "Recent Searches.."
 instu_3: "Enter Query to Search"
 instu_4: "Success"
 
-# games
-games_1: "Choose The Game 🎮"
-games_2: "Choose Category!"
-games_3: "Choose Difficulty Level"
-games_4: "Choose Number of Questions.."
-games_5: "Choose Time Interval..."
-games_6: "**• Starting Quiz in 5 secs.** \n**• Level :** {}\n**• Qs :** {}"
-
 # callbackstuffs
 clst_1: "`Bot dyno build in progress, please wait for it to complete.`"
 clst_2: "`Successfully Updated!\nRestarting, please wait...`"
@@ -641,7 +628,6 @@ help_notes: " -\n\n• `{i}addnote <word><reply to a message>`\n    add note in 
 help_other: " -\n\n• `{i}send <username/id> <reply/type>`\n    send message to User/Chat.\n\n• `{i}fwdreply <reply to msg>`\n    Reply to someone's msg by forwarding it in private.\n\n• `{i}save <reply message>`\n    Save that replied msg to ur saved messages box.\n\n• `{i}fsave <reply message>`\n    Forward that replied msg to ur saved messages.\n"
 help_pmpermit: " -\n\n• `{i}a` or `{i}approve`\n    Approve someone to PM.\n\n• `{i}da` or `{i}disapprove`\n    Disapprove someone to PM.\n\n• `{i}block`\n    Block someone.\n\n• `{i}unblock` | `{i}unblock all`\n    Unblock someone.\n\n• `{i}nologpm`\n    Stop logging messages from the user.\n\n• `{i}logpm`\n    Start logging messages from the user.\n\n• `{i}startarchive`\n    Archive new PMs.\n\n• `{i}stoparchive`\n    Don't archive new PMs.\n\n• `{i}cleararchive`\n    Unarchive all chats.\n\n• `{i}listapproved`\n   List all approved PMs.\n"
 help_polls: " -\n\n• `{i}poll <question> ; <option> ; <option>`\n    Get the Anonymous Poll with Given Options\n\n• `{i}poll <question> ; <option> ; <option> | <type>`\n    Get the poll specified with desired type!\n    type should be any of  `public`,  `multiple` or `quiz`\n\n• `{i}poll <question> ; <option> ; <option> | quiz_<answerno>`\n    Get the quiz poll where answerno is the number of option which is correct\n\n"
-help_profanityfilter: " -\n\n•`{i}addprofanity`\n   If someone sends bad word in a chat, Then bot will delete that message.\n\n•`{i}remprofanity`\n   From chat from Profanity list.\n\n"
 help_profile: " -\n\n• `{i}setname <first name // last name>`\n    Change your profile name.\n\n• `{i}setbio <bio>`\n    Change your profile bio.\n\n• `{i}setpic <reply to pic>`\n    Change your profile pic.\n\n• `{i}delpfp <n>(optional)`\n    Delete one profile pic, if no value given, else delete n number of pics.\n\n• `{i}poto <username>`\n    Upload the photo of Chat/User if Available.\n"
 help_qrcode: " -\n\n• `{i}qrcode <text/reply to text>`\n   `Makes qrcode of text`\n\n• `{i}addqr <reply image> <text>`\n   `Makes qr of text and add it to image.`\n\n• `{i}qrdecode <reply to qrcode>`\n   `It decodes the qrcode.`\n"
 help_resize: " -\n\n•`{i}size <reply to media>`\n   To get size of it.\n\n•`{i}resize <number> <number>`\n   To resize image on x, y axis.\n   eg. `{i}resize 690 960`\n"

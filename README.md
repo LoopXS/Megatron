@@ -220,7 +220,6 @@ These integrations may require additional API keys and/or external services.
 
 Included functionality covers:
 
-- Inline games
 - Emoji games
 - Dice
 - Darts
@@ -433,7 +432,6 @@ globaltools
 locks
 mute
 nsfwfilter
-profanityfilter
 warn
 ```
 
@@ -530,7 +528,6 @@ weather
 
 ```text
 emojigame
-inlinegames
 fakeaction
 extra
 specialtools

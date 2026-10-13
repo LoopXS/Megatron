@@ -88,11 +88,6 @@ purge_1: "`برای پاک‌سازی، به یک پیام ریپلای کنید
 purgeall_1: "`برای حذف پیام‌های یک شخص، به پیام او ریپلای کنید.`"
 purgeall_2: "همه پیام‌های {} با موفقیت پاک شدند"
 
-# akinator
-aki_1: "بازی خاتمه یافت...."
-aki_2: "شروع بازی"
-aki_3: "زمان به پایان رسید!"
-
 # antiflood
 antiflood_1: "`تنظیمات Antiflood غیرفعال شد`"
 antiflood_2: "`در این چت محدودیت Flood وجود ندارد.`"
@@ -542,14 +537,6 @@ instu_2: "جستجوهای اخیر.."
 instu_3: "عبارت جستجو را وارد کنید"
 instu_4: "موفق"
 
-# games
-games_1: "بازی را انتخاب کنید 🎮"
-games_2: "دسته‌بندی را انتخاب کنید!"
-games_3: "سطح دشواری را انتخاب کنید"
-games_4: "تعداد سؤال‌ها را انتخاب کنید.."
-games_5: "بازه زمانی را انتخاب کنید..."
-games_6: "**• آزمون تا ۵ ثانیه دیگر شروع می‌شود.** \n**• سطح:** {}\n**• تعداد سؤال:** {}"
-
 # callbackstuffs
 clst_1: "`ساخت Dyno ربات در حال انجام است؛ لطفاً تا تکمیل آن صبر کنید.`"
 clst_2: "`با موفقیت به‌روزرسانی شد!\nدر حال راه‌اندازی مجدد، لطفاً صبر کنید...`"
@@ -636,7 +623,6 @@ help_notes: " -\n\n• `{i}addnote <word><reply to a message>`\n    کلمه م�
 help_other: " -\n\n• `{i}send <username/id> <reply/type>`\n    پیام را به کاربر/چت ارسال کنید.\n\n• `{i}fwdreply <reply to msg>`\n    با فوروارد کردن پیام، به پیام شخص در خصوصی پاسخ دهید.\n\n• `{i}save <reply message>`\n    پیام ریپلای‌شده را در Saved Messages ذخیره کنید.\n\n• `{i}fsave <reply message>`\n    پیام ریپلای‌شده را به Saved Messages فوروارد کنید.\n"
 help_pmpermit: " -\n\n• `{i}a` یا `{i}approve`\n    اجازه ارسال پیام خصوصی به شخص بدهید.\n\n• `{i}da` یا `{i}disapprove`\n    اجازه پیام خصوصی شخص را لغو کنید.\n\n• `{i}block`\n    شخصی را بلاک کنید.\n\n• `{i}unblock` | `{i}unblock all`\n    شخص یا همه را آن‌بلوک کنید.\n\n• `{i}nologpm`\n    ثبت پیام‌های کاربر را متوقف کنید.\n\n• `{i}logpm`\n    ثبت پیام‌های کاربر را شروع کنید.\n\n• `{i}startarchive`\n    پیام‌های خصوصی جدید را آرشیو کنید.\n\n• `{i}stoparchive`\n    آرشیو پیام‌های خصوصی جدید را متوقف کنید.\n\n• `{i}cleararchive`\n    همه چت‌ها را از آرشیو خارج کنید.\n\n• `{i}listapproved`\n   فهرست همه پیام‌های خصوصی تأییدشده.\n"
 help_polls: " -\n\n• `{i}poll <question> ; <option> ; <option>`\n    نظرسنجی ناشناس با گزینه‌های داده‌شده ایجاد کنید.\n\n• `{i}poll <question> ; <option> ; <option> | <type>`\n    نظرسنجی را با نوع دلخواه ایجاد کنید!\n    type باید یکی از `public`، `multiple` یا `quiz` باشد.\n\n• `{i}poll <question> ; <option> ; <option> | quiz_<answerno>`\n    نظرسنجی Quiz ایجاد کنید؛ answerno شماره گزینه صحیح است.\n\n"
-help_profanityfilter: " -\n\n•`{i}addprofanity`\n   اگر کسی در چت کلمه نامناسبی ارسال کند، ربات آن پیام را حذف می‌کند.\n\n•`{i}remprofanity`\n   کلمه را از فهرست Profanity چت حذف کنید.\n\n"
 help_profile: " -\n\n• `{i}setname <first name // last name>`\n    نام پروفایل خود را تغییر دهید.\n\n• `{i}setbio <bio>`\n    Bio پروفایل خود را تغییر دهید.\n\n• `{i}setpic <reply to pic>`\n    عکس پروفایل خود را تغییر دهید.\n\n• `{i}delpfp <n>(optional)`\n    یک عکس پروفایل را حذف کنید؛ اگر مقداری داده نشود، n عکس حذف می‌شود.\n\n• `{i}poto <username>`\n    در صورت موجود بودن، عکس چت/کاربر را آپلود کنید.\n"
 help_qrcode: " -\n\n• `{i}qrcode <text/reply to text>`\n   `از متن QR Code می‌سازد`\n\n• `{i}addqr <reply image> <text>`\n   `از متن QR ساخته و آن را به تصویر اضافه می‌کند.`\n\n• `{i}qrdecode <reply to qrcode>`\n   `QR Code را Decode می‌کند.`\n"
 help_resize: " -\n\n•`{i}size <reply to media>`\n   اندازه آن را دریافت کنید.\n\n•`{i}resize <number> <number>`\n   تصویر را روی محورهای x و y تغییر اندازه دهید.\n   مثال: `{i}resize 690 960`\n"
