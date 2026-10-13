@@ -74,15 +74,23 @@ DEFAULT_ACTION = "ban"
 SUPPORTED_ACTIONS = {"ban", "mute"}
 MAX_IMAGE_BYTES = 20 * 1024 * 1024
 MAX_VIDEO_BYTES = 150 * 1024 * 1024
-VIDEO_SAMPLE_COUNT = 5
+# Number of frames sampled from each video.  They are spread
+# evenly across the whole duration so content anywhere in the
+# clip is seen, not just the opening seconds.
+VIDEO_SAMPLE_COUNT = 8
 DETECTOR_SCORE = 0.55
 MAX_CONCURRENT_SCANS = 2
 CACHE_TTL = 6 * 60 * 60
+# Wait this long before retrying a failed NudeNet load instead of
+# disabling local detection until restart.
+DETECTOR_RETRY_DELAY = 300
 
 _SCAN_SEMAPHORE = asyncio.Semaphore(MAX_CONCURRENT_SCANS)
 _DETECTOR = None
 _DETECTOR_ERROR = None
+_DETECTOR_RETRY_AT = 0.0
 _DETECTOR_LOCK = asyncio.Lock()
+# Only positive detections are cached (see _scan_message).
 _RESULT_CACHE: dict[str, tuple[float, float]] = {}
 _ACTIVE_CHATS: set[int] = set()
 
@@ -170,8 +178,12 @@ def _looks_visual(message) -> bool:
     if not getattr(message, "media", None):
         return False
 
-    # Photo is always visual.
-    if getattr(message, "photo", None):
+    # Native photo / video / video-note / GIF containers are always
+    # visual, even when the mime type is missing or generic.
+    if any(
+        getattr(message, attr, None)
+        for attr in ("photo", "video", "video_note", "gif")
+    ):
         return True
 
     mime = _mime(message)
@@ -183,7 +195,7 @@ def _looks_visual(message) -> bool:
     return ext in {
         ".jpg", ".jpeg", ".png", ".webp", ".bmp", ".gif", ".apng",
         ".mp4", ".m4v", ".mov", ".webm", ".mkv", ".avi", ".3gp",
-        ".tgs", ".webp",
+        ".tgs",
     }
 
 
@@ -225,24 +237,36 @@ def _file_hash(path: Path) -> str:
 # ---------------------------------------------------------------------------
 
 async def _get_detector():
-    global _DETECTOR, _DETECTOR_ERROR
+    global _DETECTOR, _DETECTOR_ERROR, _DETECTOR_RETRY_AT
 
     if _DETECTOR is not None:
         return _DETECTOR
 
+    now = time.monotonic()
+    if _DETECTOR_ERROR is not None and now < _DETECTOR_RETRY_AT:
+        # Still inside the cooldown window that follows a failed
+        # load; try again once it elapses.
+        return None
+
     async with _DETECTOR_LOCK:
         if _DETECTOR is not None:
             return _DETECTOR
-        if _DETECTOR_ERROR is not None:
+        now = time.monotonic()
+        if _DETECTOR_ERROR is not None and now < _DETECTOR_RETRY_AT:
             return None
 
         try:
             from nudenet import NudeDetector
 
             _DETECTOR = NudeDetector()
+            _DETECTOR_ERROR = None
             LOGS.info("NSFW Guard: NudeNet detector loaded.")
         except Exception as exc:
+            # Do not latch a transient failure (e.g. a model
+            # download hiccup) permanently: that would disable
+            # local detection until the userbot restarts.
             _DETECTOR_ERROR = repr(exc)
+            _DETECTOR_RETRY_AT = time.monotonic() + DETECTOR_RETRY_DELAY
             LOGS.error("NSFW Guard: NudeNet unavailable: %s", exc)
 
     return _DETECTOR
@@ -332,6 +356,18 @@ async def _deepai_score(path: Path) -> float:
 # Media extraction
 # ---------------------------------------------------------------------------
 
+async def _download_thumbnail(message, workdir: Path) -> Path | None:
+    """Download the server-side thumbnail Telegram generates for a message."""
+    try:
+        target = workdir / "thumb.jpg"
+        result = await message.download_media(file=str(target), thumb=-1)
+        if not result:
+            return None
+        return Path(result)
+    except Exception:
+        return None
+
+
 async def _download_media(message, workdir: Path) -> Path | None:
     try:
         target = workdir / "source"
@@ -344,13 +380,9 @@ async def _download_media(message, workdir: Path) -> Path | None:
         is_tgs = mime in {"application/x-tgsticker", "application/x-tgs"} or file_name.endswith(".tgs")
 
         if is_tgs:
-            thumb_target = workdir / "sticker_thumb.jpg"
-            result = await message.download_media(
-                file=str(thumb_target),
-                thumb=-1,
-            )
-        else:
-            result = await message.download_media(file=str(target))
+            return await _download_thumbnail(message, workdir)
+
+        result = await message.download_media(file=str(target))
 
         if not result:
             return None
@@ -364,9 +396,37 @@ def _is_video_file(path: Path, message) -> bool:
     mime = _mime(message)
     if mime.startswith("video/"):
         return True
+    # Telethon exposes the native containers that carry a video
+    # even when the mime type is missing or generic.
+    if any(getattr(message, attr, None) for attr in ("video", "gif", "video_note")):
+        return True
     return path.suffix.lower() in {
         ".mp4", ".m4v", ".mov", ".webm", ".mkv", ".avi", ".3gp", ".gif", ".apng"
     }
+
+
+def _probe_duration_sync(video: Path) -> float:
+    """Return the video duration in seconds, or 0.0 when unknown."""
+    ffprobe = shutil.which("ffprobe")
+    if not ffprobe:
+        return 0.0
+
+    cmd = [
+        ffprobe, "-hide_banner", "-loglevel", "error",
+        "-show_entries", "format=duration",
+        "-of", "default=noprint_wrappers=1:nokey=1",
+        str(video),
+    ]
+    try:
+        out = subprocess.run(cmd, check=False, capture_output=True, timeout=20)
+    except Exception:
+        return 0.0
+
+    text = (out.stdout or b"").decode(errors="ignore").strip()
+    try:
+        return float(text)
+    except (TypeError, ValueError):
+        return 0.0
 
 
 def _extract_video_frames_sync(
@@ -374,16 +434,58 @@ def _extract_video_frames_sync(
     output_dir: Path,
     count: int = VIDEO_SAMPLE_COUNT,
 ) -> list[Path]:
+    """
+    Extract ``count`` frames spread evenly across the *whole* video.
+
+    The previous implementation sampled with ``fps=1/2`` and capped the
+    output at ``count`` frames, which only ever covered the first few
+    seconds of a clip.  Explicit content appearing later in the video was
+    therefore missed entirely.  Seeking to evenly spaced timestamps
+    samples the entire duration instead, and input seeking (``-ss``
+    placed before ``-i``) keeps this fast even for large files.
+    """
     ffmpeg = shutil.which("ffmpeg")
     if not ffmpeg:
         return []
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    pattern = str(output_dir / "frame_%02d.jpg")
+    duration = _probe_duration_sync(video)
 
-    # fps=1/2 gives a time-spread sample for normal videos.  The final
-    # scale keeps CPU/memory consumption reasonable.
-    vf = f"fps=1/2,scale=640:-2:force_original_aspect_ratio=decrease"
+    if duration > 0:
+        frames: list[Path] = []
+        for i in range(count):
+            # Sample at the centre of each segment so both the
+            # opening and the tail of the video are represented.
+            ts = duration * (i + 0.5) / count
+            out = output_dir / f"frame_{i:02d}.jpg"
+            cmd = [
+                ffmpeg, "-hide_banner", "-loglevel", "error",
+                "-ss", f"{ts:.3f}",
+                "-i", str(video),
+                "-frames:v", "1",
+                "-vf", "scale=640:-2:force_original_aspect_ratio=decrease",
+                "-q:v", "4",
+                str(out),
+            ]
+            try:
+                subprocess.run(
+                    cmd,
+                    check=False,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    timeout=30,
+                )
+            except Exception:
+                continue
+            if out.exists() and out.stat().st_size > 0:
+                frames.append(out)
+        if frames:
+            return frames
+
+    # Duration probing failed: fall back to a fixed-rate sample so a
+    # video is still inspected rather than skipped outright.
+    pattern = str(output_dir / "fps_%02d.jpg")
+    vf = "fps=1/2,scale=640:-2:force_original_aspect_ratio=decrease"
     cmd = [
         ffmpeg, "-hide_banner", "-loglevel", "error",
         "-i", str(video),
@@ -403,7 +505,7 @@ def _extract_video_frames_sync(
     except Exception:
         return []
 
-    return sorted(output_dir.glob("frame_*.jpg"))[:count]
+    return sorted(output_dir.glob("fps_*.jpg"))[:count]
 
 
 async def _visual_candidates(message, source: Path, workdir: Path) -> list[Path]:
@@ -416,8 +518,18 @@ async def _visual_candidates(message, source: Path, workdir: Path) -> list[Path]
         if frames:
             return frames
 
-    # Static images, photo thumbnails, stickers, and video files when ffmpeg
-    # is unavailable are scanned directly where possible.
+        # NudeNet cannot decode a video container.  When frame
+        # extraction fails (ffmpeg missing, corrupt or oversized
+        # file), fall back to the server-side thumbnail instead
+        # of feeding the raw video to the detector, which would
+        # always score 0.
+        thumb = await _download_thumbnail(message, workdir)
+        if thumb and thumb.exists():
+            return [thumb]
+        return []
+
+    # Static images, photos and (already rendered) sticker
+    # thumbnails are scanned directly.
     return [source]
 
 
@@ -446,9 +558,11 @@ async def _scan_message(message) -> tuple[bool, float, str]:
                 return cached[1] >= DETECTOR_SCORE, cached[1], "cache"
 
             candidates = await _visual_candidates(message, source, workdir)
+
             best = 0.0
             provider = "none"
 
+            # Pass 1: local NudeNet over every sampled frame.
             for candidate in candidates:
                 if candidate.stat().st_size > MAX_IMAGE_BYTES:
                     continue
@@ -458,18 +572,30 @@ async def _scan_message(message) -> tuple[bool, float, str]:
                     best = score
                     provider = "nudenet"
 
-                # If local detection isn't conclusive, use the configured
-                # fallback provider. This keeps normal messages fast.
-                if best < DETECTOR_SCORE and _deepai_key():
+                if best >= DETECTOR_SCORE:
+                    break
+
+            # Pass 2: only when local detection is inconclusive,
+            # consult the optional DeepAI fallback.
+            if best < DETECTOR_SCORE and _deepai_key():
+                for candidate in candidates:
+                    if candidate.stat().st_size > MAX_IMAGE_BYTES:
+                        continue
+
                     score = await _deepai_score(candidate)
                     if score > best:
                         best = score
                         provider = "deepai"
 
-                if best >= DETECTOR_SCORE:
-                    break
+                    if best >= DETECTOR_SCORE:
+                        break
 
-            _RESULT_CACHE[digest] = (time.monotonic(), best)
+            # Remember positive results only.  Caching a low
+            # score would turn a single false negative into a
+            # permanent one for the whole cache lifetime.
+            if best >= DETECTOR_SCORE:
+                _RESULT_CACHE[digest] = (time.monotonic(), best)
+
             return best >= DETECTOR_SCORE, best, provider
 
         except Exception as exc:
