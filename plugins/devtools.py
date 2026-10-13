@@ -126,18 +126,40 @@ async def _upload_to_graph(file_path, domain="graph.org"):
 )
 async def _(e):
     xx = await e.eor(get_pstring("com_1", "load"))
-    x, y = await bash("neofetch|sed 's/\x1B\\[[0-9;\\?]*[a-zA-Z]//g' >> neo.txt")
-    if y and y.endswith("NOT_FOUND"):
-        return await xx.edit(f"Error: `{y}`")
-    with open("neo.txt", "r", encoding="utf-8") as neo:
-        p = (neo.read()).replace("\n\n", "")
-    haa = await Carbon(code=p, file_name="neofetch", backgroundColor=choice(ATRA_COL))
-    if isinstance(haa, dict):
-        await xx.edit(f"`{haa}`")
-    else:
-        await e.reply(file=haa, force_document=True)
-        await xx.delete()
-    remove("neo.txt")
+    out = "neo.txt"
+    if os.path.exists(out):
+        remove(out)
+    x, y = await bash("neofetch|sed 's/\x1B\\[[0-9;\\?]*[a-zA-Z]//g' > " + out)
+    try:
+        if y and y.endswith("NOT_FOUND"):
+            return await xx.edit(f"Error: `{y}`")
+        with open(out, "r", encoding="utf-8") as neo:
+            p = (neo.read()).replace("\n\n", "")
+        haa = None
+        try:
+            haa = await Carbon(
+                code=p,
+                file_name="neofetch",
+                backgroundColor=choice(ATRA_COL),
+            )
+        except Exception as er:
+            # The public Carbon API is unreliable and often down;
+            # fall back to the raw neofetch output below.
+            LOGS.exception(er)
+        if isinstance(haa, dict):
+            await xx.edit(f"`{haa}`")
+        elif haa is not None:
+            await e.reply(file=haa, force_document=True)
+            await xx.delete()
+        else:
+            # Carbon failed - send the raw system info as a file.
+            info = BytesIO(p.encode("utf-8"))
+            info.name = "sysinfo.txt"
+            await e.reply(file=info, force_document=True)
+            await xx.delete()
+    finally:
+        if os.path.exists(out):
+            remove(out)
 
 
 @heartless_cmd(pattern="bash", fullsudo=True, only_devs=True)

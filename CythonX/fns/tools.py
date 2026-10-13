@@ -783,7 +783,18 @@ async def Carbon(
         kwargs["title"] = kwargs.get("title", "CipherX")
     else:
         kwargs["code"] = code
-    con = await async_searcher(base_url, post=True, json=kwargs, re_content=True)
+    # Image generation is slow and the public Carbon mirrors are
+    # frequently unreachable: make a single generous attempt rather
+    # than retrying a slow/dead endpoint three times (which would
+    # stall the caller for minutes before finally failing).
+    con = await async_searcher(
+        base_url,
+        post=True,
+        json=kwargs,
+        re_content=True,
+        timeout=aiohttp.ClientTimeout(total=45),
+        retries=1,
+    )
     if not download:
         file = BytesIO(con)
         file.name = file_name + ".jpg"
