@@ -517,6 +517,11 @@ zip_1: "Reply to any media/Document."
 zip_2: "First add all files via `{}azip`, then run `{}dozip` to archive them at once."
 zip_3: "`Reply to zip file only`"
 
+# pdftools
+pdf_1: "Reply to a PDF file."
+pdf_2: "Reply to an image file."
+pdf_3: "Reply to an image or PDF file."
+
 # file share
 fsh_1: "**List of files stored.:**"
 fsh_2: "**File has been stored!**\n\n**Shareable link:** {}"
@@ -657,4 +662,5 @@ help_videotools: " -\n\n•`{i}sample <duration in seconds>`\n   Creates Short s
 help_warn: "\n\n•`{i}warn <reply to user> <reason>`\n    Gives Warn.\n\n•`{i}resetwarn <reply to user>`\n    To reset All Warns.\n\n•`{i}warns <reply to user>`\n   To Get List of Warnings of a user.\n\n•`{i}setwarn <warn count> | <ban/mute/kick>`\n   Set Number in warn count for warnings\n   After putting ' | ' mark put action like ban/mute/kick\n   Its Default 3 kick\n   Example : `setwarn 5 | mute`\n\n"
 help_webupload: " -\n\n• `{i}webupload`\n    Upload files on another server.\n"
 help_words: " -\n\n• `{i}meaning <word>`\n    Get the meaning of the word.\n\n• `{i}synonym <word>`\n    Get all synonyms.\n\n• `{i}antonym <word>`\n    Get all antonyms.\n\n• `{i}ud <word>`\n    Fetch word defenition from urbandictionary.\n"
+help_pdftools: "\n\n• `{i}pdf [pages] <reply to pdf>`\n    Send page(s) as images. Pages: `N`, `A-B`, `A-B,C` or nothing for all.\n\n• `{i}pdftext [pages] <reply to pdf>`\n    Extract text from page(s) into a `.txt` file.\n\n• `{i}trim <range> <reply to pdf>`\n    Extract a page range into a separate PDF, e.g. `{i}trim 50-200`.\n\n• `{i}pdfinfo <reply to pdf>`\n    Show page count, size, dimensions and metadata.\n\n• `{i}pdscan <reply to image>`\n    Scan, crop & send an image as a PDF.\n\n• `{i}pdsave <reply to image/pdf>`\n    Scan & save a file to the merge queue.\n\n• `{i}pdsend [name]`\n    Merge the queued files and send them as one PDF.\n\n"
 help_ziptools: "\n\n• `{i}zip [reply] [-n NAME] [-p PASSWORD] [-f zip|tar|gz]`\n    Create an archive. `-n` custom name, `-p` password, `-f` format.\n    A bare argument sets the password (or a local path when not replying).\n\n• `{i}unzip [reply] [-p PASSWORD] [-l]`\n    Extract an archive (zip/tar/tar.gz auto-detected). `-l` lists contents.\n\n• `{i}azip [reply to file]`\n   Add a file to the batch folder.\n\n• `{i}dozip [-n NAME] [-p PASSWORD] [-f zip|tar|gz]`\n   Archive the whole batch folder added via `{i}azip`.\n\n"
