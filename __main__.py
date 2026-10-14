@@ -1,3 +1,5 @@
+# All Credits Belong to @DarkPentester
+
 import glob
 import asyncio
 import logging
@@ -20,7 +22,17 @@ logging.basicConfig(
 ppath = "CythonX/*.py"
 files = glob.glob(ppath)
 
-loop = asyncio.get_event_loop()
+# Python 3.14: get_event_loop() no longer auto-creates a loop.
+try:
+    loop = asyncio.get_running_loop()
+except RuntimeError:
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_closed():
+            raise RuntimeError
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
 
 
 async def start_services():
