@@ -19,7 +19,7 @@ opencv-python-headless>=4.8
 numpy>=1.24
 catbox-uploader>=2.9
 cloudscraper>=1.2.71
-py-tgcalls==3.0.0
+pytgcalls==3.0.0.dev24
 git+https://github.com/ToxygenX/floor.git
 git+https://github.com/ToxygenX/floorT.git
 nudenet
