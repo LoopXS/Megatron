@@ -16,9 +16,19 @@ Inline interface
 @AssisXBot tr fa>en سلام حالت چطوره؟
 @AssisXBot tr list
 
-The plugin is intentionally self-contained and uses only aiohttp plus the
-existing Megatron/CythonX interfaces. It does not require langdetect,
-translate libraries, or a mandatory API key.
+Backends are layered, Google-first, and chosen for reliability:
+
+* Google Cloud Translation API - the official, paid API. Used
+  automatically whenever a GOOGLE_TRANSLATE_API_KEY is set
+  (environment variable or the persistent database).
+* Google Translate (AJAX)      - Google's own fast endpoint.
+* deep-translator            - a maintained translation module
+  (Google's web endpoint) that backs up the AJAX endpoint.
+
+Text of any size (up to MAX_INPUT) is split on sentence and
+paragraph boundaries and translated chunk by chunk, so a single
+request never exceeds any backend's per-query limit. The flaky
+public APIs (MyMemory, Lingva, Google web scraping) are gone.
 """
 
 from __future__ import annotations
@@ -32,13 +42,21 @@ import os
 import re
 import time
 from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
-from urllib.parse import quote
 
 import aiohttp
 from telethon import Button, types
 
 from . import HNDLR, LOGS, eor, in_pattern, heartless_cmd
+
+# deep-translator is an optional but recommended translation module.
+# The plugin still works without it (the Google AJAX endpoint is the
+# primary free backend), so a missing install never breaks the plugin.
+try:
+    from deep_translator import GoogleTranslator
+except Exception:  # pragma: no cover - exercised only when not installed
+    GoogleTranslator = None
 
 
 # ---------------------------------------------------------------------------
@@ -118,17 +136,15 @@ ALIASES = {
     "persian (farsi)": "fa",
 }
 
-MAX_INPUT = 12000
+MAX_INPUT = 100_000
 MAX_INLINE_RESULT = 3800
 MAX_COPY_TEXT = 256
 MAX_SHARE_QUERY_BYTES = 256
 MAX_TELEGRAM_TEXT = 3950
-# MyMemory rejects queries over 500 chars; the Google endpoints accept up
-# to ~5000. Chunking at the Google limit keeps every provider in the race
-# (MyMemory simply steps aside for long chunks) while the orchestrator can
-# still translate input up to MAX_INPUT.
-MAX_MYMEMORY_QUERY = 500
-MAX_QUERY_CHARS = 5000
+# Every backend accepts roughly 5000 characters per query, but
+# deep-translator hard-rejects anything >= 5000. Chunking just below
+# that keeps all three backends usable on every chunk.
+MAX_QUERY_CHARS = 4000
 CACHE_SIZE = 256
 CACHE_TTL = 15 * 60
 # Session-level total timeout must be >= the slowest per-request timeout.
@@ -137,12 +153,29 @@ FAST_TIMEOUT = 4.5
 SLOW_TIMEOUT = 7.0
 CONCURRENCY = 8
 TRANSLATION_DEADLINE = 7.5
+# deep-translator is the robust module fallback. It is only spun up
+# after this grace period, so a fast Google AJAX response never wastes
+# a worker thread or a second Google request.
+DEEP_TRANSLATOR_GRACE = 1.0
+# Hard ceiling for a single deep-translator call. Its internal HTTP
+# request has no timeout of its own, so we bound the wait here and run
+# it in a tiny dedicated pool so a hung call cannot stall the rest.
+# 1s grace + 6s here stays inside the 7.5s race deadline.
+DEEP_TRANSLATOR_TIMEOUT = 6.0
+DEEP_TRANSLATOR_WORKERS = 2
 
 _CACHE: "OrderedDict[str, tuple[float, str, str]]" = OrderedDict()
 _CACHE_LOCK = asyncio.Lock()
 _SEMAPHORE = asyncio.Semaphore(CONCURRENCY)
 _SESSION: Optional[aiohttp.ClientSession] = None
 _SESSION_LOCK = asyncio.Lock()
+# Isolated pool for the synchronous deep-translator module.
+_DEEP_EXECUTOR = ThreadPoolExecutor(
+    max_workers=DEEP_TRANSLATOR_WORKERS, thread_name_prefix="translate"
+)
+
+# deep-translator speaks Google's legacy language code for Hebrew.
+_DEEP_TRANSLATOR_CODES = {"he": "iw"}
 
 
 # ---------------------------------------------------------------------------
@@ -414,84 +447,33 @@ async def _google_ajax(text: str, target: str, source: str):
     return translated, detected
 
 
-async def _google_web(text: str, target: str, source: str):
-    raw = await _request_text(
-        "GET",
-        "https://translate.google.com/m",
-        timeout=SLOW_TIMEOUT,
-        params={"tl": target, "sl": source, "q": text},
-    )
-    matches = re.findall(
-        r'class=["\'](?:result-container|t0)[^>]*>(.*?)<', raw, flags=re.I | re.S
-    )
-    if not matches:
-        raise ValueError("Google web returned no translation")
-    value = re.sub(r"<[^>]+>", "", matches[0])
-    return _valid_translation(value, text), source
+async def _deep_translator(text: str, target: str, source: str):
+    """Translate via the maintained deep-translator module.
 
+    deep-translator is synchronous and hits Google's *web* endpoint,
+    which is a different code path from the AJAX endpoint, so it stays
+    useful when the AJAX endpoint is rate-limited or changes. It runs
+    in a tiny dedicated thread pool with a hard wait ceiling because
+    its internal HTTP request has no timeout of its own.
+    """
+    if GoogleTranslator is None:
+        raise RuntimeError("deep-translator is not installed")
 
-async def _lingva_one(text: str, target: str, source: str, instance: str):
-    encoded = quote(text, safe="")
-    raw = await _request_text(
-        "GET",
-        f"{instance}/api/v1/{source}/{target}/{encoded}",
-        timeout=FAST_TIMEOUT,
-    )
-    payload = json.loads(raw)
-    if not isinstance(payload, dict):
-        raise ValueError("invalid Lingva response")
-    return _valid_translation(payload.get("translation"), text), source
-
-
-async def _lingva(text: str, target: str, source: str):
-    instances = (
-        "https://lingva.ml",
-        "https://translate.plausibility.cloud",
-        "https://translate.dr460nf1r3.org",
-    )
-    tasks = [asyncio.create_task(_lingva_one(text, target, source, x)) for x in instances]
-    try:
-        return await _first_success(tasks, timeout=FAST_TIMEOUT + 0.5)
-    finally:
-        for task in tasks:
-            if not task.done():
-                task.cancel()
-
-
-async def _mymemory(text: str, target: str, source: str):
-    if len(text) > MAX_MYMEMORY_QUERY:
-        # MyMemory hard-rejects queries over 500 chars; do not spend a
-        # request on one that is guaranteed to fail.
-        raise RuntimeError("MyMemory query too long")
-    source = source if source != "auto" else _guess_source(text)
-    raw = await _request_text(
-        "GET",
-        "https://api.mymemory.translated.net/get",
-        timeout=FAST_TIMEOUT,
-        params={"q": text, "langpair": f"{source}|{target}"},
-    )
-    payload = json.loads(raw)
-    if not isinstance(payload, dict):
-        raise ValueError("invalid MyMemory response")
-    response_data = payload.get("responseData") or {}
-    status = response_data.get("responseStatus")
-    if status not in (None, 200, "200"):
-        raise RuntimeError(f"MyMemory status {status}")
-    return _valid_translation(response_data.get("translatedText"), text), source
-
-
-async def _legacy_core(text: str, target: str, source: str):
-    """Legacy fallback using the project's original translate helper."""
-    from CythonX.fns.tools import translate as legacy_translate
-
-    detected = source if source != "auto" else _guess_source(text)
+    # deep-translator speaks Google's legacy code for Hebrew.
+    src = _DEEP_TRANSLATOR_CODES.get(source, source)
+    tgt = _DEEP_TRANSLATOR_CODES.get(target, target)
 
     def _call():
-        return legacy_translate(text, lang_tgt=target, lang_src=detected, timeout=5)
+        return GoogleTranslator(source=src, target=tgt).translate(text)
 
-    value = await asyncio.wait_for(asyncio.to_thread(_call), timeout=6)
-    if isinstance(value, tuple):
-        value = value[0]
+    loop = asyncio.get_running_loop()
+    value = await asyncio.wait_for(
+        loop.run_in_executor(_DEEP_EXECUTOR, _call),
+        timeout=DEEP_TRANSLATOR_TIMEOUT,
+    )
+    # deep-translator does not expose the detected language, so report
+    # our conservative guess when the source was auto-detected.
+    detected = source if source != "auto" else _guess_source(text)
     return _valid_translation(value, text), detected
 
 
@@ -532,14 +514,15 @@ async def _first_success(tasks, timeout: float):
     raise RuntimeError("; ".join(errors) or "translation timeout")
 
 
-async def _translate_single(
-    text: str, target: str, source: str, *, fast_only: bool = False
-):
-    """Translate a single chunk (<= MAX_QUERY_CHARS) through the provider race.
+async def _translate_single(text: str, target: str, source: str):
+    """Translate a single chunk (<= MAX_QUERY_CHARS) via the backend layering.
 
-    Fast public providers are queried concurrently rather than sequentially.
-    This is the key difference from the previous version: one dead/429
-    provider can no longer add another full timeout to the user's request.
+    When a Google Cloud API key is configured it is used alone, so a
+    fast free response can never abandon -- and still bill -- a paid
+    request. Otherwise the fast Google AJAX endpoint races the
+    deep-translator module. deep-translator is only spun up after a
+    short grace period, so a quick AJAX answer never wastes a worker
+    thread or a second Google request.
     """
     key = _cache_key(text, source, target)
     cached = await _cache_get(key)
@@ -549,39 +532,31 @@ async def _translate_single(
     detected = source if source != "auto" else _guess_source(text)
 
     async with _SEMAPHORE:
-        # If a Cloud API key is configured, use it as one of the concurrent
-        # candidates. Otherwise the public Google/MyMemory/Lingva race is fast.
-        candidates = [
-            ("Google AJAX", _google_ajax(text, target, source)),
-            ("MyMemory", _mymemory(text, target, detected)),
-            ("Lingva", _lingva(text, target, detected)),
-        ]
         if _get_api_key():
-            candidates.insert(0, ("Google Cloud", _google_cloud(text, target, source)))
+            try:
+                translated, actual_source = await _google_cloud(
+                    text, target, source
+                )
+                actual_source = _normalise_code(actual_source) or detected
+            except Exception as exc:
+                LOGS.debug("Google Cloud translation failed: %s", exc)
+            else:
+                await _cache_put(key, translated, actual_source)
+                return translated, actual_source
+
+        candidates = [("Google AJAX", _google_ajax(text, target, source))]
+
+        async def _deep_after_grace():
+            await asyncio.sleep(DEEP_TRANSLATOR_GRACE)
+            return await _deep_translator(text, target, source)
+
+        candidates.append(("deep-translator", _deep_after_grace()))
 
         tasks = [asyncio.create_task(coro) for _, coro in candidates]
         try:
             translated, actual_source = await _first_success(
                 tasks, timeout=TRANSLATION_DEADLINE
             )
-        except Exception as first_error:
-            LOGS.debug("Fast translation race failed: %s", first_error)
-            if fast_only:
-                raise RuntimeError("fast translation providers unavailable") from first_error
-            # Only after the fast race fails do we try the slower fallbacks.
-            fallback_tasks = [
-                asyncio.create_task(_google_web(text, target, detected)),
-                asyncio.create_task(_legacy_core(text, target, detected)),
-            ]
-            try:
-                translated, actual_source = await _first_success(
-                    fallback_tasks, timeout=6.5
-                )
-            finally:
-                for task in fallback_tasks:
-                    if not task.done():
-                        task.cancel()
-                await asyncio.gather(*fallback_tasks, return_exceptions=True)
         finally:
             for task in tasks:
                 if not task.done():
@@ -631,12 +606,10 @@ def _split_text(text: str, limit: int = MAX_QUERY_CHARS) -> list[str]:
     return chunks or [text]
 
 
-async def _translate(
-    text: str, target: str, source: str = "auto", *, fast_only: bool = False
-):
+async def _translate(text: str, target: str, source: str = "auto"):
     """Translate ``text``, splitting long input into backend-sized chunks.
 
-    Each chunk runs through the provider race independently, so input
+    Each chunk runs through the backend layering independently, so input
     longer than any single provider's query limit still translates (up to
     MAX_INPUT) and a single slow provider cannot block the whole request.
     """
@@ -649,14 +622,12 @@ async def _translate(
 
     chunks = _split_text(text)
     if len(chunks) == 1:
-        return await _translate_single(chunks[0], target, source, fast_only=fast_only)
+        return await _translate_single(chunks[0], target, source)
 
     translated_parts: list[str] = []
     detected = source
     for index, chunk in enumerate(chunks):
-        part, chunk_source = await _translate_single(
-            chunk, target, source, fast_only=fast_only
-        )
+        part, chunk_source = await _translate_single(chunk, target, source)
         translated_parts.append(part)
         if index == 0:
             detected = chunk_source
@@ -699,10 +670,6 @@ def _display_name(code: str) -> str:
 
 def _flag(code: str) -> str:
     return LANGUAGE_FLAGS.get(code, "🌐")
-
-
-def _language_label(code: str) -> str:
-    return f"{_flag(code)} {_display_name(code)} ({code})"
 
 
 def _format_result(original: str, translated: str, source: str, target: str, *, auto_detected: bool = False) -> str:
@@ -1125,7 +1092,7 @@ async def translation_inline(event):
         return await event.answer([article], cache_time=0)
 
     try:
-        translated, detected = await _translate(text, target, source, fast_only=True)
+        translated, detected = await _translate(text, target, source)
     except Exception:
         LOGS.exception("Translation Pro inline failed")
         article = await event.builder.article(
