@@ -147,7 +147,7 @@ def main():
     try:
         type_of_ss = int(
             input(
-                "\nCipherX Bot supports both telethon as well as pyrogram sessions.\n\nWhich session do you want to generate?\n1. Telethon Session.\n2. Pyrogram Session.\n\nEnter choice:  "
+                "\nUserBot supports both telethon as well as pyrogram sessions.\n\nWhich session do you want to generate?\n1. Telethon Session.\n2. Pyrogram Session.\n\nEnter choice:  "
             )
         )
     except Exception as e:
