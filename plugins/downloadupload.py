@@ -34,7 +34,7 @@ from . import (
 )
 async def down(event):
     matched = event.pattern_match.group(1).strip()
-    msg = await event.eor(get_pstring("udl_4", "load"))
+    msg = await event.eor(get_string("udl_4"))
     if not matched:
         return await eor(msg, get_string("udl_5"), time=5)
     try:
@@ -48,7 +48,7 @@ async def down(event):
         filename, d = await fast_download(
             link,
             filename,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(
                 progress(
                     d,
                     t,
@@ -60,7 +60,7 @@ async def down(event):
         )
     except InvalidURL:
         return await msg.eor("`Invalid URL provided :(`", time=5)
-    await msg.eor(get_pstring("udl_2", "star", "dir", "load").format(filename, time_formatter(d*1000)))
+    await msg.eor(f"`{filename}` `downloaded in {time_formatter(d*1000)}.`")
 
 
 @heartless_cmd(
@@ -109,7 +109,7 @@ async def download(event):
         file_name = await event.client.download_media(
             ok,
             d,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(
                 progress(
                     d,
                     t,
@@ -121,7 +121,7 @@ async def download(event):
         )
     e = dt.now()
     t = time_formatter(((e - s).seconds) * 1000)
-    await xx.eor(get_pstring("udl_2", "star", "dir", "load").format(file_name, t))
+    await xx.eor(get_string("udl_2").format(file_name, t))
 
 
 @heartless_cmd(
@@ -188,7 +188,7 @@ async def _(event):
                         force_document=force_doc,
                         thumb=thumb,
                         attributes=attributes,
-                        caption=get_pstring("udl_9", "star", "dir", "load").format(files, time_formatter(_*1000)),
+                        caption=f"`Uploaded` `{files}` `in {time_formatter(_*1000)}`",
                         reply_to=event.reply_to_msg_id or event,
                     )
                     s += 1
@@ -211,6 +211,6 @@ async def _(event):
             force_document=force_doc,
             thumb=thumb,
             attributes=attributes,
-            caption=get_pstring("udl_9", "star", "dir", "load").format(result, time_formatter(_*1000)),
+            caption=f"`Uploaded` `{result}` `in {time_formatter(_*1000)}`",
         )
     await msg.try_delete()
