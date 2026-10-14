@@ -2,12 +2,13 @@ import os
 from time import sleep
 
 a = r"""
-    _______       __             _  __ 
-   / ____(_)___  / /_  ___  ____| |/ / 
-  / /   / / __ \/ __ \/ _ \/ ___/   /  
- / /___/ / /_/ / / / /  __/ /  /   |   
- \____/_/ .___/_/ /_/\___/_/  /_/|_|   
-       /_/                             
+__________________________________________________
+                                                  
+    /                            /                
+---/__----__----__---)__--_/_---/----__---__---__-
+  /   ) /___) /   ) /   ) /    /   /___) (_ ` (_ `
+_/___/_(___ _(___(_/_____(_ __/___(___ _(__)_(__)_
+                                                  
 """
 
 
@@ -50,8 +51,12 @@ def telethon_session():
         import telethon
         x = "\bFound an existing installation of Telethon...\nSuccessfully Imported.\n\n"
     except ImportError:
-        print("Installing Telethon...")
-        os.system("pip uninstall telethon -y && pip install -U telethon")
+        print("Installing Telethon fork...")
+        os.system(
+            "pip uninstall telethon -y && "
+            "pip install -U "
+            "git+https://github.com/ToxygenX/Telethon.git@35290bc24af401e9c1331d71b7e0ff3ff0a10429"
+        )
 
         x = "\bDone. Installed and imported Telethon."
     clear_screen()
@@ -72,12 +77,12 @@ def telethon_session():
 
     # logging in
     try:
-        with TelegramClient(StringSession(), API_ID, API_HASH) as heartless:
-            print("Generating a string session for userbot.")
+        with TelegramClient(StringSession(), API_ID, API_HASH) as ultroid:
+            print("Generating a string session for •CIPHERX BOT•")
             try:
-                heartless.send_message(
+                ultroid.send_message(
                     "me",
-                    f"`SESSION`:\n\n`{heartless.session.save()}`\n\n**Do not share this anywhere!**",
+                    f"`SESSION`:\n\n`{ultroid.session.save()}`\n\n**Do not share this anywhere!**",
                 )
                 print(
                     "Your SESSION has been generated. Check your Telegram saved messages!"
@@ -85,7 +90,7 @@ def telethon_session():
                 return
             except UserIsBotError:
                 print("You are trying to Generate Session for your Bot's Account?")
-                print("Here is That!\n{heartless.session.save()}\n\n")
+                print("Here is That!\n{ultroid.session.save()}\n\n")
                 print("NOTE: You can't use that as User Session..")
     except ApiIdInvalidError:
         print(
@@ -123,11 +128,11 @@ def pyro_session():
     API_ID, API_HASH = get_api_id_and_hash()
     print("Enter phone number when asked.\n\n")
     try:
-        with Client(name="heartless", api_id=API_ID, api_hash=API_HASH, in_memory=True) as pyro:
+        with Client(name="DarkPentester", api_id=API_ID, api_hash=API_HASH, in_memory=True) as pyro:
             ss = pyro.export_session_string()
             pyro.send_message(
                 "me",
-                f"`{ss}`\n\nAbove is your Pyrogram Session String for @Theheartless. **DO NOT SHARE it.**",
+                f"`{ss}`\n\nAbove is your Pyrogram Session String for userbot. **DO NOT SHARE it.**",
             )
             print("Session has been sent to your saved messages!")
             exit(0)
