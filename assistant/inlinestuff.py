@@ -2,7 +2,7 @@ import asyncio
 import base64
 import inspect
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from html import unescape
 from random import choice
 from re import compile as re_compile
@@ -186,7 +186,9 @@ async def _(e):
             release = data["type"]
             version = data["version"]
             size = humanbytes(data["size"])
-            release_date = datetime.utcfromtimestamp(data["date"]).strftime("%Y-%m-%d")
+            release_date = datetime.fromtimestamp(
+                data["date"], tz=timezone.utc
+            ).strftime("%Y-%m-%d")
             text = f"[\xad]({ofox})**OʀᴀɴɢᴇFᴏx Rᴇᴄᴏᴠᴇʀʏ Fᴏʀ**\n\n"
             text += f"`  Fᴜʟʟ Nᴀᴍᴇ: {fullname}`\n"
             text += f"`  Cᴏᴅᴇɴᴀᴍᴇ: {codename}`\n"
