@@ -24,10 +24,10 @@ if run_as_module:
     from .fns.helper import async_searcher
     from .startup import *
     from .startup._database import HeartlessDB
-    from .startup.BaseClient import UltroidClient
+    from .startup.BaseClient import heartlessClient
     from .startup.connections import validate_session, vc_connection
     from .startup.funcs import _version_changes, autobot, enable_inline, update_envs
-    from .version import ultroid_version
+    from .version import heartless_version
 
     if not os.path.exists("./plugins"):
         LOGS.error(
@@ -65,10 +65,10 @@ if run_as_module:
 
     # sys.exit()
     else:
-        heartless_bot = UltroidClient(
+        heartless_bot = heartlessClient(
             validate_session(Var.SESSION, LOGS),
             udB=udB,
-            app_version=ultroid_version,
+            app_version=heartless_version,
             device_model="DarkPentester",
         )
         heartless_bot.run_in_loop(autobot())
@@ -100,7 +100,7 @@ if run_as_module:
     if USER_MODE:
         asst = heartless_bot
     else:
-        asst = UltroidClient("asst", bot_token=udB.get_key("BOT_TOKEN"), udB=udB)
+        asst = heartlessClient("asst", bot_token=udB.get_key("BOT_TOKEN"), udB=udB)
 
     # if BOT_MODE:
     # heartless_bot = asst
