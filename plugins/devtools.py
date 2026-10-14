@@ -420,19 +420,24 @@ def _stringify(text=None, *args, **kwargs):
 
 
 async def aexec(code, event):
-    exec(
-        (
-            "async def __aexec(e, client): "
-            + "\n print = p = _stringify"
-            + "\n message = event = e"
-            + "\n u.r = reply = await event.get_reply_message()"
-            + "\n chat = event.chat_id"
-            + "\n u.lr = locals()"
-        )
-        + "".join(f"\n {l}" for l in code.split("\n"))
-    )
+    """Compile and run eval code in an async helper.
 
-    return await locals()["__aexec"](event, event.client)
+    Python 3.13+ no longer reliably exposes names created by bare ``exec``
+    through ``locals()`` inside a function, which caused
+    ``KeyError: '__aexec'``. Bind the helper into an explicit namespace.
+    """
+    src = (
+        "async def __aexec(e, client):"
+        + "\n print = p = _stringify"
+        + "\n message = event = e"
+        + "\n u.r = reply = await event.get_reply_message()"
+        + "\n chat = event.chat_id"
+        + "\n u.lr = locals()"
+        + "".join(f"\n {line}" for line in code.split("\n"))
+    )
+    ns = {**globals(), "_stringify": _stringify}
+    exec(compile(src, "<ultroid_aexec>", "exec"), ns, ns)
+    return await ns["__aexec"](event, event.client)
 
 
 DUMMY_CPP = """#include <iostream>
