@@ -4,7 +4,6 @@
 akinator
 apscheduler
 aiohttp
-aiofiles>=24.1.0,<25.0.0
 bs4
 cairosvg
 google-search-results
@@ -26,21 +25,23 @@ lxml
 Markdown
 mediainfo
 numpy>=1.21.2
-openai==0.28.0
+openai
 oauth2client
 opencv-python-headless
-Pillow>=10.0.0,<12.0.0
-moviepy
+Pillow>=12.3.0
+# PyPI moviepy 2.2.1 pins pillow<12 (breaks Python 3.14); master allows Pillow 12+
+git+https://github.com/Zulko/moviepy.git
 profanitydetector
 psutil
-pypdf2>=1.26.0
+pypdf>=6.0
 pytz
 qrcode
 requests
 tabulate
 telegraph
-tgcrypto
-twikit
+# TgCrypto has no cp314 wheels yet; Telethon works without it (slower crypto).
+# Uncomment when a Python 3.14 wheel is published, or build with python3-dev:
+# tgcrypto
 yt-dlp
-spotdl==4.5.2
+spotdl>=4.5.2
 # -------------------------------------------------------#
