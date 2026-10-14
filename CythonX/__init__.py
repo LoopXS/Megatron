@@ -24,10 +24,10 @@ if run_as_module:
     from .fns.helper import async_searcher
     from .startup import *
     from .startup._database import HeartlessDB
-    from .startup.BaseClient import heartlessClient
+    from .startup.BaseClient import UltroidClient
     from .startup.connections import validate_session, vc_connection
     from .startup.funcs import _version_changes, autobot, enable_inline, update_envs
-    from .version import heartless_version
+    from .version import ultroid_version
 
     if not os.path.exists("./plugins"):
         LOGS.error(
@@ -65,16 +65,16 @@ if run_as_module:
 
     # sys.exit()
     else:
-        heartless_bot = heartlessClient(
+        heartless_bot = UltroidClient(
             validate_session(Var.SESSION, LOGS),
             udB=udB,
-            app_version=heartless_version,
+            app_version=ultroid_version,
             device_model="DarkPentester",
         )
         heartless_bot.run_in_loop(autobot())
         
     #-------------SPOTLOGS LOGGER-------------#
-    SPOTLOGS = getLogger("CythonX:")
+    SPOTLOGS = getLogger("⛧CythonX⛧ :")
     SPOTLOGS.propagate = False
 
     class CustomFormatter(Formatter):
@@ -100,7 +100,7 @@ if run_as_module:
     if USER_MODE:
         asst = heartless_bot
     else:
-        asst = heartlessClient("asst", bot_token=udB.get_key("BOT_TOKEN"), udB=udB)
+        asst = UltroidClient("asst", bot_token=udB.get_key("BOT_TOKEN"), udB=udB)
 
     # if BOT_MODE:
     # heartless_bot = asst
@@ -126,25 +126,40 @@ if run_as_module:
     HUGGING_TOKEN = udB.get_key("hf")
 
     async def hfv(api_url, timeout=10):
+        """Ping HF Space keep-alive. Never raises — rate limits / HTML are expected."""
         try:
             headers = {
                 "Authorization": f"Bearer {HUGGING_TOKEN}",
                 "Content-Type": "application/json",
             }
+
+            async def _parse(resp):
+                if resp.status != 200:
+                    return {"message": f"hf status {resp.status}"}
+                try:
+                    data = await resp.json(content_type=None)
+                except Exception:
+                    return {"message": "ded"}
+                return data if isinstance(data, dict) else {"message": "ded"}
+
             response = await async_searcher(
                 api_url,
                 headers=headers,
-                re_json=True
+                evaluate=_parse,
+                retries=1,
             )
             return response.get("message", "ded")
-        except requests.exceptions.RequestException as e:
-            print("Error occurred:", e)
+        except Exception as e:
+            LOGS.debug("HF keep-alive failed: %s", e)
             return False
 
     async def periodic_hfv(api_url, interval_range):
         while True:
-            result = await hfv(api_url)
-            print(result)
+            try:
+                result = await hfv(api_url)
+                LOGS.debug("HF keep-alive: %s", result)
+            except Exception as e:
+                LOGS.debug("HF keep-alive loop error: %s", e)
             interval = random.randint(*interval_range)
             await asyncio.sleep(interval)
 
@@ -158,7 +173,7 @@ if run_as_module:
     # ---------------- END ---------------- #
 
 else:
-    print("CythonX")
+    print("CythonX 2024")
 
     from logging import getLogger
 
