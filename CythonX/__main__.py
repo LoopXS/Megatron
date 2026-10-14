@@ -1,5 +1,4 @@
 import asyncio
-import nest_asyncio
 import logging
 from aiohttp import web
 
@@ -63,20 +62,13 @@ def main():
     addons = udB.get_key("ADDONS") or Var.ADDONS
     vcbot = udB.get_key("VCBOT") or Var.VCBOT
 
-    #nest_asyncio.apply()
-    #logging.info('----------- Configuring Web App ------------')
-    #app = web.AppRunner(asyncio.run(web_server())) 
-    #asyncio.run(app.setup()) 
-    #bind_address = "0.0.0.0"
-    #asyncio.run(web.TCPSite(app, bind_address, 8080).start())
-
     if HOSTED_ON == "okteto":
         vcbot = False
 
     if (HOSTED_ON == "termux" or udB.get_key("LITE_DEPLOY")) and udB.get_key(
         "EXCLUDE_OFFICIAL"
     ) is None:
-        _plugins = "autocorrect autopic audiotools compressor forcesubscribe fedutils gdrive glitch instagram nsfwfilter nightmode pdftools writer youtube"
+        _plugins = "autocorrect autopic audiotools compressor forcesubscribe fedutils gdrive glitch instagram nsfwfilter nightmode pdftools profanityfilter writer youtube"
         udB.set_key("EXCLUDE_OFFICIAL", _plugins)
 
     load_other_plugins(addons=addons, pmbot=pmbot, manager=manager, vcbot=vcbot)
@@ -90,7 +82,7 @@ def main():
     # for channel plugins
     plugin_channels = udB.get_key("PLUGIN_CHANNEL")
 
-    # Customize CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ Assistant...
+    # Customize Assistant...
     heartless_bot.run_in_loop(customize())
 
     # Load Addons from Plugin Channels.
@@ -109,12 +101,12 @@ def main():
     heartless_bot.run_in_loop(WasItRestart(udB))
 
     try:
-        udB.re_cache()
+        cleanup_cache()
     except BaseException:
         pass
 
     LOGS.info(
-        f"Took {time_formatter((time.time() - start_time)*1000)} to start userbot."
+        f"Took {time_formatter((time.time() - start_time)*1000)} to start userbot"
     )
     LOGS.info(suc_msg)
 
