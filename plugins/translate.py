@@ -123,6 +123,12 @@ MAX_INLINE_RESULT = 3800
 MAX_COPY_TEXT = 256
 MAX_SHARE_QUERY_BYTES = 256
 MAX_TELEGRAM_TEXT = 3950
+# MyMemory rejects queries over 500 chars; the Google endpoints accept up
+# to ~5000. Chunking at the Google limit keeps every provider in the race
+# (MyMemory simply steps aside for long chunks) while the orchestrator can
+# still translate input up to MAX_INPUT.
+MAX_MYMEMORY_QUERY = 500
+MAX_QUERY_CHARS = 5000
 CACHE_SIZE = 256
 CACHE_TTL = 15 * 60
 # Session-level total timeout must be >= the slowest per-request timeout.
@@ -189,12 +195,23 @@ async def _cache_put(key: str, translated: str, detected: str) -> None:
             _CACHE.popitem(last=False)
 
 
+# Some backends return an error message in place of a translation when a
+# query violates their limits (e.g. MyMemory answers an over-long query
+# with "QUERY LENGTH LIMIT EXCEEDED. MAX ALLOWED QUERY : 500 CHARS").
+# Recognising these strings here means no provider can ever win the race
+# with an error message instead of a real translation.
+_BACKEND_ERROR_MARKERS = ("QUERY LENGTH LIMIT", "MAX ALLOWED QUERY")
+
+
 def _valid_translation(value: object, original: str) -> str:
     if value is None:
         raise ValueError("empty translation")
     result = html.unescape(str(value)).strip()
     if not result:
         raise ValueError("empty translation")
+    upper = result.upper()
+    if any(marker in upper for marker in _BACKEND_ERROR_MARKERS):
+        raise ValueError("backend returned an error message")
     # A backend occasionally returns the original query after an upstream
     # failure. Do not reject legitimate identical translations for very short
     # text, but reject suspicious exact echoes for longer input.
@@ -442,6 +459,10 @@ async def _lingva(text: str, target: str, source: str):
 
 
 async def _mymemory(text: str, target: str, source: str):
+    if len(text) > MAX_MYMEMORY_QUERY:
+        # MyMemory hard-rejects queries over 500 chars; do not spend a
+        # request on one that is guaranteed to fail.
+        raise RuntimeError("MyMemory query too long")
     source = source if source != "auto" else _guess_source(text)
     raw = await _request_text(
         "GET",
@@ -511,20 +532,15 @@ async def _first_success(tasks, timeout: float):
     raise RuntimeError("; ".join(errors) or "translation timeout")
 
 
-async def _translate(text: str, target: str, source: str = "auto", *, fast_only: bool = False):
-    """Low-latency translation orchestration.
+async def _translate_single(
+    text: str, target: str, source: str, *, fast_only: bool = False
+):
+    """Translate a single chunk (<= MAX_QUERY_CHARS) through the provider race.
 
     Fast public providers are queried concurrently rather than sequentially.
     This is the key difference from the previous version: one dead/429
     provider can no longer add another full timeout to the user's request.
     """
-    target = _normalise_code(target)
-    source = _normalise_code(source) or "auto"
-    if not target or target == "auto":
-        raise ValueError("invalid target language")
-    if source == target:
-        return text, source
-
     key = _cache_key(text, source, target)
     cached = await _cache_get(key)
     if cached:
@@ -576,6 +592,75 @@ async def _translate(text: str, target: str, source: str = "auto", *, fast_only:
     translated = _valid_translation(translated, text)
     await _cache_put(key, translated, actual_source)
     return translated, actual_source
+
+
+def _split_text(text: str, limit: int = MAX_QUERY_CHARS) -> list[str]:
+    """Split ``text`` into chunks of at most ``limit`` characters.
+
+    Breaks on paragraph and sentence boundaries so a chunk is never cut
+    mid-sentence; a single oversized token is hard-split as a last resort.
+    """
+    text = text.strip()
+    if len(text) <= limit:
+        return [text]
+
+    chunks: list[str] = []
+    for paragraph in re.split(r"\n\s*\n", text):
+        sentences = re.split(r"(?<=[.!?。！？])\s+", paragraph)
+        current = ""
+        for sentence in sentences:
+            if not sentence:
+                continue
+            candidate = f"{current} {sentence}" if current else sentence
+            if len(candidate) <= limit:
+                current = candidate
+                continue
+            if current:
+                chunks.append(current)
+                current = ""
+            # One sentence longer than the limit: hard-split on spaces.
+            while len(sentence) > limit:
+                cut = sentence.rfind(" ", 0, limit)
+                if cut <= 0:
+                    cut = limit
+                chunks.append(sentence[:cut])
+                sentence = sentence[cut:].lstrip()
+            current = sentence
+        if current:
+            chunks.append(current)
+    return chunks or [text]
+
+
+async def _translate(
+    text: str, target: str, source: str = "auto", *, fast_only: bool = False
+):
+    """Translate ``text``, splitting long input into backend-sized chunks.
+
+    Each chunk runs through the provider race independently, so input
+    longer than any single provider's query limit still translates (up to
+    MAX_INPUT) and a single slow provider cannot block the whole request.
+    """
+    target = _normalise_code(target)
+    source = _normalise_code(source) or "auto"
+    if not target or target == "auto":
+        raise ValueError("invalid target language")
+    if source == target:
+        return text, source
+
+    chunks = _split_text(text)
+    if len(chunks) == 1:
+        return await _translate_single(chunks[0], target, source, fast_only=fast_only)
+
+    translated_parts: list[str] = []
+    detected = source
+    for index, chunk in enumerate(chunks):
+        part, chunk_source = await _translate_single(
+            chunk, target, source, fast_only=fast_only
+        )
+        translated_parts.append(part)
+        if index == 0:
+            detected = chunk_source
+    return "\n".join(translated_parts), detected
 
 
 # ---------------------------------------------------------------------------
