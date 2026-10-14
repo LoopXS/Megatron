@@ -14,6 +14,7 @@ from telethon.errors import (
 
 from ..configs import Var
 from . import *
+from .aio import ensure_event_loop
 
 
 class heartlessClient(TelegramClient):
@@ -39,12 +40,16 @@ class heartlessClient(TelegramClient):
         kwargs["api_id"] = api_id or Var.API_ID
         kwargs["api_hash"] = api_hash or Var.API_HASH
         kwargs["base_logger"] = TelethonLogger
+        # Ensure a loop exists before TelegramClient binds to one (Py 3.14).
+        ensure_event_loop()
         super().__init__(session, **kwargs)
         self.run_in_loop(self.start_client(bot_token=bot_token))
         self.dc_id = self.session.dc_id
 
     def __repr__(self):
-        return "<Client :\n self: {}\n bot: {}\n>".format(self.full_name, self._bot)
+        return "<Client :\n self: {}\n bot: {}\n>".format(
+            self.full_name, self._bot
+        )
 
     @property
     def __dict__(self):
@@ -214,7 +219,8 @@ class heartlessClient(TelegramClient):
 
     def run_in_loop(self, function):
         """run inside asyncio loop"""
-        return self.loop.run_until_complete(function)
+        loop = ensure_event_loop()
+        return loop.run_until_complete(function)
 
     def run(self):
         """run asyncio loop"""
