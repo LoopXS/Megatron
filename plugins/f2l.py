@@ -1,5 +1,6 @@
 import asyncio
 import re
+import time
 
 from telethon import functions
 from telethon.errors import YouBlockedUserError
@@ -29,20 +30,14 @@ async def f2l(event):
         links.append(first_link.group(0))
         reply_text = f"**[✨ Direct Link]**({links[0]})\n✨ T.me/DarkPentester"
         await xx.edit(reply_text)
-        try:
-            with asyncio.TimeoutError:
-                pass 
-        except:
-            pass
-        try:
-            with asyncio.TimeoutError:
-                pass
-        except:
-            pass
-        end_time = asyncio.get_event_loop().time() + 60
-        while asyncio.get_event_loop().time() < end_time and len(links) < 3:
+        # Prefer monotonic clock — avoids asyncio.get_event_loop() on Python 3.14.
+        end_time = time.monotonic() + 60
+        while time.monotonic() < end_time and len(links) < 3:
             try:
-                msg = await asyncio.wait_for(conv.get_response(), timeout=end_time - asyncio.get_event_loop().time())
+                msg = await asyncio.wait_for(
+                    conv.get_response(),
+                    timeout=max(0.1, end_time - time.monotonic()),
+                )
             except asyncio.TimeoutError:
                 break
             await heartless_bot.send_read_acknowledge(conv.chat_id)
