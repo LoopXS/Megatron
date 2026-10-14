@@ -106,7 +106,7 @@ def main():
         pass
 
     LOGS.info(
-        f"Took {time_formatter((time.time() - start_time)*1000)} to start userbot"
+        f"Took {time_formatter((time.time() - start_time)*1000)} to start userbot."
     )
     LOGS.info(suc_msg)
 
