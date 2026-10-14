@@ -1,8 +1,8 @@
 import asyncio
 import aiohttp
-import nest_asyncio
 import math
 import os
+import random
 import re
 import sys
 import time
@@ -73,7 +73,13 @@ from .FastTelethon import upload_file as uploadable
 def run_async(function):
     @wraps(function)
     async def wrapper(*args, **kwargs):
-        return await asyncio.get_event_loop().run_in_executor(
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            from CythonX.startup.aio import ensure_event_loop
+
+            loop = ensure_event_loop()
+        return await loop.run_in_executor(
             ThreadPoolExecutor(max_workers=multiprocessing.cpu_count() * 5),
             partial(function, *args, **kwargs),
         )
@@ -280,7 +286,7 @@ if run_as_module:
                     ok, f"✓ `Heartless Exclusive Bot - Installed`: `{plug}` ✓\n\n`{x}`"
                 )
             except BaseException:
-                await eod(ok, f"✓ `Heartless Exclusive Bot - Installed`: `{plug}` ✓")
+                await eod(ok, f"✓ `Heartless Exclusive Bot- Installed`: `{plug}` ✓")
 
     async def heroku_logs(event):
         """
@@ -316,7 +322,7 @@ if run_as_module:
 
     async def def_logs(ult, file):
         await ult.respond(
-            "**CɪᴘʜᴇʀX ᴇxᴄlusivᴇ ʙᴏᴛ Logs**",
+            "**UserBot Logs**",
             file=file,
             thumb=ULTConfig.thumb,
         )
@@ -361,7 +367,7 @@ async def bash(cmd, run_code=0):
     err = stderr.decode().strip() or None
     out = stdout.decode().strip()
     if not run_code and err:
-        if match := re.match("\/bin\/sh: (.*): ?(\w+): not found", err):
+        if match := re.match(r"/bin/sh: (.*): ?(\w+): not found", err):
             return out, f"{match.group(2).upper()}_NOT_FOUND"
     return out, err
 
@@ -412,7 +418,7 @@ async def uploader(file, name, taime, event, msg):
             client=event.client,
             file=f,
             filename=name,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(
                 progress(
                     d,
                     t,
@@ -431,7 +437,7 @@ async def downloader(filename, file, event, taime, msg):
             client=event.client,
             location=file,
             out=fk,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+            progress_callback=lambda d, t: asyncio.get_running_loop().create_task(
                 progress(
                     d,
                     t,
@@ -745,72 +751,89 @@ async def shutdown(ult):
 
 
 async def get_custom_emoji(emp):
-    import random
+    """Async helper: resolve a premium emoji key to CustomMarkdown text."""
     from .. import heartless_bot, LOGS
-    from ..dB.premium_db import get_emp, list_emp
-    ok = list_emp()
+    from ..dB.premium_db import list_emp
+
+    ok = list_emp() or {}
     if not ok.get(emp):
         return None
     document_id = random.choice(ok[emp])
+    result = "✨"
     try:
         x = await heartless_bot(
             GetCustomEmojiDocumentsRequest(document_id=[document_id])
         )
-        result = ""
         for i in x:
             result = i.attributes[1].alt
             break
     except Exception as e:
-        LOGS.exception(f"Error: {str(e)}")
+        LOGS.exception("Error fetching custom emoji alt: %s", e)
     return f"[{result}](emoji/{document_id})"
 
 
 async def customEmojis(document_id):
+    """Async helper: resolve a document id to CustomMarkdown text."""
     from .. import heartless_bot, LOGS
+
+    result = "✨"
     try:
         x = await heartless_bot(
             GetCustomEmojiDocumentsRequest(document_id=[document_id])
         )
-        result = ""
         for i in x:
             result = i.attributes[1].alt
             break
     except Exception as e:
-        LOGS.exception("Failed to get emoji alt text:", e)
-    nest_asyncio.revert()
+        LOGS.exception("Failed to get emoji alt text: %s", e)
     return f"[{result}](emoji/{document_id})"
 
 
 def cusmo(document_id):
-    nest_asyncio.apply()
+    """Sync CustomMarkdown emoji tag — no nested event loop (Python 3.14 safe).
+
+    Fetching alt text via ``asyncio.run`` / nest_asyncio re-enters Telethon's
+    running loop and raises ``Cannot enter into task`` on 3.14. The document
+    id is what CustomMarkdown needs; alt is cosmetic.
+    """
+    from ..dB.premium_db import list_emp
+
     if isinstance(document_id, str):
-        return asyncio.run(get_custom_emoji(document_id))
-    else:
-        return asyncio.run(customEmojis(document_id))
+        ok = list_emp() or {}
+        if ok.get(document_id):
+            doc_id = random.choice(ok[document_id])
+        elif document_id.isdigit():
+            doc_id = int(document_id)
+        else:
+            return ""
+        return f"[✨](emoji/{doc_id})"
+    return f"[✨](emoji/{document_id})"
 
 
 def get_pstring(string: str, *emojis: str) -> Any:
+    """Format a localized string with optional premium custom emojis.
+
+    Uses ``heartless_bot.me`` (already loaded at startup) instead of
+    ``asyncio.run(get_me())``, which breaks under Python 3.14.
+    """
     from .. import heartless_bot
     from strings import get_string
-    nest_asyncio.apply()
-    if not asyncio.run(heartless_bot.get_me()).premium:
-        if not (get_string(string)).startswith("Warning"):
-            string_result = get_string(string)
-            new_string = string_result.replace("{p}", "")
-            return new_string 
-        else:
-            string_result = string
-            new_string = string_result.replace("{p}", "")
-            return new_string 
-    else:
-        if not (get_string(string)).startswith("Warning"):
-            string_result = get_string(string)
-        else:
-            string_result = string
+
+    me = getattr(heartless_bot, "me", None)
+    is_premium = bool(getattr(me, "premium", False))
+
+    resolved = get_string(string)
+    if isinstance(resolved, str) and resolved.startswith("Warning"):
+        resolved = string
+
+    if not is_premium:
+        return resolved.replace("{p}", "")
+
+    result = resolved
     for emoji in emojis:
-        position = string_result.find('{p}')
+        position = result.find("{p}")
         if position != -1:
-            string_result = string_result[:position] + cusmo(emoji) + string_result[position+3:]
+            result = result[:position] + cusmo(emoji) + result[position + 3 :]
         else:
-            string_result += cusmo(emoji)
-    return string_result
+            result += cusmo(emoji)
+    return result
