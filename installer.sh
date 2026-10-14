@@ -170,7 +170,7 @@ misc_install() {
             echo -e "Cloning VCBOT.."
             git clone https://github.com/LoopXS/VcBot $DIR/vcbot
         fi
-        pip3 install pytgcalls==3.0.0.dev23 && pip3 install av -q --no-binary av
+        pip3 install -U 'ntgcalls>=3.0.0,<4.0.0' 'py-tgcalls>=3.0.0'
     fi
 }
 
@@ -189,7 +189,7 @@ dep_install() {
 }
 
 main() {
-    echo -e "Starting ToxygenX Setup..."
+    echo -e "Starting Setup..."
     if [ -d "CythonX" ] && [ -d "resources" ] && [ -d "plugins" ]; then
         DIR=$CURRENT_DIR
     fi
