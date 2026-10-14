@@ -28,7 +28,17 @@ for z in range(5):
             cwd=None,
         )
 
-loop = asyncio.get_event_loop()
+# Python 3.14: get_event_loop() no longer auto-creates a loop.
+try:
+    loop = asyncio.get_running_loop()
+except RuntimeError:
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_closed():
+            raise RuntimeError
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
 
 try:
     loop.run_forever()
