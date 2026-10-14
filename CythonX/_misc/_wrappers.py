@@ -2,7 +2,11 @@ from asyncio import sleep
 from functools import wraps
 
 from telethon import functions
-from telethon.errors import MessageDeleteForbiddenError, MessageNotModifiedError
+from telethon.errors import (
+    MessageDeleteForbiddenError,
+    MessageIdInvalidError,
+    MessageNotModifiedError,
+)
 from telethon.tl.custom import Message
 from telethon.tl.types import MessageService
 
@@ -27,6 +31,15 @@ async def eor(event, text=None, time=None, link_preview=False, edit_time=None, *
                 ok = await event.edit(text, link_preview=link_preview, **args)
             except MessageNotModifiedError:
                 ok = event
+            except MessageIdInvalidError:
+                # Outgoing message vanished / uneditable — fall back to reply.
+                ok = await event.client.send_message(
+                    event.chat_id,
+                    text,
+                    link_preview=link_preview,
+                    reply_to=reply_to,
+                    **args,
+                )
     else:
         ok = await event.client.send_message(
             event.chat_id, text, link_preview=link_preview, reply_to=reply_to, **args
