@@ -84,13 +84,14 @@ install_pillow(){
     export LDFLAGS="-L/system/lib/"
     export CFLAGS="-I/data/data/com.termux/files/usr/include/"
     pip install -U pip wheel setuptools
-    pip install Pillow
+    # Pillow 12.3+ ships cp314 wheels (required for Python 3.14)
+    pip install -U 'Pillow>=12.3.0'
     clear
 }
 
 install_dependencies(){
     echo "Installing Dependencies..."
-    wget -O requirements.txt https://raw.githubusercontent.com/ToxygenX/Megatron/main/resources/startup/optional-requirements.txt
+    wget -O requirements.txt https://raw.githubusercontent.com/LoopXS/Megatron/main/resources/startup/optional-requirements.txt
     pip install --no-cache-dir -r requirements.txt
     pip install av --no-binary av
     rm requirements.txt
