@@ -654,3 +654,322 @@ help_webupload: " -\n\n• `{i}webupload`\n    Upload files on another server.\n
 help_words: " -\n\n• `{i}meaning <word>`\n    Get the meaning of the word.\n\n• `{i}synonym <word>`\n    Get all synonyms.\n\n• `{i}antonym <word>`\n    Get all antonyms.\n\n• `{i}ud <word>`\n    Fetch word defenition from urbandictionary.\n"
 help_pdftools: "\n\n• `{i}pdf [pages] <reply to pdf>`\n    Send page(s) as images. Pages: `N`, `A-B`, `A-B,C` or nothing for all.\n\n• `{i}pdftext [pages] <reply to pdf>`\n    Extract text from page(s) into a `.txt` file.\n\n• `{i}trim <range> <reply to pdf>`\n    Extract a page range into a separate PDF, e.g. `{i}trim 50-200`.\n\n• `{i}pdfinfo <reply to pdf>`\n    Show page count, size, dimensions and metadata.\n\n• `{i}pdscan <reply to image>`\n    Scan, crop & send an image as a PDF.\n\n• `{i}pdsave <reply to image/pdf>`\n    Scan & save a file to the merge queue.\n\n• `{i}pdsend [name]`\n    Merge the queued files and send them as one PDF.\n\n"
 help_ziptools: "\n\n• `{i}zip [reply] [-n NAME] [-p PASSWORD] [-f zip|tar|gz]`\n    Create an archive. `-n` custom name, `-p` password, `-f` format.\n    A bare argument sets the password (or a local path when not replying).\n\n• `{i}unzip [reply] [-p PASSWORD] [-l]`\n    Extract an archive (zip/tar/tar.gz auto-detected). `-l` lists contents.\n\n• `{i}azip [reply to file]`\n   Add a file to the batch folder.\n\n• `{i}dozip [-n NAME] [-p PASSWORD] [-f zip|tar|gz]`\n   Archive the whole batch folder added via `{i}azip`.\n\n"
+
+
+
+# exclusive
+help_exclusive: |
+  ✘ Commands Available
+
+  • `{i}hyper <link>`
+      Hyperlink a telegram link with its message id
+
+  • `{i}uglitch`
+      Glitch a replied image into an animated gif
+
+  • `{i}slash`
+      Typing-slash animation
+
+  • `{i}para`
+      Typing-paren animation
+
+  • `{i}fl`
+      Fake loading bar
+
+  • `{i}oof`
+      "Oof" text animation
+
+  • `{i}motion`
+      Shape cycler
+
+  • `{i}square`
+      Shape cycler
+
+  • `{i}oop`
+      Shape cycler
+
+  • `{i}round`
+      Shape cycler
+
+  • `{i}comp`
+      Server stats animation
+
+  • `{i}joon`
+      "Joon" text animation
+
+  • `{i}bigoof`
+      "Big OOF" text-art animation
+
+  • `{i}ok`
+      "ok/Ok" flip animation
+
+  • `{i}meme <text>`
+      Scroll a text marquee (left)
+
+  • `{i}rmeme <text>`
+      Scroll a text marquee (out and back)
+
+  • `{i}think`
+      "thinking" garble animation
+
+  • `{i}snake`
+      Snake wave grid animation
+
+  • `{i}police`
+      Police siren animation
+
+  • `{i}gangestar <text>`
+      "Everybody was Gangestar Until I Arrived" typing
+
+  • `{i}flower`
+      Growing flower marquee
+
+  • `{i}question`
+      Question-mark spinner
+
+  • `{i}melow`
+      Emoji spinner
+
+  • `{i}cute`
+      Emoji spinner
+
+  • `{i}tlol`
+      Emoji spinner
+
+  • `{i}teeth`
+      Emoji spinner
+
+  • `{i}gym`
+      Emoji spinner
+
+  • `{i}run`
+      Emoji spinner
+
+  • `{i}candy`
+      Emoji spinner
+
+  • `{i}kiss`
+      Emoji spinner
+
+  • `{i}butterfly`
+      Emoji spinner
+
+  • `{i}box`
+      Emoji spinner
+
+  • `{i}clock`
+      Emoji spinner
+
+  • `{i}moon`
+      Emoji spinner
+
+  • `{i}earth`
+      Emoji spinner
+
+  • `{i}smile`
+      Emoji spinner
+
+  • `{i}laugh`
+      Emoji spinner
+
+  • `{i}cat`
+      Emoji spinner
+
+  • `{i}poker`
+      Emoji spinner
+
+  • `{i}wow`
+      Emoji spinner
+
+  • `{i}monkey`
+      Emoji spinner
+
+  • `{i}starheart`
+      Emoji spinner
+
+  • `{i}wink`
+      Emoji spinner
+
+  • `{i}lip`
+      Emoji spinner
+
+  • `{i}angry`
+      Emoji spinner
+
+  • `{i}sad`
+      Emoji spinner
+
+  • `{i}amaze`
+      Emoji spinner
+
+  • `{i}omg`
+      Emoji spinner
+
+  • `{i}tongue`
+      Emoji spinner
+
+  • `{i}sun`
+      Emoji spinner
+
+  • `{i}speaker`
+      Emoji spinner
+
+  • `{i}heart`
+      Emoji spinner
+
+  • `{i}sand`
+      Emoji spinner
+
+  • `{i}storm`
+      Emoji spinner
+
+  • `{i}floodwarn`
+      Emoji spinner
+
+  • `{i}rain`
+      Emoji spinner
+
+  • `{i}her`
+      Love-face animation ending in "I Love You"
+
+  • `{i}donce`
+      Dancing-character animation
+
+  • `{i}cheart`
+      Heart color cycle
+
+  • `{i}finger`
+      Finger (skin-tone) cycle
+
+  • `{i}billy`
+      Billy (skin-tone) cycle
+
+  • `{i}agree`
+      Agree (skin-tone) cycle
+
+  • `{i}brain`
+      Brain animation
+
+  • `{i}dump [abc]`
+      Recycling-bin "dump" animation (pass 3 chars)
+
+  • `{i}good`
+      "GOOD MORNING" animation
+
+  • `{i}human`
+      Human wave animation
+
+  • `{i}mc`
+      Block wave animation
+
+  • `{i}solar`
+      Sun / moon orbit animation
+
+  • `{i}lmoon`
+      Moon-phase art
+
+  • `{i}town`
+      City scene animation
+
+  • `{i}bombs`
+      Bomb explosion animation
+
+  • `{i}plane`
+      Plane flyby animation
+
+  • `{i}lalol`
+      Laughing text art
+
+  • `{i}lit`
+      Concentric color-squares animation
+
+  • `{i}my`
+      Diagonal rainbow heart rotation
+
+  • `{i}hi`
+      Heart rows, then a typewriter "I love you"
+
+  • `{i}figcar`
+      ASCII car
+
+  • `{i}figkiller`
+      ASCII killer
+
+  • `{i}tgm`
+      Telegram logo art
+
+  • `{i}emam`
+      ASCII art
+
+  • `{i}tgn`
+      ASCII art
+
+  • `{i}tnx`
+      ASCII art
+
+  • `{i}figgm`
+      ASCII art
+
+  • `{i}fighi`
+      ASCII art
+
+  • `{i}figgn`
+      ASCII art
+
+  • `{i}sponge`
+      Spongebob ASCII art
+
+  • `{i}figlol`
+      Laughing ASCII art
+
+  • `{i}figlmao`
+      LMFAO ASCII art
+
+  • `{i}fighello`
+      "hello" ASCII art
+
+  • `{i}figno`
+      "NO" ASCII art
+
+  • `{i}figtrump`
+      ASCII art
+
+  • `{i}figputin`
+      ASCII art
+
+  • `{i}figchina`
+      ASCII art
+
+  • `{i}figthink`
+      "thinking" ASCII art
+
+  • `{i}figdick`
+      ASCII art
+
+  • `{i}fighappyfrog`
+      Happy frog ASCII art
+
+  • `{i}figdeadfrog`
+      Dead frog ASCII art
+
+  • `{i}fuck`
+      ASCII art
+
+  • `{i}dick [emoji]`
+      ASCII art, optionally drawn in another emoji
+
+  • `{i}eem <text>`
+      Render text (or a reply) as a colored heart grid
+
+  • `{i}fhack`
+      Fake "hacking" terminal animation
+
+  • `{i}thack`
+      Fake "hacking" terminal animation
+
+  • `{i}whack`
+      Fake "hacking" terminal animation
+
+  • `{i}xmas`
+      Christmas art animation
+
