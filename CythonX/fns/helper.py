@@ -286,7 +286,7 @@ if run_as_module:
                     ok, f"✓ `Heartless Exclusive Bot - Installed`: `{plug}` ✓\n\n`{x}`"
                 )
             except BaseException:
-                await eod(ok, f"✓ `Heartless Exclusive Bot- Installed`: `{plug}` ✓")
+                await eod(ok, f"✓ `Heartless Exclusive Bot - Installed`: `{plug}` ✓")
 
     async def heroku_logs(event):
         """
