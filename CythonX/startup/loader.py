@@ -93,13 +93,17 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
             )
         if os.path.exists("addons/addons.txt"):
             # generally addons req already there so it won't take much time
-            # subprocess.run(
-            #        "rm -rf /usr/local/lib/python3.*/site-packages/pip/_vendor/.wh*"
-            #    )
-            subprocess.run(
+            # Do not abort bot startup if an optional addon dep fails (e.g. no
+            # Python 3.14 wheels) — plugins that need it will soft-fail later.
+            pip_rc = subprocess.run(
                 f"{sys.executable} -m pip install --no-cache-dir -q -r ./addons/addons.txt",
                 shell=True,
             )
+            if pip_rc.returncode != 0:
+                LOGS.error(
+                    "Some addon requirements failed to install "
+                    "(see pip output). Continuing without them."
+                )
 
         _exclude = udB.get_key("EXCLUDE_ADDONS")
         _exclude = _exclude.split() if _exclude else []
@@ -123,11 +127,16 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
         if pmbot:
             Loader(path="assistant/pmbot.py").load(log=False)
 
-    # vc bot
+    # vc bot — NTgCalls (native) + py-tgcalls (MTProto bridge)
     if vcbot and not vcClient._bot:
         try:
+            import ntgcalls  # ignore: pylint
             import pytgcalls  # ignore: pylint
 
+            LOGS.info(
+                f"VCBot deps OK — ntgcalls {getattr(ntgcalls, '__version__', '?')}, "
+                f"pytgcalls {getattr(pytgcalls, '__version__', '?')}"
+            )
             if os.path.exists("vcbot"):
                 if os.path.exists("vcbot/.git"):
                     subprocess.run("cd vcbot && git pull", shell=True)
@@ -145,4 +154,8 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
             except FileNotFoundError as e:
                 LOGS.error(f"{e} Skipping VCBot Installation.")
         except ModuleNotFoundError:
-            LOGS.error("'pytgcalls' not installed!\nSkipping loading of VCBOT.")
+            LOGS.error(
+                "'ntgcalls' / 'py-tgcalls' not installed!\n"
+                "Install with: pip install 'ntgcalls>=3' 'py-tgcalls>=3'\n"
+                "Skipping loading of VCBOT."
+            )
