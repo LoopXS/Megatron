@@ -304,9 +304,9 @@ def text_set(text):
 class LogoHelper:
     @staticmethod
     def get_text_size(text, image, font):
-        im = Image.new("RGB", (image.width, image.height))
-        draw = ImageDraw.Draw(im)
-        return draw.textsize(text, font)
+        # Pillow 10+ removed ImageDraw.textsize; use font.getbbox.
+        bbox = font.getbbox(text)
+        return bbox[2] - bbox[0], bbox[3] - bbox[1]
 
     @staticmethod
     def find_font_size(text, font, image, target_width_ratio):
@@ -315,6 +315,8 @@ class LogoHelper:
         observed_width, observed_height = LogoHelper.get_text_size(
             text, image, tested_font
         )
+        if not observed_width:
+            return tested_font_size
         estimated_font_size = (
             tested_font_size / (observed_width / image.width) * target_width_ratio
         )
@@ -332,7 +334,7 @@ class LogoHelper:
         draw = ImageDraw.Draw(img)
         font_size = LogoHelper.find_font_size(text, funt, img, width_ratio)
         font = ImageFont.truetype(funt, font_size)
-        w, h = draw.textsize(text, font=font)
+        w, h = LogoHelper.get_text_size(text, img, font)
         draw.text(
             ((width - w) / 2, (height - h) / 2),
             text,
@@ -452,8 +454,9 @@ def write_image_data(image_data_base64):
     image_data = base64.b64decode(image_data_base64)
     try:
         img = Image.open(BytesIO(image_data))
+        # Pillow 10+ removed Image.ANTIALIAS; use Resampling.LANCZOS.
         img = img.resize(
-            (img.width * 2, img.height * 2), Image.ANTIALIAS
+            (img.width * 2, img.height * 2), Image.Resampling.LANCZOS
         )
         image_filename = "output.jpg"
         img.save(image_filename, quality=100)
@@ -747,7 +750,7 @@ def telegraph_client():
     except Exception as er:
         if "SHORT_NAME_TOO_LONG" in str(er):
             TelegraphClient.create_account(
-                short_name="heartless", author_name=gd_name, author_url=profile_url
+                short_name="heartlessuser", author_name=gd_name, author_url=profile_url
             )
         else:
             LOGS.exception(er)
@@ -770,7 +773,7 @@ def make_html_telegraph(title, html=""):
 async def Carbon(
     code,
     base_url="https://carbonara.solopov.dev/api/cook",
-    file_name="heartless",
+    file_name="Heartless",
     download=False,
     rayso=False,
     **kwargs,
@@ -780,21 +783,10 @@ async def Carbon(
         kwargs["text"] = code
         kwargs["theme"] = kwargs.get("theme", "breeze")
         kwargs["darkMode"] = kwargs.get("darkMode", True)
-        kwargs["title"] = kwargs.get("title", "CipherX")
+        kwargs["title"] = kwargs.get("title", "Heartless")
     else:
         kwargs["code"] = code
-    # Image generation is slow and the public Carbon mirrors are
-    # frequently unreachable: make a single generous attempt rather
-    # than retrying a slow/dead endpoint three times (which would
-    # stall the caller for minutes before finally failing).
-    con = await async_searcher(
-        base_url,
-        post=True,
-        json=kwargs,
-        re_content=True,
-        timeout=aiohttp.ClientTimeout(total=45),
-        retries=1,
-    )
+    con = await async_searcher(base_url, post=True, json=kwargs, re_content=True)
     if not download:
         file = BytesIO(con)
         file.name = file_name + ".jpg"
