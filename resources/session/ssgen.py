@@ -77,12 +77,12 @@ def telethon_session():
 
     # logging in
     try:
-        with TelegramClient(StringSession(), API_ID, API_HASH) as ultroid:
-            print("Generating a string session for •CIPHERX BOT•")
+        with TelegramClient(StringSession(), API_ID, API_HASH) as heartless:
+            print("Generating a string session for UserBot")
             try:
-                ultroid.send_message(
+                heartless.send_message(
                     "me",
-                    f"`SESSION`:\n\n`{ultroid.session.save()}`\n\n**Do not share this anywhere!**",
+                    f"`SESSION`:\n\n`{heartless.session.save()}`\n\n**Do not share this anywhere!**",
                 )
                 print(
                     "Your SESSION has been generated. Check your Telegram saved messages!"
@@ -90,7 +90,7 @@ def telethon_session():
                 return
             except UserIsBotError:
                 print("You are trying to Generate Session for your Bot's Account?")
-                print("Here is That!\n{ultroid.session.save()}\n\n")
+                print("Here is That!\n{heartless.session.save()}\n\n")
                 print("NOTE: You can't use that as User Session..")
     except ApiIdInvalidError:
         print(
@@ -147,7 +147,7 @@ def main():
     try:
         type_of_ss = int(
             input(
-                "\nUserBot supports both telethon as well as pyrogram sessions.\n\nWhich session do you want to generate?\n1. Telethon Session.\n2. Pyrogram Session.\n\nEnter choice:  "
+                "\nCipherX Bot supports both telethon as well as pyrogram sessions.\n\nWhich session do you want to generate?\n1. Telethon Session.\n2. Pyrogram Session.\n\nEnter choice:  "
             )
         )
     except Exception as e:
