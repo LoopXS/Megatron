@@ -26,13 +26,16 @@
    List / cancel auto-buy monitors.
 
 • `{i}gift Collection`
-   Collection floors only.
+   Full floors + sticker (transferable MRKT floor).
 
 • `{i}gift Collection, Model`
-   Floors + quick sells + up to 5 cheapest MRKT listings.
+   Floors + quick sells + up to 5 cheapest transferable listings + sticker.
 
 • `{i}gift Collection, Model, Backdrop`
-   Floors + quick sells + cheapest listings + latest sales.
+   Floors + quick sells + cheapest listings + latest sales + sticker.
+
+• `{i}gift c Collection[, Model[, Backdrop]]`
+   Floors + matching quick sell only (no sticker / listings / extras).
 
 • `{i}gift https://t.me/nft/Name-123`
    Floors + backdrop rarity + listings + latest sales.
@@ -71,13 +74,20 @@
    Create a new order for model only.
 
 • `{i}orderup N`
-   Cancel + recreate order N at top+0.01.
+   Retarget order N to competitor top+0.01 (raise or lower).
 
 • `{i}orderupall`
-   Orderup every active order that is not already top.
+   Retarget every order to competitor top+0.01 (raise or lower).
 
-• `{i}orderdel N` | `{i}orderdelall`
-   Delete one / all orders.
+• `{i}autotop on` | `{i}autotop off`
+   Auto orderupall every 30s / disable it.
+   Turns itself off when no active orders remain.
+
+• `{i}orderdel N` | `{i}orderdel 1, 2, 3`
+   Delete one or multiple orders by `.orders` index.
+
+• `{i}orderdelall`
+   Delete all orders.
 
 Auto: missing/expired token regenerates from DB `SESSIONMRKT`.
 """
@@ -104,10 +114,10 @@ from artemis.exceptions import TradingError, RequestError, AuthError
 from artemis.utils import ton_to_nano, nano_to_ton
 
 from . import (
-    heartless_cmd,
+    cipherx_cmd,
     asst_cmd,
     LOGS,
-    heartless_bot,
+    cipherx_bot,
     asst,
     udB,
     HNDLR,
@@ -135,6 +145,20 @@ MONITOR_COUNTER = 0
 BUY_LOCK = asyncio.Lock()
 TOKEN_LOCK = asyncio.Lock()
 ORDER_CACHE = []
+
+AUTOTOP_INTERVAL = 30.0
+AUTOTOP_DB_KEY = "ARTEMIS_AUTOTOP"
+ORDERUP_LOCK = asyncio.Lock()
+AUTOTOP_TASK = None
+AUTOTOP_ENABLED = False
+AUTOTOP_STATS = {
+    "started_at": None,
+    "last_run_at": None,
+    "last_updated": 0,
+    "last_skipped": 0,
+    "last_errors": 0,
+    "cycles": 0,
+}
 
 TELEGRAM_GIFTS = TelegramGifts(
     cache_mode="http",
@@ -1112,9 +1136,9 @@ async def _resolve_nft_gift(client, raw, tg_client=None):
     model = backdrop = None
     model_rarity = backdrop_rarity = None
 
-    # Prefer the chat client, then fall back to heartless_bot.
+    # Prefer the chat client, then fall back to cipherx_bot.
     tg_clients = []
-    for candidate in (tg_client, heartless_bot):
+    for candidate in (tg_client, cipherx_bot):
         if candidate is not None and candidate not in tg_clients:
             tg_clients.append(candidate)
 
@@ -1263,7 +1287,7 @@ async def _send_purchase_log(client, gift, monitor_id):
         f"📡 <b>Log:</b> <code>{LOG_CHAT_ID}</code>"
     )
     try:
-        await heartless_bot.send_message(
+        await cipherx_bot.send_message(
             LOG_CHAT_ID, text, parse_mode="html",
         )
     except Exception:
@@ -1356,7 +1380,13 @@ def _order_status_text(order):
 
 
 def _order_finished(order):
-    """True when the order should not appear in `.orders`."""
+    """True when the order should not appear in `.orders`.
+
+    Be conservative: MRKT still returns live bids that have an ``endAt``
+    (scheduled lifetime). Treating past ``endAt`` as finished made orders
+    vanish from ``.orders`` / autotop after a few hours even though they
+    were still open on MRKT. Only definitive completion signals count.
+    """
     if not isinstance(order, dict):
         return True
 
@@ -1382,20 +1412,13 @@ def _order_finished(order):
 
     status = _order_status_text(order)
     if status:
-        if status in _FINISHED_STATUS_TOKENS:
+        # Exact token only — substring checks like "finish" in "unfinished"
+        # falsely hide active orders.
+        normalized = status.replace("-", "_")
+        if normalized in _FINISHED_STATUS_TOKENS:
             return True
-        if any(
-            token in status
-            for token in (
-                "finish",
-                "cancel",
-                "complete",
-                "close",
-                "expire",
-                "fail",
-                "reject",
-            )
-        ):
+        parts = {p for p in normalized.split("_") if p}
+        if parts & _FINISHED_STATUS_TOKENS:
             return True
 
     total = int(
@@ -1415,10 +1438,12 @@ def _order_finished(order):
         except Exception:
             pass
 
+    # Do NOT use endAt here: it is a lifetime hint, not a completion stamp.
+    # An order returned by get-my-orders with remaining qty is still open
+    # until MRKT sets a real finished/cancelled timestamp or flag.
     now = time.time()
     for key in (
         "finishedAt",
-        "endAt",
         "closedAt",
         "completedAt",
         "cancelledAt",
@@ -1458,6 +1483,73 @@ def _order_is_highest(order, top):
     return my_max >= _order_max_nano(top)
 
 
+ORDER_TOP_STEP = Decimal("0.01")
+
+
+def _ton_q2(value):
+    """Quantize a TON amount to 0.01 for order price comparisons."""
+    return Decimal(str(value or 0)).quantize(
+        ORDER_TOP_STEP, rounding=ROUND_HALF_UP,
+    )
+
+
+def _order_ideal_max(competitor_top_ton, price_min_ton):
+    """
+    Target max = competitor top + 0.01, never below our min.
+    competitor_top_ton may be None when there is no other bid.
+    """
+    if competitor_top_ton is None:
+        ideal = _ton_q2(price_min_ton)
+    else:
+        ideal = _ton_q2(competitor_top_ton) + ORDER_TOP_STEP
+    min_q = _ton_q2(price_min_ton)
+    if ideal < min_q:
+        return min_q
+    return ideal
+
+
+async def _competitor_top_ton(client, order, top=None):
+    """
+    Highest competing max bid for this order's filter (excludes this order).
+    Returns Decimal TON or None if nobody else is bidding.
+    """
+    if top is None:
+        top = await _top_order(client, order)
+    my_id = str(order.get("id") or "")
+    if top and _order_max_nano(top) > 0:
+        top_id = str(top.get("id") or "")
+        if not my_id or top_id != my_id:
+            return nano_to_ton(top.get("priceMaxNanoTONs") or 0)
+
+    # /orders/top is us (or empty) — walk the book for the next bid.
+    collection = order.get("collectionName") or order.get("collectionTitle")
+    if not collection:
+        return None
+    try:
+        data = await _fetch_filter_orders_page(
+            client,
+            collection,
+            model=order.get("modelName") or None,
+            backdrop=order.get("backdropName") or None,
+            count=20,
+            low_to_high=False,
+        )
+    except Exception as e:
+        LOGS.warning("Competitor order book failed: %s", e)
+        return None
+    orders, _, _ = _orders_list_payload(data)
+    best = None
+    for row in orders or []:
+        if my_id and str(row.get("id") or "") == my_id:
+            continue
+        amount = _as_floor(nano_to_ton(row.get("priceMaxNanoTONs") or 0))
+        if amount is None:
+            continue
+        if best is None or amount > best:
+            best = amount
+    return best
+
+
 def _order_label(order):
     parts = [
         order.get("collectionTitle") or order.get("collectionName") or "?",
@@ -1478,9 +1570,17 @@ def _require_order_uuid(value):
 
 
 async def _fetch_my_orders(client):
+    """Fetch all of the account's orders, then keep only open ones.
+
+    Paginates with a larger page size and dedupes by id so a flaky cursor
+    cannot silently drop live bids from ``.orders`` / autotop.
+    """
     orders = []
+    seen_ids = set()
     cursor = ""
-    while True:
+    page_size = 50
+    max_pages = 40  # hard cap against a broken cursor loop
+    for _ in range(max_pages):
         data = await client.request(
             "POST",
             "/orders/get-my-orders",
@@ -1496,26 +1596,36 @@ async def _fetch_my_orders(client):
                 "lowToHigh": False,
                 "query": None,
                 "cursor": cursor,
-                "count": 20,
+                "count": page_size,
             },
         )
         batch = (data or {}).get("orders") or []
-        orders.extend(batch)
-        cursor = (data or {}).get("cursor") or ""
-        if not cursor or len(batch) < 20:
+        if not batch:
             break
+        new_in_page = 0
+        for order in batch:
+            if not isinstance(order, dict):
+                continue
+            oid = order.get("id")
+            key = str(oid) if oid is not None else None
+            if key:
+                if key in seen_ids:
+                    continue
+                seen_ids.add(key)
+            orders.append(order)
+            new_in_page += 1
+        next_cursor = (data or {}).get("cursor") or ""
+        # Stop when API says done, page undersized, or cursor made no progress.
+        if (
+            not next_cursor
+            or next_cursor == cursor
+            or len(batch) < page_size
+            or new_in_page == 0
+        ):
+            break
+        cursor = next_cursor
 
-    active = []
-    for order in orders:
-        if _order_finished(order):
-            LOGS.info(
-                "Skipping finished MRKT order id=%s finishedAt=%r endAt=%r",
-                order.get("id"),
-                order.get("finishedAt"),
-                order.get("endAt"),
-            )
-            continue
-        active.append(order)
+    active = [order for order in orders if not _order_finished(order)]
     return active
 
 
@@ -2135,7 +2245,7 @@ def _format_order_book_message(
         f"📊 <b>Order book</b>",
         f"📦 <code>{html.escape(label)}</code>",
         "",
-        f"🔢 <b>Total offers:</b> <code>{total}</code>",
+        f"🔢 <b>Total orders:</b> <code>{total}</code>",
         f"🏆 <b>Highest:</b> <code>{highest} TON</code>",
         "",
         "🔝 <b>Top 5</b>",
@@ -2350,14 +2460,14 @@ async def _fetch_collection_top_orders(client, collection, *, top_n=10):
                 return None
 
     results = await asyncio.gather(*[_one(m) for m in models])
-    if skipped_429 or skipped_other:
-        LOGS.info(
-            "ordertop %s: scanned %s models, skipped 429=%s other=%s",
-            collection,
-            len(models),
-            skipped_429,
-            skipped_other,
-        )
+    #if skipped_429 or skipped_other:
+        #LOGS.info(
+            #"ordertop %s: scanned %s models, skipped 429=%s other=%s",
+            #collection,
+            #len(models),
+            #skipped_429,
+            #skipped_other,
+        #)
 
     best = []
     seen = set()
@@ -2512,6 +2622,32 @@ async def _get_cached_order(idx):
     return order
 
 
+def _parse_order_indices(raw):
+    """
+    Parse `.orderdel 1` / `.orderdel 1, 2, 3` into unique 1-based indexes.
+    Preserves first-seen order.
+    """
+    text = str(raw or "").strip()
+    if not text:
+        raise ValueError("empty")
+    parts = [p.strip() for p in re.split(r"[\s,]+", text) if p.strip()]
+    if not parts:
+        raise ValueError("empty")
+    indexes = []
+    seen = set()
+    for part in parts:
+        if not part.isdigit():
+            raise ValueError(part)
+        idx = int(part)
+        if idx < 1:
+            raise ValueError(part)
+        if idx in seen:
+            continue
+        seen.add(idx)
+        indexes.append(idx)
+    return indexes
+
+
 def _chunk_html(text, limit=3500):
     """Split long Telegram HTML into chunks under the 4096-char cap."""
     text = str(text or "").rstrip()
@@ -2567,7 +2703,7 @@ async def _artemis_ordertop_handler(event):
     status = None
     try:
         status = await event.eor(
-            "<b>Fetching top offers...</b>",
+            "<b>Fetching top orders...</b>",
             parse_mode="html",
         )
 
@@ -2611,11 +2747,11 @@ async def _artemis_ordertop_handler(event):
         LOGS.exception("Artemis .ordertop failed: %s", e)
         if status:
             return await status.edit(
-                f"❌ <b>Failed to fetch top offers.</b>\n\n<code>{e}</code>",
+                f"❌ <b>Failed to fetch top orders.</b>\n\n<code>{e}</code>",
                 parse_mode="html",
             )
         return await event.eor(
-            f"❌ <b>Failed to fetch top offers.</b>\n\n<code>{e}</code>",
+            f"❌ <b>Failed to fetch top orders.</b>\n\n<code>{e}</code>",
             parse_mode="html",
         )
 
@@ -2697,17 +2833,17 @@ async def _artemis_order_book_handler(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"ordertop(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"ordertop(?:\s+(.+))?$")
 async def artemis_ordertop(event):
     await _artemis_ordertop_handler(event)
 
 
-@heartless_cmd(owner_only=True, pattern=r"order(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"order(?:\s+(.+))?$")
 async def artemis_order_book(event):
     await _artemis_order_book_handler(event)
 
 
-@heartless_cmd(owner_only=True, pattern=r"orders$")
+@cipherx_cmd(owner_only=True, pattern=r"orders$")
 async def artemis_orders(event):
     global ORDER_CACHE
     status = None
@@ -2785,7 +2921,10 @@ async def artemis_orders(event):
 
 async def _orderup_one(client, order):
     """
-    Raise one order to market top + 0.01 when it is not already highest.
+    Retarget one order to competitor top + 0.01.
+
+    Raises when below, lowers when there is a gap above the second-highest,
+    skips when already exactly at competitor top + 0.01.
 
     Returns a result dict:
       status: "updated" | "skipped" | "error"
@@ -2822,12 +2961,16 @@ async def _orderup_one(client, order):
 
     try:
         top = await _top_order(client, filt)
-        if top and top.get("priceMaxNanoTONs") is not None:
-            top_max = nano_to_ton(top.get("priceMaxNanoTONs"))
-        else:
+        competitor = await _competitor_top_ton(client, order, top=top)
+        if competitor is None:
+            # No other bids — keep current max (nothing to chase).
             top_max = old_max
+            ideal_max = _ton_q2(old_max)
+        else:
+            top_max = competitor
+            ideal_max = _order_ideal_max(competitor, old_min)
 
-        if _order_is_highest(order, top):
+        if _ton_q2(old_max) == _ton_q2(ideal_max):
             return {
                 "status": "skipped",
                 "label": label,
@@ -2838,24 +2981,41 @@ async def _orderup_one(client, order):
             }
 
         await _cancel_order(client, oid)
+        # After cancel, /orders/top is the true second-highest (ex-ours).
         top = await _top_order(client, filt)
         if top and top.get("priceMaxNanoTONs") is not None:
             top_max = nano_to_ton(top.get("priceMaxNanoTONs"))
         else:
-            top_max = old_max
-        new_max = Decimal(str(top_max)) + Decimal("0.01")
-        if new_max < old_min:
-            new_max = old_min
-        await _create_order(
-            client,
-            collection=collection,
-            model=model,
-            backdrop=backdrop,
-            symbol=symbol,
-            price_min_ton=old_min,
-            price_max_ton=new_max,
-            quantity=remaining_quantity,
-        )
+            top_max = competitor if competitor is not None else old_min
+        new_max = _order_ideal_max(top_max, old_min)
+        # Cancel already succeeded — retry create so a transient API blip
+        # does not leave the user with a silently deleted bid.
+        create_err = None
+        for attempt in range(3):
+            try:
+                await _create_order(
+                    client,
+                    collection=collection,
+                    model=model,
+                    backdrop=backdrop,
+                    symbol=symbol,
+                    price_min_ton=old_min,
+                    price_max_ton=new_max,
+                    quantity=remaining_quantity,
+                )
+                create_err = None
+                break
+            except Exception as e:
+                create_err = e
+                LOGS.warning(
+                    "orderup recreate attempt %s failed for %s: %s",
+                    attempt + 1,
+                    oid,
+                    e,
+                )
+                await asyncio.sleep(0.6 * (attempt + 1))
+        if create_err is not None:
+            raise create_err
         return {
             "status": "updated",
             "label": label,
@@ -2876,9 +3036,270 @@ async def _orderup_one(client, order):
         }
 
 
-@heartless_cmd(owner_only=True, pattern=r"orderupall$")
-async def artemis_orderupall(event):
+async def _run_orderup_all(client):
+    """
+    Retarget every active order to competitor top+0.01.
+
+    Returns dict: orders, updated, skipped, errors.
+    Updates ORDER_CACHE.
+    """
     global ORDER_CACHE
+    orders = await _fetch_my_orders(client)
+    ORDER_CACHE = orders
+    updated = []
+    skipped = 0
+    errors = []
+    for order in orders:
+        result = await _orderup_one(client, order)
+        if result["status"] == "updated":
+            updated.append(result)
+        elif result["status"] == "skipped":
+            skipped += 1
+        else:
+            errors.append(result)
+    ORDER_CACHE = await _fetch_my_orders(client)
+    return {
+        "orders": orders,
+        "updated": updated,
+        "skipped": skipped,
+        "errors": errors,
+    }
+
+
+def _orderup_all_message(result):
+    updated = result["updated"]
+    skipped = result["skipped"]
+    errors = result["errors"]
+    lines = [
+        "🚀 <b>Orderup All</b>",
+        "",
+        f"✅ Updated: <code>{len(updated)}</code>",
+        f"⏭ Already at top+0.01: <code>{skipped}</code>",
+        f"❌ Errors: <code>{len(errors)}</code>",
+        "",
+    ]
+    if updated:
+        lines.append("<b>Updated orders</b>")
+        lines.append("")
+        for i, row in enumerate(updated, 1):
+            lines.append(
+                f"<b>{i}. {row['label']}</b>\n"
+                f"   💰 {_ton2(row['old_min'])}-{_ton2(row['old_max'])} TON"
+                f" → {_ton2(row['old_min'])}-{_ton2(row['new_max'])} TON\n"
+                f"   📊 Competitor top: {_ton2(row['top_max'])} TON\n"
+                f"   🔢 Qty: {row['qty']}\n"
+                f"   🆔 <code>{row['oid']}</code>"
+            )
+            lines.append("")
+    elif not errors:
+        if not result.get("orders"):
+            lines.append("📭 <b>No active orders.</b>")
+        else:
+            lines.append(
+                "✅ <b>All active orders were already at competitor top+0.01.</b>"
+            )
+        lines.append("")
+
+    if errors:
+        lines.append("<b>Errors</b>")
+        lines.append("")
+        for i, row in enumerate(errors[:10], 1):
+            err = row.get("error") or "?"
+            lines.append(
+                f"{i}. {row.get('label') or '?'}\n"
+                f"   <code>{err}</code>"
+            )
+            lines.append("")
+    return "\n".join(lines).rstrip()
+
+
+def _autotop_db_enabled():
+    raw = udB.get_key(AUTOTOP_DB_KEY)
+    if raw is True or raw == 1:
+        return True
+    if isinstance(raw, str) and raw.strip().lower() in ("1", "true", "on", "yes"):
+        return True
+    return False
+
+
+def _autotop_set_db(enabled):
+    udB.set_key(AUTOTOP_DB_KEY, bool(enabled))
+
+
+def _autotop_status_message():
+    running = bool(
+        AUTOTOP_ENABLED
+        and AUTOTOP_TASK is not None
+        and not AUTOTOP_TASK.done()
+    )
+    state = "ON" if running else "OFF"
+    lines = [
+        f"⏱ <b>Autotop:</b> <code>{state}</code>",
+        f"🔁 Interval: <code>{int(AUTOTOP_INTERVAL)}s</code>",
+    ]
+    if AUTOTOP_STATS.get("started_at"):
+        lines.append(
+            f"▶️ Started: <code>{_format_tehran(AUTOTOP_STATS['started_at'])}</code>"
+        )
+    if AUTOTOP_STATS.get("last_run_at"):
+        lines.append(
+            f"🕒 Last check: <code>{_format_tehran(AUTOTOP_STATS['last_run_at'])}</code>"
+        )
+        lines.append(
+            f"📊 Last cycle — updated "
+            f"<code>{AUTOTOP_STATS.get('last_updated', 0)}</code>, "
+            f"skipped <code>{AUTOTOP_STATS.get('last_skipped', 0)}</code>, "
+            f"errors <code>{AUTOTOP_STATS.get('last_errors', 0)}</code>"
+        )
+    lines.append(f"🔢 Cycles: <code>{AUTOTOP_STATS.get('cycles', 0)}</code>")
+    return "\n".join(lines)
+
+
+async def _autotop_notify_disabled(reason: str):
+    """Best-effort owner notice when autotop turns itself off."""
+    try:
+        owner = OWNER_ID or (owner_and_sudos() or [None])[0]
+        if not owner or not cipherx_bot:
+            return
+        await cipherx_bot.send_message(
+            int(owner),
+            "⏹ <b>Autotop disabled</b>\n"
+            f"{reason}\n\n"
+            f"Use <code>{_h('autotop')} on</code> to enable again.",
+            parse_mode="html",
+        )
+    except Exception:
+        LOGS.debug("Autotop disable notify failed", exc_info=True)
+
+
+async def _autotop_cycle_once():
+    """One silent orderup-all pass used by the autotop worker."""
+    global AUTOTOP_STATS
+    await _ensure_artemis_token()
+    async with ORDERUP_LOCK:
+        async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+            result = await _run_orderup_all(client)
+    AUTOTOP_STATS["last_run_at"] = time.time()
+    AUTOTOP_STATS["last_updated"] = len(result["updated"])
+    AUTOTOP_STATS["last_skipped"] = result["skipped"]
+    AUTOTOP_STATS["last_errors"] = len(result["errors"])
+    AUTOTOP_STATS["cycles"] = int(AUTOTOP_STATS.get("cycles") or 0) + 1
+    return result
+
+
+async def _autotop_worker():
+    global AUTOTOP_TASK, AUTOTOP_ENABLED
+    LOGS.info("Artemis autotop worker started (every %ss)", AUTOTOP_INTERVAL)
+    empty_streak = 0
+    try:
+        while AUTOTOP_ENABLED:
+            try:
+                result = await _autotop_cycle_once()
+                # Require two consecutive empty fetches before auto-disable so
+                # a single flaky/over-filtered response cannot kill autotop.
+                if not result.get("orders"):
+                    empty_streak += 1
+                else:
+                    empty_streak = 0
+                if empty_streak >= 2:
+                    LOGS.info(
+                        "Autotop: no active orders for %s cycles — disabling",
+                        empty_streak,
+                    )
+                    AUTOTOP_ENABLED = False
+                    _autotop_set_db(False)
+                    await _autotop_notify_disabled(
+                        "📭 No active orders remaining."
+                    )
+                    break
+            except asyncio.CancelledError:
+                raise
+            except Exception as e:
+                empty_streak = 0
+                AUTOTOP_STATS["last_run_at"] = time.time()
+                AUTOTOP_STATS["cycles"] = int(AUTOTOP_STATS.get("cycles") or 0) + 1
+                if _is_token_expired_error(e):
+                    try:
+                        await _force_refresh_token()
+                        LOGS.info("Autotop refreshed expired Artemis token")
+                    except Exception as refresh_err:
+                        LOGS.warning(
+                            "Autotop token refresh failed: %s", refresh_err,
+                        )
+                LOGS.warning("Autotop cycle failed: %s", e)
+            if not AUTOTOP_ENABLED:
+                break
+            await asyncio.sleep(AUTOTOP_INTERVAL)
+    except asyncio.CancelledError:
+        LOGS.info("Artemis autotop worker cancelled")
+        raise
+    finally:
+        if AUTOTOP_TASK is asyncio.current_task():
+            AUTOTOP_TASK = None
+        LOGS.info("Artemis autotop worker stopped")
+
+
+def _autotop_start():
+    """Enable + start the background worker (idempotent)."""
+    global AUTOTOP_TASK, AUTOTOP_ENABLED, AUTOTOP_STATS
+    AUTOTOP_ENABLED = True
+    _autotop_set_db(True)
+    if AUTOTOP_TASK is not None and not AUTOTOP_TASK.done():
+        return False
+    AUTOTOP_STATS = {
+        "started_at": time.time(),
+        "last_run_at": None,
+        "last_updated": 0,
+        "last_skipped": 0,
+        "last_errors": 0,
+        "cycles": 0,
+    }
+    AUTOTOP_TASK = asyncio.create_task(_autotop_worker())
+    return True
+
+
+async def _autotop_stop():
+    """Disable + stop the background worker."""
+    global AUTOTOP_TASK, AUTOTOP_ENABLED
+    AUTOTOP_ENABLED = False
+    _autotop_set_db(False)
+    task = AUTOTOP_TASK
+    AUTOTOP_TASK = None
+    if task and not task.done():
+        task.cancel()
+        with contextlib.suppress(asyncio.CancelledError, Exception):
+            await task
+    return True
+
+
+def _autotop_bootstrap():
+    """Resume autotop after plugin reload when DB flag is on."""
+    if not _autotop_db_enabled():
+        return
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        try:
+            from CythonX.startup.aio import ensure_event_loop
+
+            loop = ensure_event_loop()
+        except Exception:
+            return
+    try:
+        loop.call_soon(_autotop_start)
+    except Exception:
+        with contextlib.suppress(Exception):
+            loop.create_task(_autotop_delayed_start())
+
+
+async def _autotop_delayed_start():
+    await asyncio.sleep(1)
+    if _autotop_db_enabled():
+        _autotop_start()
+
+
+@cipherx_cmd(owner_only=True, pattern=r"orderupall$")
+async def artemis_orderupall(event):
     try:
         _, status = await _ensure_artemis_token(event)
     except ValueError as e:
@@ -2888,67 +3309,16 @@ async def artemis_orderupall(event):
     else:
         status = await status.edit("<b>Processing...</b>", parse_mode="html")
     try:
-        async with MRKTClient(token=ARTEMIS_TOKEN) as client:
-            orders = await _fetch_my_orders(client)
-            ORDER_CACHE = orders
-            if not orders:
-                return await status.edit(
-                    "📭 <b>No active orders.</b>",
-                    parse_mode="html",
-                )
-
-            updated = []
-            skipped = 0
-            errors = []
-            for order in orders:
-                result = await _orderup_one(client, order)
-                if result["status"] == "updated":
-                    updated.append(result)
-                elif result["status"] == "skipped":
-                    skipped += 1
-                else:
-                    errors.append(result)
-
-            ORDER_CACHE = await _fetch_my_orders(client)
-
-        lines = [
-            "🚀 <b>Orderup All</b>",
-            "",
-            f"✅ Updated: <code>{len(updated)}</code>",
-            f"⏭ Already top: <code>{skipped}</code>",
-            f"❌ Errors: <code>{len(errors)}</code>",
-            "",
-        ]
-        if updated:
-            lines.append("<b>Updated orders</b>")
-            lines.append("")
-            for i, row in enumerate(updated, 1):
-                lines.append(
-                    f"<b>{i}. {row['label']}</b>\n"
-                    f"   💰 {_ton2(row['old_min'])}-{_ton2(row['old_max'])} TON"
-                    f" → {_ton2(row['old_min'])}-{_ton2(row['new_max'])} TON\n"
-                    f"   📊 Prev top: {_ton2(row['top_max'])} TON\n"
-                    f"   🔢 Qty: {row['qty']}\n"
-                    f"   🆔 <code>{row['oid']}</code>"
-                )
-                lines.append("")
-        elif not errors:
-            lines.append("✅ <b>All active orders were already the highest.</b>")
-            lines.append("")
-
-        if errors:
-            lines.append("<b>Errors</b>")
-            lines.append("")
-            for i, row in enumerate(errors[:10], 1):
-                err = row.get("error") or "?"
-                lines.append(
-                    f"{i}. {row.get('label') or '?'}\n"
-                    f"   <code>{err}</code>"
-                )
-                lines.append("")
-
+        async with ORDERUP_LOCK:
+            async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+                result = await _run_orderup_all(client)
+        if not result["orders"]:
+            return await status.edit(
+                "📭 <b>No active orders.</b>",
+                parse_mode="html",
+            )
         return await _edit_chunks(
-            status, event, "\n".join(lines).rstrip(),
+            status, event, _orderup_all_message(result),
         )
     except (TradingError, RequestError) as e:
         return await status.edit(
@@ -2963,7 +3333,52 @@ async def artemis_orderupall(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"orderup(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"autotop(?:\s+(.+))?$")
+async def artemis_autotop(event):
+    raw = (event.pattern_match.group(1) or "").strip().lower()
+    if not raw:
+        return await event.eor(_autotop_status_message(), parse_mode="html")
+
+    if raw in ("on", "start", "enable", "1", "true"):
+        try:
+            await _ensure_artemis_token(event)
+        except ValueError as e:
+            return await event.eor(f"❌ {e}", parse_mode="html")
+        started = _autotop_start()
+        if started:
+            msg = (
+                "🟢 <b>Autotop enabled.</b>\n\n"
+                f"🔁 Checking every <code>{int(AUTOTOP_INTERVAL)}s</code>.\n"
+                f"Use <code>{_h('autotop')} off</code> to disable."
+            )
+        else:
+            msg = (
+                "🟢 <b>Autotop is already running.</b>\n\n"
+                f"🔁 Interval: <code>{int(AUTOTOP_INTERVAL)}s</code>"
+            )
+        return await event.eor(
+            msg + "\n\n" + _autotop_status_message(),
+            parse_mode="html",
+        )
+
+    if raw in ("off", "stop", "disable", "0", "false"):
+        await _autotop_stop()
+        return await event.eor(
+            "🔴 <b>Autotop disabled.</b>\n\n"
+            f"Use <code>{_h('autotop')} on</code> to enable again.",
+            parse_mode="html",
+        )
+
+    return await event.eor(
+        "❌ <b>Usage:</b>\n"
+        f"<code>{_h('autotop')}</code>\n"
+        f"<code>{_h('autotop')} on</code>\n"
+        f"<code>{_h('autotop')} off</code>",
+        parse_mode="html",
+    )
+
+
+@cipherx_cmd(owner_only=True, pattern=r"orderup(?:\s+(.+))?$")
 async def artemis_orderup(event):
     global ORDER_CACHE
     try:
@@ -2985,18 +3400,19 @@ async def artemis_orderup(event):
                 f"❌ Invalid index. Run <code>{_h('orders')}</code> first.",
                 parse_mode="html",
             )
-        async with MRKTClient(token=ARTEMIS_TOKEN) as client:
-            result = await _orderup_one(client, order)
-            ORDER_CACHE = await _fetch_my_orders(client)
+        async with ORDERUP_LOCK:
+            async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+                result = await _orderup_one(client, order)
+                ORDER_CACHE = await _fetch_my_orders(client)
 
         if result["status"] == "skipped":
             return await status.edit(
-                "✅ <b>Your order is already the highest.</b>\n\n"
+                "✅ <b>Your order is already at competitor top+0.01.</b>\n\n"
                 f"📦 <b>Order:</b> {result['label']}\n"
                 f"🆔 <code>{result['oid']}</code>\n"
                 f"💰 <b>Yours:</b> "
                 f"<code>{_ton2(result['old_min'])}-{_ton2(result['old_max'])} TON</code>\n"
-                f"📊 <b>Market top:</b> "
+                f"📊 <b>Competitor top:</b> "
                 f"<code>{_ton2(result['top_max'])} TON</code>",
                 parse_mode="html",
             )
@@ -3012,7 +3428,7 @@ async def artemis_orderup(event):
             f"🆔 <b>Old ID:</b> <code>{result['oid']}</code>\n"
             f"💰 <b>Old:</b> "
             f"<code>{_ton2(result['old_min'])}-{_ton2(result['old_max'])} TON</code>\n"
-            f"📊 <b>Previous top:</b> "
+            f"📊 <b>Competitor top:</b> "
             f"<code>{_ton2(result['top_max'])} TON</code>\n"
             f"🚀 <b>New:</b> "
             f"<code>{_ton2(result['old_min'])}-{_ton2(result['new_max'])} TON</code>\n"
@@ -3033,7 +3449,7 @@ async def artemis_orderup(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"orderdelall$")
+@cipherx_cmd(owner_only=True, pattern=r"orderdelall$")
 async def artemis_orderdelall(event):
     global ORDER_CACHE
     try:
@@ -3045,22 +3461,23 @@ async def artemis_orderdelall(event):
     else:
         status = await status.edit("<b>Processing...</b>", parse_mode="html")
     try:
-        async with MRKTClient(token=ARTEMIS_TOKEN) as client:
-            orders = await _fetch_my_orders(client)
-            if not orders:
-                ORDER_CACHE = []
-                return await status.edit(
-                    "📭 <b>No active orders.</b>", parse_mode="html",
-                )
-            deleted = 0
-            errors = []
-            for order in orders:
-                try:
-                    await _cancel_order(client, order["id"])
-                    deleted += 1
-                except Exception as e:
-                    errors.append(f"{order.get('id')}: {e}")
-            ORDER_CACHE = await _fetch_my_orders(client)
+        async with ORDERUP_LOCK:
+            async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+                orders = await _fetch_my_orders(client)
+                if not orders:
+                    ORDER_CACHE = []
+                    return await status.edit(
+                        "📭 <b>No active orders.</b>", parse_mode="html",
+                    )
+                deleted = 0
+                errors = []
+                for order in orders:
+                    try:
+                        await _cancel_order(client, order["id"])
+                        deleted += 1
+                    except Exception as e:
+                        errors.append(f"{order.get('id')}: {e}")
+                ORDER_CACHE = await _fetch_my_orders(client)
         msg = (
             "🗑 <b>Bulk delete finished.</b>\n\n"
             f"Deleted: <code>{deleted}/{len(orders)}</code>"
@@ -3083,7 +3500,7 @@ async def artemis_orderdelall(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"orderdel(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"orderdel(?:\s+(.+))?$")
 async def artemis_orderdel(event):
     global ORDER_CACHE
     try:
@@ -3091,28 +3508,92 @@ async def artemis_orderdel(event):
     except ValueError as e:
         return await event.eor(f"❌ {e}", parse_mode="html")
     raw_idx = event.pattern_match.group(1)
-    if not raw_idx or not raw_idx.strip().isdigit():
-        return await event.eor(f"Usage: <code>{_h('orderdel')} N</code>", parse_mode="html")
-    idx = int(raw_idx.strip())
+    usage = (
+        "Usage:\n"
+        f"<code>{_h('orderdel')} N</code>\n"
+        f"<code>{_h('orderdel')} 1, 2, 3</code>"
+    )
+    try:
+        indexes = _parse_order_indices(raw_idx)
+    except ValueError:
+        return await event.eor(usage, parse_mode="html")
+
     if status is None:
         status = await event.eor("<b>Processing...</b>", parse_mode="html")
     else:
         status = await status.edit("<b>Processing...</b>", parse_mode="html")
     try:
-        order = await _get_cached_order(idx)
-        if not order:
+        # Resolve all targets from the same snapshot so indexes stay stable.
+        if not ORDER_CACHE:
+            async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+                ORDER_CACHE = await _fetch_my_orders(client)
+        if not ORDER_CACHE:
             return await status.edit(
-                f"❌ Invalid index. Run <code>{_h('orders')}</code> first.",
+                "📭 <b>No active orders.</b>",
                 parse_mode="html",
             )
-        oid = _require_order_uuid(order["id"])
-        async with MRKTClient(token=ARTEMIS_TOKEN) as client:
-            await _cancel_order(client, oid)
-            ORDER_CACHE = await _fetch_my_orders(client)
+
+        invalid = [i for i in indexes if i < 1 or i > len(ORDER_CACHE)]
+        if invalid:
+            bad = ", ".join(str(i) for i in invalid)
+            return await status.edit(
+                f"❌ Invalid index: <code>{bad}</code>\n"
+                f"Run <code>{_h('orders')}</code> first "
+                f"(1-{len(ORDER_CACHE)}).",
+                parse_mode="html",
+            )
+
+        targets = []
+        for idx in indexes:
+            order = ORDER_CACHE[idx - 1]
+            oid = _require_order_uuid(order.get("id"))
+            targets.append((idx, order, oid))
+
+        deleted = []
+        errors = []
+        async with ORDERUP_LOCK:
+            async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+                for idx, order, oid in targets:
+                    try:
+                        await _cancel_order(client, oid)
+                        deleted.append((idx, order, oid))
+                    except Exception as e:
+                        errors.append((idx, order, oid, e))
+                ORDER_CACHE = await _fetch_my_orders(client)
+
+        if len(targets) == 1 and len(deleted) == 1 and not errors:
+            idx, order, oid = deleted[0]
+            return await status.edit(
+                "🗑 <b>Order deleted.</b>\n\n"
+                f"📦 {_order_label(order)}\n"
+                f"🆔 <code>{oid}</code>",
+                parse_mode="html",
+            )
+
+        lines = [
+            "🗑 <b>Orders deleted.</b>",
+            "",
+            f"✅ Deleted: <code>{len(deleted)}/{len(targets)}</code>",
+            "",
+        ]
+        for idx, order, oid in deleted:
+            lines.append(
+                f"<b>#{idx}. {_order_label(order)}</b>\n"
+                f"   🆔 <code>{oid}</code>"
+            )
+            lines.append("")
+        if errors:
+            lines.append("<b>Errors</b>")
+            lines.append("")
+            for idx, order, oid, err in errors[:10]:
+                lines.append(
+                    f"#{idx}. {_order_label(order)}\n"
+                    f"   🆔 <code>{oid}</code>\n"
+                    f"   <code>{err}</code>"
+                )
+                lines.append("")
         return await status.edit(
-            "🗑 <b>Order deleted.</b>\n\n"
-            f"📦 {_order_label(order)}\n"
-            f"🆔 <code>{oid}</code>",
+            "\n".join(lines).rstrip(),
             parse_mode="html",
         )
     except (TradingError, RequestError) as e:
@@ -3128,7 +3609,7 @@ async def artemis_orderdel(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"ordernew(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"ordernew(?:\s+(.+))?$")
 async def artemis_ordernew(event):
     global ORDER_CACHE
     raw = event.pattern_match.group(1)
@@ -3210,7 +3691,7 @@ async def artemis_ordernew(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"gentoken(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"gentoken(?:\s+(.+))?$")
 async def artemis_gentoken(event):
     session = event.pattern_match.group(1)
     if not session or not session.strip():
@@ -3555,11 +4036,69 @@ async def _satellite_market_floors(collection, model=None, backdrop=None):
     return collection_floors, model_floors, full_floors
 
 
+async def _mrkt_search_transferable(
+    client,
+    *,
+    collection,
+    model=None,
+    backdrop=None,
+    count=20,
+):
+    """
+    POST /gifts/saling with transferable-only filter (no premarket / transfer lock).
+    Falls back to a raw body when the installed Artemis SDK lacks is_transferable.
+    """
+    count = max(int(count or 1), 1)
+    kwargs = {
+        "collection_names": [collection],
+        "ordering": "Price",
+        "low_to_high": True,
+        "count": count,
+        "is_premarket": False,
+        "is_transferable": True,
+    }
+    if model:
+        kwargs["model_names"] = [model]
+    if backdrop:
+        kwargs["backdrop_names"] = [backdrop]
+    try:
+        return await client.market.search(**kwargs)
+    except TypeError:
+        from artemis.models import MRKTGift, GiftPage
+
+        body = {
+            "collectionNames": [collection],
+            "modelNames": [model] if model else [],
+            "backdropNames": [backdrop] if backdrop else [],
+            "symbolNames": [],
+            "ordering": "Price",
+            "lowToHigh": True,
+            "maxPrice": None,
+            "minPrice": None,
+            "mintable": None,
+            "number": None,
+            "count": count,
+            "cursor": "",
+            "query": None,
+            "isPremarket": False,
+            "promotedFirst": False,
+            "isTransferable": True,
+        }
+        data = await client.request("POST", "/gifts/saling", json=body)
+        raw = data if isinstance(data, dict) else {}
+        items = [MRKTGift(x) for x in raw.get("gifts") or []]
+        return GiftPage(items, raw.get("cursor"), raw)
+
+
 async def _mrkt_cheapest(client, collection, model=None, backdrop=None, count=1):
     """
-    Cheapest MRKT listings. Tries canonical names first (fast path), then
-    case/space variants only if empty.
+    Cheapest transferable MRKT listings (excludes premarket / locked).
+    Tries canonical names first (fast path), then case/space variants if empty.
     """
+    want = max(int(count or 1), 1)
+    # Ask for a wider page so client-side lock filters still leave enough hits.
+    fetch_count = max(want, 20)
+
     primary = [(collection, model, backdrop)]
     extras = []
     coll_variants = _name_variants(collection) or [collection]
@@ -3578,18 +4117,14 @@ async def _mrkt_cheapest(client, collection, model=None, backdrop=None, count=1)
     used_backdrop = backdrop
 
     for coll, mod, back in primary + extras:
-        kwargs = {
-            "collection_names": [coll],
-            "ordering": "Price",
-            "low_to_high": True,
-            "count": max(count, 1),
-        }
-        if mod:
-            kwargs["model_names"] = [mod]
-        if back:
-            kwargs["backdrop_names"] = [back]
         try:
-            page = await client.market.search(**kwargs)
+            page = await _mrkt_search_transferable(
+                client,
+                collection=coll,
+                model=mod,
+                backdrop=back,
+                count=fetch_count,
+            )
         except Exception:
             continue
         items = list(page.items or [])
@@ -3602,11 +4137,13 @@ async def _mrkt_cheapest(client, collection, model=None, backdrop=None, count=1)
     if not items:
         return None, []
 
-    # Prefer the true minimum among returned listings, verifying attrs.
+    # Prefer the true minimum among transferable listings, verifying attrs.
     best = None
     best_price = None
     matched = []
     for gift in items:
+        if not _gift_without_transfer_lock(gift):
+            continue
         raw = _get_raw(gift)
         item_model = (
             raw.get("modelName")
@@ -3639,10 +4176,9 @@ async def _mrkt_cheapest(client, collection, model=None, backdrop=None, count=1)
             best_price = price
             best = gift
 
-    if best is None:
-        price = _as_floor(getattr(items[0], "price_ton", None))
-        return price, items
-    return best_price, matched or items
+    if not matched:
+        return None, []
+    return best_price, matched[:want]
 
 
 async def _download_sticker_url(
@@ -4326,6 +4862,173 @@ def _format_monochrome_block(rows, highlight_backdrop=None):
     return lines
 
 
+async def _satellite_floors_for_filter(collection, model=None, backdrop=None):
+    """Satellite floors for exactly one filter level (collection / model / full)."""
+    floors = {label: None for _, label in SATELLITE_MARKETS}
+    token = _satellite_token()
+    if not token or not collection:
+        return floors
+
+    headers = {"Authorization": f"Token {token}"}
+    timeout = aiohttp.ClientTimeout(total=20, connect=8)
+    async with aiohttp.ClientSession(
+        timeout=timeout, headers=headers,
+    ) as session:
+        for market, label in SATELLITE_MARKETS:
+            floors[label] = await _satellite_floor_once(
+                session,
+                market,
+                collection,
+                model=model,
+                backdrop=backdrop,
+            )
+    return floors
+
+
+async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
+    """
+    Compact `.gift c` output:
+    headers + one multi-market floor block for the filter + matching quick sell.
+    No sticker, listings, monochromes, or sales.
+    """
+    mrkt_task = asyncio.create_task(
+        _mrkt_cheapest(
+            client, collection, model=model, backdrop=backdrop, count=1,
+        )
+    )
+    sat_task = asyncio.create_task(
+        _satellite_floors_for_filter(
+            collection, model=model, backdrop=backdrop,
+        )
+    )
+    quick_task = asyncio.create_task(
+        _highest_order_ton(client, collection, model, backdrop)
+    )
+    models_task = (
+        asyncio.create_task(
+            client.request(
+                "POST", "/gifts/models", json={"collections": [collection]},
+            )
+        )
+        if model else None
+    )
+    backdrops_task = (
+        asyncio.create_task(
+            client.request(
+                "POST",
+                "/gifts/backdrops",
+                json={"collections": [collection]},
+            )
+        )
+        if model and backdrop else None
+    )
+    tg_snap_task = (
+        asyncio.create_task(_changes_gift_snapshot(collection, model))
+        if model else None
+    )
+
+    try:
+        mrkt_floor, _ = await mrkt_task
+        mrkt_floor = _as_floor(mrkt_floor)
+    except Exception as e:
+        LOGS.warning("Compact MRKT floor failed: %s", e)
+        mrkt_floor = None
+
+    try:
+        sat_floors = await sat_task
+    except Exception as e:
+        LOGS.warning("Compact satellite floors failed: %s", e)
+        sat_floors = {label: None for _, label in SATELLITE_MARKETS}
+
+    try:
+        quick = await quick_task
+    except Exception as e:
+        LOGS.warning("Compact quick sell failed: %s", e)
+        quick = None
+
+    model_rarity = None
+    backdrop_rarity = None
+    tg_snap = {}
+    if tg_snap_task is not None:
+        try:
+            tg_snap = await tg_snap_task
+        except Exception as e:
+            LOGS.warning("Compact gift snapshot failed: %s", e)
+            tg_snap = {}
+
+    if model:
+        try:
+            models = await models_task if models_task else []
+        except Exception:
+            models = []
+        model_row = _find_named_row(models, ("modelName", "name"), model)
+        model_rarity = model_row.get("rarityPerMille")
+        if model_rarity is None:
+            tg_model = (tg_snap or {}).get("model") or {}
+            model_rarity = (
+                tg_model.get("rarity_permille")
+                or tg_model.get("rarityPerMille")
+                or _rarity_from_label(tg_model.get("name"))
+            )
+
+    if model and backdrop:
+        try:
+            backdrops = await backdrops_task if backdrops_task else []
+        except Exception:
+            backdrops = []
+        back_row = _find_named_row(
+            backdrops, ("backdropName", "name"), backdrop,
+        )
+        backdrop_rarity = back_row.get("rarityPerMille")
+        if backdrop_rarity is None:
+            for key, pm in (tg_snap.get("backdrop_rarities") or {}).items():
+                if _match_attr(key, backdrop):
+                    backdrop_rarity = pm
+                    break
+        if backdrop_rarity is None:
+            for key in (tg_snap.get("backdrop_prices") or {}):
+                if _match_attr(key, backdrop):
+                    backdrop_rarity = _rarity_from_label(key)
+                    if backdrop_rarity is not None:
+                        break
+
+    lines = [f"🎁 <b>Collection:</b> {html.escape(str(collection))}"]
+    if model:
+        lines.append(
+            f"🧩 <b>Model:</b> {html.escape(str(model))} "
+            f"({_rarity_pct(model_rarity)})"
+        )
+    if backdrop:
+        lines.append(
+            f"🎨 <b>Backdrop:</b> {html.escape(str(backdrop))} "
+            f"({_rarity_pct(backdrop_rarity)})"
+        )
+    lines.append("")
+    for label, value in (
+        ("MRKT", mrkt_floor),
+        ("Portal", sat_floors.get("Portal")),
+        ("Tonnel", sat_floors.get("Tonnel")),
+        ("Telegram", sat_floors.get("Telegram")),
+        ("GetGems", sat_floors.get("GetGems")),
+    ):
+        lines.append(f"   {label}: {_floor_ton(value)}")
+    lines.append("")
+
+    quick_txt = _ton2(quick) if quick is not None else "—"
+    if model and backdrop:
+        lines.append(
+            f"📊 Quick Sell Collection + Model + Backdrop: {quick_txt} TON"
+        )
+    elif model:
+        lines.append(
+            f"📊 Quick Sell Collection + Model: {quick_txt} TON"
+        )
+    else:
+        lines.append(f"📊 Quick Sell Collection: {quick_txt} TON")
+
+    return "\n".join(lines)
+
+
 async def _build_gift_info(
     client,
     collection,
@@ -4366,7 +5069,11 @@ async def _build_gift_info(
     back_row = {}
 
     # Kick off independent MRKT work in parallel with satellite.
-    coll_floors_task = asyncio.create_task(client.market.collection_floors())
+    # MRKT floors always come from transferable cheapest listings — never
+    # collection/model API floorPriceNanoTons (those include premarket).
+    cheap_coll_task = asyncio.create_task(
+        _mrkt_cheapest(client, collection, count=1),
+    )
     quick_coll_task = asyncio.create_task(
         _highest_order_ton(client, collection),
     )
@@ -4416,16 +5123,13 @@ async def _build_gift_info(
     else:
         model_list_task = None
         full_list_task = None
-        cheap_coll_task = asyncio.create_task(
-            _mrkt_cheapest(client, collection, count=1),
-        )
 
     try:
-        coll_floors = await coll_floors_task
+        cheapest_coll, _ = await cheap_coll_task
+        mrkt_collection = _as_floor(cheapest_coll)
     except Exception as e:
-        LOGS.warning("MRKT collection floors failed: %s", e)
-        coll_floors = None
-    mrkt_collection = _mrkt_floor_lookup(coll_floors, collection)
+        LOGS.warning("MRKT transferable collection floor failed: %s", e)
+        mrkt_collection = None
 
     if model:
         try:
@@ -4442,10 +5146,6 @@ async def _build_gift_info(
         model_row = _find_named_row(
             models, ("modelName", "name"), model,
         )
-        if mrkt_model is None:
-            mrkt_model = _as_floor(
-                nano_to_ton(model_row.get("floorPriceNanoTons") or 0)
-            )
 
         if model_rarity is None:
             model_rarity = model_row.get("rarityPerMille")
@@ -4507,13 +5207,6 @@ async def _build_gift_info(
                 mrkt_full = _as_floor(
                     getattr(listing_items[0], "price_ton", None),
                 )
-    else:
-        if mrkt_collection is None:
-            try:
-                cheapest, _ = await cheap_coll_task
-                mrkt_collection = _as_floor(cheapest)
-            except Exception:
-                pass
 
     # Await satellite + quicksells together (satellite likely already done).
     sat_result, quick_collection = await asyncio.gather(
@@ -4936,7 +5629,7 @@ async def _restart_all_monitors():
         new_monitor["task"] = task
 
 
-@heartless_cmd(owner_only=True, pattern=r"buytoken(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"buytoken(?:\s+(.+))?$")
 async def artemis_buytoken(event):
     token = event.pattern_match.group(1)
     if not token or not token.strip():
@@ -4970,7 +5663,7 @@ async def artemis_buytoken(event):
     )
 
 
-@heartless_cmd(owner_only=True, pattern=r"b$")
+@cipherx_cmd(owner_only=True, pattern=r"b$")
 async def artemis_balance(event):
     """Show MRKT hard balance in TON."""
     status = None
@@ -5157,7 +5850,7 @@ async def _listed_nfts_message(client):
     return "\n".join(lines).rstrip()
 
 
-@heartless_cmd(owner_only=True, pattern=r"nfts$")
+@cipherx_cmd(owner_only=True, pattern=r"nfts$")
 async def artemis_nfts(event):
     """Show your currently listed MRKT NFTs with model floors."""
     status = None
@@ -5198,7 +5891,7 @@ async def artemis_nfts(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"buy(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"buy(?:\s+(.+))?$")
 async def artemis_buy(event):
     try:
         await _ensure_artemis_token(event)
@@ -5246,7 +5939,7 @@ async def artemis_buy(event):
     )
 
 
-@heartless_cmd(owner_only=True, pattern=r"buys$")
+@cipherx_cmd(owner_only=True, pattern=r"buys$")
 async def artemis_buys(event):
     if not BUY_MONITORS:
         return await event.eor(
@@ -5274,7 +5967,7 @@ async def artemis_buys(event):
     await event.eor("\n".join(lines), parse_mode="html")
 
 
-@heartless_cmd(owner_only=True, pattern=r"buycancel(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"buycancel(?:\s+(.+))?$")
 async def artemis_buycancel(event):
     target = event.pattern_match.group(1)
     if not target:
@@ -5315,7 +6008,7 @@ async def artemis_buycancel(event):
     )
 
 
-@heartless_cmd(owner_only=True, pattern=r"gift(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"gift(?:\s+(.+))?$")
 async def artemis_gift(event):
     await _artemis_gift_handler(event)
 
@@ -5375,24 +6068,46 @@ async def artemis_order_asst(event):
 
 async def _artemis_gift_handler(event):
     raw = event.pattern_match.group(1)
+    usage = (
+        "❌ <b>Gift filter is missing.</b>\n\n"
+        "Formats:\n"
+        f"<code>{_h('gift')} Collection</code>\n"
+        f"<code>{_h('gift')} Collection, Model</code>\n"
+        f"<code>{_h('gift')} Collection, Model, Backdrop</code>\n"
+        f"<code>{_h('gift')} c Collection[, Model[, Backdrop]]</code>\n"
+        f"<code>{_h('gift')} https://t.me/nft/LibertyFigure-214445</code>"
+    )
     if not raw:
-        return await event.eor(
-            "❌ <b>Gift filter is missing.</b>\n\n"
-            "Formats:\n"
-            f"<code>{_h('gift')} Collection</code>\n"
-            f"<code>{_h('gift')} Collection, Model</code>\n"
-            f"<code>{_h('gift')} Collection, Model, Backdrop</code>\n"
-            f"<code>{_h('gift')} https://t.me/nft/LibertyFigure-214445</code>",
-            parse_mode="html",
-        )
+        return await event.eor(usage, parse_mode="html")
 
     raw = raw.strip()
+    compact = False
+    # `.gift c Liberty Figure[, Model[, Backdrop]]` — floor-only mode
+    if not _parse_nft_link(raw):
+        c_match = re.match(r"(?is)^c(?:\s+|$)(.*)$", raw)
+        if c_match is not None:
+            compact = True
+            raw = (c_match.group(1) or "").strip()
+            if not raw:
+                return await event.eor(
+                    "❌ <b>Gift filter is missing.</b>\n\n"
+                    f"<code>{_h('gift')} c Collection</code>\n"
+                    f"<code>{_h('gift')} c Collection, Model</code>\n"
+                    f"<code>{_h('gift')} c Collection, Model, Backdrop</code>",
+                    parse_mode="html",
+                )
+
     seed_rarities = {}
     nft_mode = bool(_parse_nft_link(raw))
     collection = model = backdrop = None
     include_listings = False
 
     if nft_mode:
+        if compact:
+            return await event.eor(
+                "❌ Compact <code>c</code> mode does not support NFT links.",
+                parse_mode="html",
+            )
         include_listings = True
     else:
         parts = [part.strip() for part in raw.split(",")]
@@ -5413,12 +6128,7 @@ async def _artemis_gift_handler(event):
                 include_listings = True
         else:
             return await event.eor(
-                "❌ <b>Invalid format.</b>\n\n"
-                "Use:\n"
-                f"<code>{_h('gift')} Collection</code>\n"
-                f"<code>{_h('gift')} Collection, Model</code>\n"
-                f"<code>{_h('gift')} Collection, Model, Backdrop</code>\n"
-                f"<code>{_h('gift')} https://t.me/nft/LibertyFigure-214445</code>",
+                "❌ <b>Invalid format.</b>\n\n" + usage.partition("\n\n")[2],
                 parse_mode="html",
             )
 
@@ -5437,7 +6147,7 @@ async def _artemis_gift_handler(event):
     status_deleted = False
     try:
         status = await event.eor(
-            "<b>Fetching NFT Info...</b>",
+            "<b>Fetching floor...</b>" if compact else "<b>Fetching NFT Info...</b>",
             parse_mode="html",
         )
 
@@ -5471,6 +6181,11 @@ async def _artemis_gift_handler(event):
                 )
                 nft_slug = None
                 listings = include_listings
+
+            if compact:
+                return await _build_gift_floor_only(
+                    client, coll, mod, back,
+                )
 
             sat_task = asyncio.create_task(
                 _satellite_market_floors(
@@ -5578,12 +6293,12 @@ async def _artemis_price_handler(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"p(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"p(?:\s+(.+))?$")
 async def artemis_price(event):
     await _artemis_price_handler(event)
 
 
-@heartless_cmd(owner_only=True, pattern=r"add(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"add(?:\s+(.+))?$")
 async def artemis_add_nftid(event):
     """Append a Telegram user (id or username) to the assistant allow-list."""
     raw = (event.pattern_match.group(1) or "").strip()
@@ -5608,7 +6323,7 @@ async def artemis_add_nftid(event):
     )
 
 
-@heartless_cmd(owner_only=True, pattern=r"rm(?:\s+(.+))?$")
+@cipherx_cmd(owner_only=True, pattern=r"rm(?:\s+(.+))?$")
 async def artemis_rm_nftid(event):
     """Remove a Telegram user (id or username) from the assistant allow-list."""
     raw = (event.pattern_match.group(1) or "").strip()
@@ -5636,3 +6351,7 @@ async def artemis_rm_nftid(event):
         f"<b>{link} removed from database</b>",
         parse_mode="html",
     )
+
+
+# Resume autotop after plugin load when DB flag is enabled.
+_autotop_bootstrap()
