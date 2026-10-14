@@ -74,7 +74,7 @@ if run_as_module:
         heartless_bot.run_in_loop(autobot())
         
     #-------------SPOTLOGS LOGGER-------------#
-    SPOTLOGS = getLogger("⛧CythonX⛧ :")
+    SPOTLOGS = getLogger("CythonX :")
     SPOTLOGS.propagate = False
 
     class CustomFormatter(Formatter):
