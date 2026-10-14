@@ -5,9 +5,14 @@ from logging import INFO, WARNING, FileHandler, StreamHandler, basicConfig, getL
 
 from .. import run_as_module
 from ._extra import _ask_input
+from .aio import ensure_event_loop
 
 if run_as_module:
     from ..configs import Var
+
+    # Python 3.14: create a main-thread loop before Telethon/UltroidClient
+    # touch ``client.loop`` during sync startup.
+    ensure_event_loop()
 else:
     Var = None
 
@@ -36,8 +41,8 @@ if run_as_module:
     from telethon import __version__
     from telethon.tl.alltlobjects import LAYER
 
-    from ..version import __version__ as __pyheartless__
-    from ..version import heartless_version
+    from ..version import __version__ as __pyUltroid__
+    from ..version import ultroid_version
 
     file = f"heartless{sys.argv[6]}.log" if len(sys.argv) > 6 else "heartless.log"
 
@@ -82,9 +87,9 @@ if run_as_module:
     )
 
     LOGS.info(f"Python version - {platform.python_version()}")
-    LOGS.info(f"CythonX Version - {__pyheartless__}")
+    LOGS.info(f"CythonX Version - {__pyUltroid__}")
     LOGS.info(f"Telethon Version - {__version__} [Layer: {LAYER}]")
-    LOGS.info(f"Version - {heartless_version} [{HOSTED_ON}]")
+    LOGS.info(f"Version - {ultroid_version} [{HOSTED_ON}]")
 
     try:
         from safety.tools import *
