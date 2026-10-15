@@ -1,6 +1,7 @@
 import os
 import re
 
+import pytz
 from telethon.errors.rpcerrorlist import (
     ChannelPrivateError,
     ChatWriteForbiddenError,
@@ -161,8 +162,9 @@ if udB.get_key("TAG_LOG"):
             return LOGS.exception(er)
         TEXT = MSG.text
         if msg:
-            TEXT += "\n\n🖋 **Later Edited to !**"
-        strf = event.edit_date.strftime("%H:%M:%S")
+            TEXT += "\n\n🖋 **Edited to :**"
+        md = pytz.timezone("Asia/Tehran")
+        strf = event.edit_date.astimezone(md).strftime("%H:%M:%S")
         if "\n" not in event.text:
             TEXT += f"\n• `{strf}` : {event.text}"
         else:
@@ -268,15 +270,18 @@ async def parse_buttons(event):
     where_n, who_n = get_display_name(y), get_display_name(x)
     where_l = event.message_link
     buttons = [[Button.url(where_n, where_l)]]
-    if isinstance(x, User) and x.username:
+    # Telethon 1.45 / layer 230: InlineButtonTypeUserProfile.user_id must be
+    # an int. Prefer the numeric id; fall back to a t.me URL button.
+    if isinstance(x, User):
         try:
-            buttons.append(
-                [Button.mention(who_n, await asst.get_input_entity(x.username))]
-            )
+            buttons.append([Button.mention(who_n, int(x.id))])
         except Exception as er:
-            LOGS.exception(er)
-            buttons.append([Button.url(who_n, f"t.me/{x.username}")])
-    elif getattr(x, "username"):
+            LOGS.debug("userlogs mention button failed: %s", er)
+            if x.username:
+                buttons.append([Button.url(who_n, f"t.me/{x.username}")])
+            else:
+                buttons.append([Button.url(who_n, where_l)])
+    elif getattr(x, "username", None):
         buttons.append([Button.url(who_n, f"t.me/{x.username}")])
     else:
         buttons.append([Button.url(who_n, where_l)])
