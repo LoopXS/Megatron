@@ -39,7 +39,7 @@ from telethon import events
 from telethon.errors import ChatAdminRequiredError, FloodWaitError, RPCError
 from telethon.tl import types
 
-from . import Button, HNDLR, LOGS, Redis, eor, udB, cipherx_bot, cipherx_cmd
+from . import Button, HNDLR, LOGS, Redis, eor, udB, heartless_bot, heartless_cmd
 from CythonX.dB.nsfw_db import is_nsfw, nsfw_chat, rem_nsfw
 
 
@@ -701,7 +701,7 @@ async def _scan_message(message) -> tuple[bool, float, str]:
 async def _take_action(chat_id: int, user_id: int, action: str) -> str:
     action = action if action in SUPPORTED_ACTIONS else DEFAULT_ACTION
     if action == "mute":
-        await cipherx_bot.edit_permissions(
+        await heartless_bot.edit_permissions(
             chat_id,
             user_id,
             send_messages=False,
@@ -713,7 +713,7 @@ async def _take_action(chat_id: int, user_id: int, action: str) -> str:
         )
         return "MUTED"
 
-    await cipherx_bot.edit_permissions(
+    await heartless_bot.edit_permissions(
         chat_id,
         user_id,
         view_messages=False,
@@ -733,7 +733,7 @@ async def _purge_sender(chat_id: int, user_id: int, *, around_id: int | None = N
         return 0
     ids = []
     try:
-        async for msg in cipherx_bot.iter_messages(
+        async for msg in heartless_bot.iter_messages(
             chat_id,
             from_user=user_id,
             limit=PURGE_LIMIT,
@@ -747,7 +747,7 @@ async def _purge_sender(chat_id: int, user_id: int, *, around_id: int | None = N
             return 0
         # Telegram accepts batches of up to 100.
         for i in range(0, len(ids), 100):
-            await cipherx_bot.delete_messages(chat_id, ids[i : i + 100])
+            await heartless_bot.delete_messages(chat_id, ids[i : i + 100])
         return len(ids)
     except Exception as exc:
         LOGS.debug("NSFW Guard: purge failed: %s", exc)
@@ -761,7 +761,7 @@ async def _forward_to_log(log_chat, message):
         if hasattr(message, "forward_to"):
             result = await message.forward_to(log_chat, reply_to=None)
         else:
-            result = await cipherx_bot.forward_messages(
+            result = await heartless_bot.forward_messages(
                 log_chat,
                 message,
                 reply_to=None,
@@ -772,7 +772,7 @@ async def _forward_to_log(log_chat, message):
     except TypeError:
         # Extremely old forks without reply_to kw.
         try:
-            result = await cipherx_bot.forward_messages(log_chat, message)
+            result = await heartless_bot.forward_messages(log_chat, message)
             if isinstance(result, list):
                 return result[0] if result else None
             return result
@@ -829,7 +829,7 @@ async def _send_log(
         text += "\n📎 **Detected content:** forward failed (protected/unavailable)."
 
     try:
-        await cipherx_bot.send_message(
+        await heartless_bot.send_message(
             log_chat,
             text,
             buttons=buttons or None,
@@ -863,7 +863,7 @@ async def _nsfw_event(event):
         return
 
     try:
-        permissions = await cipherx_bot.get_permissions(chat_id, sender)
+        permissions = await heartless_bot.get_permissions(chat_id, sender)
         if getattr(permissions, "is_admin", False) or getattr(
             permissions, "is_creator", False
         ):
@@ -978,7 +978,7 @@ def _status_text(chat_id: int | None = None) -> str:
     )
 
 
-@cipherx_cmd(pattern=r"nsfw(?:\s+([\s\S]+))?$", admins_only=True)
+@heartless_cmd(pattern=r"nsfw(?:\s+([\s\S]+))?$", admins_only=True)
 async def nsfw_cmd(e):
     raw = (e.pattern_match.group(1) or "").strip()
     low = raw.casefold()
@@ -1038,7 +1038,7 @@ async def nsfw_cmd(e):
 
 
 # Legacy aliases
-@cipherx_cmd(pattern=r"addnsfw(?:\s+(ban|mute))?$", admins_only=True)
+@heartless_cmd(pattern=r"addnsfw(?:\s+(ban|mute))?$", admins_only=True)
 async def add_nsfw_legacy(e):
     action = (e.pattern_match.group(1) or DEFAULT_ACTION).lower()
     if action not in SUPPORTED_ACTIONS:
@@ -1058,7 +1058,7 @@ async def add_nsfw_legacy(e):
     )
 
 
-@cipherx_cmd(pattern=r"remnsfw$", admins_only=True)
+@heartless_cmd(pattern=r"remnsfw$", admins_only=True)
 async def rem_nsfw_legacy(e):
     rem_nsfw(e.chat_id)
     _ACTIVE_CHATS.discard(e.chat_id)
@@ -1085,7 +1085,7 @@ def _load_active_chats():
 
 _load_active_chats()
 
-cipherx_bot.add_handler(
+heartless_bot.add_handler(
     _nsfw_event,
     events.NewMessage(incoming=True),
 )
