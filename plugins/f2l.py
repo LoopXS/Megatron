@@ -1,3 +1,10 @@
+"""
+✘ Commands Available -
+
+• `{i}link`
+   Reply to a file/media to get a direct download link.
+"""
+
 import asyncio
 import re
 import time
