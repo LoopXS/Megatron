@@ -55,7 +55,7 @@ def telethon_session():
         os.system(
             "pip uninstall telethon -y && "
             "pip install -U "
-            "git+https://github.com/ToxygenX/Telethon.git@35290bc24af401e9c1331d71b7e0ff3ff0a10429"
+            "git+https://github.com/ToxygenX/Telethon.git@5411fb87f6c274acd859a48d877bdf8421af1faf"
         )
 
         x = "\bDone. Installed and imported Telethon."
