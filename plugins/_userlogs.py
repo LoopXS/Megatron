@@ -3,6 +3,7 @@ import re
 
 import pytz
 from telethon.errors.rpcerrorlist import (
+    ButtonUserInvalidError,
     ChannelPrivateError,
     ChatWriteForbiddenError,
     MediaCaptionTooLongError,
@@ -48,7 +49,12 @@ async def all_messages_catcher(e):
     NEEDTOLOG = udB.get_key("TAG_LOG")
     buttons = await parse_buttons(e)
     try:
-        sent = await asst.send_message(NEEDTOLOG, e.message, buttons=buttons)
+        try:
+            sent = await asst.send_message(NEEDTOLOG, e.message, buttons=buttons)
+        except ButtonUserInvalidError:
+            LOGS.debug("TAG_LOG ButtonUserInvalidError; retrying without mention")
+            buttons = await parse_buttons(e, allow_mention=False)
+            sent = await asst.send_message(NEEDTOLOG, e.message, buttons=buttons)
         if TAG_EDITS.get(e.chat_id):
             TAG_EDITS[e.chat_id].update({e.id: {"id": sent.id, "msg": e}})
         else:
@@ -58,7 +64,11 @@ async def all_messages_catcher(e):
         LOGS.debug(f"handling {er}.")
         try:
             msg = await asst.get_messages(e.chat_id, ids=e.id)
-            sent = await asst.send_message(NEEDTOLOG, msg, buttons=buttons)
+            try:
+                sent = await asst.send_message(NEEDTOLOG, msg, buttons=buttons)
+            except ButtonUserInvalidError:
+                buttons = await parse_buttons(e, allow_mention=False)
+                sent = await asst.send_message(NEEDTOLOG, msg, buttons=buttons)
             if TAG_EDITS.get(e.chat_id):
                 TAG_EDITS[e.chat_id].update({e.id: {"id": sent.id, "msg": e}})
             else:
@@ -70,9 +80,15 @@ async def all_messages_catcher(e):
             if e.photo or e.sticker or e.gif:
                 try:
                     media = await e.download_media()
-                    sent = await asst.send_message(
-                        NEEDTOLOG, e.message.text, file=media, buttons=buttons
-                    )
+                    try:
+                        sent = await asst.send_message(
+                            NEEDTOLOG, e.message.text, file=media, buttons=buttons
+                        )
+                    except ButtonUserInvalidError:
+                        buttons = await parse_buttons(e, allow_mention=False)
+                        sent = await asst.send_message(
+                            NEEDTOLOG, e.message.text, file=media, buttons=buttons
+                        )
                     if TAG_EDITS.get(e.chat_id):
                         TAG_EDITS[e.chat_id].update({e.id: {"id": sent.id, "msg": e}})
                     else:
@@ -80,7 +96,11 @@ async def all_messages_catcher(e):
                     return os.remove(media)
                 except Exception as er:
                     LOGS.exception(er)
-            await asst.send_message(NEEDTOLOG, get_string("com_4"), buttons=buttons)
+            try:
+                await asst.send_message(NEEDTOLOG, get_string("com_4"), buttons=buttons)
+            except ButtonUserInvalidError:
+                buttons = await parse_buttons(e, allow_mention=False)
+                await asst.send_message(NEEDTOLOG, get_string("com_4"), buttons=buttons)
     except (PeerIdInvalidError, ValueError) as er:
         LOGS.exception(er)
         try:
@@ -265,26 +285,40 @@ async def _(event):
     await event.answer()
 
 
-async def parse_buttons(event):
+async def parse_buttons(event, *, allow_mention=True):
     y, x = event.chat, event.sender
     where_n, who_n = get_display_name(y), get_display_name(x)
     where_l = event.message_link
     buttons = [[Button.url(where_n, where_l)]]
-    # Telethon 1.45 / layer 230: InlineButtonTypeUserProfile.user_id must be
-    # an int. Prefer the numeric id; fall back to a t.me URL button.
-    if isinstance(x, User):
+
+    def _who_url():
+        if getattr(x, "username", None):
+            return Button.url(who_n, f"t.me/{x.username}")
+        return Button.url(who_n, where_l)
+
+    # Layer 230 profile buttons need an InputUser the *assistant* knows.
+    # Prefer asst.get_input_entity; otherwise fall back to a t.me URL so
+    # SendMessageRequest does not raise ButtonUserInvalidError.
+    if isinstance(x, User) and allow_mention:
+        peer = None
         try:
-            buttons.append([Button.mention(who_n, int(x.id))])
-        except Exception as er:
-            LOGS.debug("userlogs mention button failed: %s", er)
-            if x.username:
-                buttons.append([Button.url(who_n, f"t.me/{x.username}")])
-            else:
-                buttons.append([Button.url(who_n, where_l)])
-    elif getattr(x, "username", None):
-        buttons.append([Button.url(who_n, f"t.me/{x.username}")])
+            peer = await asst.get_input_entity(x)
+        except Exception:
+            try:
+                peer = await asst.get_input_entity(int(x.id))
+            except Exception as er:
+                LOGS.debug("TAG_LOG asst cannot resolve mention peer: %s", er)
+        if peer is not None:
+            try:
+                buttons.append([Button.mention(who_n, peer)])
+            except Exception as er:
+                LOGS.debug("TAG_LOG mention button build failed: %s", er)
+                buttons.append([_who_url()])
+        else:
+            buttons.append([_who_url()])
     else:
-        buttons.append([Button.url(who_n, where_l)])
+        buttons.append([_who_url()])
+
     replied = await event.get_reply_message()
     if replied and replied.out:
         button = Button.url("Replied to", replied.message_link)
