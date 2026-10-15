@@ -1,2 +1,2 @@
-__version__ = "24.03.29"
-heartless_version = "1.8.1"
+__version__ = "2026.10.15"
+heartless_version = "2.2"
