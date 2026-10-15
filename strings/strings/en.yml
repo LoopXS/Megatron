@@ -973,3 +973,15 @@ help_exclusive: |
   • `{i}xmas`
       Christmas art animation
 
+
+# autopic
+help_autopic: "\n\n• `{i}autopic <query>`\n    Start auto-changing profile picture using Google Images.\n    The bot will cycle through images matching the search query at a set interval.\n\n• `{i}autopic` (no args)\n    Stop the auto-picture changer if running, or show this help.\n\n"
+
+
+# compressor
+help_compressor: "\n\n• `{i}compress <reply to video>`\n    Compress a replied video using libx265 codec (default CRF 27).\n\n• `{i}compress <crf> <reply to video>`\n    Compress with a custom CRF value (0-51, lower = better quality, higher = smaller size).\n\n• `{i}compress <crf> stream <reply to video>`\n    Compress for streaming playback with optimized video attributes.\n\n"
+
+
+# timebio
+help_timebio: "\n\n• `{i}tbio`\n    Start automatic Tehran time updates in your account bio.\n\n• `{i}tbio off`\n    Stop the account bio automation.\n\n• `{i}tname`\n    Start automatic Tehran time updates in your account first name.\n\n• `{i}tname off`\n    Stop the account name automation.\n\n• `{i}tcbio`\n    Start automatic Tehran time updates in the current channel description.\n\n• `{i}tcbio off`\n    Stop the channel description automation.\n\n• `{i}tgbio`\n    Start automatic Tehran time updates in the current group description.\n\n• `{i}tgbio off`\n    Stop the group description automation.\n\n• `{i}tclock`\n    Show the current Tehran date and time.\n\n"
+
