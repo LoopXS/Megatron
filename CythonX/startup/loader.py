@@ -21,8 +21,10 @@ def _after_load(loader, module, plugin_name=""):
     from strings import get_help
 
     if doc_ := get_help(plugin_name) or module.__doc__:
+        # Only substitute `{i}` — `.format(**)` breaks docs that mention
+        # other braces (e.g. `{time}`, JSON examples).
         try:
-            doc = doc_.format(i=HNDLR)
+            doc = str(doc_).replace("{i}", str(HNDLR))
         except Exception as er:
             loader._logger.exception(er)
             loader._logger.info(f"Error in {plugin_name}: {module}")
@@ -158,4 +160,4 @@ def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):
                 "'ntgcalls' / 'py-tgcalls' not installed!\n"
                 "Install with: pip install 'ntgcalls>=3' 'py-tgcalls>=3'\n"
                 "Skipping loading of VCBOT."
-            )
+    )
