@@ -1,8 +1,8 @@
 google-play-scraper>=1.2.7
 gitpython>=3.1.52
 dnspython
-# CipherX Telethon fork (Lonami v1 + CustomMarkdown/reactions + Py3.14 loop fix)
-git+https://github.com/ToxygenX/Telethon.git@35290bc24af401e9c1331d71b7e0ff3ff0a10429
+# CipherX Telethon fork (ufoptg/Lonami v1.45 + CustomMarkdown + Py3.14 loop fix)
+git+https://github.com/ToxygenX/Telethon.git@5411fb87f6c274acd859a48d877bdf8421af1faf
 https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/refs/heads/master.zip
 yt-dlp>=2025.1.15
 python-decouple>=3.8
