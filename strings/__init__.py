@@ -65,7 +65,18 @@ def get_string(key: str, _res: bool = True) -> Any:
 
 
 def get_help(key):
-    doc = get_string(f"help_{key}", _res=False)
+    """Load a plugin help string from languages.
+
+    Accepts either ``"compressor"`` or ``"help_compressor"`` — plugins and
+    the loader historically mixed both forms, and prefixing ``help_`` twice
+    made ``__doc__ = get_help("help_…")`` resolve to a missing key.
+    """
+    name = str(key or "").strip()
+    if name.startswith("help_"):
+        name = name[5:]
+    if not name:
+        return None
+    doc = get_string(f"help_{name}", _res=False)
     if doc:
         return get_string("cmda") + doc
 
