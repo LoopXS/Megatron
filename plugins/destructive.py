@@ -1,3 +1,10 @@
+"""
+✘ Commands Available -
+
+• Auto (no command)
+   Saves view-once / TTL media received in PMs to Saved Messages.
+"""
+
 import os
 
 from telethon import events
