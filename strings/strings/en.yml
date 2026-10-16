@@ -758,7 +758,6 @@ abliterix_done_ok: "✅ **Job `{id}` finished.**\n\nModel exported to:\n`{path}`
 abliterix_done_failed: "✖️ **Job `{id}` failed** (exit code {code}). Last log lines:"
 abliterix_lost_note: "⚠️ Job `{id}` was interrupted by a restart and is marked lost. Re-run it if needed."
 abliterix_unknown_sub: "✖️ Unknown subcommand. Try `abliterix help`."
-abliterix_worker_error: "✖️ Worker error on `{id}`: {error}"
 
 
 # exclusive

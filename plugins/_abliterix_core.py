@@ -161,11 +161,6 @@ def is_valid_model_id(text):
     return bool(_MODEL_ID_RE.fullmatch(text or ""))
 
 
-def slugify_model_id(model):
-    """A filesystem-safe directory name derived from a model id."""
-    return re.sub(r"[^a-z0-9._-]+", "-", model.lower().replace("/", "__"))
-
-
 def new_job_id(existing, rng=None):
     """A short ``ax-`` id that is not already in ``existing``."""
     rng = rng or random
