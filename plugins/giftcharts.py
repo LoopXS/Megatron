@@ -1,18 +1,19 @@
 """
 ✘ Commands Available -
 
-• Inline: `@assistant ch Collection`
-   GiftCharts collection baseline chart with 24h / 3d / 7d / 1m switches.
+• Inline: @AssisXBot g Collection[, Model]
+   Hub → Floor Price 📉 or Gift Chart 📊 (charts open here).
 
-• Inline: `@assistant ch Collection, Model`
-   GiftCharts model baseline chart (same interval switches).
+• Inline: @AssisXBot g https://t.me/nft/Name-123
+   Resolve NFT → same Floor / Chart hub.
 
-• `{i}ch Collection[, Model]`
-   Same as inline, sent directly in chat.
+• Inline `ch` aliases to `g` (floors + charts).
 
-Uses DB `api_id` / `api_hash` / `SESSIONMRKT` (same as Artemis) to mint a
-GiftCharts Mini App token. Chart values come from GiftCharts
-`/v1/charts` and `/v1/model-charts` (gramPrice baseline) — not MRKT floors.
+• .ch Collection[, Model]
+   Send the chart directly in chat (owner).
+
+Owner + NFTIDS verified users can use inline `g`.
+Uses DB `api_id` / `api_hash` / `SESSIONMRKT` (same as Artemis).
 """
 
 from __future__ import annotations
@@ -26,7 +27,7 @@ import secrets
 import time
 from datetime import datetime, timezone
 from typing import Any, Optional
-from urllib.parse import quote, urlencode, urlparse, parse_qs
+from urllib.parse import quote, urlparse, parse_qs
 
 import aiohttp
 import numpy as np
@@ -45,11 +46,14 @@ GC_SITE = "https://giftcharts.com"
 GC_IMG_CDN = "https://images.giftcharts.com"
 GC_BOT = "@gift_charts_bot"
 
+BRAND = "CɪᴘʜᴇʀX"
+BRAND_FULL = "CɪᴘʜᴇʀX Ⲉⲭⲥⳑυⲋⲓⳳⲉ ⲃⲟⲧ"
+
 # Official baseline field on GiftCharts (site default).
 GC_FIELD = "gramPrice"
 
 # Collection charts support 7d; model charts do not — we derive 7d from 1m.
-INTERVALS = ("24h", "3d", "7d", "1m")
+INTERVALS = ("24h", "3d", "7d", "1m", "3m", "6m", "1y", "all")
 MODEL_NATIVE_TF = {"24h", "3d", "1m", "3m", "6m", "1y", "all"}
 
 AUTH_TTL = 45 * 60
@@ -122,6 +126,93 @@ def _parse_query(raw: str) -> tuple[str, Optional[str]]:
     return text, None
 
 
+def _nft_allowed(user_id) -> bool:
+    try:
+        from .artemis import _nft_user_allowed
+        return bool(_nft_user_allowed(user_id))
+    except Exception:
+        return False
+
+
+async def _inline_denied(event):
+    article = await event.builder.article(
+        title="❌ Not authorized",
+        description="Ask the owner to .add your ID",
+        text=(
+            f"**{BRAND_FULL}**\n\n"
+            "❌ You are not on the NFT allow-list.\n"
+            "Ask the owner to `.add <your id>`."
+        ),
+    )
+    return await event.answer(
+        [article],
+        cache_time=5,
+        switch_pm="Request access",
+        switch_pm_param="start",
+    )
+
+
+async def _resolve_ch_input(raw: str, tg_client=None) -> tuple[str, Optional[str], str]:
+    """
+    Parse ch query text or NFT link → (gift, model, source).
+    source is ``nft`` or ``text``.
+    """
+    text = (raw or "").strip()
+    if not text:
+        return "", None, "text"
+
+    try:
+        from .artemis import (
+            _parse_nft_link,
+            _resolve_collection_from_slug,
+            _fetch_telegram_nft_attrs,
+            _fetch_unique_star_gift_attrs,
+            heartless_bot as _cx_bot,
+        )
+    except Exception:
+        return (*_parse_query(text), "text")
+
+    parsed = _parse_nft_link(text)
+    if not parsed:
+        return (*_parse_query(text), "text")
+
+    slug, short_slug, _number = parsed
+    collection, _, _ = _resolve_collection_from_slug(short_slug)
+    model = None
+    # GetUniqueStarGift is user-only — never use the assistant bot.
+    for tg in (_cx_bot,):
+        if tg is None:
+            continue
+        try:
+            m, _b, *_rest = await _fetch_unique_star_gift_attrs(tg, slug)
+        except Exception:
+            m = None
+        if m:
+            model = m
+            break
+    if not model:
+        try:
+            html_model, _hb, *_r = await _fetch_telegram_nft_attrs(slug)
+            model = html_model
+        except Exception:
+            model = None
+
+    # Canonicalize against GiftCharts when possible.
+    try:
+        gift = await _resolve_gift(collection)
+        collection = gift.get("name") or collection
+    except Exception:
+        pass
+    if model:
+        try:
+            row = await _resolve_model(collection, model)
+            model = row.get("name") or model
+        except Exception:
+            pass
+    return collection, model, "nft"
+
+
+
 def _norm_key(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", (value or "").lower())
 
@@ -141,10 +232,14 @@ def _analytics_url(gift: str, model_id: Optional[int] = None) -> str:
     return f"{GC_SITE}/analytics/gift/{quote(gift)}"
 
 
-def _share_url(gift: str, model_id: Optional[int], timeframe: str) -> str:
-    page = _analytics_url(gift, model_id)
-    text = f"{gift} • {timeframe} baseline (GiftCharts)"
-    return "https://t.me/share/url?" + urlencode({"url": page, "text": text})
+def _share_query(gift: str, model: Optional[str] = None) -> str:
+    gift = (gift or "").strip()
+    model = (model or "").strip() if model else ""
+    if gift and model:
+        return f"g {gift}, {model}"
+    if gift:
+        return f"g {gift}"
+    return "g "
 
 
 def _pct_change(points: list[dict]) -> Optional[float]:
@@ -164,6 +259,58 @@ def _fmt_price(value: float) -> str:
         return f"{value:.3f}".rstrip("0").rstrip(".")
     return f"{value:.4f}".rstrip("0").rstrip(".")
 
+
+def _fmt_int(value: Any) -> str:
+    try:
+        return str(int(round(float(value))))
+    except Exception:
+        return "—"
+
+def _fmt_mcap(value: Any) -> str:
+    try:
+        num = float(value)
+    except Exception:
+        return "—"
+    abs_n = abs(num)
+    if abs_n >= 1_000_000_000:
+        text = f"{num / 1_000_000_000:.2f}".rstrip("0").rstrip(".")
+        return f"{text}B"
+    if abs_n >= 1_000_000:
+        text = f"{num / 1_000_000:.2f}".rstrip("0").rstrip(".")
+        return f"{text}M"
+    if abs_n >= 1_000:
+        text = f"{num / 1_000:.2f}".rstrip("0").rstrip(".")
+        return f"{text}K"
+    return _fmt_int(num)
+
+
+def _fmt_usd_plain(value: Any) -> str:
+    try:
+        num = float(value)
+    except Exception:
+        return "—"
+    if abs(num - round(num)) < 1e-9:
+        return f"{int(round(num))}$"
+    text = f"{num:.2f}".rstrip("0").rstrip(".")
+    return f"{text}$"
+
+
+def _tf_label(tf: str) -> str:
+    """Display label: 24H / 1M / 1Y / All (API values stay lowercase)."""
+    if tf == "all":
+        return "All"
+    return "".join(ch.upper() if ch in "hmy" else ch for ch in (tf or ""))
+
+
+def _md_escape(text: Any) -> str:
+    value = str(text or "")
+    return (
+        value.replace("\\", "\\\\")
+        .replace("_", "\\_")
+        .replace("*", "\\*")
+        .replace("`", "\\`")
+        .replace("[", "\\[")
+    )
 
 # ---------------------------------------------------------------------------
 # GiftCharts auth + HTTP
@@ -266,6 +413,13 @@ async def _gc_get(
 # Resolve gift / model
 # ---------------------------------------------------------------------------
 
+async def _gift_detail(gift_name: str) -> dict[str, Any]:
+    """Full collection meta (supply / mcap / init price)."""
+    payload = await _gc_get(f"/v1/gifts/{quote(gift_name)}")
+    data = (payload or {}).get("data")
+    return data if isinstance(data, dict) else {}
+
+
 async def _resolve_gift(name: str) -> dict[str, Any]:
     needle = name.strip()
     if not needle:
@@ -305,7 +459,6 @@ async def _resolve_gift(name: str) -> dict[str, Any]:
         partial.sort(key=lambda g: abs(len(g.get("name") or "") - len(needle)))
         return partial[0]
     raise ValueError(f"GiftCharts collection not found: {needle}")
-
 
 async def _resolve_model(gift_name: str, model_name: str) -> dict[str, Any]:
     needle = model_name.strip()
@@ -388,6 +541,9 @@ async def _load_chart_bundle(
     gift = await _resolve_gift(gift_query)
     gift_name = gift.get("name") or gift_query
     image = gift.get("image")
+    detail = await _gift_detail(gift_name)
+    if detail.get("image"):
+        image = detail.get("image")
     model = None
     model_id = None
     if model_query:
@@ -402,6 +558,20 @@ async def _load_chart_bundle(
     points = list((chart or {}).get("data") or [])
     if not points:
         raise RuntimeError("GiftCharts returned no chart points for this filter.")
+
+    init_supply = detail.get("initSupply")
+    total_supply = detail.get("totalSupply")
+    upgraded = detail.get("upgradedSupply")
+    burned = detail.get("burnedSupply")
+    if burned is None and init_supply is not None and total_supply is not None:
+        try:
+            burned = max(int(init_supply) - int(total_supply), 0)
+        except Exception:
+            burned = None
+    mcap = detail.get("marketCapGram")
+    if mcap is None:
+        mcap = detail.get("marketCap") or gift.get("marketCap")
+
     return {
         "gift": gift_name,
         "model": (model or {}).get("name") if model else None,
@@ -412,8 +582,14 @@ async def _load_chart_bundle(
         "field": GC_FIELD,
         "points": points,
         "derived_from": chart.get("derived_from"),
+        "market_cap": mcap,
+        "init_stars": detail.get("initStarsPrice"),
+        "init_usd": detail.get("initUsdPrice"),
+        "init_supply": init_supply,
+        "current_supply": total_supply,
+        "upgraded": upgraded,
+        "burned": burned,
     }
-
 
 # ---------------------------------------------------------------------------
 # Baseline chart renderer (GiftCharts-style area baseline)
@@ -473,7 +649,7 @@ def _render_baseline_chart(
     font_axis = _font(16)
 
     draw.text((56, 44), title, fill=text_main, font=font_title)
-    subtitle = f"GiftCharts baseline • {timeframe} • {field}"
+    subtitle = f"{BRAND} . {_tf_label(timeframe)} . TON"
     draw.text((56, 90), subtitle, fill=text_muted, font=font_sub)
 
     price_txt = f"{_fmt_price(last)} TON"
@@ -543,13 +719,6 @@ def _render_baseline_chart(
             tw = bbox[2] - bbox[0]
             draw.text((x - tw / 2, plot_y1 + 12), label, fill=text_muted, font=font_axis)
 
-    draw.text(
-        (56, height - 48),
-        "Source: api.giftcharts.com  •  Heartless",
-        fill=text_muted,
-        font=font_axis,
-    )
-
     buf = io.BytesIO()
     img.save(buf, format="PNG", optimize=True)
     buf.seek(0)
@@ -561,34 +730,105 @@ def _render_baseline_chart(
 # UI
 # ---------------------------------------------------------------------------
 
-def _interval_buttons(token: str, owner_id: int, active: str) -> list:
-    row = []
+def _back_data(token: str, owner_id: int) -> bytes:
+    """Back target: hub if attached, else chart picker/root."""
+    sess = _SESSIONS.get(token) or {}
+    stage = sess.get("chart_stage") or "root"
+    hub_token = sess.get("hub_token")
+    hub_owner = sess.get("hub_owner") or owner_id
+    if hub_token and stage == "root":
+        return f"gu:h:{hub_owner}:{hub_token}".encode()
+    return f"gc:b:{owner_id}:{token}".encode()
+
+
+def _action_row(token: str, owner_id: int, *, show_back: bool = False) -> list:
+    sess = _SESSIONS.get(token) or {}
+    raw = sess.get("raw") or ""
+    gift = sess.get("gift") or sess.get("gift_q") or ""
+    model = sess.get("model") or sess.get("model_q")
+    if raw:
+        share_q = f"g {raw}"
+    else:
+        share_q = _share_query(gift, model)
+    row = [
+        Button.switch_inline("🔎 Search again", query="g ", same_peer=True),
+        Button.switch_inline("🔗 Share", query=share_q, same_peer=False),
+    ]
+    if show_back:
+        return [
+            row,
+            [Button.inline("⬅️ Back", data=_back_data(token, owner_id))],
+        ]
+    return [row]
+
+
+def _picker_buttons(token: str, owner_id: int, *, show_back: bool = False) -> list:
+    rows = [
+        [
+            Button.inline(
+                "Collection 📉",
+                data=f"gc:m:{owner_id}:{token}:c".encode(),
+            ),
+            Button.inline(
+                "Model 📊",
+                data=f"gc:m:{owner_id}:{token}:m".encode(),
+            ),
+        ]
+    ]
+    rows.extend(_action_row(token, owner_id, show_back=show_back))
+    return rows
+
+
+def _interval_buttons(
+    token: str,
+    owner_id: int,
+    active: str,
+    *,
+    show_back: bool = False,
+) -> list:
+    rows = []
+    chunk: list = []
     for tf in INTERVALS:
         mark = "• " if tf == active else ""
-        row.append(
+        chunk.append(
             Button.inline(
-                f"{mark}{tf}",
+                f"{mark}{_tf_label(tf)}",
                 data=f"gc:t:{owner_id}:{token}:{tf}".encode(),
             )
         )
-    return [
-        row,
-        [
-            Button.switch_inline(
-                "🔎 Search again",
-                query="ch ",
-                same_peer=True,
-            ),
-            Button.url(
-                "🔗 Share",
-                _share_url(
-                    _SESSIONS.get(token, {}).get("gift") or "Gift",
-                    _SESSIONS.get(token, {}).get("model_id"),
-                    active,
-                ),
-            ),
-        ],
-    ]
+        if len(chunk) == 4:
+            rows.append(chunk)
+            chunk = []
+    if chunk:
+        rows.append(chunk)
+    rows.extend(_action_row(token, owner_id, show_back=show_back))
+    return rows
+
+
+def _picker_text(sess: dict) -> str:
+    gift = sess.get("gift") or sess.get("gift_q") or "?"
+    model = sess.get("model") or sess.get("model_q")
+    title = gift if not model else f"{gift}, {model}"
+    return (
+        f"📈 **{_md_escape(title)}**\n\n"
+        "Choose chart type:"
+    )
+
+
+def _intervals_text(sess: dict, mode: str) -> str:
+    gift = sess.get("gift") or sess.get("gift_q") or "?"
+    model = sess.get("model") or sess.get("model_q")
+    if mode == "model" and model:
+        title = f"{gift}, {model}"
+        kind = "Model 📊"
+    else:
+        title = gift
+        kind = "Collection 📉"
+    return (
+        f"📈 **{_md_escape(title)}**\n"
+        f"{kind} baseline\n\n"
+        "Pick an interval:"
+    )
 
 
 def _caption(bundle: dict[str, Any]) -> str:
@@ -596,25 +836,62 @@ def _caption(bundle: dict[str, Any]) -> str:
     last = float(points[-1]["value"])
     change = _pct_change(points)
     ch = f"{change:+.2f}%" if change is not None else "—"
-    derived = bundle.get("derived_from")
-    note = ""
-    if derived:
-        note = (
-            f"\nℹ️ Model charts have no native <code>7d</code> on GiftCharts; "
-            f"showing last 7 points from <code>{html.escape(derived)}</code>."
-        )
+    stars = bundle.get("init_stars")
+    init_usd = bundle.get("init_usd")
+    if stars is not None and init_usd is not None:
+        init_price = f"{_fmt_int(stars)} stars ({_fmt_usd_plain(init_usd)})"
+    elif stars is not None:
+        init_price = f"{_fmt_int(stars)} stars"
+    else:
+        init_price = "—"
+
+    title = _md_escape(bundle["title"])
+    tf = _tf_label(bundle["timeframe"])
+    price = _md_escape(_fmt_price(last))
     return (
-        f"📈 <b>{html.escape(bundle['title'])}</b>\n"
-        f"⏱ <b>{html.escape(bundle['timeframe'])}</b> · "
-        f"<code>{html.escape(bundle['field'])}</code>\n"
-        f"💰 <b>{html.escape(_fmt_price(last))} TON</b>  ({html.escape(ch)})\n"
-        f"🌐 <a href=\"{html.escape(_analytics_url(bundle['gift'], bundle.get('model_id')))}\">"
-        f"Open on GiftCharts</a>"
-        f"{note}"
+        f"📈 **{title}**\n"
+        f"⏱ **{tf}** Baseline Chart\n"
+        f"💰 **{price} TON**  `({_md_escape(ch)})`\n"
+        f"🧢 **Market Cap** : `{_md_escape(_fmt_mcap(bundle.get('market_cap')))}`\n"
+        f"🌟 **Initial Price** : `{_md_escape(init_price)}`\n"
+        f"✅ **Initial Supply** : `{_md_escape(_fmt_int(bundle.get('init_supply')))}`\n"
+        f"⏰ **Current Supply** : `{_md_escape(_fmt_int(bundle.get('current_supply')))}`\n"
+        f"🆙 **Upgraded** : `{_md_escape(_fmt_int(bundle.get('upgraded')))}`\n"
+        f"🔥 **Burned** : `{_md_escape(_fmt_int(bundle.get('burned')))}`"
+    )
+
+
+async def _edit_panel(event, text: str, buttons: list):
+    """Edit callback message back to a text panel (drop chart media if any)."""
+    try:
+        await event.edit(
+            text,
+            buttons=buttons,
+            parse_mode="md",
+            link_preview=False,
+            file=None,
+        )
+        return
+    except Exception:
+        pass
+    try:
+        await event.delete()
+    except Exception:
+        pass
+    await event.respond(
+        text,
+        buttons=buttons,
+        parse_mode="md",
+        link_preview=False,
     )
 
 
 async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token: str):
+    sess = _SESSIONS.get(token) or {}
+    sess["chart_stage"] = "chart"
+    sess["at"] = time.monotonic()
+    _SESSIONS[token] = sess
+    show_back = True  # stage 2+ always has Back
     png = await asyncio.to_thread(
         _render_baseline_chart,
         title=bundle["title"],
@@ -622,7 +899,9 @@ async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token:
         points=bundle["points"],
         field=bundle["field"],
     )
-    buttons = _interval_buttons(token, owner_id, bundle["timeframe"])
+    buttons = _interval_buttons(
+        token, owner_id, bundle["timeframe"], show_back=show_back,
+    )
     caption = _caption(bundle)
     file = io.BytesIO(png)
     file.name = "giftcharts.png"
@@ -631,18 +910,17 @@ async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token:
             caption,
             file=file,
             buttons=buttons,
-            parse_mode="html",
+            parse_mode="md",
             link_preview=False,
         )
     except Exception:
-        # Fallback: send as a new message in the chat.
         chat = event.chat_id
         await event.client.send_file(
             chat,
             file,
             caption=caption,
             buttons=buttons,
-            parse_mode="html",
+            parse_mode="md",
             link_preview=False,
             reply_to=getattr(event, "message_id", None),
         )
@@ -650,85 +928,162 @@ async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token:
             await event.answer("Chart sent.")
 
 
+def _chart_queries(sess: dict) -> tuple[str, Optional[str]]:
+    """Gift/model queries for the active picker mode."""
+    gift = sess.get("gift_q") or sess.get("gift") or ""
+    model = sess.get("model_q") or sess.get("model")
+    mode = sess.get("mode") or ("model" if model else "collection")
+    if mode == "model" and model:
+        return gift, model
+    return gift, None
+
+
 # ---------------------------------------------------------------------------
 # Inline + commands
 # ---------------------------------------------------------------------------
 
 _HELP = (
-    "**GiftCharts**\n\n"
-    "`ch Liberty Figure`\n"
-    "`ch Liberty Figure, Fire Opal`\n\n"
-    "Intervals: **24h · 3d · 7d · 1m**\n"
-    "Baseline field: `gramPrice` (official GiftCharts)."
+    f"**{BRAND_FULL}**\n\n"
+    "`g Liberty Figure`\n"
+    "`g Resistance Dog, Cocoon`\n"
+    "`g https://t.me/nft/LibertyFigure-214445`\n\n"
+    "First pick **Floor Price 📉** or **Gift Chart 📊**.\n"
+    "Intervals: **24H · 3d · 7d · 1M · 3M · 6M · 1Y · All**"
 )
 
 
-@in_pattern(r"(?i)^ch(?:\s+([\s\S]+))?$", owner=True)
+@in_pattern(r"(?i)^ch(?:\s+([\s\S]+))?$", owner=False)
 async def giftcharts_inline(event):
+    """Alias: redirect users to unified inline `g`."""
+    if not _nft_allowed(event.sender_id):
+        return await _inline_denied(event)
     raw = ""
     try:
         raw = (event.pattern_match.group(1) or "").strip()
     except Exception:
         raw = ""
-
-    if not raw:
-        article = await event.builder.article(
-            title="📈 GiftCharts",
-            description="ch Collection[, Model]",
-            text=_HELP,
-            buttons=[
-                [
-                    Button.switch_inline(
-                        "Try Liberty Figure",
-                        query="ch Liberty Figure",
-                        same_peer=True,
-                    )
-                ]
-            ],
-        )
-        return await event.answer([article], cache_time=5)
-
-    gift_q, model_q = _parse_query(raw)
-    owner_id = int(event.sender_id)
-    token = _save_session(
-        {
-            "gift_q": gift_q,
-            "model_q": model_q,
-            "owner_id": owner_id,
-            "gift": gift_q,
-            "model": model_q,
-            "model_id": None,
-        }
-    )
-
-    title = gift_q if not model_q else f"{gift_q}, {model_q}"
-    text = (
-        f"📈 **{title}**\n\n"
-        "Pick a GiftCharts baseline interval:"
-    )
-    buttons = [
-        [
-            Button.inline(tf, data=f"gc:t:{owner_id}:{token}:{tf}".encode())
-            for tf in INTERVALS
-        ],
-        [
-            Button.switch_inline(
-                "🔎 Search again",
-                query="ch ",
-                same_peer=True,
-            )
-        ],
-    ]
+    q = f"g {raw}".rstrip() if raw else "g "
     article = await event.builder.article(
-        title=f"📈 {title}",
-        description="24h · 3d · 7d · 1m baseline charts",
-        text=text,
-        buttons=buttons,
+        title=f"📈 {BRAND}",
+        description="Use g … (floors + charts)",
+        text=(
+            f"{_HELP}\n\n"
+            "ℹ️ Inline charts/floors are under **`g`** now."
+        ),
+        buttons=[
+            [Button.switch_inline("Open with g", query=q, same_peer=True)]
+        ],
     )
-    return await event.answer([article], cache_time=0)
+    return await event.answer([article], cache_time=5)
 
 
-@callback(re.compile(rb"^gc:t:(\d+):([A-Za-z0-9_-]{6,16}):(24h|3d|7d|1m)$"))
+@callback(re.compile(rb"^gc:m:(\d+):([A-Za-z0-9_-]{6,16}):([cm])$"))
+async def giftcharts_mode_cb(event):
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+        mode_flag = event.data_match.group(3).decode()
+    except Exception:
+        return await event.answer("Invalid chart request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This chart panel belongs to another user.", alert=True)
+
+    sess = _load_session(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    mode = "model" if mode_flag == "m" else "collection"
+    if mode == "model" and not (sess.get("model") or sess.get("model_q")):
+        return await event.answer("No model in this query.", alert=True)
+
+    sess["mode"] = mode
+    sess["chart_stage"] = "intervals"
+    sess["at"] = time.monotonic()
+    _SESSIONS[token] = sess
+    await event.answer("Collection" if mode == "collection" else "Model")
+    await _edit_panel(
+        event,
+        _intervals_text(sess, mode),
+        _interval_buttons(token, owner_id, "", show_back=True),
+    )
+
+
+@callback(re.compile(rb"^gc:b:(\d+):([A-Za-z0-9_-]{6,16})$"))
+async def giftcharts_back_cb(event):
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+    except Exception:
+        return await event.answer("Invalid chart request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This chart panel belongs to another user.", alert=True)
+
+    sess = _load_session(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    stage = sess.get("chart_stage") or "root"
+    await event.answer("Back")
+
+    # Chart image → interval / picker panel (not hub).
+    if stage == "chart":
+        mode = sess.get("mode") or "collection"
+        if sess.get("has_model"):
+            sess["chart_stage"] = "intervals"
+            _SESSIONS[token] = sess
+            return await _edit_panel(
+                event,
+                _intervals_text(sess, mode),
+                _interval_buttons(token, owner_id, "", show_back=True),
+            )
+        # Collection-only: intervals are the chart root; Back from there → hub.
+        sess["chart_stage"] = "root"
+        _SESSIONS[token] = sess
+        return await _edit_panel(
+            event,
+            _intervals_text(sess, "collection"),
+            _interval_buttons(token, owner_id, "", show_back=True),
+        )
+
+    if stage == "intervals" and sess.get("has_model"):
+        sess["mode"] = None
+        sess["chart_stage"] = "root"
+        _SESSIONS[token] = sess
+        return await _edit_panel(
+            event,
+            _picker_text(sess),
+            _picker_buttons(token, owner_id, show_back=True),
+        )
+
+    # Root chart panel → hub if present
+    hub_token = sess.get("hub_token")
+    if hub_token:
+        from . import artemis as art
+        hub = art._gift_inline_load(hub_token)
+        if not hub:
+            return await event.answer("Hub session expired.", alert=True)
+        hub_owner = int(sess.get("hub_owner") or owner_id)
+        hub["view"] = "hub"
+        art._GIFT_INLINE_SESSIONS[hub_token] = hub
+        return await art._gift_inline_edit(
+            event,
+            art._gift_inline_hub_text(hub),
+            art._gift_inline_hub_buttons(
+                hub_owner, hub_token, hub.get("raw") or "",
+            ),
+            parse_mode="md",
+        )
+
+    return await event.answer("Nothing to go back to.", alert=True)
+
+
+@callback(
+    re.compile(
+        rb"^gc:t:(\d+):([A-Za-z0-9_-]{6,16}):(24h|3d|7d|1m|3m|6m|1y|all)$"
+    )
+)
 async def giftcharts_interval_cb(event):
     try:
         owner_id = int(event.data_match.group(1))
@@ -742,26 +1097,23 @@ async def giftcharts_interval_cb(event):
 
     sess = _load_session(token)
     if not sess:
-        return await event.answer("Session expired — search again with ch …", alert=True)
+        return await event.answer("Session expired — search again with g …", alert=True)
 
+    gift_q, model_q = _chart_queries(sess)
     await event.answer(f"Loading {timeframe}…")
     try:
-        bundle = await _load_chart_bundle(
-            sess.get("gift_q") or sess.get("gift") or "",
-            sess.get("model_q") or sess.get("model"),
-            timeframe,
-        )
+        bundle = await _load_chart_bundle(gift_q, model_q, timeframe)
     except Exception as exc:
         LOGS.warning("GiftCharts fetch failed: %s", exc)
         return await event.answer(str(exc)[:180], alert=True)
 
-    # Refresh session with resolved names for share URL.
     sess.update(
         {
             "gift": bundle["gift"],
-            "model": bundle.get("model"),
+            "model": bundle.get("model") or sess.get("model") or sess.get("model_q"),
             "model_id": bundle.get("model_id"),
             "image": bundle.get("image"),
+            "chart_stage": "chart",
             "at": time.monotonic(),
         }
     )
@@ -776,38 +1128,51 @@ async def giftcharts_cmd(event):
         return await event.eor(
             "❌ <b>Usage</b>\n"
             f"<code>.ch Collection</code>\n"
-            f"<code>.ch Collection, Model</code>\n\n"
+            f"<code>.ch Collection, Model</code>\n"
+            f"<code>.ch https://t.me/nft/Name-123</code>\n\n"
             "Or inline: <code>@{} ch …</code>".format(
                 getattr(getattr(asst, "me", None), "username", "AssisXBot")
             ),
             parse_mode="html",
         )
 
-    gift_q, model_q = _parse_query(raw)
     status = await event.eor("<b>Fetching GiftCharts…</b>", parse_mode="html")
     owner_id = int(event.sender_id)
-    token = _save_session(
-        {
-            "gift_q": gift_q,
-            "model_q": model_q,
-            "owner_id": owner_id,
-            "gift": gift_q,
-            "model": model_q,
-            "model_id": None,
-        }
-    )
     try:
+        gift_q, model_q, _source = await _resolve_ch_input(
+            raw, tg_client=event.client,
+        )
+        if not gift_q:
+            return await status.edit(
+                "❌ Could not resolve collection from query.",
+                parse_mode="html",
+            )
+        token = _save_session(
+            {
+                "gift_q": gift_q,
+                "model_q": model_q,
+                "owner_id": owner_id,
+                "gift": gift_q,
+                "model": model_q,
+                "model_id": None,
+                "has_model": bool(model_q),
+                "mode": "model" if model_q else "collection",
+            }
+        )
         bundle = await _load_chart_bundle(gift_q, model_q, "24h")
         sess = _load_session(token) or {}
         sess.update(
             {
                 "gift": bundle["gift"],
-                "model": bundle.get("model"),
+                "model": bundle.get("model") or model_q,
                 "model_id": bundle.get("model_id"),
                 "image": bundle.get("image"),
                 "gift_q": gift_q,
                 "model_q": model_q,
                 "owner_id": owner_id,
+                "has_model": bool(model_q),
+                "mode": "model" if model_q else "collection",
+                "chart_stage": "chart",
                 "at": time.monotonic(),
             }
         )
@@ -827,8 +1192,10 @@ async def giftcharts_cmd(event):
             event.chat_id,
             file,
             caption=_caption(bundle),
-            buttons=_interval_buttons(token, owner_id, "24h"),
-            parse_mode="html",
+            buttons=_interval_buttons(
+                token, owner_id, "24h", show_back=bool(model_q),
+            ),
+            parse_mode="md",
             link_preview=False,
             reply_to=event.reply_to_msg_id,
         )
