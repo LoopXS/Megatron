@@ -23,11 +23,14 @@ Configuration (environment variables, read at import):
 import asyncio
 import contextlib
 import os
+import re
 import shutil
 import time
 
+from telethon import Button
+
 from . import _abliterix_core as core
-from . import LOGS, get_help, get_string, heartless_bot, heartless_cmd
+from . import LOGS, callback, get_help, get_string, heartless_bot, heartless_cmd
 
 __doc__ = get_help("abliterix")
 
@@ -167,6 +170,83 @@ def _log_text(rest):
     return f"{header}\n{body or '(no output yet)'}"
 
 
+def _stop_job(job):
+    """Terminate a running job's process group and mark it canceled."""
+    if job.state == "running" and job.pid:
+        core.terminate_tree(job.pid, grace=_KILL_GRACE)
+    if job.state in core.ACTIVE_STATES:
+        core.transition(job, "canceled", now=time.time())
+    _store().save()
+
+
+async def _cancel(e, rest):
+    job_id = rest.split()[0] if rest.split() else ""
+    if not job_id:
+        await e.reply(_render("abliterix_help"))
+        return
+    job = _store().get(job_id)
+    if job is None:
+        await e.reply(_render("abliterix_no_job", id=job_id))
+        return
+    if job.state not in core.ACTIVE_STATES:
+        await e.reply(_render("abliterix_canceled", id=job_id))
+        return
+    _stop_job(job)
+    await e.reply(_render("abliterix_cancel_ok", id=job_id))
+
+
+async def _rm(e, rest):
+    tokens = rest.split()
+    if not tokens:
+        await e.reply(_render("abliterix_help"))
+        return
+    job_id = tokens[0]
+    purge = "--purge" in tokens[1:]
+    job = _store().get(job_id)
+    if job is None:
+        await e.reply(_render("abliterix_no_job", id=job_id))
+        return
+    if job.state in core.ACTIVE_STATES:
+        await e.reply(_render("abliterix_rm_active", id=job_id))
+        return
+    if purge:
+        buttons = [
+            [
+                Button.inline(
+                    _render("abliterix_purge_btn_yes"),
+                    f"axpurge_yes_{job_id}".encode(),
+                ),
+                Button.inline(
+                    _render("abliterix_purge_btn_no"),
+                    f"axpurge_no_{job_id}".encode(),
+                ),
+            ]
+        ]
+        await e.reply(_render("abliterix_purge_confirm", id=job_id), buttons=buttons)
+        return
+    _store().remove(job_id)
+    _store().save()
+    await e.reply(_render("abliterix_rm_ok", id=job_id))
+
+
+@callback(re.compile(r"axpurge_(yes|no)_(.+)"))
+async def _purge_cb(e):
+    data = e.data.decode() if isinstance(e.data, bytes) else str(e.data)
+    match = re.match(r"axpurge_(yes|no)_(.+)", data)
+    if not match:
+        return
+    action, job_id = match.group(1), match.group(2)
+    job = _store().get(job_id)
+    if action == "no" or job is None:
+        await e.edit(_render("abliterix_purge_cancel", id=job_id))
+        return
+    if job.workdir:
+        shutil.rmtree(job.workdir, ignore_errors=True)
+    _store().remove(job_id)
+    _store().save()
+    await e.edit(_render("abliterix_purge_done", id=job_id))
+
+
 @heartless_cmd(pattern="abliterix( (.*)|$)", owner_only=True)
 async def abliterix_cmd(e):
     arg = (e.pattern_match.group(1) or "").strip()
@@ -191,6 +271,10 @@ async def abliterix_cmd(e):
     elif sub == "log":
         text = _log_text(rest)
         await e.reply(text if text is not None else _render("abliterix_help"))
+    elif sub == "cancel":
+        await _cancel(e, rest)
+    elif sub == "rm":
+        await _rm(e, rest)
     else:
         await e.reply(_render("abliterix_unknown_sub"))
 

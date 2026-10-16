@@ -747,6 +747,7 @@ abliterix_no_job: "✖️ No job with id `{id}`. Use `abliterix list` to see the
 abliterix_cancel_ok: "🛑 Cancelled `{id}`."
 abliterix_canceled: "ℹ️ `{id}` had already finished; nothing to cancel."
 abliterix_rm_ok: "🗑 Removed `{id}` from the job list. Its files were kept."
+abliterix_rm_active: "⏳ `{id}` is still active. Cancel it first with `abliterix cancel {id}`."
 abliterix_purge_confirm: "⚠️ Delete `{id}` **and all of its files** (checkpoints, output, logs)? This cannot be undone."
 abliterix_purge_btn_yes: "✅ Purge"
 abliterix_purge_btn_no: "✖️ Cancel"
