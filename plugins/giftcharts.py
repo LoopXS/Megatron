@@ -33,7 +33,9 @@ import aiohttp
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from telethon import Button, TelegramClient, functions, utils
+from telethon.errors import MessageNotModifiedError
 from telethon.sessions import StringSession
+from telethon.tl.types import InputBotInlineMessageID
 
 from . import LOGS, asst, callback, heartless_cmd, in_pattern, udB
 
@@ -178,24 +180,26 @@ async def _resolve_ch_input(raw: str, tg_client=None) -> tuple[str, Optional[str
 
     slug, short_slug, _number = parsed
     collection, _, _ = _resolve_collection_from_slug(short_slug)
-    model = None
+    model = backdrop = None
     # GetUniqueStarGift is user-only — never use the assistant bot.
     for tg in (_cx_bot,):
         if tg is None:
             continue
         try:
-            m, _b, *_rest = await _fetch_unique_star_gift_attrs(tg, slug)
+            m, b, *_rest = await _fetch_unique_star_gift_attrs(tg, slug)
         except Exception:
-            m = None
+            m = b = None
         if m:
             model = m
+            backdrop = b
             break
-    if not model:
+    if not model or not backdrop:
         try:
-            html_model, _hb, *_r = await _fetch_telegram_nft_attrs(slug)
-            model = html_model
+            html_model, html_back, *_r = await _fetch_telegram_nft_attrs(slug)
+            model = model or html_model
+            backdrop = backdrop or html_back
         except Exception:
-            model = None
+            pass
 
     # Canonicalize against GiftCharts when possible.
     try:
@@ -209,6 +213,8 @@ async def _resolve_ch_input(raw: str, tg_client=None) -> tuple[str, Optional[str
             model = row.get("name") or model
         except Exception:
             pass
+    # backdrop kept for callers that store hub session; charts use model only.
+    _ = backdrop
     return collection, model, "nft"
 
 
@@ -808,27 +814,19 @@ def _interval_buttons(
 def _picker_text(sess: dict) -> str:
     gift = sess.get("gift") or sess.get("gift_q") or "?"
     model = sess.get("model") or sess.get("model_q")
-    title = gift if not model else f"{gift}, {model}"
-    return (
-        f"📈 **{_md_escape(title)}**\n\n"
-        "Choose chart type:"
-    )
+    lines = [f"🎁 **Collection:** `{_md_escape(gift)}`"]
+    if model:
+        lines.append(f"🧩 **Model:** `{_md_escape(model)}`")
+    return "\n".join(lines)
 
 
 def _intervals_text(sess: dict, mode: str) -> str:
     gift = sess.get("gift") or sess.get("gift_q") or "?"
     model = sess.get("model") or sess.get("model_q")
+    lines = [f"🎁 **Collection:** `{_md_escape(gift)}`"]
     if mode == "model" and model:
-        title = f"{gift}, {model}"
-        kind = "Model 📊"
-    else:
-        title = gift
-        kind = "Collection 📉"
-    return (
-        f"📈 **{_md_escape(title)}**\n"
-        f"{kind} baseline\n\n"
-        "Pick an interval:"
-    )
+        lines.append(f"🧩 **Model:** `{_md_escape(model)}`")
+    return "\n".join(lines)
 
 
 def _caption(bundle: dict[str, Any]) -> str:
@@ -861,6 +859,14 @@ def _caption(bundle: dict[str, Any]) -> str:
     )
 
 
+def _is_inline_callback(event) -> bool:
+    """True when the callback targets an inline message (no chat entity)."""
+    try:
+        return isinstance(getattr(event.query, "msg_id", None), InputBotInlineMessageID)
+    except Exception:
+        return False
+
+
 async def _edit_panel(event, text: str, buttons: list):
     """Edit callback message back to a text panel (drop chart media if any)."""
     try:
@@ -872,18 +878,27 @@ async def _edit_panel(event, text: str, buttons: list):
             file=None,
         )
         return
-    except Exception:
-        pass
+    except MessageNotModifiedError:
+        with contextlib.suppress(Exception):
+            await event.answer()
+        return
+    except Exception as exc:
+        LOGS.debug("GiftCharts panel edit failed: %s", exc)
+        if _is_inline_callback(event):
+            with contextlib.suppress(Exception):
+                await event.answer("Couldn't update panel. Search again with g …", alert=True)
+            return
     try:
         await event.delete()
     except Exception:
         pass
-    await event.respond(
-        text,
-        buttons=buttons,
-        parse_mode="md",
-        link_preview=False,
-    )
+    with contextlib.suppress(Exception):
+        await event.respond(
+            text,
+            buttons=buttons,
+            parse_mode="md",
+            link_preview=False,
+        )
 
 
 async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token: str):
@@ -913,10 +928,27 @@ async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token:
             parse_mode="md",
             link_preview=False,
         )
-    except Exception:
-        chat = event.chat_id
+        return
+    except MessageNotModifiedError:
+        # Same interval re-tapped — content identical; nothing to do.
+        with contextlib.suppress(Exception):
+            await event.answer()
+        return
+    except Exception as exc:
+        LOGS.debug("GiftCharts chart edit failed: %s", exc)
+
+    # Inline results have no resolvable chat — never send_file there.
+    if _is_inline_callback(event):
+        with contextlib.suppress(Exception):
+            await event.answer(
+                "Couldn't update chart. Try another interval or Search again.",
+                alert=True,
+            )
+        return
+
+    try:
         await event.client.send_file(
-            chat,
+            event.chat_id,
             file,
             caption=caption,
             buttons=buttons,
@@ -926,6 +958,10 @@ async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token:
         )
         with contextlib.suppress(Exception):
             await event.answer("Chart sent.")
+    except Exception as exc:
+        LOGS.warning("GiftCharts chart send failed: %s", exc)
+        with contextlib.suppress(Exception):
+            await event.answer("Couldn't send chart.", alert=True)
 
 
 def _chart_queries(sess: dict) -> tuple[str, Optional[str]]:
