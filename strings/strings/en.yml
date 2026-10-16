@@ -1075,3 +1075,30 @@ help_exclusive: |
 
   • `{i}xmas`
       Christmas art animation
+
+
+# assistant (owner tools)
+help_assistant: " -\n\n• `{i}ask <text>`\n    Ask the assistant a question, or just send plain text in DM.\n\n• `{i}img <prompt>`\n    Generate an image from a prompt.\n\n• `{i}imgfind <query>`\n    Find and send an image for a query.\n\n• `{i}run <command>`\n    Run a host command.\n\n• `{i}memory`\n    List saved facts. Use `{i}memory forget <id>` to drop one.\n\n• `{i}aiconfig`\n    Show or set the assistant configuration.\n\n• `{i}ai on` | `{i}ai off`\n    Enable or disable the assistant.\n\n• `{i}reset`\n    Clear this conversation's history.\n\n• `{i}help_ai`\n    Show this help.\n"
+assistant_disabled: "✖️ The assistant is off. Use `/ai on` to enable it."
+assistant_not_configured: "✖️ The assistant is not configured. Set AI_API_KEY and AI_MODEL."
+assistant_brain_error: "✖️ The assistant could not reach its model: {value}"
+assistant_thinking: "🧠 Thinking..."
+assistant_tool_running: "🔧 Running {name}..."
+assistant_confirm_prompt: "⚠️ The assistant wants to run:\n\n`{cmd}`\n\nApprove this command?"
+assistant_confirm_button: "✅ Approve"
+assistant_cancel_button: "✖️ Cancel"
+assistant_confirm_expired: "⌛ This confirmation expired ({when}). The command was not run."
+assistant_declined: "✖️ Cancelled. The command was not run."
+assistant_budget: "⌛ I stopped after {n} steps to stay within the turn budget."
+assistant_shell_timeout: "⌛ The command timed out after {n} seconds."
+assistant_output_spilled: "📄 Output was too large to send, so it was saved to {value}."
+assistant_sudo_refused: "✖️ Refused to run a sudo command:\n\n`{cmd}`\n\nSet AI_ALLOW_SUDO to allow it."
+assistant_memory_list: "🧠 Saved memories ({count}):\n{value}"
+assistant_memory_empty: "🧠 You have no saved memories yet."
+assistant_memory_added: "🧠 Remembered {id}: {value}"
+assistant_memory_forgotten: "🗑 Forgot {id}."
+assistant_memory_unknown: "✖️ No memory with id {id}."
+assistant_config_shown: "⚙️ Assistant configuration:\n\n{value}"
+assistant_config_updated: "✅ Updated {name} to {value}."
+assistant_enabled: "✅ The assistant is now {value}."
+assistant_reset: "🧹 Conversation history cleared."
