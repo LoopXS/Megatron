@@ -407,6 +407,76 @@ def tool_message(call_id: str, text: str) -> dict:
     return {"role": "tool", "tool_call_id": call_id, "content": text}
 
 
+def _message_cost(message: dict) -> int:
+    """The character cost of one message: its text content length.
+
+    Tool-call ``assistant`` messages carry their payload in ``tool_calls``
+    and have ``content=None``; counting only text keeps the budget simple
+    and predictable (spec section 10 bounds history in characters).
+    """
+
+    content = message.get("content")
+    return len(content) if isinstance(content, str) else 0
+
+
+def trim_history(history: list[dict], max_chars: int) -> list[dict]:
+    """Keep the newest messages that fit within ``max_chars`` of content.
+
+    Walks from the newest message backwards accumulating character cost and
+    stops at the first message that would exceed the budget, so the oldest
+    turns are dropped first.  When anything is dropped, a count-based
+    ``system`` note takes their place as the first element; v1 does not ask
+    the model for a real summary (spec section 10).  The input list is left
+    untouched.
+    """
+
+    kept: list[dict] = []
+    total = 0
+    for message in reversed(history):
+        cost = _message_cost(message)
+        if total + cost > max_chars:
+            break
+        kept.append(message)
+        total += cost
+    kept.reverse()
+
+    dropped = len(history) - len(kept)
+    if dropped:
+        kept.insert(
+            0,
+            {
+                "role": "system",
+                "content": (
+                    "Summary of earlier conversation (truncated): "
+                    f"{dropped} earlier message(s) omitted."
+                ),
+            },
+        )
+    return kept
+
+
+def assemble_messages(
+    system_prompt: str,
+    facts_text: str,
+    history: list[dict],
+    user_text: str,
+    max_chars: int = 8000,
+) -> list[dict]:
+    """Build the ``messages`` list for one turn (spec section 11).
+
+    Order is the system prompt, an optional "Things to remember" facts
+    block (omitted when empty), the budget-trimmed history, and finally the
+    new user message.
+    """
+
+    messages: list[dict] = [{"role": "system", "content": system_prompt}]
+    if facts_text:
+        messages.append({"role": "system", "content": facts_text})
+    messages.extend(trim_history(history, max_chars))
+    messages.append({"role": "user", "content": user_text})
+    return messages
+
+
 class Agent:
     """One user turn: a bounded model⇄tool loop over the registry.
 
