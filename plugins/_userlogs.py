@@ -224,10 +224,23 @@ async def when_added_or_joined(event):
     chat = await event.get_chat()
     if not (user and user.is_self):
         return
-    if getattr(chat, "username", None):
-        chat = f"[{chat.title}](https://t.me/{chat.username}/{event.action_message.id})"
+    action_msg = getattr(event, "action_message", None)
+    msg_id = getattr(action_msg, "id", None) or getattr(event, "id", None)
+    title = getattr(chat, "title", None) or "Chat"
+    username = getattr(chat, "username", None)
+    chat_id = getattr(chat, "id", None)
+    if username and msg_id:
+        chat = f"[{title}](https://t.me/{username}/{msg_id})"
+    elif chat_id and msg_id:
+        # strip -100 prefix for t.me/c/ links when present
+        cid = str(chat_id)
+        if cid.startswith("-100"):
+            cid = cid[4:]
+        chat = f"[{title}](https://t.me/c/{cid}/{msg_id})"
+    elif username:
+        chat = f"[{title}](https://t.me/{username})"
     else:
-        chat = f"[{chat.title}](https://t.me/c/{chat.id}/{event.action_message.id})"
+        chat = f"**{title}**"
     key = "bot" if event.client._bot else "user"
     buttons = Button.inline(
         get_string("userlogs_3"), data=f"leave_ch_{event.chat_id}|{key}"
