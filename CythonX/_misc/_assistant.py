@@ -137,7 +137,7 @@ def in_pattern(pattern=None, owner=False, **kwargs):
                             await event.builder.article(
                                 title="Unhandled Exception has Occured!",
                                 text=error_text(),
-                                buttons=Button.url("Report", "T.me/DarkPentesterBot"),
+                                buttons=Button.url("Report", "T.me/AssisXBot"),
                             )
                         ]
                     )
