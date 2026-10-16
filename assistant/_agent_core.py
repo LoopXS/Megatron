@@ -391,6 +391,10 @@ class PendingAction:
     messages: list[dict]
     user_id: int
     chat_id: int
+    # The resolution this card produced once it was decided, so a retry after
+    # a failed post-resolution brain call reuses it instead of running the
+    # side-effecting tool (or auditing the decline) a second time.
+    outcome: ToolResult | None = None
 
 
 @dataclass
@@ -642,29 +646,44 @@ class Agent:
         declined one is not run and its result message says so, audited as
         ``declined``.  Either way the loop then continues on the extended
         history.
+
+        The decision is recorded on ``pending.outcome`` before the loop
+        resumes, and a later retry (the glue keeps a failed resume
+        retryable) reuses that recorded result instead of executing the
+        tool or auditing the decision again.  A fresh copy of the history
+        is extended each time so a retry rebuilds it deterministically.
         """
 
         deadline = self.now() + self.settings.turn_timeout
         call = pending.tool_call
-        messages = pending.messages
+        messages = list(pending.messages)
+        surface = approved
 
-        result = None
-        if approved:
-            result = await self._run_tool(
-                call, pending.user_id, pending.chat_id, decision="approved"
-            )
-            messages.append(tool_message(call.id, result.text))
+        if pending.outcome is not None:
+            # Already resolved on an earlier, failed attempt: do not run the
+            # tool, audit, or re-evaluate the branch.
+            result = pending.outcome
         else:
-            started = self.now()
-            self._audit(
-                call, pending.user_id, pending.chat_id, "declined", started
-            )
-            messages.append(tool_message(call.id, "user declined"))
+            if approved:
+                result = await self._run_tool(
+                    call,
+                    pending.user_id,
+                    pending.chat_id,
+                    decision="approved",
+                )
+            else:
+                started = self.now()
+                self._audit(
+                    call, pending.user_id, pending.chat_id, "declined", started
+                )
+                result = ToolResult(text="user declined")
+            pending.outcome = result
 
+        messages.append(tool_message(call.id, result.text))
         turn = await self._run(
             messages, pending.user_id, pending.chat_id, deadline
         )
-        if result is not None:
+        if surface:
             # Surface the approved call's result (e.g. spilled files) exactly
             # as the loop would have had it run in its own batch.
             turn.tool_results.insert(0, result)
