@@ -14,7 +14,7 @@ import os
 import re
 import time
 from dataclasses import dataclass, field
-from typing import Callable, Iterable
+from typing import Callable, Iterable, Protocol
 
 # A secret shorter than this is not replaced by substring: nuking two-letter
 # keys out of ordinary prose would mangle every message for no gain.
@@ -52,6 +52,18 @@ class LLMReply:
 
     text: str | None = None
     tool_calls: list[ToolCall] = field(default_factory=list)
+
+
+class BrainError(Exception):
+    """The model endpoint could not be reached or answered with an error."""
+
+
+class LLMClient(Protocol):
+    """The one method the agent loop needs from any model backend."""
+
+    async def complete(
+        self, messages: list[dict], tools: list[dict]
+    ) -> LLMReply: ...
 
 
 @dataclass
@@ -224,3 +236,124 @@ class AuditLog:
             except Exception:
                 pass
         return record
+
+
+class OpenAICompatibleClient:
+    """A chat-completions client for any OpenAI-shaped endpoint.
+
+    OpenAI, OpenRouter, Groq, llama.cpp, Ollama and vLLM all speak this
+    shape, so moving between a cloud API and a locally served model is only
+    a change of base URL, key and model.  The aiohttp session is injected so
+    tests never touch the network; one is created lazily otherwise, and only
+    a session this client itself created is ever closed.
+    """
+
+    def __init__(
+        self,
+        base_url,
+        api_key,
+        model,
+        temperature=0.7,
+        timeout=60.0,
+        session=None,
+    ):
+        # A trailing slash would otherwise produce ``//chat/completions``.
+        self.base_url = (base_url or "").rstrip("/")
+        self.api_key = api_key
+        self.model = model
+        self.temperature = temperature
+        self.timeout = timeout
+        self.session = session
+        self._session = None
+
+    def _ensure_session(self):
+        """Return the injected session, or build one on first use."""
+
+        if self.session is not None:
+            return self.session
+        if self._session is None:
+            import aiohttp
+
+            self._session = aiohttp.ClientSession(
+                timeout=aiohttp.ClientTimeout(total=self.timeout)
+            )
+        return self._session
+
+    async def complete(self, messages, tools) -> LLMReply:
+        """Ask the model for the next reply, text or tool calls."""
+
+        session = self._ensure_session()
+        body = {
+            "model": self.model,
+            "messages": messages,
+            "tools": tools,
+            "temperature": self.temperature,
+        }
+        headers = {"Authorization": f"Bearer {self.api_key}"}
+
+        async with session.post(
+            f"{self.base_url}/chat/completions", json=body, headers=headers
+        ) as response:
+            if not 200 <= response.status < 300:
+                raise BrainError(f"brain returned HTTP {response.status}")
+            payload = await response.json()
+        return _parse_reply(payload)
+
+    async def aclose(self):
+        """Close the session, but only if this client opened it."""
+
+        if self._session is not None:
+            await self._session.close()
+            self._session = None
+
+
+def _parse_reply(payload) -> LLMReply:
+    """Turn an OpenAI chat-completions body into an ``LLMReply``.
+
+    Anything that is not the expected shape yields an empty reply rather
+    than raising: a misbehaving endpoint must not crash the loop.
+    """
+
+    if not isinstance(payload, dict):
+        return LLMReply()
+    choices = payload.get("choices")
+    if not isinstance(choices, list) or not choices:
+        return LLMReply()
+    first = choices[0]
+    if not isinstance(first, dict):
+        return LLMReply()
+    message = first.get("message")
+    if not isinstance(message, dict):
+        return LLMReply()
+
+    tool_calls = []
+    raw_calls = message.get("tool_calls")
+    if isinstance(raw_calls, list):
+        for raw in raw_calls:
+            call = _parse_tool_call(raw)
+            if call is not None:
+                tool_calls.append(call)
+    return LLMReply(text=message.get("content") or None, tool_calls=tool_calls)
+
+
+def _parse_tool_call(raw):
+    """Build one ``ToolCall``, or return ``None`` for an unusable entry."""
+
+    if not isinstance(raw, dict):
+        return None
+    function = raw.get("function")
+    if not isinstance(function, dict):
+        return None
+    name = function.get("name")
+    if not isinstance(name, str):
+        return None
+
+    arguments = function.get("arguments")
+    if isinstance(arguments, str):
+        try:
+            arguments = json.loads(arguments)
+        except ValueError:
+            arguments = {}
+    if not isinstance(arguments, dict):
+        arguments = {}
+    return ToolCall(id=raw.get("id"), name=name, arguments=arguments)
