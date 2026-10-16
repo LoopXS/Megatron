@@ -728,6 +728,37 @@ api_err_invalid: "✖️ Too many invalid attempts. Restart with `/api`."
 api_err_generic: "✖️ Something went wrong while fetching your credentials. Please try again, or use the manual method."
 
 
+# abliterix
+help_abliterix: " -\n\n• `{i}abliterate <hf-model-id> [flags]`\n    Queue an abliterix run for a Hugging Face model, then deliver the exported model path and its reproduce.json manifest.\n\n• `{i}abliterix status <id>`\n    Show one job's state, phase and elapsed time.\n\n• `{i}abliterix list`\n    List every known job.\n\n• `{i}abliterix log <id> [n]`\n    Show the last n lines of a job's run log (default 40).\n\n• `{i}abliterix cancel <id>`\n    Stop a queued or running job.\n\n• `{i}abliterix rm <id> [--purge]`\n    Forget a finished job; --purge also deletes its files.\n\n    Owner/sudo only. Abliterix must be installed in its own environment and the GPU and disk preconditions met.\n"
+abliterix_help: "🤖 **Abliterix**\n\nUsage:\n• `{i}abliterate <hf-model-id> [safe flags]`\n• `{i}abliterix status|list|log|cancel|rm ...`\n\nOwner/sudo only."
+abliterix_no_gpu: "⚠️ **No GPU detected.** Abliterix needs a CUDA GPU and nvidia-smi was not found on this host."
+abliterix_low_disk: "⚠️ **Not enough free disk.** Abliterix needs at least {gb} GB free; free some space and retry."
+abliterix_no_binary: "⚠️ **Abliterix is not installed.** Set ABLITERIX_BIN to its executable (currently `{bin}`). See the README for setup."
+abliterix_bad_model: "✖️ That is not a valid Hugging Face model id. Use `owner/name`, e.g. `Qwen/Qwen2.5-7B-Instruct`."
+abliterix_duplicate: "⏳ Job `{id}` is already queued or running for that model. Cancel it or wait for it to finish."
+abliterix_bad_flag: "✖️ Unsupported flag. Allowed flags (each with a value): --optimization.n-trials, --optimization.seed, --model.quant-method, --model.backend, --inference.batch-size, --inference.max-batch-size."
+abliterix_queued: "🕑 Queued `{id}` for `{model}`. It starts as soon as a slot is free; follow it with `abliterix status {id}`."
+abliterix_status: "🤖 **{id}** — `{model}`\n\n• State: **{state}**\n• Elapsed: {elapsed}\n• Phase: {phase}\n• Trials: {trials}\n\n`{last}`"
+abliterix_list_header: "📋 **Abliterix jobs**"
+abliterix_list_empty: "📭 No abliterix jobs yet. Start one with `abliterate <hf-model-id>`."
+abliterix_list_item: "• `{id}` — **{state}** — `{model}` ({elapsed})"
+abliterix_log_header: "📜 Last {n} lines of `{id}`:"
+abliterix_no_job: "✖️ No job with id `{id}`. Use `abliterix list` to see the ids."
+abliterix_cancel_ok: "🛑 Cancelled `{id}`."
+abliterix_canceled: "ℹ️ `{id}` had already finished; nothing to cancel."
+abliterix_rm_ok: "🗑 Removed `{id}` from the job list. Its files were kept."
+abliterix_purge_confirm: "⚠️ Delete `{id}` **and all of its files** (checkpoints, output, logs)? This cannot be undone."
+abliterix_purge_btn_yes: "✅ Purge"
+abliterix_purge_btn_no: "✖️ Cancel"
+abliterix_purge_done: "🗑 Purged `{id}` and deleted its files."
+abliterix_purge_cancel: "✖️ Purge of `{id}` cancelled."
+abliterix_done_ok: "✅ **Job `{id}` finished.**\n\nModel exported to:\n`{path}`\n\nThe reproduce.json manifest is attached."
+abliterix_done_failed: "✖️ **Job `{id}` failed** (exit code {code}). Last log lines:"
+abliterix_lost_note: "⚠️ Job `{id}` was interrupted by a restart and is marked lost. Re-run it if needed."
+abliterix_unknown_sub: "✖️ Unknown subcommand. Try `abliterix help`."
+abliterix_worker_error: "✖️ Worker error on `{id}`: {error}"
+
+
 # exclusive
 help_exclusive: |
   ✘ Commands Available
