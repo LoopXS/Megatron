@@ -662,6 +662,41 @@ help_ziptools: "\n\n• `{i}zip [reply] [-n NAME] [-p PASSWORD] [-f zip|tar|gz]`
 
 
 
+# session (assistant bot)
+help_session: " -\n\n• `{i}session`\n    Generate a Telethon StringSession for one of your own accounts, right from the assistant bot.\n\n    The bot asks for your API ID, API Hash, phone number, login code and (if set) your 2FA password, then sends the session as a message and a `.txt` file.\n\n    ⚠️ Treat the session like a password — never share it with anyone.\n"
+
+session_intro: "🔐 **Telethon StringSession Generator**\n\nThis wizard logs in to a Telegram account you own and returns a StringSession for running a userbot.\n\nYou will need:\n• Your **API ID** and **API Hash** — get them from my.telegram.org\n• The account's **phone number** in international format (e.g. `+12025550123`)\n• The **login code** Telegram sends you (plus your **2FA password**, if enabled)\n\n⚠️ Anyone who has the session can fully control the account. Never share it.\n\nTap ✅ Generate to continue, or ✖️ Cancel to abort."
+session_btn_generate: "✅ Generate"
+session_btn_cancel: "✖️ Cancel"
+session_cancelled: "✖️ Session generation cancelled. Nothing was saved."
+session_cooldown: "⏳ Please wait {wait} before requesting another session."
+session_busy: "⏳ Too many sessions are being generated right now. Please try again shortly."
+session_ask_api_id: "➊ Send your **API ID** (a number, from my.telegram.org).\n\nSend /cancel to abort."
+session_bad_api_id: "✖️ That is not a valid API ID. Send a positive number."
+session_ask_api_hash: "➋ Now send your **API Hash** (the 32-character value from my.telegram.org).\n\nSend /cancel to abort."
+session_bad_api_hash: "✖️ That is not a valid API Hash. It must be exactly 32 hexadecimal characters."
+session_ask_phone: "➌ Send the **phone number** in international format, e.g. `+12025550123`.\n\nSend /cancel to abort."
+session_bad_phone: "✖️ That is not a valid phone number. Start with `+` and include the country code."
+session_working: "📡 Sending a login code to that account's Telegram app..."
+session_ask_code: "➍ Send the **login code** Telegram just sent you (spaces are fine).\n\nSend /cancel to abort."
+session_bad_code: "✖️ That code was not accepted. Check it and send it again."
+session_ask_password: "🔒 This account has **two-step verification**. Send your **2FA password**.\n\nSend /cancel to abort."
+session_bad_password: "✖️ Wrong 2FA password. Please try again."
+session_result: "✅ **Session generated for {name}** (`{uid}`)\n\n`{session}`\n\nSave this and keep it private."
+session_warning: "⚠️ **Keep this session secret.** Anyone who has it can fully control the account. If it ever leaks, open Telegram → Settings → Devices and terminate it, then generate a new one."
+session_err_timeout: "⌛ Timed out waiting for your reply. Restart with /session."
+session_err_api_id: "✖️ That API ID / API Hash pair is invalid. Double-check them at my.telegram.org and try again."
+session_err_phone: "✖️ That phone number is invalid or is not registered on Telegram."
+session_err_phone_banned: "✖️ This phone number is banned by Telegram and cannot be used."
+session_err_flood: "⏳ Telegram asked to wait {seconds} seconds before another code can be sent. Please retry later."
+session_err_code_expired: "⌛ The login code expired. Restart with /session."
+session_err_code_max: "✖️ Too many wrong login codes. Restart with /session."
+session_err_password_max: "✖️ Too many wrong 2FA passwords. Restart with /session."
+session_err_signup: "✖️ This number has no Telegram account yet. Create one in the app first."
+session_err_invalid: "✖️ Too many invalid attempts. Restart with /session."
+session_err_generic: "✖️ Something went wrong while generating the session. Please try again."
+
+
 # exclusive
 help_exclusive: |
   ✘ Commands Available
