@@ -6809,14 +6809,6 @@ def _gift_inline_title(sess: dict) -> str:
     return ", ".join(parts)
 
 
-def _gift_inline_hub_text(sess: dict) -> str:
-    title = _gift_inline_title(sess)
-    return (
-        f"🎁 **{_md_escape_inline(title)}**\n\n"
-        "Choose a tool:"
-    )
-
-
 def _md_escape_inline(value) -> str:
     text = str(value or "")
     return (
@@ -6828,12 +6820,26 @@ def _md_escape_inline(value) -> str:
     )
 
 
+def _gift_inline_info_lines(sess: dict) -> list[str]:
+    """Gift-style Collection / Model / Backdrop header lines."""
+    lines = [
+        f"🎁 **Collection:** `{_md_escape_inline(sess.get('collection') or '?')}`"
+    ]
+    model = sess.get("model")
+    if model:
+        lines.append(f"🧩 **Model:** `{_md_escape_inline(model)}`")
+    backdrop = sess.get("backdrop")
+    if backdrop:
+        lines.append(f"🎨 **Backdrop:** `{_md_escape_inline(backdrop)}`")
+    return lines
+
+
+def _gift_inline_hub_text(sess: dict) -> str:
+    return "\n".join(_gift_inline_info_lines(sess))
+
+
 def _gift_inline_floor_picker_text(sess: dict) -> str:
-    title = _md_escape_inline(_gift_inline_title(sess))
-    return (
-        f"🎁 **{title}**\n\n"
-        "Pick a compact floor filter:"
-    )
+    return "\n".join(_gift_inline_info_lines(sess))
 
 
 def _gift_inline_action_row(
@@ -7023,6 +7029,13 @@ async def _gift_inline_answer(event, articles, **kwargs):
 
 async def _gift_inline_edit(event, text: str, buttons, *, parse_mode="md"):
     try:
+        from telethon.errors import MessageNotModifiedError
+        from telethon.tl.types import InputBotInlineMessageID
+    except Exception:
+        MessageNotModifiedError = Exception  # noqa: N806
+        InputBotInlineMessageID = type(None)  # noqa: N806
+
+    try:
         await event.edit(
             text,
             buttons=buttons,
@@ -7031,18 +7044,35 @@ async def _gift_inline_edit(event, text: str, buttons, *, parse_mode="md"):
             file=None,
         )
         return
-    except Exception:
-        pass
+    except MessageNotModifiedError:
+        with contextlib.suppress(Exception):
+            await event.answer()
+        return
+    except Exception as exc:
+        LOGS.debug("Inline g edit failed: %s", exc)
+        try:
+            is_inline = isinstance(
+                getattr(event.query, "msg_id", None), InputBotInlineMessageID
+            )
+        except Exception:
+            is_inline = False
+        if is_inline:
+            with contextlib.suppress(Exception):
+                await event.answer(
+                    "Couldn't update. Search again with g …", alert=True,
+                )
+            return
     try:
         await event.delete()
     except Exception:
         pass
-    await event.respond(
-        text,
-        buttons=buttons,
-        parse_mode=parse_mode,
-        link_preview=False,
-    )
+    with contextlib.suppress(Exception):
+        await event.respond(
+            text,
+            buttons=buttons,
+            parse_mode=parse_mode,
+            link_preview=False,
+        )
 
 
 @in_pattern(r"(?i)^g(?:\s+([\s\S]+))?$", owner=False)
@@ -7105,26 +7135,81 @@ async def artemis_gift_inline(event):
         return await _gift_inline_answer(event, [article], cache_time=5)
 
     owner_id = int(event.sender_id)
+    # NFT links: resolve model/backdrop before answering so hub + share show them.
+    if parsed.get("nft_mode"):
+        try:
+            coll, mod, back = await asyncio.wait_for(
+                _gift_inline_resolve_nft_fast(parsed.get("nft_raw") or raw),
+                timeout=4.0,
+            )
+            if coll:
+                parsed["collection"] = coll
+            if mod:
+                parsed["model"] = mod
+                parsed["depth"] = max(int(parsed.get("depth") or 1), 2)
+            if back:
+                parsed["backdrop"] = back
+                parsed["depth"] = max(int(parsed.get("depth") or 1), 3)
+            if mod and back:
+                parsed["resolved"] = True
+        except Exception as e:
+            LOGS.debug("Inline g NFT pre-resolve skipped: %s", e)
+
     token = _gift_inline_save(
         {
             **parsed,
             "owner_id": owner_id,
-            "resolved": False,
+            "resolved": bool(parsed.get("resolved")),
             "view": "hub",
             "last_mode": None,
         }
     )
     sess = _GIFT_INLINE_SESSIONS[token]
     title = _gift_inline_title(sess)
+    desc_parts = [sess.get("collection") or "Gift"]
+    if sess.get("model"):
+        desc_parts.append(sess["model"])
+    if sess.get("backdrop"):
+        desc_parts.append(sess["backdrop"])
     article = await event.builder.article(
         title=f"🎁 {title}",
-        description="Floor Price 📉 · Gift Chart 📊",
+        description=" · ".join(desc_parts[:3]),
         text=_gift_inline_hub_text(sess),
         parse_mode="md",
         link_preview=False,
         buttons=_gift_inline_hub_buttons(owner_id, token, sess.get("raw") or ""),
     )
     return await _gift_inline_answer(event, [article], cache_time=0)
+
+
+async def _gift_inline_resolve_nft_fast(raw: str):
+    """
+    Fast NFT → collection/model/backdrop for inline answer.
+    Prefers GetUniqueStarGift; falls back to t.me HTML. No MRKT.
+    """
+    parsed = _parse_nft_link(raw)
+    if not parsed:
+        return None, None, None
+    slug, short_slug, _number = parsed
+    collection, _, _ = _resolve_collection_from_slug(short_slug)
+    model = backdrop = None
+    title = None
+    try:
+        model, backdrop, _mr, _br, title = await _fetch_unique_star_gift_attrs(
+            heartless_bot, slug,
+        )
+    except Exception as e:
+        LOGS.debug("Inline NFT MTProto resolve failed: %s", e)
+    if title:
+        collection = title
+    if not model or not backdrop:
+        try:
+            hm, hb, *_rest = await _fetch_telegram_nft_attrs(slug)
+            model = model or hm
+            backdrop = backdrop or hb
+        except Exception as e:
+            LOGS.debug("Inline NFT HTML resolve failed: %s", e)
+    return collection, model, backdrop
 
 
 async def _gift_inline_resolve_session(sess: dict):
@@ -7148,6 +7233,10 @@ async def _gift_inline_resolve_session(sess: dict):
     sess["collection"] = coll
     sess["model"] = mod
     sess["backdrop"] = back
+    if mod:
+        sess["depth"] = max(int(sess.get("depth") or 1), 2)
+    if back:
+        sess["depth"] = max(int(sess.get("depth") or 1), 3)
     sess["resolved"] = True
     sess["at"] = time.monotonic()
     return sess
@@ -7181,11 +7270,27 @@ async def artemis_gift_inline_hub_select_cb(event):
     if not sess:
         return await event.answer("Session expired — search again with g …", alert=True)
 
+    # Ensure NFT attrs are populated before any stage-2 panel.
+    if sess.get("nft_mode") and (
+        not sess.get("resolved") or not sess.get("model") or not sess.get("backdrop")
+    ):
+        await event.answer("Resolving NFT…")
+        try:
+            sess = await _gift_inline_resolve_session(sess)
+            _GIFT_INLINE_SESSIONS[token] = sess
+        except Exception as e:
+            LOGS.warning("g hub NFT resolve failed: %s", e)
+            return await event.answer(str(e)[:180], alert=True)
+
     if choice == "f":
+        # NFT always has collection+model+backdrop depth once resolved.
+        if sess.get("nft_mode"):
+            sess["depth"] = 3
         sess["view"] = "floor_pick"
         sess["at"] = time.monotonic()
         _GIFT_INLINE_SESSIONS[token] = sess
-        await event.answer("Floor Price")
+        if not sess.get("nft_mode"):
+            await event.answer("Floor Price")
         return await _gift_inline_edit(
             event,
             _gift_inline_floor_picker_text(sess),
@@ -7194,32 +7299,18 @@ async def artemis_gift_inline_hub_select_cb(event):
         )
 
     # Gift Chart path — open giftcharts stage under the same hub token.
-    await event.answer("Gift Chart")
+    if not sess.get("nft_mode"):
+        await event.answer("Gift Chart")
     try:
         from . import giftcharts as gc
     except Exception as e:
         LOGS.warning("giftcharts import failed: %s", e)
         return await event.answer("Charts unavailable.", alert=True)
 
-    # Prefer resolved names when available; otherwise fast local parse.
     gift_q = sess.get("collection") or ""
     model_q = sess.get("model")
     raw = sess.get("raw") or ""
     source = "nft" if sess.get("nft_mode") else "text"
-    if sess.get("nft_mode") and not sess.get("resolved"):
-        try:
-            gift_q, model_q, source = await gc._resolve_ch_input(
-                raw, tg_client=heartless_bot,
-            )
-            if gift_q:
-                sess["collection"] = gift_q
-            if model_q:
-                sess["model"] = model_q
-                sess["depth"] = max(int(sess.get("depth") or 1), 2)
-            sess["at"] = time.monotonic()
-            _GIFT_INLINE_SESSIONS[token] = sess
-        except Exception as e:
-            LOGS.warning("g chart resolve failed: %s", e)
 
     if not gift_q:
         return await event.answer("Could not resolve collection.", alert=True)
