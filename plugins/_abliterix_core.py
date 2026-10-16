@@ -12,7 +12,9 @@ import json
 import os
 import random
 import re
+import signal
 import string
+import time
 from dataclasses import asdict, dataclass, field
 
 JOB_STATES = ("queued", "running", "succeeded", "failed", "canceled", "lost")
@@ -275,3 +277,81 @@ def tail_lines(text, n):
     if n <= 0:
         return ""
     return "\n".join(text.splitlines()[-n:])
+
+
+# Legal state moves.  A terminal state can never leave; a job must pass
+# through ``running`` before it succeeds or fails.
+_TRANSITIONS = {
+    "queued": {"running", "canceled"},
+    "running": {"succeeded", "failed", "canceled", "lost"},
+    "succeeded": set(),
+    "failed": set(),
+    "canceled": set(),
+    "lost": set(),
+}
+
+
+def transition(job, new_state, now=None, **fields):
+    """Move ``job`` to ``new_state`` if legal, else raise ``ValueError``.
+
+    Stamps ``started_at`` on entering ``running`` and ``finished_at`` on any
+    terminal state, then applies any extra ``fields``.
+    """
+    if new_state not in _TRANSITIONS.get(job.state, set()):
+        raise ValueError(f"illegal transition {job.state!r} -> {new_state!r}")
+    job.state = new_state
+    if new_state == "running" and job.started_at is None:
+        job.started_at = now
+    if new_state in TERMINAL_STATES:
+        job.finished_at = now
+    for key, value in fields.items():
+        setattr(job, key, value)
+
+
+def is_pid_alive(pid):
+    """Whether ``pid`` names a live process we are allowed to signal."""
+    if not pid:
+        return False
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def terminate_tree(pid, grace=20.0, *, killpg=os.killpg, sleep=time.sleep, alive=is_pid_alive):
+    """Stop a whole process group: SIGTERM, wait ``grace``, then SIGKILL.
+
+    The child is started with ``start_new_session=True`` so its pid is also
+    its process-group id; signalling the group reaps abliterix's own
+    subprocesses too.  A missing pid or group is a silent no-op.
+    """
+    if not pid:
+        return
+    try:
+        killpg(pid, signal.SIGTERM)
+    except OSError:
+        return
+    sleep(grace)
+    if alive(pid):
+        try:
+            killpg(pid, signal.SIGKILL)
+        except OSError:
+            pass
+
+
+def reap(jobs, alive=is_pid_alive, now=None):
+    """Mark every ``running`` job whose pid has died as ``lost``.
+
+    Called on startup (a restart cannot reattach to a child) and after a
+    worker cycle.  Returns the jobs whose state changed.
+    """
+    now = time.time() if now is None else now
+    changed = []
+    for job in jobs:
+        if job.state == "running" and not alive(job.pid):
+            transition(job, "lost", now)
+            changed.append(job)
+    return changed
