@@ -62,7 +62,6 @@ ULTPIC = inline_pic() or choice(heartless_IMAGES)
 buttons = [
     [
         Button.url(get_string("bot_3"), "https://xhamsterlive.com"),
-        Button.url(get_string("bot_4"), "t.me/FutureTechnologyOfficial"),
     ]
 ]
 
@@ -288,7 +287,7 @@ async def inline_alive(ult):
                     await builder.document(
                         pic,
                         title="Inline Alive",
-                        description="• 𝒍𝒂 𝒔𝒆𝒖𝒍𝒆 𝒓𝒂𝒊𝒔𝒐𝒏 𝒑𝒐𝒖𝒓 𝒍𝒂𝒒𝒖𝒆𝒍𝒍𝒆 𝒋𝒆 𝒓𝒆𝒔𝒑𝒊𝒓𝒆 | 𝒂 ♡",
+                        description="℘ he/she (or anything you like; I don't care)",
                         parse_mode="html",
                         buttons=buttons,
                     )
