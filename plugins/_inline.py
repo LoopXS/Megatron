@@ -144,8 +144,8 @@ async def _(event):
         text="Pasted to Spacebin 🌌",
         buttons=[
             [
-                Button.url("✵ʙɪɴ✵", url=link),
-                Button.url("✵Rᴀw✵", url=raw),
+                Button.url("✵ ʙɪɴ ✵", url=link),
+                Button.url("✵ Rᴀw ✵", url=raw),
             ],
         ],
     )
@@ -168,12 +168,12 @@ async def setting(event):
         link_preview=False,
         buttons=[
             [
-                Button.inline("•Pɪɴɢ•", data="pkng"),
-                Button.inline("•Uᴘᴛɪᴍᴇ•", data="upp"),
+                Button.inline("• Pɪɴɢ •", data="pkng"),
+                Button.inline("• Uᴘᴛɪᴍᴇ •", data="upp"),
             ],
             [
-                Button.inline("•Stats•", data="alive"),
-                Button.inline("•Uᴘᴅᴀᴛᴇ•", data="doupdate"),
+                Button.inline("• Stats •", data="alive"),
+                Button.inline("• Uᴘᴅᴀᴛᴇ •", data="doupdate"),
             ],
             [Button.inline("« Bᴀᴄᴋ", data="open")],
         ],
@@ -216,7 +216,7 @@ async def uptd_plugin(event):
                 help_ += HNDLR + d
                 help_ += "\n"
     if not help_:
-        help_ = f"{file} has no Detailed Help!"
+        help_ = f"{file} Has No Detailed Help!"
     help_ += "\n✘ @DarkPentester"
     buttons = []
     if inline_pic():
