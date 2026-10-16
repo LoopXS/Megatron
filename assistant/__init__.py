@@ -7,7 +7,7 @@ from CythonX._misc._assistant import asst_cmd, callback, in_pattern
 from CythonX.fns.helper import *
 from CythonX.fns.tools import get_stored_file
 from plugins import ATRA_COL, InlinePlugin
-from strings import get_languages, get_string
+from strings import get_help, get_languages, get_string
 
 OWNER_NAME = heartless_bot.full_name
 OWNER_ID = heartless_bot.uid
