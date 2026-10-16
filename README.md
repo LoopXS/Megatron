@@ -735,8 +735,63 @@ Some of the most important ones are:
 | `TWITTER_USERNAME` | Twitter/X integration |
 | `TWITTER_EMAIL` | Twitter/X integration |
 | `TWITTER_PASSWORD` | Twitter/X integration |
+| `ABLITERIX_BIN` | Path to the abliterix executable (optional job runner) |
+| `ABLITERIX_WORKDIR` | Root directory for abliterix job state |
 
 Many additional feature-specific settings are stored in the persistent database rather than the initial `.env` file.
+
+---
+
+## Abliterix job runner (optional)
+
+The `abliterix` plugin runs [abliterix](https://github.com/wuwangzhang1216/abliterix) — a CLI
+that removes refusal behaviour from a model's weights and exports the result — as a managed
+background job, controlled from Telegram. It stays dormant until abliterix is installed on the
+host, and it never installs abliterix for you.
+
+Because abliterix pulls in torch, transformers, bitsandbytes and optuna, it must live in its own
+virtual environment — never in the bot's environment. On the GPU host:
+
+```bash
+python -m venv ~/.abliterix && . ~/.abliterix/bin/activate
+pip install abliterix
+which abliterix   # note the absolute path
+```
+
+Then point the bot at it:
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `ABLITERIX_BIN` | `abliterix` | Executable name or absolute path |
+| `ABLITERIX_WORKDIR` | `./abliterix_jobs` | Where job directories and `jobs.json` live |
+| `ABLITERIX_MIN_FREE_GB` | `40` | A job is refused below this much free disk |
+| `ABLITERIX_POLL_SECONDS` | `20` | Progress-edit and worker cadence |
+| `ABLITERIX_KILL_GRACE` | `20` | Seconds between SIGTERM and SIGKILL on cancel |
+| `ABLITERIX_ALLOWED_FLAGS` | curated list | Comma-separated extra-flag allowlist |
+| `ABLITERIX_MAX_RUNTIME` | (unset) | Optional hard per-job time limit, in seconds |
+
+Before a job is queued the plugin checks that the binary exists and is executable, that an NVIDIA
+GPU (`nvidia-smi`) is present, and that free disk meets the floor.
+
+Commands (owner / sudo only):
+
+| Command | Purpose |
+|---|---|
+| `.abliterate <hf-model-id> [flags]` | Queue a run; the export path and `reproduce.json` are delivered when it finishes |
+| `.abliterix status <id>` | State, phase, trials and elapsed time |
+| `.abliterix list` | Every known job |
+| `.abliterix log <id> [n]` | Last n lines of a job's log |
+| `.abliterix cancel <id>` | Stop a queued or running job |
+| `.abliterix rm <id> [--purge]` | Forget a job; `--purge` deletes its files after a confirmation |
+
+One job runs at a time. State is stored atomically in `ABLITERIX_WORKDIR/jobs.json`, and jobs left
+`running` by a restart are reported as `lost`. Only the curated flags in `ABLITERIX_ALLOWED_FLAGS`
+may be passed; unknown flags and shell metacharacters are rejected, and abliterix is always invoked
+with `--non-interactive` so it never blocks on its interactive menu.
+
+> **License and safety:** Megatron and abliterix are both AGPL-3.0, so combining them is
+> license-compatible. Abliterix is designed to remove a model's safety training; you are
+> responsible for how you use the models it produces.
 
 ---
 

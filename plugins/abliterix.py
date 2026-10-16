@@ -39,6 +39,8 @@ _BINARY = os.environ.get("ABLITERIX_BIN", "abliterix")
 _MIN_FREE_GB = float(os.environ.get("ABLITERIX_MIN_FREE_GB", "40"))
 _POLL_SECONDS = float(os.environ.get("ABLITERIX_POLL_SECONDS", "20"))
 _KILL_GRACE = float(os.environ.get("ABLITERIX_KILL_GRACE", "20"))
+_MAX_RUNTIME = os.environ.get("ABLITERIX_MAX_RUNTIME")
+_MAX_RUNTIME = float(_MAX_RUNTIME) if _MAX_RUNTIME else None
 _ALLOWED_FLAGS = tuple(
     flag.strip()
     for flag in os.environ.get(
@@ -170,10 +172,16 @@ def _log_text(rest):
     return f"{header}\n{body or '(no output yet)'}"
 
 
-def _stop_job(job):
+async def _terminate(pid):
+    """Stop a process group off the event loop (``terminate_tree`` sleeps)."""
+    if pid:
+        await asyncio.to_thread(core.terminate_tree, pid, _KILL_GRACE)
+
+
+async def _stop_job(job):
     """Terminate a running job's process group and mark it canceled."""
     if job.state == "running" and job.pid:
-        core.terminate_tree(job.pid, grace=_KILL_GRACE)
+        await _terminate(job.pid)
     if job.state in core.ACTIVE_STATES:
         core.transition(job, "canceled", now=time.time())
     _store().save()
@@ -191,7 +199,7 @@ async def _cancel(e, rest):
     if job.state not in core.ACTIVE_STATES:
         await e.reply(_render("abliterix_canceled", id=job_id))
         return
-    _stop_job(job)
+    await _stop_job(job)
     await e.reply(_render("abliterix_cancel_ok", id=job_id))
 
 
@@ -306,7 +314,18 @@ async def _run_job(job):
     _store().save()
     monitor = asyncio.ensure_future(_monitor(job))
     try:
-        code = await process.wait()
+        if _MAX_RUNTIME:
+            try:
+                code = await asyncio.wait_for(process.wait(), timeout=_MAX_RUNTIME)
+            except asyncio.TimeoutError:
+                await _terminate(process.pid)
+                with contextlib.suppress(Exception):
+                    await process.wait()
+                raise RuntimeError(
+                    f"exceeded ABLITERIX_MAX_RUNTIME ({int(_MAX_RUNTIME)}s)"
+                )
+        else:
+            code = await process.wait()
     finally:
         job.pid = None
         monitor.cancel()
@@ -491,3 +510,23 @@ async def abliterate_cmd(e):
         await e.reply(_render("abliterix_help"))
         return
     await _enqueue(e, tokens[0], tokens[1:])
+
+
+def _reap_on_load():
+    """Mark jobs left ``running`` by a restart as ``lost``.
+
+    A worker cannot reattach to a child process it did not spawn, so any
+    ``running`` job whose pid is gone is stale and reported as lost rather
+    than left to look active forever.
+    """
+    store = _store()
+    changed = core.reap(list(store.all()))
+    if changed:
+        store.save()
+    return changed
+
+
+try:
+    _reap_on_load()
+except Exception as _err:  # noqa: BLE001 - never block plugin loading
+    LOGS.exception(_err)
