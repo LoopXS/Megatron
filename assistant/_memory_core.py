@@ -11,6 +11,8 @@ user id to.  A missing or corrupt value is treated as an empty list rather than
 an error, so one bad write can never wedge memory.
 """
 
+from __future__ import annotations
+
 import json
 import secrets
 import time
