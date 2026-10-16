@@ -446,16 +446,23 @@ class Agent:
         return TurnResult("budget", last_text, None, tool_results)
 
     async def _run_tool(self, call, user_id, chat_id) -> ToolResult:
-        """Resolve, validate and execute one tool call, never raising."""
+        """Resolve, validate and execute one tool call, never raising.
 
+        Rejected calls are audited as well, so a model probing unknown names
+        or malformed arguments still leaves a trace (spec section 12).
+        """
+
+        started = self.now()
         tool = self.registry.get(call.name)
         if tool is None:
+            self._audit(call, user_id, chat_id, "rejected", started)
             return ToolResult(
                 text=f"error: unknown tool: {call.name}", error=True
             )
 
         problem = self.registry.validate(call.name, call.arguments)
         if problem is not None:
+            self._audit(call, user_id, chat_id, "rejected", started)
             return ToolResult(text=f"error: {problem}", error=True)
 
         context = ToolContext(
@@ -464,16 +471,20 @@ class Agent:
             workdir=self.settings.workdir,
             allow_sudo=self.settings.allow_sudo,
         )
-        started = self.now()
         try:
             result = await tool.handler(call.arguments, context)
         except Exception as exc:
             result = ToolResult(text=f"error: {exc}", error=True)
-        self._audit(call, result, user_id, chat_id, started)
+        self._audit(call, user_id, chat_id, "auto", started, result)
         return result
 
-    def _audit(self, call, result, user_id, chat_id, started) -> None:
-        """Append one redacted audit record for a tool that actually ran."""
+    def _audit(self, call, user_id, chat_id, decision, started, result=None):
+        """Append one redacted audit record for any tool call.
+
+        Both executed and rejected calls are recorded; only ``decision`` and
+        the (absent) exit code differ.  ``args`` is untrusted model data and
+        ``AuditLog.record`` redacts it.
+        """
 
         if self.audit is None:
             return
@@ -482,7 +493,7 @@ class Agent:
             chat=chat_id,
             tool=call.name,
             args=call.arguments,
-            decision="auto",
+            decision=decision,
             exit=getattr(result, "exit", None),
             ms=int((self.now() - started) * 1000),
         )
