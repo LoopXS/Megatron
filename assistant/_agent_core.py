@@ -74,6 +74,7 @@ class ToolResult:
     text: str
     files: list[str] = field(default_factory=list)
     error: bool = False
+    exit: int | None = None
 
 
 @dataclass
@@ -281,7 +282,15 @@ class OpenAICompatibleClient:
         return self._session
 
     async def complete(self, messages, tools) -> LLMReply:
-        """Ask the model for the next reply, text or tool calls."""
+        """Ask the model for the next reply, text or tool calls.
+
+        Every failure mode a dead or misbehaving brain can produce is
+        surfaced as ``BrainError`` so the caller handles them uniformly: a
+        non-2xx status is checked before the body is parsed, a 2xx whose
+        body is not JSON is an error too, and any connection, timeout or
+        other transport exception is wrapped.  The API key never appears in
+        the message.
+        """
 
         session = self._ensure_session()
         body = {
@@ -292,12 +301,25 @@ class OpenAICompatibleClient:
         }
         headers = {"Authorization": f"Bearer {self.api_key}"}
 
-        async with session.post(
-            f"{self.base_url}/chat/completions", json=body, headers=headers
-        ) as response:
-            if not 200 <= response.status < 300:
-                raise BrainError(f"brain returned HTTP {response.status}")
-            payload = await response.json()
+        try:
+            async with session.post(
+                f"{self.base_url}/chat/completions", json=body, headers=headers
+            ) as response:
+                if not 200 <= response.status < 300:
+                    raise BrainError(f"brain returned HTTP {response.status}")
+                try:
+                    payload = await response.json()
+                except Exception as er:
+                    raise BrainError(
+                        "brain response was not JSON: "
+                        f"{type(er).__name__}"
+                    ) from er
+        except BrainError:
+            raise
+        except Exception as er:
+            raise BrainError(
+                f"brain request failed: {type(er).__name__}"
+            ) from er
         return _parse_reply(payload)
 
     async def aclose(self):
@@ -607,7 +629,7 @@ class Agent:
             tool=call.name,
             args=call.arguments,
             decision=decision,
-            exit=getattr(result, "exit", None),
+            exit=result.exit if result is not None else None,
             ms=int((self.now() - started) * 1000),
         )
 
