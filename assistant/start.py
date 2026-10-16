@@ -11,7 +11,7 @@ from telethon.utils import get_display_name
 from assistant.manager._help import *
 from CythonX._misc import SUDO_M, owner_and_sudos
 from CythonX.dB.base import KeyManager
-from CythonX.fns.helper import inline_mention
+from CythonX.fns.helper import get_pstring, inline_mention
 from strings import get_string
 
 from . import *
@@ -169,7 +169,7 @@ async def _(event):
     x = await event.respond("𝙿𝙸𝙽𝙶")
     end = round((time.time() - start) * 1000)
     uptime = time_formatter((time.time() - start_time) * 1000)
-    await x.edit(get_string("ping").format(end, uptime))
+    await x.edit(get_pstring("ping", "prem", "live").format(end, uptime))
 
 
 @callback("group")
