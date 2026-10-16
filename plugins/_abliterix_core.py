@@ -228,3 +228,50 @@ def build_process_spec(binary, model, job_dir, extra_flags, base_env=None):
         env=build_env(base_env),
         log_path=os.path.join(job_dir, "run.log"),
     )
+
+
+# Stable substrings abliterix prints as it advances through a run.  The last
+# one seen in the log wins, so the order here does not matter.
+PHASE_MARKERS = (
+    ("Loading benign prompts", "loading data"),
+    ("Determining optimal batch size", "tuning batch size"),
+    ("Computing per-layer steering vectors", "computing vectors"),
+    ("Non-interactive mode: optimization finished", "finishing"),
+    ("Exporting verified trial", "exporting"),
+)
+
+_TRIAL_RE = re.compile(r"trial\s*#?\s*(\d+)", re.IGNORECASE)
+
+
+def detect_phase(text):
+    """The latest known phase label found in ``text`` (or ``"running"``)."""
+    best_index = -1
+    best_label = "running"
+    for marker, label in PHASE_MARKERS:
+        index = text.rfind(marker)
+        if index > best_index:
+            best_index = index
+            best_label = label
+    return best_label
+
+
+def count_trials(text):
+    """The highest trial number mentioned in ``text`` (or ``0``)."""
+    numbers = [int(match) for match in _TRIAL_RE.findall(text)]
+    return max(numbers) if numbers else 0
+
+
+def last_line(text):
+    """The final non-empty line of ``text``, truncated to 200 chars."""
+    for line in reversed(text.splitlines()):
+        line = line.strip()
+        if line:
+            return line[:200]
+    return ""
+
+
+def tail_lines(text, n):
+    """The last ``n`` lines of ``text`` joined with newlines."""
+    if n <= 0:
+        return ""
+    return "\n".join(text.splitlines()[-n:])
