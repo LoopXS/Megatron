@@ -21,12 +21,13 @@ Configuration (environment variables, read at import):
 """
 
 import asyncio
+import contextlib
 import os
 import shutil
 import time
 
 from . import _abliterix_core as core
-from . import LOGS, get_help, get_string, heartless_cmd
+from . import LOGS, get_help, get_string, heartless_bot, heartless_cmd
 
 __doc__ = get_help("abliterix")
 
@@ -219,9 +220,98 @@ async def _run_job(job):
     process = await _spawn(spec)
     job.pid = process.pid
     _store().save()
-    code = await process.wait()
-    job.pid = None
+    monitor = asyncio.ensure_future(_monitor(job))
+    try:
+        code = await process.wait()
+    finally:
+        job.pid = None
+        monitor.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await monitor
     return code
+
+
+def _refresh_progress(job):
+    """Update ``job``'s phase/trials/last-line from its run log."""
+    if not job.workdir:
+        return
+    try:
+        with open(
+            os.path.join(job.workdir, "run.log"), encoding="utf-8", errors="replace"
+        ) as handle:
+            text = handle.read()
+    except OSError:
+        return
+    job.phase = core.detect_phase(text)
+    job.trials_done = core.count_trials(text)
+    job.last_line = core.last_line(text)
+
+
+async def _safe_edit(client, job, text):
+    """Edit the job's status message, ignoring any Telegram error."""
+    if not job.chat_id or not job.status_message_id:
+        return
+    try:
+        await client.edit_message(job.chat_id, job.status_message_id, text)
+    except Exception as err:  # noqa: BLE001 - progress edits are best-effort
+        LOGS.info(f"abliterix: status edit failed for {job.id}: {err}")
+
+
+async def _monitor(job, client=None, interval=None, stop=None):
+    """Refresh the status message while ``stop()`` (default: terminal) is false."""
+    client = client or heartless_bot
+    interval = _POLL_SECONDS if interval is None else interval
+    stop = stop or job.is_terminal
+    while not stop():
+        _refresh_progress(job)
+        await _safe_edit(client, job, _status_text(job))
+        await asyncio.sleep(interval)
+
+
+def _find_manifest(out_dir):
+    """Locate the reproduce.json manifest under a job's output directory."""
+    if not out_dir or not os.path.isdir(out_dir):
+        return None
+    preferred = os.path.join(out_dir, "reproduce", "reproduce.json")
+    if os.path.isfile(preferred):
+        return preferred
+    for root, _dirs, files in os.walk(out_dir):
+        if "reproduce.json" in files:
+            return os.path.join(root, "reproduce.json")
+    return None
+
+
+async def _deliver(job, client=None):
+    """Report a finished job and attach its manifest when there is one."""
+    client = client or heartless_bot
+    if job.state == "succeeded":
+        await _safe_edit(
+            client, job, _render("abliterix_done_ok", id=job.id, path=job.out_dir)
+        )
+        manifest = _find_manifest(job.out_dir)
+        if manifest and job.chat_id:
+            try:
+                await client.send_file(job.chat_id, manifest)
+            except Exception as err:  # noqa: BLE001 - delivery is best-effort
+                LOGS.info(f"abliterix: manifest delivery failed for {job.id}: {err}")
+    elif job.state == "canceled":
+        await _safe_edit(client, job, _render("abliterix_canceled", id=job.id))
+    elif job.state == "lost":
+        await _safe_edit(client, job, _render("abliterix_lost_note", id=job.id))
+    else:
+        tail = ""
+        if job.workdir:
+            try:
+                with open(
+                    os.path.join(job.workdir, "run.log"),
+                    encoding="utf-8",
+                    errors="replace",
+                ) as handle:
+                    tail = core.tail_lines(handle.read(), 40)
+            except OSError:
+                tail = ""
+        text = _render("abliterix_done_failed", id=job.id, code=job.returncode)
+        await _safe_edit(client, job, f"{text}\n\n{tail}" if tail else text)
 
 
 async def _worker_loop():
@@ -252,6 +342,10 @@ async def _worker_loop():
                 if job.state == "running":
                     core.transition(job, "failed", now=time.time(), error=str(err))
             _store().save()
+            try:
+                await _deliver(job)
+            except Exception as err:  # noqa: BLE001 - delivery is best-effort
+                LOGS.exception(err)
     finally:
         _WORKER_TASK = None
 
