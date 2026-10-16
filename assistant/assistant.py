@@ -745,14 +745,15 @@ async def _aclose(agent):
         LOGS.debug("assistant: could not close brain client: %s", er)
 
 
-async def _deliver(event, target, turn, user_id, user_text):
+async def _deliver(event, target, turn, user_id, user_text, prefix=None):
     """Deliver one TurnResult to the chat, however the turn ended.
 
     Files are sent from ``turn.tool_results`` in every case: on
     ``awaiting_confirm`` they carry the auto-tool output produced before the
     pause, and on the resumed result they carry the approved call plus any
     later work.  An ``awaiting_confirm`` turn is parked (with a confirm card)
-    instead of editing to a final reply.
+    instead of editing to a final reply.  ``prefix`` is prepended to a terminal
+    reply (used to surface ``assistant_declined`` after a decline).
     """
 
     await _send_files(event, turn.tool_results)
@@ -773,6 +774,8 @@ async def _deliver(event, target, turn, user_id, user_text):
         text = _render("assistant_budget", {"n": settings.max_steps})
     else:
         text = turn.reply_text or _EMPTY_REPLY
+    if prefix:
+        text = prefix + "\n\n" + text
     await _safe_edit(target, text)
     if turn.status == "done":
         _append_history(user_id, user_text, turn.reply_text)
@@ -934,7 +937,10 @@ async def assistant_confirm_callback(event):
     finally:
         await _aclose(agent)
 
-    await _deliver(event, event, turn, pending.user_id, user_text)
+    # A decline must be visible on the card even though the loop resumes (so
+    # the model can react): show assistant_declined, then the model's reply.
+    prefix = None if approved else _render("assistant_declined")
+    await _deliver(event, event, turn, pending.user_id, user_text, prefix)
 
 
 @asst_cmd(pattern="run( (.*)|$)", owner=True)
@@ -1001,7 +1007,13 @@ async def _direct_command(event, name, arguments):
     try:
         result = await tool.handler(arguments, context)
     except Exception as er:
-        result = ToolResult(text=f"error: {er}", error=True)
+        # A provider error can echo a key or an Authorization header, so the
+        # same redaction the brain-error paths use is applied here too.
+        detail = redact(
+            "error: {}".format(er),
+            [settings.api_key, _as_str(_raw("AI_IMAGE_API_KEY"))],
+        )
+        result = ToolResult(text=detail, error=True)
     if getattr(agent, "audit", None) is not None:
         agent.audit.record(
             uid=event.sender_id,
