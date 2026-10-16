@@ -806,29 +806,65 @@ async def thumb_dl(event):
     os.remove(m)
 
 
+def _parse_telegram_post_url(url: str):
+    """
+    Parse public or private Telegram message links.
+
+    Returns (peer, msg_id) where peer is username (str) or -100 channel id (int).
+    """
+    text = (url or "").strip()
+    # strip tracking / single flags
+    text = text.split("?")[0].rstrip("/")
+    # private: t.me/c/<internal_id>/<msg_id>[/<topic?>]
+    priv = re.fullmatch(
+        r"(?:https?://)?(?:www\.)?(?:t\.me|telegram\.me|telegram\.dog)"
+        r"/c/(\d+)(?:/\d+)?/(\d+)",
+        text,
+        flags=re.I,
+    )
+    if priv:
+        channel_id = int(priv.group(1))
+        msg_id = int(priv.group(2))
+        return int(f"-100{channel_id}"), msg_id
+    # public: t.me/<username>/<msg_id>
+    pub = re.fullmatch(
+        r"(?:https?://)?(?:www\.)?(?:t\.me|telegram\.me|telegram\.dog)"
+        r"/([A-Za-z][\w\d_]{3,})/(\d+)",
+        text,
+        flags=re.I,
+    )
+    if pub:
+        username = pub.group(1)
+        # reserved path segments that are not chats
+        if username.lower() in {
+            "c", "s", "joinchat", "addstickers", "share", "socks", "proxy",
+            "setlanguage", "iv", "login", "confirmphone", "nft",
+        }:
+            return None
+        return username, int(pub.group(2))
+    return None
+
+
 @heartless_cmd(pattern=r"getpost(?:\s+(.+))?$")
 async def get_msgs(event):
     url = event.pattern_match.group(1)
     if not url:
         return await event.eor(
             "`Usage:`\n"
-            "`.getmsgs https://t.me/c/3985749900/9`",
-            time=6,
+            "`.getpost https://t.me/c/3985749900/9`\n"
+            "`.getpost https://t.me/username/123`",
+            time=8,
         )
-    match = re.fullmatch(
-        r"https?://t\.me/c/(\d+)/(\d+)/?",
-        url.strip()
-    )
-    if not match:
+    parsed = _parse_telegram_post_url(url)
+    if not parsed:
         return await event.eor(
             "`Invalid Telegram post URL.`\n"
             "Example:\n"
-            "`.getmsgs https://t.me/c/3985749900/9`",
-            time=6,
+            "`.getpost https://t.me/c/3985749900/9`\n"
+            "`.getpost https://t.me/username/123`",
+            time=8,
         )
-    channel_id = int(match.group(1))
-    msg_id = int(match.group(2))
-    peer_id = int(f"-100{channel_id}")
+    peer_id, msg_id = parsed
     status = await event.eor("`Fetching message...`")
     try:
         msg = await event.client.get_messages(
@@ -889,4 +925,4 @@ async def get_msgs(event):
     except Exception as e:
         await status.edit(
             f"**Error:**\n`{e}`"
-)
+    )
