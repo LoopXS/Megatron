@@ -697,6 +697,37 @@ session_err_invalid: "✖️ Too many invalid attempts. Restart with /session."
 session_err_generic: "✖️ Something went wrong while generating the session. Please try again."
 
 
+# api (assistant bot)
+help_api: " -\n\n• `{i}api`\n    Get your Telegram API ID and API Hash without leaving Telegram.\n\n    The assistant logs in to my.telegram.org on your behalf, creates an app if you do not already have one, and sends you the credentials. A manual guide is offered if the automatic method fails.\n\n    ⚠️ Keep these credentials secret — they are tied to your account.\n"
+
+api_intro: "🆔 **Get your Telegram API credentials**\n\nThe assistant will log in to my.telegram.org *for you*, create an application if needed, and send you the resulting **api_id** and **api_hash**.\n\nYou will need:\n• The account's **phone number** in international format (e.g. `+12025550123`)\n• The **login code** Telegram sends to that account's **Telegram app** (not SMS)\n\n🔒 Nothing is stored or logged.\n\nTap ✅ Get credentials to continue, 📖 Manual method to do it yourself, or ✖️ Cancel to abort."
+api_btn_get: "✅ Get credentials"
+api_btn_manual: "📖 Manual method"
+api_btn_cancel: "✖️ Cancel"
+api_cancelled: "✖️ Cancelled. Nothing was created or saved."
+api_cooldown: "⏳ Please wait {wait} before requesting credentials again."
+api_busy: "⏳ Too many requests are being processed right now. Please try again shortly."
+api_ask_phone: "➊ Send the **phone number** of the account, in international format (e.g. `+12025550123`).\n\nSend /cancel to abort."
+api_bad_phone: "✖️ That is not a valid phone number. Start with `+` and include the country code."
+api_working: "📡 Contacting my.telegram.org..."
+api_code_sent: "📨 Telegram is sending a **login code** to that account's app now. It usually arrives within a minute.\n\nIf it does not arrive, reopen my.telegram.org once in a browser to trigger it."
+api_ask_code: "➋ Send the **login code** Telegram sent you (spaces are fine).\n\nSend /cancel to abort."
+api_bad_code: "✖️ That code was not accepted. Check it and send it again."
+api_result: "✅ **Your Telegram API credentials**\n\n**App api_id:**\n`{api_id}`\n\n**App api_hash:**\n`{api_hash}`"
+api_result_warning: "⚠️ **Keep these secret.** They are tied to your account; anyone who has them can build a client that acts as you. Each phone number can only have one such app — if you already had one, this is it."
+api_result_next: "➡️ To turn these into a runnable session, run `/session`. When it asks, send this api_id and api_hash."
+api_manual: "📖 **Manual method — my.telegram.org**\n\n1. Open https://my.telegram.org in a browser.\n2. Enter your phone number in international format and tap Next.\n3. Enter the login code Telegram sends you.\n4. Open **API development tools**.\n5. Fill in **App title** and **Short name** (any values) and create the app.\n6. Copy the **App api_id** and **App api_hash** shown.\n\nThen run `/session` and paste them when asked."
+api_err_send_code: "✖️ Could not send the login code. Check the phone number (international format) and try again. If it keeps failing, use the manual method."
+api_err_unexpected: "✖️ my.telegram.org returned something unexpected. Please try again, or use the manual method."
+api_err_bad_code: "✖️ The login code was not accepted. Restart with `/api` and try again, or use the manual method."
+api_err_create: "✖️ Telegram refused to create the application (this is usually temporary). Please try again in a little while, or use the manual method."
+api_err_parse: "✖️ Could not read the response from my.telegram.org. Please try again, or use the manual method."
+api_err_network: "✖️ Could not reach my.telegram.org from the server. Please try again, or use the manual method."
+api_err_timeout: "⌛ The request timed out. Please try again, or use the manual method."
+api_err_invalid: "✖️ Too many invalid attempts. Restart with `/api`."
+api_err_generic: "✖️ Something went wrong while fetching your credentials. Please try again, or use the manual method."
+
+
 # exclusive
 help_exclusive: |
   ✘ Commands Available
