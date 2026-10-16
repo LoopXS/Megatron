@@ -357,3 +357,137 @@ def _parse_tool_call(raw):
     if not isinstance(arguments, dict):
         arguments = {}
     return ToolCall(id=raw.get("id"), name=name, arguments=arguments)
+
+
+@dataclass
+class PendingAction:
+    """A ``confirm`` tool call parked until the user answers the card."""
+
+    id: str
+    tool_call: ToolCall
+    messages: list[dict]
+    user_id: int
+    chat_id: int
+
+
+@dataclass
+class TurnResult:
+    """The outcome of one user turn: final text, a wait, or a budget stop."""
+
+    status: str  # "done" | "awaiting_confirm" | "budget"
+    reply_text: str | None
+    pending: PendingAction | None = None
+    tool_results: list[ToolResult] = field(default_factory=list)
+
+
+def assistant_tool_calls_message(reply: LLMReply) -> dict:
+    """Render a tool-calling reply as an OpenAI ``assistant`` message."""
+
+    return {
+        "role": "assistant",
+        "content": reply.text or None,
+        "tool_calls": [
+            {
+                "id": call.id,
+                "type": "function",
+                "function": {
+                    "name": call.name,
+                    "arguments": json.dumps(call.arguments),
+                },
+            }
+            for call in reply.tool_calls
+        ],
+    }
+
+
+def tool_message(call_id: str, text: str) -> dict:
+    """Render one tool result as an OpenAI ``tool`` message."""
+
+    return {"role": "tool", "tool_call_id": call_id, "content": text}
+
+
+class Agent:
+    """One user turn: a bounded model⇄tool loop over the registry.
+
+    The model drives; the registry decides what a name means.  Every
+    model-supplied argument is untrusted and passes ``registry.validate``
+    before a handler runs, and any failure becomes an error ``ToolResult``
+    for the model to react to rather than an exception that ends the turn.
+    """
+
+    def __init__(self, client, registry, settings, audit=None, *, now=time.time):
+        self.client = client
+        self.registry = registry
+        self.settings = settings
+        self.audit = audit
+        self.now = now
+
+    async def step(self, messages, *, user_id, chat_id) -> TurnResult:
+        """Run one turn to completion, to a budget stop, or to a pause."""
+
+        tool_results: list[ToolResult] = []
+        last_text: str | None = None
+
+        for _ in range(self.settings.max_steps):
+            reply = await self.client.complete(
+                messages, self.registry.schemas()
+            )
+            if reply.text is not None:
+                last_text = reply.text
+            if not reply.tool_calls:
+                return TurnResult("done", reply.text, None, tool_results)
+
+            messages.append(assistant_tool_calls_message(reply))
+            for call in reply.tool_calls:
+                result = await self._run_tool(call, user_id, chat_id)
+                messages.append(tool_message(call.id, result.text))
+                tool_results.append(result)
+
+        return TurnResult("budget", last_text, None, tool_results)
+
+    async def _run_tool(self, call, user_id, chat_id) -> ToolResult:
+        """Resolve, validate and execute one tool call, never raising."""
+
+        tool = self.registry.get(call.name)
+        if tool is None:
+            return ToolResult(
+                text=f"error: unknown tool: {call.name}", error=True
+            )
+
+        problem = self.registry.validate(call.name, call.arguments)
+        if problem is not None:
+            return ToolResult(text=f"error: {problem}", error=True)
+
+        context = ToolContext(
+            user_id=user_id,
+            chat_id=chat_id,
+            workdir=self.settings.workdir,
+            allow_sudo=self.settings.allow_sudo,
+        )
+        started = self.now()
+        try:
+            result = await tool.handler(call.arguments, context)
+        except Exception as exc:
+            result = ToolResult(text=f"error: {exc}", error=True)
+        self._audit(call, result, user_id, chat_id, started)
+        return result
+
+    def _audit(self, call, result, user_id, chat_id, started) -> None:
+        """Append one redacted audit record for a tool that actually ran."""
+
+        if self.audit is None:
+            return
+        self.audit.record(
+            uid=user_id,
+            chat=chat_id,
+            tool=call.name,
+            args=call.arguments,
+            decision="auto",
+            exit=getattr(result, "exit", None),
+            ms=int((self.now() - started) * 1000),
+        )
+
+    async def resume(self, pending, approved: bool) -> TurnResult:
+        """Continue a paused turn; completed in the confirmation task."""
+
+        raise NotImplementedError
