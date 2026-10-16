@@ -12,6 +12,7 @@ its file path (see ``tests/test_agent_core.py``).  The Telethon glue lives in
 import json
 import os
 import re
+import secrets
 import time
 from dataclasses import dataclass, field
 from typing import Callable, Iterable, Protocol
@@ -425,10 +426,28 @@ class Agent:
     async def step(self, messages, *, user_id, chat_id) -> TurnResult:
         """Run one turn to completion, to a budget stop, or to a pause."""
 
+        return await self._run(messages, user_id, chat_id)
+
+    async def _run(
+        self, messages, user_id, chat_id, deadline=None
+    ) -> TurnResult:
+        """The bounded model⇄tool loop shared by ``step`` and ``resume``.
+
+        ``deadline`` is a wall-clock instant; when omitted it is set from
+        the current time plus ``settings.turn_timeout``.  Calls run in order
+        and a ``confirm`` call pauses the loop before its handler executes.
+        """
+
+        if deadline is None:
+            deadline = self.now() + self.settings.turn_timeout
+
         tool_results: list[ToolResult] = []
         last_text: str | None = None
 
         for _ in range(self.settings.max_steps):
+            if self.now() > deadline:
+                return TurnResult("budget", last_text, None, tool_results)
+
             reply = await self.client.complete(
                 messages, self.registry.schemas()
             )
@@ -437,19 +456,43 @@ class Agent:
             if not reply.tool_calls:
                 return TurnResult("done", reply.text, None, tool_results)
 
-            messages.append(assistant_tool_calls_message(reply))
-            for call in reply.tool_calls:
+            assistant_message = assistant_tool_calls_message(reply)
+            messages.append(assistant_message)
+            for index, call in enumerate(reply.tool_calls):
+                tool = self.registry.get(call.name)
+                if tool is not None and tool.risk == "confirm":
+                    # No ``tool_calls`` entry may be left without a matching
+                    # tool response: keep the calls resolved so far plus the
+                    # paused one, and drop the rest for the model to re-ask.
+                    assistant_message["tool_calls"] = (
+                        assistant_message["tool_calls"][: index + 1]
+                    )
+                    pending = PendingAction(
+                        id="pa-" + secrets.token_hex(3),
+                        tool_call=call,
+                        messages=messages,
+                        user_id=user_id,
+                        chat_id=chat_id,
+                    )
+                    return TurnResult(
+                        "awaiting_confirm", reply.text, pending, tool_results
+                    )
+
                 result = await self._run_tool(call, user_id, chat_id)
                 messages.append(tool_message(call.id, result.text))
                 tool_results.append(result)
 
         return TurnResult("budget", last_text, None, tool_results)
 
-    async def _run_tool(self, call, user_id, chat_id) -> ToolResult:
+    async def _run_tool(
+        self, call, user_id, chat_id, decision="auto"
+    ) -> ToolResult:
         """Resolve, validate and execute one tool call, never raising.
 
         Rejected calls are audited as well, so a model probing unknown names
         or malformed arguments still leaves a trace (spec section 12).
+        ``decision`` tags a successfully executed call (``auto`` from the
+        loop, ``approved`` from a resumed confirm card).
         """
 
         started = self.now()
@@ -475,7 +518,7 @@ class Agent:
             result = await tool.handler(call.arguments, context)
         except Exception as exc:
             result = ToolResult(text=f"error: {exc}", error=True)
-        self._audit(call, user_id, chat_id, "auto", started, result)
+        self._audit(call, user_id, chat_id, decision, started, result)
         return result
 
     def _audit(self, call, user_id, chat_id, decision, started, result=None):
@@ -499,6 +542,38 @@ class Agent:
         )
 
     async def resume(self, pending, approved: bool) -> TurnResult:
-        """Continue a paused turn; completed in the confirmation task."""
+        """Continue a paused turn once the user approves or declines.
 
-        raise NotImplementedError
+        A fresh wall-clock deadline is started here, so the confirm wait
+        itself does not count against the turn budget.  An approved call
+        runs exactly as an ``auto`` tool but is audited as ``approved``; a
+        declined one is not run and its result message says so, audited as
+        ``declined``.  Either way the loop then continues on the extended
+        history.
+        """
+
+        deadline = self.now() + self.settings.turn_timeout
+        call = pending.tool_call
+        messages = pending.messages
+
+        result = None
+        if approved:
+            result = await self._run_tool(
+                call, pending.user_id, pending.chat_id, decision="approved"
+            )
+            messages.append(tool_message(call.id, result.text))
+        else:
+            started = self.now()
+            self._audit(
+                call, pending.user_id, pending.chat_id, "declined", started
+            )
+            messages.append(tool_message(call.id, "user declined"))
+
+        turn = await self._run(
+            messages, pending.user_id, pending.chat_id, deadline
+        )
+        if result is not None:
+            # Surface the approved call's result (e.g. spilled files) exactly
+            # as the loop would have had it run in its own batch.
+            turn.tool_results.insert(0, result)
+        return turn
