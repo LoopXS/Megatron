@@ -20,12 +20,13 @@ Configuration (environment variables, read at import):
 * ``ABLITERIX_MAX_RUNTIME`` — optional hard per-job time limit, in seconds
 """
 
+import asyncio
 import os
 import shutil
 import time
 
 from . import _abliterix_core as core
-from . import get_help, get_string, heartless_cmd
+from . import LOGS, get_help, get_string, heartless_cmd
 
 __doc__ = get_help("abliterix")
 
@@ -43,6 +44,7 @@ _ALLOWED_FLAGS = tuple(
 )
 
 _STORE = None
+_WORKER_TASK = None
 
 
 def _render(key, **fields):
@@ -190,3 +192,124 @@ async def abliterix_cmd(e):
         await e.reply(text if text is not None else _render("abliterix_help"))
     else:
         await e.reply(_render("abliterix_unknown_sub"))
+
+
+async def _spawn(spec):
+    """Launch one abliterix run, appending both streams to its log file."""
+    handle = open(spec.log_path, "ab")
+    try:
+        return await asyncio.create_subprocess_exec(
+            *spec.argv,
+            cwd=spec.cwd,
+            env=spec.env,
+            stdout=handle,
+            stderr=asyncio.subprocess.STDOUT,
+            start_new_session=True,
+        )
+    finally:
+        handle.close()
+
+
+async def _run_job(job):
+    """Run one job to completion and return the child's exit code."""
+    os.makedirs(job.workdir, exist_ok=True)
+    spec = core.build_process_spec(
+        _BINARY, job.model, job.workdir, job.extra_flags, os.environ
+    )
+    process = await _spawn(spec)
+    job.pid = process.pid
+    _store().save()
+    code = await process.wait()
+    job.pid = None
+    return code
+
+
+async def _worker_loop():
+    """Drain the queue one job at a time, newest work last."""
+    global _WORKER_TASK
+    try:
+        while True:
+            job = _store().next_queued()
+            if job is None:
+                break
+            try:
+                core.transition(job, "running", now=time.time())
+            except ValueError:
+                _store().save()
+                continue
+            _store().save()
+            try:
+                code = await _run_job(job)
+                if job.state == "running":
+                    core.transition(
+                        job,
+                        "succeeded" if code == 0 else "failed",
+                        now=time.time(),
+                        returncode=code,
+                    )
+            except Exception as err:  # noqa: BLE001 - record any failure
+                LOGS.exception(err)
+                if job.state == "running":
+                    core.transition(job, "failed", now=time.time(), error=str(err))
+            _store().save()
+    finally:
+        _WORKER_TASK = None
+
+
+def _ensure_worker():
+    """Start the worker if it is not already running."""
+    global _WORKER_TASK
+    if _WORKER_TASK is None or _WORKER_TASK.done():
+        _WORKER_TASK = asyncio.ensure_future(_worker_loop())
+
+
+async def _enqueue(e, model, extra_tokens):
+    """Validate, preflight and persist a new job; reply with the outcome."""
+    if not core.is_valid_model_id(model):
+        await e.reply(_render("abliterix_bad_model"))
+        return None
+    flags, error = core.parse_extra_flags(extra_tokens, _ALLOWED_FLAGS)
+    if error:
+        await e.reply(_render(error))
+        return None
+    store = _store()
+    active = store.find_active(model)
+    if active is not None:
+        await e.reply(_render("abliterix_duplicate", id=active.id))
+        return None
+    problem = _preflight()
+    if problem:
+        await e.reply(_preflight_message(problem))
+        return None
+
+    job_id = core.new_job_id([job.id for job in store.all()])
+    workdir = os.path.join(_WORKDIR, job_id)
+    os.makedirs(workdir, exist_ok=True)
+    job = core.Job(
+        id=job_id,
+        model=model,
+        state="queued",
+        extra_flags=flags,
+        created_at=time.time(),
+        chat_id=e.chat_id,
+        workdir=workdir,
+        out_dir=os.path.join(workdir, "out"),
+    )
+    store.add(job)
+    store.save()
+    message = await e.reply(_render("abliterix_queued", id=job_id, model=model))
+    if message is not None and getattr(message, "id", None):
+        job.status_message_id = message.id
+        store.save()
+    _ensure_worker()
+    return job
+
+
+@heartless_cmd(pattern="abliterate( (.*)|$)", owner_only=True)
+async def abliterate_cmd(e):
+    arg = (e.pattern_match.group(1) or "").strip()
+    tokens = arg.split()
+    if not tokens:
+        await e.reply(_render("abliterix_help"))
+        return
+    await _enqueue(e, tokens[0], tokens[1:])
