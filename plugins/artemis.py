@@ -14,7 +14,8 @@
    Show your listed MRKT NFTs + model floors.
 
 • `{i}add <id|@username>`
-   Allow a user for assistant `/gift` `/gift c` `/p` (all types) `/order` `/ordertop`.
+   Allow a user for assistant `/gift` `/gift c` `/p` `/order` `/ordertop`
+   and inline `g` / `ch`.
 
 • `{i}rm <id|@username>`
    Remove a user from that allow-list.
@@ -42,6 +43,10 @@
 
 • `{i}gift c https://t.me/nft/Name-123`
    Compact floors for that NFT's collection + model + backdrop.
+
+• Inline: `@AssisXBot g Collection[, Model][, Backdrop]`
+• Inline: `@AssisXBot g https://t.me/nft/Name-123`
+   First pick Floor Price 📉 or Gift Chart 📊, then the matching filters.
 
 • `{i}p usdt` | `{i}p ton` | `{i}p stars`
    Convert 1 unit (+ Tomans & USDT).
@@ -85,8 +90,9 @@
 • `{i}orderupall`
    Retarget every order to competitor top+0.01 (raise or lower).
 
-• `{i}autotop on` | `{i}autotop off`
-   Auto orderupall every 30s / disable it.
+• `{i}autotop on` | `{i}autotop on 20` | `{i}autotop off`
+   Auto orderupall every N seconds (default 30).
+   Active orders are stored in DB and recreated if missing.
    Turns itself off when no active orders remain.
 
 • `{i}orderdel N` | `{i}orderdel 1, 2, 3`
@@ -104,6 +110,7 @@ import html
 import requests
 import asyncio
 import contextlib
+import secrets
 import time
 import re
 from uuid import UUID
@@ -119,6 +126,8 @@ from artemis import MRKTClient
 from artemis.exceptions import TradingError, RequestError, AuthError
 from artemis.utils import ton_to_nano, nano_to_ton
 
+from telethon import Button
+
 from . import (
     heartless_cmd,
     asst_cmd,
@@ -128,6 +137,8 @@ from . import (
     udB,
     HNDLR,
     OWNER_ID,
+    in_pattern,
+    callback,
 )
 from CythonX._misc import owner_and_sudos
 
@@ -152,8 +163,13 @@ BUY_LOCK = asyncio.Lock()
 TOKEN_LOCK = asyncio.Lock()
 ORDER_CACHE = []
 
-AUTOTOP_INTERVAL = 30.0
+AUTOTOP_DEFAULT_INTERVAL = 30.0
+AUTOTOP_MIN_INTERVAL = 5.0
+AUTOTOP_MAX_INTERVAL = 3600.0
+AUTOTOP_INTERVAL = AUTOTOP_DEFAULT_INTERVAL
 AUTOTOP_DB_KEY = "ARTEMIS_AUTOTOP"
+AUTOTOP_INTERVAL_DB_KEY = "ARTEMIS_AUTOTOP_INTERVAL"
+AUTOTOP_ORDERS_DB_KEY = "ARTEMIS_AUTOTOP_ORDERS"
 ORDERUP_LOCK = asyncio.Lock()
 AUTOTOP_TASK = None
 AUTOTOP_ENABLED = False
@@ -163,6 +179,7 @@ AUTOTOP_STATS = {
     "last_updated": 0,
     "last_skipped": 0,
     "last_errors": 0,
+    "last_recreated": 0,
     "cycles": 0,
 }
 
@@ -1142,11 +1159,17 @@ async def _resolve_nft_gift(client, raw, tg_client=None):
     model = backdrop = None
     model_rarity = backdrop_rarity = None
 
-    # Prefer the chat client, then fall back to heartless_bot.
+    # GetUniqueStarGift is user-only — never call it with the assistant bot.
     tg_clients = []
-    for candidate in (tg_client, heartless_bot):
-        if candidate is not None and candidate not in tg_clients:
-            tg_clients.append(candidate)
+    for candidate in (heartless_bot, tg_client):
+        if candidate is None or candidate in tg_clients:
+            continue
+        if candidate is asst:
+            continue
+        me = getattr(candidate, "me", None)
+        if me is not None and getattr(me, "bot", False):
+            continue
+        tg_clients.append(candidate)
 
     # 1) MTProto unique gift lookup (preferred — no Cloudflare/HTML)
     title = None
@@ -2896,6 +2919,7 @@ async def artemis_orders(event):
             global ORDER_CACHE
             orders = await _fetch_my_orders(client)
             ORDER_CACHE = orders
+            _autotop_orders_sync_live(orders, trusted=bool(orders))
             if not orders:
                 return None
             lines = [
@@ -2961,6 +2985,187 @@ async def artemis_orders(event):
         )
 
 
+def _extract_created_order_id(resp):
+    if not isinstance(resp, dict):
+        return None
+    oid = resp.get("id")
+    if oid:
+        return str(oid)
+    for key in ("order", "data", "result"):
+        nested = resp.get(key)
+        if isinstance(nested, dict) and nested.get("id"):
+            return str(nested["id"])
+    return None
+
+
+def _order_track_key_from_parts(
+    collection, model, backdrop, symbol, price_min,
+):
+    return "|".join(
+        [
+            str(collection or "").strip().lower(),
+            str(model or "").strip().lower(),
+            str(backdrop or "").strip().lower(),
+            str(symbol or "").strip().lower(),
+            str(_ton_q2(price_min)),
+        ]
+    )
+
+
+def _order_snapshot(order, *, pending_recreate=False):
+    """Serializable snapshot used to restore a bid if MRKT drops it."""
+    collection = order.get("collectionName") or order.get("collectionTitle") or ""
+    model = order.get("modelName") or None
+    backdrop = order.get("backdropName") or None
+    symbol = order.get("symbolName") or None
+    price_min = float(nano_to_ton(order.get("priceMinNanoTONs") or 0))
+    price_max = float(nano_to_ton(order.get("priceMaxNanoTONs") or 0))
+    total_quantity = int(
+        order.get("totalQuantity") or order.get("quantity") or 1
+    )
+    completed_quantity = int(order.get("completedQuantity") or 0)
+    remaining_quantity = max(total_quantity - completed_quantity, 1)
+    oid = order.get("id")
+    return {
+        "key": _order_track_key_from_parts(
+            collection, model, backdrop, symbol, price_min,
+        ),
+        "id": str(oid) if oid else None,
+        "collection": collection,
+        "model": model,
+        "backdrop": backdrop,
+        "symbol": symbol,
+        "price_min": price_min,
+        "price_max": price_max,
+        "quantity": int(remaining_quantity),
+        "label": _order_label(order),
+        "pending_recreate": bool(pending_recreate),
+        "updated_at": time.time(),
+    }
+
+
+def _snapshot_from_parts(
+    *,
+    collection,
+    model,
+    backdrop,
+    symbol,
+    price_min,
+    price_max,
+    quantity,
+    oid=None,
+    label=None,
+    pending_recreate=False,
+):
+    return {
+        "key": _order_track_key_from_parts(
+            collection, model, backdrop, symbol, price_min,
+        ),
+        "id": str(oid) if oid else None,
+        "collection": collection,
+        "model": model or None,
+        "backdrop": backdrop or None,
+        "symbol": symbol or None,
+        "price_min": float(price_min),
+        "price_max": float(price_max),
+        "quantity": max(int(quantity or 1), 1),
+        "label": label
+        or ", ".join(
+            p
+            for p in (collection, model or None, backdrop or None)
+            if p
+        ),
+        "pending_recreate": bool(pending_recreate),
+        "updated_at": time.time(),
+    }
+
+
+def _autotop_orders_load():
+    raw = udB.get_key(AUTOTOP_ORDERS_DB_KEY)
+    if not isinstance(raw, list):
+        return []
+    out = []
+    for row in raw:
+        if not isinstance(row, dict):
+            continue
+        if not row.get("collection"):
+            continue
+        out.append(row)
+    return out
+
+
+def _autotop_orders_save(rows):
+    clean = []
+    for row in rows or []:
+        if not isinstance(row, dict) or not row.get("collection"):
+            continue
+        clean.append(dict(row))
+    with contextlib.suppress(Exception):
+        udB.set_key(AUTOTOP_ORDERS_DB_KEY, clean)
+    return clean
+
+
+def _autotop_orders_upsert(snapshot):
+    if not isinstance(snapshot, dict) or not snapshot.get("key"):
+        return
+    rows = _autotop_orders_load()
+    key = snapshot["key"]
+    out = [row for row in rows if row.get("key") != key]
+    out.append(dict(snapshot))
+    _autotop_orders_save(out)
+
+
+def _autotop_orders_remove_order(order):
+    """Hard-drop a tracked order after intentional delete."""
+    try:
+        snap = _order_snapshot(order)
+        key = snap.get("key")
+    except Exception:
+        key = None
+    oid = str(order.get("id") or "")
+    rows = []
+    for row in _autotop_orders_load():
+        if key and row.get("key") == key:
+            continue
+        if oid and str(row.get("id") or "") == oid:
+            continue
+        rows.append(row)
+    _autotop_orders_save(rows)
+
+
+def _autotop_orders_clear():
+    _autotop_orders_save([])
+
+
+def _autotop_orders_sync_live(orders, *, trusted=True):
+    """
+    Persist current live bids.
+
+    Keeps ``pending_recreate`` snapshots that are not present live so the
+    next cycle can restore them after cancel/create races or restarts.
+
+    An untrusted empty fetch (``trusted=False``) does not wipe the tracker —
+    that avoids dropping DB snapshots when MRKT briefly returns no rows.
+    """
+    live_snaps = []
+    live_keys = set()
+    for order in orders or []:
+        if not isinstance(order, dict):
+            continue
+        snap = _order_snapshot(order, pending_recreate=False)
+        live_snaps.append(snap)
+        live_keys.add(snap["key"])
+    if not live_snaps and not trusted:
+        return _autotop_orders_load()
+    pending = [
+        dict(row)
+        for row in _autotop_orders_load()
+        if row.get("pending_recreate") and row.get("key") not in live_keys
+    ]
+    _autotop_orders_save(live_snaps + pending)
+    return live_snaps
+
+
 async def _orderup_try_create(
     client,
     *,
@@ -2974,11 +3179,11 @@ async def _orderup_try_create(
     attempts=3,
     label="",
 ):
-    """Create an order with retries. Returns (ok, last_error)."""
+    """Create an order with retries. Returns (ok, last_error, response)."""
     last_err = None
     for attempt in range(max(int(attempts), 1)):
         try:
-            await _create_order(
+            resp = await _create_order(
                 client,
                 collection=collection,
                 model=model,
@@ -2988,7 +3193,7 @@ async def _orderup_try_create(
                 price_max_ton=price_max_ton,
                 quantity=quantity,
             )
-            return True, None
+            return True, None, resp
         except Exception as e:
             last_err = e
             LOGS.warning(
@@ -3000,7 +3205,86 @@ async def _orderup_try_create(
                 e,
             )
             await asyncio.sleep(0.7 * (attempt + 1))
-    return False, last_err
+    return False, last_err, None
+
+
+async def _recreate_snapshot(client, snap):
+    """Recreate one tracked bid from a DB snapshot."""
+    collection = snap.get("collection")
+    if not collection:
+        return False, "missing collection", None
+    ok, err, resp = await _orderup_try_create(
+        client,
+        collection=collection,
+        model=snap.get("model"),
+        backdrop=snap.get("backdrop"),
+        symbol=snap.get("symbol"),
+        price_min_ton=snap.get("price_min") or 0,
+        price_max_ton=snap.get("price_max") or snap.get("price_min") or 0,
+        quantity=snap.get("quantity") or 1,
+        attempts=5,
+        label=f"{snap.get('label') or collection} [db-restore]",
+    )
+    if not ok:
+        snap = dict(snap)
+        snap["pending_recreate"] = True
+        snap["updated_at"] = time.time()
+        _autotop_orders_upsert(snap)
+        return False, err, None
+
+    new_id = _extract_created_order_id(resp)
+    snap = dict(snap)
+    snap["id"] = new_id or snap.get("id")
+    snap["pending_recreate"] = False
+    snap["updated_at"] = time.time()
+    _autotop_orders_upsert(snap)
+    return True, None, snap
+
+
+async def _ensure_tracked_orders(client, live_orders=None):
+    """
+    Recreate only DB snapshots marked ``pending_recreate`` that are still
+    missing live (cancel/create race, crash, or failed restore).
+
+    Filled / manually cancelled bids are not recreated.
+    """
+    if live_orders is None:
+        live_orders = await _fetch_my_orders(client)
+    live_keys = set()
+    live_ids = set()
+    for order in live_orders or []:
+        snap = _order_snapshot(order)
+        live_keys.add(snap["key"])
+        if snap.get("id"):
+            live_ids.add(str(snap["id"]))
+
+    restored = []
+    for row in list(_autotop_orders_load()):
+        if not row.get("pending_recreate"):
+            continue
+        key = row.get("key")
+        oid = str(row.get("id") or "")
+        present = (key in live_keys) or (oid and oid in live_ids)
+        if present:
+            row = dict(row)
+            row["pending_recreate"] = False
+            row["updated_at"] = time.time()
+            _autotop_orders_upsert(row)
+            continue
+        ok, err, snap = await _recreate_snapshot(client, row)
+        if ok:
+            restored.append(snap or row)
+            LOGS.info(
+                "Autotop DB-restored missing order: %s",
+                (snap or row).get("label") or key,
+            )
+        else:
+            LOGS.warning(
+                "Autotop DB-restore failed for %s: %s",
+                row.get("label") or key,
+                err,
+            )
+    return restored
 
 
 async def _orderup_one(client, order):
@@ -3010,13 +3294,9 @@ async def _orderup_one(client, order):
     Raises when below, lowers when there is a gap above the second-highest,
     skips when already exactly at competitor top + 0.01.
 
-    CRITICAL: cancel runs before create. If recreate fails, we immediately
-    try to restore the bid at the previous min/max so autotop cannot silently
-    delete live orders (seen after bot restarts / token blips).
-
-    Returns a result dict:
-      status: "updated" | "skipped" | "restored" | "lost" | "error"
-      plus label / price fields for reporting.
+    CRITICAL: cancel runs before create. Snapshot is written to DB with
+    ``pending_recreate`` before cancel so autotop can restore after
+    recreate failures / restarts. Immediate restore is still attempted.
     """
     label = _order_label(order)
     oid = None
@@ -3061,12 +3341,13 @@ async def _orderup_one(client, order):
         top = await _top_order(client, filt)
         competitor = await _competitor_top_ton(client, order, top=top)
         if competitor is None:
-            # No other bids — keep current max (nothing to chase).
             top_max = old_max
             ideal_max = _ton_q2(old_max)
         else:
             top_max = competitor
             ideal_max = _order_ideal_max(competitor, old_min)
+
+        _autotop_orders_upsert(_order_snapshot(order, pending_recreate=False))
 
         if _ton_q2(old_max) == _ton_q2(ideal_max):
             return {
@@ -3078,9 +3359,11 @@ async def _orderup_one(client, order):
                 "top_max": top_max,
             }
 
+        pending_snap = _order_snapshot(order, pending_recreate=True)
+        _autotop_orders_upsert(pending_snap)
+
         await _cancel_order(client, oid)
         cancelled = True
-        # After cancel, /orders/top is the true second-highest (ex-ours).
         top = await _top_order(client, filt)
         if top and top.get("priceMaxNanoTONs") is not None:
             top_max = nano_to_ton(top.get("priceMaxNanoTONs"))
@@ -3088,7 +3371,7 @@ async def _orderup_one(client, order):
             top_max = competitor if competitor is not None else old_min
         new_max = _order_ideal_max(top_max, old_min)
 
-        ok, create_err = await _orderup_try_create(
+        ok, create_err, create_resp = await _orderup_try_create(
             client,
             collection=collection,
             model=model,
@@ -3101,10 +3384,25 @@ async def _orderup_one(client, order):
             label=label,
         )
         if ok:
+            new_id = _extract_created_order_id(create_resp)
+            _autotop_orders_upsert(
+                _snapshot_from_parts(
+                    collection=collection,
+                    model=model,
+                    backdrop=backdrop,
+                    symbol=symbol,
+                    price_min=old_min,
+                    price_max=new_max,
+                    quantity=remaining_quantity,
+                    oid=new_id,
+                    label=label,
+                    pending_recreate=False,
+                )
+            )
             return {
                 "status": "updated",
                 "label": label,
-                "oid": oid,
+                "oid": new_id or oid,
                 "old_min": old_min,
                 "old_max": old_max,
                 "top_max": top_max,
@@ -3112,12 +3410,11 @@ async def _orderup_one(client, order):
                 "qty": remaining_quantity,
             }
 
-        # Recreate failed — put the old bid back so the order is not lost.
         LOGS.error(
             "orderup recreate failed for %s (%s); restoring %s-%s TON: %s",
             label, oid, old_min, old_max, create_err,
         )
-        restored, restore_err = await _orderup_try_create(
+        restored, restore_err, restore_resp = await _orderup_try_create(
             client,
             collection=collection,
             model=model,
@@ -3130,21 +3427,37 @@ async def _orderup_one(client, order):
             label=f"{label} [restore]",
         )
         if restored:
+            new_id = _extract_created_order_id(restore_resp)
+            _autotop_orders_upsert(
+                _snapshot_from_parts(
+                    collection=collection,
+                    model=model,
+                    backdrop=backdrop,
+                    symbol=symbol,
+                    price_min=old_min,
+                    price_max=old_max,
+                    quantity=remaining_quantity,
+                    oid=new_id,
+                    label=label,
+                    pending_recreate=False,
+                )
+            )
             return {
                 "status": "restored",
                 "label": label,
-                "oid": oid,
+                "oid": new_id or oid,
                 "old_min": old_min,
                 "old_max": old_max,
                 "top_max": top_max,
                 "new_max": new_max,
                 "qty": remaining_quantity,
                 "error": (
-                    f"Recreate at { _ton2(new_max) } failed "
+                    f"Recreate at {_ton2(new_max)} failed "
                     f"({create_err}); restored previous "
                     f"{_ton2(old_min)}-{_ton2(old_max)} TON."
                 ),
             }
+        _autotop_orders_upsert(pending_snap)
         return {
             "status": "lost",
             "label": label,
@@ -3157,16 +3470,16 @@ async def _orderup_one(client, order):
             "error": (
                 f"Cancelled, recreate failed ({create_err}), "
                 f"restore failed ({restore_err}). "
-                f"Re-create manually: {_h('ordernew')} "
+                f"DB snapshot kept for autotop recreate. "
+                f"Manual: {_h('ordernew')} "
                 f"{collection}, {model or ''}, {backdrop or ''}, "
                 f"{_ton2(old_min)}-{_ton2(old_max)}"
             ),
         }
     except Exception as e:
         LOGS.exception("orderup failed for %s: %s", oid, e)
-        # If we already cancelled and then crashed, try one emergency restore.
         if cancelled and collection:
-            restored, restore_err = await _orderup_try_create(
+            restored, restore_err, restore_resp = await _orderup_try_create(
                 client,
                 collection=collection,
                 model=model,
@@ -3179,10 +3492,25 @@ async def _orderup_one(client, order):
                 label=f"{label} [emergency-restore]",
             )
             if restored:
+                new_id = _extract_created_order_id(restore_resp)
+                _autotop_orders_upsert(
+                    _snapshot_from_parts(
+                        collection=collection,
+                        model=model,
+                        backdrop=backdrop,
+                        symbol=symbol,
+                        price_min=old_min,
+                        price_max=old_max,
+                        quantity=remaining_quantity,
+                        oid=new_id,
+                        label=label,
+                        pending_recreate=False,
+                    )
+                )
                 return {
                     "status": "restored",
                     "label": label,
-                    "oid": oid,
+                    "oid": new_id or oid,
                     "old_min": old_min,
                     "old_max": old_max,
                     "error": (
@@ -3190,6 +3518,20 @@ async def _orderup_one(client, order):
                         f"restored previous price."
                     ),
                 }
+            _autotop_orders_upsert(
+                _snapshot_from_parts(
+                    collection=collection,
+                    model=model,
+                    backdrop=backdrop,
+                    symbol=symbol,
+                    price_min=old_min,
+                    price_max=old_max,
+                    quantity=remaining_quantity,
+                    oid=oid,
+                    label=label,
+                    pending_recreate=True,
+                )
+            )
             return {
                 "status": "lost",
                 "label": label,
@@ -3198,7 +3540,8 @@ async def _orderup_one(client, order):
                 "old_max": old_max,
                 "error": (
                     f"orderup crashed after cancel ({e}); "
-                    f"restore failed ({restore_err})."
+                    f"restore failed ({restore_err}). "
+                    f"DB snapshot kept for autotop recreate."
                 ),
             }
         return {
@@ -3213,11 +3556,16 @@ async def _run_orderup_all(client):
     """
     Retarget every active order to competitor top+0.01.
 
-    Returns dict: orders, updated, skipped, restored, lost, errors.
-    Updates ORDER_CACHE.
+    Syncs active bids into DB first, recreates any missing tracked bids,
+    then orderups. Updates ORDER_CACHE.
     """
     global ORDER_CACHE
     orders = await _fetch_my_orders(client)
+    _autotop_orders_sync_live(orders, trusted=bool(orders))
+    recreated = await _ensure_tracked_orders(client, live_orders=orders)
+    if recreated:
+        orders = await _fetch_my_orders(client)
+        _autotop_orders_sync_live(orders, trusted=bool(orders))
     ORDER_CACHE = orders
     updated = []
     restored = []
@@ -3238,13 +3586,20 @@ async def _run_orderup_all(client):
         else:
             errors.append(result)
     ORDER_CACHE = await _fetch_my_orders(client)
+    _autotop_orders_sync_live(ORDER_CACHE, trusted=bool(ORDER_CACHE))
+    extra = await _ensure_tracked_orders(client, live_orders=ORDER_CACHE)
+    if extra:
+        recreated.extend(extra)
+        ORDER_CACHE = await _fetch_my_orders(client)
+        _autotop_orders_sync_live(ORDER_CACHE, trusted=bool(ORDER_CACHE))
     return {
-        "orders": orders,
+        "orders": ORDER_CACHE,
         "updated": updated,
         "skipped": skipped,
         "restored": restored,
         "lost": lost,
         "errors": errors,
+        "recreated": recreated,
     }
 
 
@@ -3253,12 +3608,14 @@ def _orderup_all_message(result):
     skipped = result["skipped"]
     restored = result.get("restored") or []
     lost = result.get("lost") or []
+    recreated = result.get("recreated") or []
     errors = result["errors"]
     lines = [
         "🚀 <b>Orderup All</b>",
         "",
         f"✅ Updated: <code>{len(updated)}</code>",
         f"⏭ Already at top+0.01: <code>{skipped}</code>",
+        f"💾 DB-recreated missing: <code>{len(recreated)}</code>",
         f"♻️ Restored after failed recreate: <code>{len(restored)}</code>",
         f"🚨 Lost (cancel+recreate+restore failed): <code>{len(lost)}</code>",
         f"❌ Errors: <code>{len(errors)}</code>",
@@ -3319,8 +3676,22 @@ def _orderup_all_message(result):
     return "\n".join(lines).rstrip()
 
 
+def _clamp_autotop_interval(value):
+    try:
+        seconds = float(value)
+    except Exception:
+        seconds = AUTOTOP_DEFAULT_INTERVAL
+    if seconds < AUTOTOP_MIN_INTERVAL:
+        seconds = AUTOTOP_MIN_INTERVAL
+    if seconds > AUTOTOP_MAX_INTERVAL:
+        seconds = AUTOTOP_MAX_INTERVAL
+    return float(seconds)
+
+
 def _autotop_db_enabled():
     raw = udB.get_key(AUTOTOP_DB_KEY)
+    if isinstance(raw, dict):
+        raw = raw.get("enabled")
     if raw is True or raw == 1:
         return True
     if isinstance(raw, str) and raw.strip().lower() in ("1", "true", "on", "yes"):
@@ -3332,6 +3703,25 @@ def _autotop_set_db(enabled):
     udB.set_key(AUTOTOP_DB_KEY, bool(enabled))
 
 
+def _autotop_get_interval():
+    raw = udB.get_key(AUTOTOP_INTERVAL_DB_KEY)
+    if raw is None:
+        cfg = udB.get_key(AUTOTOP_DB_KEY)
+        if isinstance(cfg, dict) and cfg.get("interval") is not None:
+            raw = cfg.get("interval")
+    if raw is None:
+        return float(AUTOTOP_DEFAULT_INTERVAL)
+    return _clamp_autotop_interval(raw)
+
+
+def _autotop_set_interval(seconds):
+    global AUTOTOP_INTERVAL
+    AUTOTOP_INTERVAL = _clamp_autotop_interval(seconds)
+    with contextlib.suppress(Exception):
+        udB.set_key(AUTOTOP_INTERVAL_DB_KEY, float(AUTOTOP_INTERVAL))
+    return AUTOTOP_INTERVAL
+
+
 def _autotop_status_message():
     running = bool(
         AUTOTOP_ENABLED
@@ -3339,9 +3729,13 @@ def _autotop_status_message():
         and not AUTOTOP_TASK.done()
     )
     state = "ON" if running else "OFF"
+    tracked = _autotop_orders_load()
+    pending = sum(1 for row in tracked if row.get("pending_recreate"))
     lines = [
         f"⏱ <b>Autotop:</b> <code>{state}</code>",
         f"🔁 Interval: <code>{int(AUTOTOP_INTERVAL)}s</code>",
+        f"💾 Tracked orders: <code>{len(tracked)}</code>"
+        + (f" (pending recreate: <code>{pending}</code>)" if pending else ""),
     ]
     if AUTOTOP_STATS.get("started_at"):
         lines.append(
@@ -3355,6 +3749,7 @@ def _autotop_status_message():
             f"📊 Last cycle — updated "
             f"<code>{AUTOTOP_STATS.get('last_updated', 0)}</code>, "
             f"skipped <code>{AUTOTOP_STATS.get('last_skipped', 0)}</code>, "
+            f"db-recreated <code>{AUTOTOP_STATS.get('last_recreated', 0)}</code>, "
             f"errors <code>{AUTOTOP_STATS.get('last_errors', 0)}</code>"
         )
     lines.append(f"🔢 Cycles: <code>{AUTOTOP_STATS.get('cycles', 0)}</code>")
@@ -3382,14 +3777,24 @@ async def _autotop_notify_problems(result: dict):
     """Alert owner when autotop loses/restores orders or hits errors."""
     lost = result.get("lost") or []
     restored = result.get("restored") or []
+    recreated = result.get("recreated") or []
     errors = result.get("errors") or []
-    if not lost and not restored and not errors:
+    if not lost and not restored and not recreated and not errors:
         return
     try:
         owner = OWNER_ID or (owner_and_sudos() or [None])[0]
         if not owner or not heartless_bot:
             return
         lines = ["⚠️ <b>Autotop orderup warning</b>", ""]
+        if recreated:
+            lines.append(
+                f"💾 <b>DB-recreated missing:</b> <code>{len(recreated)}</code>"
+            )
+            for row in recreated[:8]:
+                lines.append(
+                    f"• {html.escape(str(row.get('label') or '?'))}"
+                )
+            lines.append("")
         if lost:
             lines.append(f"🚨 <b>Lost bids:</b> <code>{len(lost)}</code>")
             for row in lost[:8]:
@@ -3433,6 +3838,7 @@ async def _autotop_cycle_once():
     AUTOTOP_STATS["last_run_at"] = time.time()
     AUTOTOP_STATS["last_updated"] = len(result["updated"])
     AUTOTOP_STATS["last_skipped"] = result["skipped"]
+    AUTOTOP_STATS["last_recreated"] = len(result.get("recreated") or [])
     AUTOTOP_STATS["last_errors"] = (
         len(result["errors"])
         + len(result.get("lost") or [])
@@ -3444,7 +3850,8 @@ async def _autotop_cycle_once():
 
 
 async def _autotop_worker():
-    global AUTOTOP_TASK, AUTOTOP_ENABLED
+    global AUTOTOP_TASK, AUTOTOP_ENABLED, AUTOTOP_INTERVAL
+    AUTOTOP_INTERVAL = _autotop_get_interval()
     LOGS.info("Artemis autotop worker started (every %ss)", AUTOTOP_INTERVAL)
     # Give startup / token refresh a moment before the first cancel+recreate
     # pass — restart races were canceling bids while the API was still settling.
@@ -3453,18 +3860,25 @@ async def _autotop_worker():
     try:
         while AUTOTOP_ENABLED:
             try:
+                AUTOTOP_INTERVAL = _autotop_get_interval()
                 result = await _autotop_cycle_once()
-                # Require two consecutive empty fetches before auto-disable so
-                # a single flaky/over-filtered response cannot kill autotop.
-                if not result.get("orders"):
+                live_empty = not result.get("orders")
+                pending = [
+                    row
+                    for row in _autotop_orders_load()
+                    if row.get("pending_recreate")
+                ]
+                # Keep running while DB still needs to restore a cancelled bid.
+                if live_empty and not pending:
                     empty_streak += 1
                 else:
                     empty_streak = 0
                 if empty_streak >= 2:
                     LOGS.info(
-                        "Autotop: no active orders for %s cycles — disabling",
+                        "Autotop: no live orders for %s cycles — disabling",
                         empty_streak,
                     )
+                    _autotop_orders_clear()
                     AUTOTOP_ENABLED = False
                     _autotop_set_db(False)
                     await _autotop_notify_disabled(
@@ -3488,7 +3902,7 @@ async def _autotop_worker():
                 LOGS.warning("Autotop cycle failed: %s", e)
             if not AUTOTOP_ENABLED:
                 break
-            await asyncio.sleep(AUTOTOP_INTERVAL)
+            await asyncio.sleep(_autotop_get_interval())
     except asyncio.CancelledError:
         LOGS.info("Artemis autotop worker cancelled")
         raise
@@ -3498,9 +3912,13 @@ async def _autotop_worker():
         LOGS.info("Artemis autotop worker stopped")
 
 
-def _autotop_start():
+def _autotop_start(interval=None):
     """Enable + start the background worker (idempotent)."""
-    global AUTOTOP_TASK, AUTOTOP_ENABLED, AUTOTOP_STATS
+    global AUTOTOP_TASK, AUTOTOP_ENABLED, AUTOTOP_STATS, AUTOTOP_INTERVAL
+    if interval is not None:
+        _autotop_set_interval(interval)
+    else:
+        AUTOTOP_INTERVAL = _autotop_get_interval()
     AUTOTOP_ENABLED = True
     _autotop_set_db(True)
     if AUTOTOP_TASK is not None and not AUTOTOP_TASK.done():
@@ -3510,6 +3928,7 @@ def _autotop_start():
         "last_run_at": None,
         "last_updated": 0,
         "last_skipped": 0,
+        "last_recreated": 0,
         "last_errors": 0,
         "cycles": 0,
     }
@@ -3533,6 +3952,8 @@ async def _autotop_stop():
 
 def _autotop_bootstrap():
     """Resume autotop after plugin reload when DB flag is on."""
+    global AUTOTOP_INTERVAL
+    AUTOTOP_INTERVAL = _autotop_get_interval()
     if not _autotop_db_enabled():
         return
     try:
@@ -3598,22 +4019,41 @@ async def artemis_autotop(event):
     if not raw:
         return await event.eor(_autotop_status_message(), parse_mode="html")
 
-    if raw in ("on", "start", "enable", "1", "true"):
+    on_match = re.match(
+        r"^(on|start|enable|1|true)(?:\s+(\d+(?:\.\d+)?)\s*s?)?$",
+        raw,
+    )
+    if on_match:
         try:
             await _ensure_artemis_token(event)
         except ValueError as e:
             return await event.eor(f"❌ {e}", parse_mode="html")
-        started = _autotop_start()
+        interval = (
+            float(on_match.group(2))
+            if on_match.group(2)
+            else AUTOTOP_DEFAULT_INTERVAL
+        )
+        interval = _autotop_set_interval(interval)
+        # Seed DB tracker from current live orders before the worker runs.
+        try:
+            async with ORDERUP_LOCK:
+                async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+                    live = await _fetch_my_orders(client)
+                    _autotop_orders_sync_live(live)
+        except Exception as e:
+            LOGS.warning("Autotop seed sync failed: %s", e)
+        started = _autotop_start(interval)
         if started:
             msg = (
                 "🟢 <b>Autotop enabled.</b>\n\n"
-                f"🔁 Checking every <code>{int(AUTOTOP_INTERVAL)}s</code>.\n"
+                f"🔁 Checking every <code>{int(interval)}s</code>.\n"
+                f"💾 Active orders are tracked in DB and recreated if missing.\n"
                 f"Use <code>{_h('autotop')} off</code> to disable."
             )
         else:
             msg = (
                 "🟢 <b>Autotop is already running.</b>\n\n"
-                f"🔁 Interval: <code>{int(AUTOTOP_INTERVAL)}s</code>"
+                f"🔁 Interval updated to <code>{int(interval)}s</code>."
             )
         return await event.eor(
             msg + "\n\n" + _autotop_status_message(),
@@ -3631,7 +4071,8 @@ async def artemis_autotop(event):
     return await event.eor(
         "❌ <b>Usage:</b>\n"
         f"<code>{_h('autotop')}</code>\n"
-        f"<code>{_h('autotop')} on</code>\n"
+        f"<code>{_h('autotop')} on</code> — default 30s\n"
+        f"<code>{_h('autotop')} on 20</code> — custom interval\n"
         f"<code>{_h('autotop')} off</code>",
         parse_mode="html",
     )
@@ -3663,6 +4104,10 @@ async def artemis_orderup(event):
             async with MRKTClient(token=ARTEMIS_TOKEN) as client:
                 result = await _orderup_one(client, order)
                 ORDER_CACHE = await _fetch_my_orders(client)
+                _autotop_orders_sync_live(
+                    ORDER_CACHE, trusted=bool(ORDER_CACHE),
+                )
+                await _ensure_tracked_orders(client, live_orders=ORDER_CACHE)
 
         if result["status"] == "skipped":
             return await status.edit(
@@ -3742,6 +4187,8 @@ async def artemis_orderdelall(event):
                 orders = await _fetch_my_orders(client)
                 if not orders:
                     ORDER_CACHE = []
+                    # Also wipe stale autotop tracker rows.
+                    _autotop_orders_clear()
                     return await status.edit(
                         "📭 <b>No active orders.</b>", parse_mode="html",
                     )
@@ -3754,6 +4201,10 @@ async def artemis_orderdelall(event):
                     except Exception as e:
                         errors.append(f"{order.get('id')}: {e}")
                 ORDER_CACHE = await _fetch_my_orders(client)
+                # orderdelall always clears DB tracker; re-seed only leftovers.
+                _autotop_orders_clear()
+                if ORDER_CACHE:
+                    _autotop_orders_sync_live(ORDER_CACHE, trusted=True)
         msg = (
             "🗑 <b>Bulk delete finished.</b>\n\n"
             f"Deleted: <code>{deleted}/{len(orders)}</code>"
@@ -3832,10 +4283,15 @@ async def artemis_orderdel(event):
                 for idx, order, oid in targets:
                     try:
                         await _cancel_order(client, oid)
+                        _autotop_orders_remove_order(order)
                         deleted.append((idx, order, oid))
                     except Exception as e:
                         errors.append((idx, order, oid, e))
                 ORDER_CACHE = await _fetch_my_orders(client)
+                if not ORDER_CACHE:
+                    _autotop_orders_clear()
+                else:
+                    _autotop_orders_sync_live(ORDER_CACHE, trusted=True)
 
         if len(targets) == 1 and len(deleted) == 1 and not errors:
             idx, order, oid = deleted[0]
@@ -3925,6 +4381,7 @@ async def artemis_ordernew(event):
                 quantity=quantity,
             )
             ORDER_CACHE = await _fetch_my_orders(client)
+            _autotop_orders_sync_live(ORDER_CACHE)
             return coll, mod, back
 
         resolved, status = await _with_mrkt(event, status, work)
@@ -5276,16 +5733,25 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
                     if backdrop_rarity is not None:
                         break
 
-    lines = [f"🎁 <b>Collection:</b> {html.escape(str(collection))}"]
+    def _md(value):
+        text = str(value or "")
+        return (
+            text.replace("\\", "\\\\")
+            .replace("_", "\\_")
+            .replace("*", "\\*")
+            .replace("`", "\\`")
+            .replace("[", "\\[")
+        )
+
+    lines = [f"🎁 **Collection:** `{_md(collection)}`"]
     if model:
         lines.append(
-            f"🧩 <b>Model:</b> {html.escape(str(model))} "
-            f"({_rarity_pct(model_rarity)})"
+            f"🧩 **Model:** `{_md(model)}` (`{_md(_rarity_pct(model_rarity))}`)"
         )
     if backdrop:
         lines.append(
-            f"🎨 <b>Backdrop:</b> {html.escape(str(backdrop))} "
-            f"({_rarity_pct(backdrop_rarity)})"
+            f"🎨 **Backdrop:** `{_md(backdrop)}` "
+            f"(`{_md(_rarity_pct(backdrop_rarity))}`)"
         )
     lines.append("")
     for label, value in (
@@ -5295,20 +5761,23 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
         ("Telegram", sat_floors.get("Telegram")),
         ("GetGems", sat_floors.get("GetGems")),
     ):
-        lines.append(f"   {label}: {_floor_ton(value)}")
+        lines.append(f"💰 **{label}:** `{_md(_floor_ton(value))}`")
     lines.append("")
 
     quick_txt = _ton2(quick) if quick is not None else "—"
     if model and backdrop:
         lines.append(
-            f"📊 Quick Sell Collection + Model + Backdrop: {quick_txt} TON"
+            f"📊 **Quick Sell Collection + Model + Backdrop:** "
+            f"`{_md(quick_txt)} TON`"
         )
     elif model:
         lines.append(
-            f"📊 Quick Sell Collection + Model: {quick_txt} TON"
+            f"📊 **Quick Sell Collection + Model:** `{_md(quick_txt)} TON`"
         )
     else:
-        lines.append(f"📊 Quick Sell Collection: {quick_txt} TON")
+        lines.append(
+            f"📊 **Quick Sell Collection:** `{_md(quick_txt)} TON`"
+        )
 
     return "\n".join(lines)
 
@@ -6297,6 +6766,612 @@ async def artemis_gift(event):
     await _artemis_gift_handler(event)
 
 
+# Inline `g` compact-floor picker sessions (answer fast; fetch on callback).
+_GIFT_INLINE_TTL = 30 * 60
+_GIFT_INLINE_SESSIONS: dict = {}
+
+
+def _gift_inline_purge():
+    now = time.monotonic()
+    dead = [
+        k
+        for k, v in _GIFT_INLINE_SESSIONS.items()
+        if now - float(v.get("at") or 0) > _GIFT_INLINE_TTL
+    ]
+    for k in dead:
+        _GIFT_INLINE_SESSIONS.pop(k, None)
+
+
+def _gift_inline_save(payload: dict) -> str:
+    _gift_inline_purge()
+    token = secrets.token_urlsafe(6)[:10]
+    row = dict(payload)
+    row["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = row
+    return token
+
+
+def _gift_inline_load(token: str):
+    _gift_inline_purge()
+    row = _GIFT_INLINE_SESSIONS.get(token)
+    if not row:
+        return None
+    row["at"] = time.monotonic()
+    return row
+
+
+def _gift_inline_title(sess: dict) -> str:
+    parts = [sess.get("collection") or "?"]
+    if sess.get("model"):
+        parts.append(sess["model"])
+    if sess.get("backdrop"):
+        parts.append(sess["backdrop"])
+    return ", ".join(parts)
+
+
+def _gift_inline_hub_text(sess: dict) -> str:
+    title = _gift_inline_title(sess)
+    return (
+        f"🎁 **{_md_escape_inline(title)}**\n\n"
+        "Choose a tool:"
+    )
+
+
+def _md_escape_inline(value) -> str:
+    text = str(value or "")
+    return (
+        text.replace("\\", "\\\\")
+        .replace("_", "\\_")
+        .replace("*", "\\*")
+        .replace("`", "\\`")
+        .replace("[", "\\[")
+    )
+
+
+def _gift_inline_floor_picker_text(sess: dict) -> str:
+    title = _md_escape_inline(_gift_inline_title(sess))
+    return (
+        f"🎁 **{title}**\n\n"
+        "Pick a compact floor filter:"
+    )
+
+
+def _gift_inline_action_row(
+    raw: str,
+    *,
+    show_back: bool,
+    owner_id: int,
+    token: str,
+    back_data: bytes | None = None,
+):
+    rows = [
+        [
+            Button.switch_inline("🔎 Search again", query="g ", same_peer=True),
+            Button.switch_inline(
+                "🔗 Share",
+                query=f"g {raw}" if raw else "g ",
+                same_peer=False,
+            ),
+        ]
+    ]
+    if show_back:
+        data = back_data or f"gf:b:{owner_id}:{token}".encode()
+        rows.append([Button.inline("⬅️ Back", data=data)])
+    return rows
+
+
+def _gift_inline_hub_buttons(owner_id: int, token: str, raw: str):
+    rows = [
+        [
+            Button.inline(
+                "Floor Price 📉",
+                data=f"gu:s:{owner_id}:{token}:f".encode(),
+            ),
+            Button.inline(
+                "Gift Chart 📊",
+                data=f"gu:s:{owner_id}:{token}:c".encode(),
+            ),
+        ]
+    ]
+    rows.extend(
+        _gift_inline_action_row(
+            raw,
+            show_back=False,
+            owner_id=owner_id,
+            token=token,
+        )
+    )
+    return rows
+
+
+def _gift_inline_floor_picker_buttons(sess: dict, owner_id: int, token: str):
+    depth = int(sess.get("depth") or 1)
+    row = [
+        Button.inline(
+            "Collection Floor" if depth == 1 else "Collection",
+            data=f"gf:f:{owner_id}:{token}:c".encode(),
+        )
+    ]
+    if depth >= 2:
+        row.append(
+            Button.inline(
+                "C+Model",
+                data=f"gf:f:{owner_id}:{token}:cm".encode(),
+            )
+        )
+    buttons = [row]
+    if depth >= 3:
+        buttons.append(
+            [
+                Button.inline(
+                    "C+M+Backdrop",
+                    data=f"gf:f:{owner_id}:{token}:cmb".encode(),
+                )
+            ]
+        )
+    # Stage 2+: always Back to hub.
+    buttons.extend(
+        _gift_inline_action_row(
+            sess.get("raw") or "",
+            show_back=True,
+            owner_id=owner_id,
+            token=token,
+            back_data=f"gu:h:{owner_id}:{token}".encode(),
+        )
+    )
+    return buttons
+
+
+def _gift_inline_parse_raw(raw: str):
+    """
+    Fast local parse for inline picker (no network).
+
+    Returns dict: collection, model, backdrop, nft_mode, depth, raw
+    depth: 1=collection, 2=collection+model, 3=collection+model+backdrop/nft
+    """
+    text = (raw or "").strip()
+    c_match = re.match(r"(?is)^c(?:\s+|$)(.*)$", text)
+    if c_match is not None:
+        text = (c_match.group(1) or "").strip()
+    if not text:
+        raise ValueError("empty")
+
+    nft_mode = bool(_parse_nft_link(text))
+    if nft_mode:
+        parsed = _parse_nft_link(text)
+        slug, short_slug, _number = parsed
+        collection, _, _ = _resolve_collection_from_slug(short_slug)
+        return {
+            "collection": collection,
+            "model": None,
+            "backdrop": None,
+            "nft_mode": True,
+            "nft_raw": text,
+            "slug": slug,
+            "depth": 3,
+            "raw": text,
+        }
+
+    parts = [part.strip() for part in text.split(",") if part.strip()]
+    if len(parts) == 1:
+        return {
+            "collection": parts[0],
+            "model": None,
+            "backdrop": None,
+            "nft_mode": False,
+            "depth": 1,
+            "raw": text,
+        }
+    if len(parts) == 2:
+        return {
+            "collection": parts[0],
+            "model": parts[1],
+            "backdrop": None,
+            "nft_mode": False,
+            "depth": 2,
+            "raw": text,
+        }
+    if len(parts) == 3:
+        backdrop = parts[2]
+        if backdrop.lower() in ("none", "null", "*", "-", "any"):
+            backdrop = None
+            depth = 2
+        else:
+            depth = 3
+        return {
+            "collection": parts[0],
+            "model": parts[1],
+            "backdrop": backdrop,
+            "nft_mode": False,
+            "depth": depth,
+            "raw": text,
+        }
+    raise ValueError("bad_format")
+
+
+async def _inline_nft_denied(event):
+    article = await event.builder.article(
+        title="❌ Not authorized",
+        description="Ask the owner to .add your ID",
+        text=(
+            "❌ You are not on the NFT allow-list.\n"
+            "Ask the owner to `.add <your id>`."
+        ),
+    )
+    try:
+        return await event.answer(
+            [article],
+            cache_time=5,
+            switch_pm="Request access",
+            switch_pm_param="start",
+        )
+    except Exception as e:
+        if "query id is invalid" in str(e).lower():
+            return
+        raise
+
+
+async def _gift_inline_answer(event, articles, **kwargs):
+    try:
+        return await event.answer(articles, **kwargs)
+    except Exception as e:
+        if "query id is invalid" in str(e).lower():
+            LOGS.debug("Inline g answer skipped (expired query id)")
+            return
+        raise
+
+
+async def _gift_inline_edit(event, text: str, buttons, *, parse_mode="md"):
+    try:
+        await event.edit(
+            text,
+            buttons=buttons,
+            parse_mode=parse_mode,
+            link_preview=False,
+            file=None,
+        )
+        return
+    except Exception:
+        pass
+    try:
+        await event.delete()
+    except Exception:
+        pass
+    await event.respond(
+        text,
+        buttons=buttons,
+        parse_mode=parse_mode,
+        link_preview=False,
+    )
+
+
+@in_pattern(r"(?i)^g(?:\s+([\s\S]+))?$", owner=False)
+async def artemis_gift_inline(event):
+    """
+    Inline `g` hub → Floor Price or Gift Chart.
+
+    Answers immediately so Telegram does not expire the query id.
+    """
+    if not _nft_user_allowed(event.sender_id):
+        return await _inline_nft_denied(event)
+
+    raw = ""
+    try:
+        raw = (event.pattern_match.group(1) or "").strip()
+    except Exception:
+        raw = ""
+
+    if not raw:
+        article = await event.builder.article(
+            title="🎁 Gift floors & charts",
+            description="g Collection, Model, Backdrop | NFT link",
+            text=(
+                "**Gift floors & charts**\n\n"
+                "`g Liberty Figure`\n"
+                "`g Liberty Figure, Fire Opal`\n"
+                "`g Liberty Figure, Fire Opal, Black`\n"
+                "`g https://t.me/nft/LibertyFigure-214445`\n\n"
+                "Then pick **Floor Price 📉** or **Gift Chart 📊**."
+            ),
+            buttons=[
+                [
+                    Button.switch_inline(
+                        "Try Liberty Figure",
+                        query="g Liberty Figure",
+                        same_peer=True,
+                    )
+                ]
+            ],
+        )
+        return await _gift_inline_answer(event, [article], cache_time=5)
+
+    try:
+        parsed = _gift_inline_parse_raw(raw)
+    except ValueError as e:
+        msg = (
+            "❌ Gift filter is missing."
+            if str(e) == "empty"
+            else "❌ Invalid format.\n\n"
+            "`g Collection`\n"
+            "`g Collection, Model`\n"
+            "`g Collection, Model, Backdrop`\n"
+            "`g https://t.me/nft/Name-123`"
+        )
+        article = await event.builder.article(
+            title="❌ Invalid query",
+            description="g Collection, Model, Backdrop",
+            text=msg,
+        )
+        return await _gift_inline_answer(event, [article], cache_time=5)
+
+    owner_id = int(event.sender_id)
+    token = _gift_inline_save(
+        {
+            **parsed,
+            "owner_id": owner_id,
+            "resolved": False,
+            "view": "hub",
+            "last_mode": None,
+        }
+    )
+    sess = _GIFT_INLINE_SESSIONS[token]
+    title = _gift_inline_title(sess)
+    article = await event.builder.article(
+        title=f"🎁 {title}",
+        description="Floor Price 📉 · Gift Chart 📊",
+        text=_gift_inline_hub_text(sess),
+        parse_mode="md",
+        link_preview=False,
+        buttons=_gift_inline_hub_buttons(owner_id, token, sess.get("raw") or ""),
+    )
+    return await _gift_inline_answer(event, [article], cache_time=0)
+
+
+async def _gift_inline_resolve_session(sess: dict):
+    """Resolve collection/model/backdrop names (and NFT attrs) via MRKT + user TG."""
+    await _ensure_artemis_token()
+    async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+        if sess.get("nft_mode"):
+            coll, mod, back, _extras = await _resolve_nft_gift(
+                client,
+                sess.get("nft_raw") or sess.get("raw") or "",
+                tg_client=heartless_bot,
+            )
+            coll, mod, back = await _resolve_gift_names(client, coll, mod, back)
+        else:
+            coll, mod, back = await _resolve_gift_names(
+                client,
+                sess.get("collection"),
+                sess.get("model"),
+                sess.get("backdrop"),
+            )
+    sess["collection"] = coll
+    sess["model"] = mod
+    sess["backdrop"] = back
+    sess["resolved"] = True
+    sess["at"] = time.monotonic()
+    return sess
+
+
+def _gift_inline_mode_filter(sess: dict, mode: str):
+    coll = sess.get("collection")
+    mod = sess.get("model")
+    back = sess.get("backdrop")
+    if mode == "c":
+        return coll, None, None
+    if mode == "cm":
+        return coll, mod, None
+    return coll, mod, back
+
+
+@callback(re.compile(rb"^gu:s:(\d+):([A-Za-z0-9_-]{6,16}):([fc])$"))
+async def artemis_gift_inline_hub_select_cb(event):
+    """Stage 1 → Floor picker or Chart picker."""
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+        choice = event.data_match.group(3).decode()
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    if choice == "f":
+        sess["view"] = "floor_pick"
+        sess["at"] = time.monotonic()
+        _GIFT_INLINE_SESSIONS[token] = sess
+        await event.answer("Floor Price")
+        return await _gift_inline_edit(
+            event,
+            _gift_inline_floor_picker_text(sess),
+            _gift_inline_floor_picker_buttons(sess, owner_id, token),
+            parse_mode="md",
+        )
+
+    # Gift Chart path — open giftcharts stage under the same hub token.
+    await event.answer("Gift Chart")
+    try:
+        from . import giftcharts as gc
+    except Exception as e:
+        LOGS.warning("giftcharts import failed: %s", e)
+        return await event.answer("Charts unavailable.", alert=True)
+
+    # Prefer resolved names when available; otherwise fast local parse.
+    gift_q = sess.get("collection") or ""
+    model_q = sess.get("model")
+    raw = sess.get("raw") or ""
+    source = "nft" if sess.get("nft_mode") else "text"
+    if sess.get("nft_mode") and not sess.get("resolved"):
+        try:
+            gift_q, model_q, source = await gc._resolve_ch_input(
+                raw, tg_client=heartless_bot,
+            )
+            if gift_q:
+                sess["collection"] = gift_q
+            if model_q:
+                sess["model"] = model_q
+                sess["depth"] = max(int(sess.get("depth") or 1), 2)
+            sess["at"] = time.monotonic()
+            _GIFT_INLINE_SESSIONS[token] = sess
+        except Exception as e:
+            LOGS.warning("g chart resolve failed: %s", e)
+
+    if not gift_q:
+        return await event.answer("Could not resolve collection.", alert=True)
+
+    has_model = bool(model_q)
+    gc_token = gc._save_session(
+        {
+            "gift_q": gift_q,
+            "model_q": model_q,
+            "owner_id": owner_id,
+            "gift": gift_q,
+            "model": model_q,
+            "model_id": None,
+            "has_model": has_model,
+            "mode": None if has_model else "collection",
+            "source": source,
+            "raw": raw,
+            "hub_token": token,
+            "hub_owner": owner_id,
+            "chart_stage": "root",
+        }
+    )
+    sess["gc_token"] = gc_token
+    sess["view"] = "chart_root"
+    sess["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = sess
+
+    gc_sess = gc._SESSIONS[gc_token]
+    if has_model:
+        text = gc._picker_text(gc_sess)
+        buttons = gc._picker_buttons(gc_token, owner_id, show_back=True)
+    else:
+        text = gc._intervals_text(gc_sess, "collection")
+        buttons = gc._interval_buttons(
+            gc_token, owner_id, "", show_back=True,
+        )
+    return await _gift_inline_edit(event, text, buttons, parse_mode="md")
+
+
+@callback(re.compile(rb"^gu:h:(\d+):([A-Za-z0-9_-]{6,16})$"))
+async def artemis_gift_inline_hub_cb(event):
+    """Back to stage-1 Floor/Chart hub."""
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    sess["view"] = "hub"
+    sess["last_mode"] = None
+    sess["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = sess
+    await event.answer("Back")
+    return await _gift_inline_edit(
+        event,
+        _gift_inline_hub_text(sess),
+        _gift_inline_hub_buttons(owner_id, token, sess.get("raw") or ""),
+        parse_mode="md",
+    )
+
+
+@callback(re.compile(rb"^gf:f:(\d+):([A-Za-z0-9_-]{6,16}):(c|cm|cmb)$"))
+async def artemis_gift_inline_floor_cb(event):
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+        mode = event.data_match.group(3).decode()
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    depth = int(sess.get("depth") or 1)
+    if mode == "cm" and depth < 2:
+        return await event.answer("Model not in this query.", alert=True)
+    if mode == "cmb" and depth < 3:
+        return await event.answer("Backdrop not in this query.", alert=True)
+
+    await event.answer("Loading floors…")
+    try:
+        if not sess.get("resolved") or sess.get("nft_mode"):
+            sess = await _gift_inline_resolve_session(sess)
+            _GIFT_INLINE_SESSIONS[token] = sess
+        coll, mod, back = _gift_inline_mode_filter(sess, mode)
+        if mode in ("cm", "cmb") and not mod:
+            return await event.answer("Could not resolve model.", alert=True)
+        if mode == "cmb" and not back:
+            return await event.answer("Could not resolve backdrop.", alert=True)
+
+        await _ensure_artemis_token()
+        async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+            message = await _build_gift_floor_only(client, coll, mod, back)
+    except Exception as e:
+        LOGS.warning("Inline g floor failed: %s", e)
+        return await event.answer(str(e)[:180], alert=True)
+
+    sess["last_mode"] = mode
+    sess["view"] = "floor_out"
+    sess["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = sess
+    # Always Back from floor output (stage 3) → floor picker (stage 2).
+    buttons = _gift_inline_action_row(
+        sess.get("raw") or "",
+        show_back=True,
+        owner_id=owner_id,
+        token=token,
+        back_data=f"gf:b:{owner_id}:{token}".encode(),
+    )
+    return await _gift_inline_edit(event, message, buttons, parse_mode="md")
+
+
+@callback(re.compile(rb"^gf:b:(\d+):([A-Za-z0-9_-]{6,16})$"))
+async def artemis_gift_inline_back_cb(event):
+    """Floor output → floor picker (stage 2)."""
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    sess["view"] = "floor_pick"
+    sess["last_mode"] = None
+    sess["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = sess
+    await event.answer("Back")
+    return await _gift_inline_edit(
+        event,
+        _gift_inline_floor_picker_text(sess),
+        _gift_inline_floor_picker_buttons(sess, owner_id, token),
+        parse_mode="md",
+    )
+
+
 async def _notify_owner_asst_cmd(event):
     """Forward verified-user assistant commands to owner bot DM."""
     try:
@@ -6562,7 +7637,9 @@ async def _artemis_gift_handler(event):
 
         # Compact / text-only: keep the edited "Fetching…" message.
         return await status.edit(
-            message, parse_mode="html", link_preview=False,
+            message,
+            parse_mode="md" if compact else "html",
+            link_preview=False,
         )
 
     except ValueError as e:
