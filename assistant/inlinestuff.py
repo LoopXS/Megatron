@@ -419,7 +419,7 @@ async def repo(e):
     res = [
         await e.builder.article(
             title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
-            description="℘ The less you know, The more at peace",
+            description="℘ he/she (or anything you like; I don't care)",
             thumb=wb(ultpic, 0, "image/jpeg", []),
             text="ᥴᥣiᥴκ δᥙᴛᴛ᧐ᥒ δᥱᥣ᧐ᥕ ᴛ᧐ ᥴ᧐ᥒᴛᥲᥴᴛ !",
             buttons=[
