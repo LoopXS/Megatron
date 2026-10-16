@@ -10,11 +10,30 @@ in ``plugins/abliterix.py``.
 
 import json
 import os
+import random
+import re
+import string
 from dataclasses import asdict, dataclass, field
 
 JOB_STATES = ("queued", "running", "succeeded", "failed", "canceled", "lost")
 ACTIVE_STATES = frozenset({"queued", "running"})
 TERMINAL_STATES = frozenset({"succeeded", "failed", "canceled", "lost"})
+
+# Extra flags an operator may pass on top of the headless defaults.  Anything
+# outside this list is rejected so a typo or an injected shell metacharacter
+# can never reach the child process.
+DEFAULT_ALLOWED_FLAGS = (
+    "--optimization.n-trials",
+    "--optimization.seed",
+    "--model.quant-method",
+    "--model.backend",
+    "--inference.batch-size",
+    "--inference.max-batch-size",
+)
+
+_MODEL_ID_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*/[A-Za-z0-9][A-Za-z0-9._-]*")
+_FORBIDDEN_RE = re.compile(r"[;`$|&\n\r]")
+_ID_ALPHABET = string.hexdigits.lower()[:16]
 
 
 @dataclass
@@ -116,3 +135,96 @@ class JobStore:
             if job.model == model and job.state in ACTIVE_STATES:
                 return job
         return None
+
+
+@dataclass
+class ProcessSpec:
+    """Everything needed to launch one abliterix run."""
+
+    argv: list
+    cwd: str
+    env: dict
+    log_path: str
+
+
+def is_valid_model_id(text):
+    """A Hugging Face model id: ``owner/name`` with safe characters."""
+    return bool(_MODEL_ID_RE.fullmatch(text or ""))
+
+
+def slugify_model_id(model):
+    """A filesystem-safe directory name derived from a model id."""
+    return re.sub(r"[^a-z0-9._-]+", "-", model.lower().replace("/", "__"))
+
+
+def new_job_id(existing, rng=None):
+    """A short ``ax-`` id that is not already in ``existing``."""
+    rng = rng or random
+    seen = set(existing)
+    while True:
+        job_id = "ax-" + "".join(rng.choice(_ID_ALPHABET) for _ in range(6))
+        if job_id not in seen:
+            return job_id
+
+
+def parse_extra_flags(tokens, allowed):
+    """Validate ``--flag value`` pairs against ``allowed``.
+
+    Returns ``(flattened_flags, error_key)``; on any problem the flags list
+    is empty and ``error_key`` is ``"abliterix_bad_flag"``.
+    """
+    allowed = set(allowed)
+    result = []
+    index = 0
+    while index < len(tokens):
+        flag = tokens[index]
+        if flag not in allowed:
+            return [], "abliterix_bad_flag"
+        if index + 1 >= len(tokens):
+            return [], "abliterix_bad_flag"
+        value = tokens[index + 1]
+        if value.startswith("--") or _FORBIDDEN_RE.search(value):
+            return [], "abliterix_bad_flag"
+        result.extend((flag, value))
+        index += 2
+    return result, None
+
+
+def build_env(base=None):
+    """Child environment: inherit ``base`` (or ``os.environ``) and force
+    non-interactive, unbuffered, colourless output."""
+    env = dict(os.environ if base is None else base)
+    env.update(
+        {
+            "NO_COLOR": "1",
+            "PYTHONUNBUFFERED": "1",
+            "TERM": "dumb",
+            "PYTHONIOENCODING": "utf-8",
+        }
+    )
+    return env
+
+
+def build_process_spec(binary, model, job_dir, extra_flags, base_env=None):
+    """Assemble the argv, cwd, env and log path for one run.
+
+    ``--non-interactive`` is mandatory: without it abliterix ends in a
+    ``questionary`` menu that would block a headless worker.
+    """
+    argv = [
+        binary,
+        "--model.model-id",
+        model,
+        "--non-interactive",
+        "--optimization.checkpoint-dir",
+        os.path.join(job_dir, "checkpoint"),
+        "--non-interactive-output-dir",
+        os.path.join(job_dir, "out"),
+    ]
+    argv.extend(extra_flags)
+    return ProcessSpec(
+        argv=argv,
+        cwd=job_dir,
+        env=build_env(base_env),
+        log_path=os.path.join(job_dir, "run.log"),
+    )
