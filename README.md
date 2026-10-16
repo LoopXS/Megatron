@@ -795,6 +795,67 @@ with `--non-interactive` so it never blocks on its interactive menu.
 
 ---
 
+## Assistant (AI) subsystem
+
+Megatron can run an owner-only conversational assistant in the assistant bot's
+private chat. Every configured key is read from the database first and falls back
+to the environment, so `/aiconfig` changes take effect without a restart. The
+assistant stays dormant until `AI_ENABLED` is on (`/ai on`).
+
+### Brain (the model)
+
+The assistant talks to any OpenAI-compatible chat-completions endpoint, so the
+same keys move between OpenAI, OpenRouter, Groq, llama.cpp, Ollama and vLLM.
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `AI_BASE_URL` | OpenAI default | OpenAI-compatible endpoint base URL |
+| `AI_API_KEY` | (unset) | Brain API key; masked everywhere and redacted from logs |
+| `AI_MODEL` | (unset) | Model id sent to the brain |
+| `AI_TEMPERATURE` | `0.7` | Sampling temperature |
+| `AI_MAX_STEPS` | `6` | Model/tool iterations per turn |
+| `AI_TURN_TIMEOUT` | `120` | Seconds before a whole turn is abandoned |
+| `AI_SYSTEM_PROMPT` | built-in | Persona override; the safety rules are always appended |
+
+### Images
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `AI_IMAGE_PROVIDER` | OpenAI images | Image-generation provider base URL |
+| `AI_IMAGE_API_KEY` | (unset) | Image-generation key; without it `/img` reports "not configured" |
+
+Image *search* (`/imgfind`) reuses the repository's Google/Unsplash helpers and
+needs no extra key.
+
+### Workspace, shell and audit
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `AI_WORKDIR` | `./assistant_work` | `cwd` for shell; home of `audit.jsonl` and artifacts |
+| `AI_SHELL_TIMEOUT` | `60` | Seconds before a shell command's process group is killed |
+| `AI_ALLOW_SUDO` | `False` | Permit privilege-escalation commands |
+| `AI_AUDIT_LOG` | (unset) | Optional chat id to mirror each audit line to |
+| `AI_TOOLS` | all | Comma list to enable/disable tools |
+
+The assistant executes shell commands on the host as the bot's own OS user, in a
+new session, with `cwd` set to `AI_WORKDIR`. Output is capped at 4000 characters;
+larger output is written whole to a file in the workspace and that path is
+returned instead. **The shell child inherits the bot's environment**, so any
+secret the bot can see is visible to a command it runs.
+
+Every tool call appends one JSONL record to `<AI_WORKDIR>/audit.jsonl` with
+secrets redacted, and is mirrored to `AI_AUDIT_LOG` when set. The destructive
+shell tool never runs until the operator approves the exact command string on a
+✅/✖️ card; an unanswered card counts as declined after
+`AI_CONFIRM_TIMEOUT` seconds (default `120`).
+
+> **Warning:** `AI_ALLOW_SUDO` lets the assistant run privilege-escalation
+> commands as the bot's OS user. Leave it off unless the host is disposable and
+> the assistant is fully trusted — approval cards are the only gate, and a
+> mistaken "approve" is a full host compromise.
+
+---
+
 # 🎛️ Command Handlers
 
 The default command prefix is:

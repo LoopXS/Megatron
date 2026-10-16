@@ -14,6 +14,7 @@ import json
 import os
 import re
 import secrets
+import time
 
 from . import *
 
@@ -21,15 +22,23 @@ from ._agent_core import (
     Agent,
     AuditLog,
     BrainError,
+    LLMReply,
     OpenAICompatibleClient,
+    PendingAction,
     Settings,
+    ToolCall,
+    ToolContext,
     ToolRegistry,
+    ToolResult,
+    TurnResult,
     assemble_messages,
+    assistant_tool_calls_message,
     redact,
 )
 from ._memory_core import MemoryStore
 from .tools.images import build_image_tools
 from .tools.memory import build_memory_tools
+from .tools.shell import build_shell_tools
 from .tools.web import build_web_tools, strip_html
 
 __doc__ = get_help("help_assistant")
@@ -76,6 +85,21 @@ _SAFETY = (
 
 #: Per-user conversation history for this session (spec section 10).
 _HISTORY: dict[int, list[dict]] = {}
+
+#: Confirm cards parked until the operator answers (spec section 11).
+_PENDING: dict[str, PendingAction] = {}
+
+#: When each parked card was created, for the expiry sweep.
+_PENDING_AT: dict[str, float] = {}
+
+#: Strong references to audit-mirror tasks so they are not garbage collected.
+_AUDIT_TASKS: set = set()
+
+
+def _now() -> float:
+    """Wall-clock seconds; a seam so confirm expiry is injectable in tests."""
+
+    return time.time()
 
 
 # --------------------------------------------------------------------------- #
@@ -493,7 +517,9 @@ def _audit_sink():
     def sink(record):
         try:
             loop = asyncio.get_running_loop()
-            loop.create_task(_mirror_audit(chat_id, record))
+            task = loop.create_task(_mirror_audit(chat_id, record))
+            _AUDIT_TASKS.add(task)
+            task.add_done_callback(_AUDIT_TASKS.discard)
         except Exception as er:  # pragma: no cover - defensive
             LOGS.debug("assistant: audit mirror schedule failed: %s", er)
 
@@ -527,6 +553,13 @@ def _registry() -> ToolRegistry:
     tools.extend(build_web_tools(_fetch, _search))
     generate = _generate_image if _raw("AI_IMAGE_API_KEY") else None
     tools.extend(build_image_tools(_image_search, _download_image, generate))
+    tools.extend(
+        build_shell_tools(
+            workdir=settings.workdir,
+            timeout=_as_float(_raw("AI_SHELL_TIMEOUT"), 60.0),
+            allow_sudo=settings.allow_sudo,
+        )
+    )
     for tool in tools:
         if keep(tool):
             registry.register(tool)
@@ -606,11 +639,78 @@ def _mask(value):
 # --------------------------------------------------------------------------- #
 
 
-async def _safe_edit(message, text):
+async def _safe_edit(message, text, buttons=None):
     try:
-        await message.edit(text)
+        if buttons is None:
+            await message.edit(text)
+        else:
+            await message.edit(text, buttons=buttons)
     except Exception as er:  # pragma: no cover - defensive
         LOGS.exception(er)
+
+
+async def _answer(event, text):
+    """Best-effort alert on a callback query, tolerated when absent."""
+
+    answer = getattr(event, "answer", None)
+    if answer is None:
+        return
+    try:
+        await answer(text, alert=True)
+    except Exception as er:  # pragma: no cover - defensive
+        LOGS.debug("assistant: callback answer failed: %s", er)
+
+
+def _confirmation_prompt(pending):
+    """Render the confirm card text using the tool's own summarizer."""
+
+    tool = _registry().get(pending.tool_call.name)
+    summary = ""
+    if tool is not None:
+        try:
+            summary = tool.summarize(pending.tool_call.arguments)
+        except Exception as er:  # pragma: no cover - defensive
+            LOGS.debug("assistant: summarize failed: %s", er)
+    return _render("assistant_confirm_prompt", {"cmd": summary})
+
+
+def _confirmation_buttons(pending_id):
+    return [
+        [
+            Button.inline(
+                _render("assistant_confirm_button"),
+                data="aiok:" + pending_id,
+            ),
+            Button.inline(
+                _render("assistant_cancel_button"),
+                data="aino:" + pending_id,
+            ),
+        ]
+    ]
+
+
+def _expired_text(settings):
+    when = "after {}s".format(int(settings.confirm_timeout))
+    return _render("assistant_confirm_expired", {"when": when})
+
+
+def _sweep_expired(settings):
+    """Drop confirm cards older than ``AI_CONFIRM_TIMEOUT`` (spec section 12)."""
+
+    now = _now()
+    timeout = settings.confirm_timeout
+    for pending_id in list(_PENDING):
+        created = _PENDING_AT.get(pending_id)
+        if created is None or now - created > timeout:
+            _PENDING.pop(pending_id, None)
+            _PENDING_AT.pop(pending_id, None)
+
+
+def _last_user_text(pending):
+    for message in reversed(pending.messages):
+        if isinstance(message, dict) and message.get("role") == "user":
+            return message.get("content") or ""
+    return ""
 
 
 async def _send_files(event, tool_results):
@@ -645,12 +745,46 @@ async def _aclose(agent):
         LOGS.debug("assistant: could not close brain client: %s", er)
 
 
+async def _deliver(event, target, turn, user_id, user_text):
+    """Deliver one TurnResult to the chat, however the turn ended.
+
+    Files are sent from ``turn.tool_results`` in every case: on
+    ``awaiting_confirm`` they carry the auto-tool output produced before the
+    pause, and on the resumed result they carry the approved call plus any
+    later work.  An ``awaiting_confirm`` turn is parked (with a confirm card)
+    instead of editing to a final reply.
+    """
+
+    await _send_files(event, turn.tool_results)
+
+    if turn.status == "awaiting_confirm" and turn.pending is not None:
+        pending = turn.pending
+        _PENDING[pending.id] = pending
+        _PENDING_AT[pending.id] = _now()
+        await _safe_edit(
+            target,
+            _confirmation_prompt(pending),
+            buttons=_confirmation_buttons(pending.id),
+        )
+        return
+
+    settings = _settings()
+    if turn.status == "budget":
+        text = _render("assistant_budget", {"n": settings.max_steps})
+    else:
+        text = turn.reply_text or _EMPTY_REPLY
+    await _safe_edit(target, text)
+    if turn.status == "done":
+        _append_history(user_id, user_text, turn.reply_text)
+
+
 async def _run_turn(event, user_text):
     settings = _settings()
     if not settings.enabled:
         return await event.reply(_render("assistant_disabled"))
     if not settings.api_key or not settings.model:
         return await event.reply(_render("assistant_not_configured"))
+    _sweep_expired(settings)
 
     user_id = event.sender_id
     chat_id = event.chat_id
@@ -673,14 +807,7 @@ async def _run_turn(event, user_text):
     finally:
         await _aclose(agent)
 
-    if turn.status == "budget":
-        text = _render("assistant_budget", {"n": settings.max_steps})
-    else:
-        text = turn.reply_text or _EMPTY_REPLY
-    await _safe_edit(placeholder, text)
-    await _send_files(event, turn.tool_results)
-    if turn.status == "done":
-        _append_history(user_id, user_text, turn.reply_text)
+    await _deliver(event, placeholder, turn, user_id, user_text)
 
 
 # --------------------------------------------------------------------------- #
@@ -770,3 +897,184 @@ async def reset_command(event):
 @asst_cmd(pattern="help_ai", owner=True)
 async def help_ai_command(event):
     return await event.reply(get_help("help_assistant"))
+
+
+# --------------------------------------------------------------------------- #
+# Confirmation, direct commands and memory (spec sections 12 and 14)
+# --------------------------------------------------------------------------- #
+
+
+@callback(owner=True, data=re.compile(r"^ai(ok|no):"))
+async def assistant_confirm_callback(event):
+    settings = _settings()
+    _sweep_expired(settings)
+
+    raw = getattr(event, "data", None) or b""
+    if isinstance(raw, bytes):
+        raw = raw.decode("utf-8", "replace")
+    match = re.match(r"^ai(ok|no):(.+)$", raw)
+    if match is None:
+        return
+
+    approved = match.group(1) == "ok"
+    pending = _PENDING.pop(match.group(2), None)
+    _PENDING_AT.pop(match.group(2), None)
+    if pending is None:
+        return await _answer(event, _expired_text(settings))
+
+    user_text = _last_user_text(pending)
+    agent = _agent()
+    try:
+        turn = await agent.resume(pending, approved)
+    except BrainError as er:
+        detail = redact(str(er), [settings.api_key])
+        return await _safe_edit(
+            event, _render("assistant_brain_error", {"value": detail})
+        )
+    finally:
+        await _aclose(agent)
+
+    await _deliver(event, event, turn, pending.user_id, user_text)
+
+
+@asst_cmd(pattern="run( (.*)|$)", owner=True)
+async def run_command(event):
+    """``/run <command>``: run through the SAME confirm card as the model."""
+
+    command = _strip_command(event, "run")
+    if not command:
+        return
+    settings = _settings()
+    if not settings.enabled:
+        return await event.reply(_render("assistant_disabled"))
+    if not settings.api_key or not settings.model:
+        return await event.reply(_render("assistant_not_configured"))
+    _sweep_expired(settings)
+
+    user_id = event.sender_id
+    chat_id = event.chat_id
+    user_text = "/run " + command
+    history = _HISTORY.setdefault(user_id, [])
+    facts = _memory().render(user_id)
+    messages = assemble_messages(
+        settings.system_prompt, facts, history, user_text
+    )
+    call = ToolCall(
+        id="tc-" + secrets.token_hex(3),
+        name="shell.run_command",
+        arguments={"command": command},
+    )
+    messages.append(assistant_tool_calls_message(LLMReply(tool_calls=[call])))
+    pending = PendingAction(
+        id="pa-" + secrets.token_hex(3),
+        tool_call=call,
+        messages=messages,
+        user_id=user_id,
+        chat_id=chat_id,
+    )
+
+    placeholder = await event.respond(_render("assistant_thinking"))
+    turn = TurnResult("awaiting_confirm", None, pending, [])
+    await _deliver(event, placeholder, turn, user_id, user_text)
+
+
+async def _direct_command(event, name, arguments):
+    """Run one ``auto`` tool directly and deliver the text and files."""
+
+    settings = _settings()
+    if not settings.enabled:
+        return await event.reply(_render("assistant_disabled"))
+
+    agent = _agent()
+    tool = agent.registry.get(name)
+    if tool is None:
+        return await event.reply(_render("assistant_not_configured"))
+
+    placeholder = await event.respond(_render("assistant_thinking"))
+    context = ToolContext(
+        user_id=event.sender_id,
+        chat_id=event.chat_id,
+        workdir=settings.workdir,
+        allow_sudo=settings.allow_sudo,
+    )
+    started = _now()
+    try:
+        result = await tool.handler(arguments, context)
+    except Exception as er:
+        result = ToolResult(text=f"error: {er}", error=True)
+    if getattr(agent, "audit", None) is not None:
+        agent.audit.record(
+            uid=event.sender_id,
+            chat=event.chat_id,
+            tool=name,
+            args=arguments,
+            decision="direct",
+            exit=None,
+            ms=int((_now() - started) * 1000),
+        )
+    await _safe_edit(placeholder, result.text or _EMPTY_REPLY)
+    await _send_files(event, [result])
+
+
+@asst_cmd(pattern="img( (.*)|$)", owner=True)
+async def img_command(event):
+    prompt = _strip_command(event, "img")
+    if not prompt:
+        return
+    await _direct_command(event, "images.image_generate", {"prompt": prompt})
+
+
+@asst_cmd(pattern="imgfind( (.*)|$)", owner=True)
+async def imgfind_command(event):
+    query = _strip_command(event, "imgfind")
+    if not query:
+        return
+    await _direct_command(event, "images.image_search", {"query": query})
+
+
+def _count_facts(rendered):
+    return sum(1 for line in rendered.splitlines() if line.startswith("- ["))
+
+
+async def _memory_list(event):
+    rendered = _memory().render(event.sender_id)
+    if not rendered:
+        return await event.reply(_render("assistant_memory_empty"))
+    return await event.reply(
+        _render(
+            "assistant_memory_list",
+            {"count": _count_facts(rendered), "value": rendered},
+        )
+    )
+
+
+@asst_cmd(pattern="memory( (.*)|$)", owner=True)
+async def memory_command(event):
+    argument = _strip_command(event, "memory")
+    parts = argument.split(None, 2)
+    if not parts:
+        return await _memory_list(event)
+
+    verb = parts[0].lower()
+    if verb == "forget" and len(parts) >= 2:
+        fact_id = parts[1]
+        if _memory().forget(event.sender_id, fact_id):
+            return await event.reply(
+                _render("assistant_memory_forgotten", {"id": fact_id})
+            )
+        return await event.reply(
+            _render("assistant_memory_unknown", {"id": fact_id})
+        )
+    if verb == "edit" and len(parts) >= 3:
+        fact_id, text = parts[1], parts[2]
+        if _memory().edit(event.sender_id, fact_id, text):
+            return await event.reply(
+                _render(
+                    "assistant_memory_added",
+                    {"id": fact_id, "value": text},
+                )
+            )
+        return await event.reply(
+            _render("assistant_memory_unknown", {"id": fact_id})
+        )
+    return await _memory_list(event)
