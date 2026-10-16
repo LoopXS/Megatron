@@ -154,7 +154,7 @@ def _as_float(value, default):
 
 
 def _as_tools(value):
-    """Parse ``AI_TOOLS``; empty means "every registered tool"."""
+    """Parse ``AI_TOOLS``; ``all``/``*``/empty mean "every registered tool"."""
 
     if value is None or value == "":
         return ()
@@ -162,7 +162,10 @@ def _as_tools(value):
         parts = [str(item) for item in value]
     else:
         parts = str(value).split(",")
-    return tuple(part.strip() for part in parts if part.strip())
+    parts = [part.strip() for part in parts if part.strip()]
+    if not parts or any(part.lower() in ("all", "*") for part in parts):
+        return ()
+    return tuple(parts)
 
 
 def _system_prompt(override):
@@ -189,6 +192,19 @@ def _settings() -> Settings:
         tools=_as_tools(_raw("AI_TOOLS")),
         system_prompt=_system_prompt(_raw("AI_SYSTEM_PROMPT")),
     )
+
+
+def _workdir() -> str:
+    """Resolve ``AI_WORKDIR`` and create it (the one creation point).
+
+    Shell artifacts, spilled output, image downloads and the audit log all
+    live under this directory, so it is created here rather than relying on
+    whichever writer happens to run first.
+    """
+
+    path = _settings().workdir
+    os.makedirs(path, exist_ok=True)
+    return path
 
 
 # --------------------------------------------------------------------------- #
@@ -425,8 +441,7 @@ async def _download_image(url):
 
     import aiohttp
 
-    workdir = _settings().workdir
-    os.makedirs(workdir, exist_ok=True)
+    workdir = _workdir()
     name = "img-" + secrets.token_hex(4) + _image_extension(url)
     path = os.path.join(workdir, name)
 
@@ -555,7 +570,7 @@ def _registry() -> ToolRegistry:
     tools.extend(build_image_tools(_image_search, _download_image, generate))
     tools.extend(
         build_shell_tools(
-            workdir=settings.workdir,
+            workdir=_workdir(),
             timeout=_as_float(_raw("AI_SHELL_TIMEOUT"), 60.0),
             allow_sudo=settings.allow_sudo,
         )
@@ -580,7 +595,7 @@ def _agent() -> Agent:
         if value
     ]
     audit = AuditLog(
-        os.path.join(settings.workdir, "audit.jsonl"),
+        os.path.join(_workdir(), "audit.jsonl"),
         secrets=secrets_,
         sink=_audit_sink(),
     )
@@ -807,6 +822,14 @@ async def _run_turn(event, user_text):
             placeholder, _render("assistant_brain_error", {"value": detail})
         )
         return
+    except Exception as er:
+        # Backstop: no failure may leave the placeholder stuck on Thinking.
+        LOGS.exception(er)
+        detail = redact(str(er), [settings.api_key])
+        await _safe_edit(
+            placeholder, _render("assistant_brain_error", {"value": detail})
+        )
+        return
     finally:
         await _aclose(agent)
 
@@ -823,13 +846,15 @@ def _is_turn_message(event):
 
     if not getattr(event, "is_private", False):
         return False
+    if getattr(event, "out", False):
+        return False
     text = _event_text(event).strip()
     if not text or text.startswith("/"):
         return False
     return True
 
 
-@asst_cmd(owner=True)
+@asst_cmd(owner=True, incoming=True)
 async def assistant_turn(event):
     if not _is_turn_message(event):
         return
@@ -920,8 +945,7 @@ async def assistant_confirm_callback(event):
         return
 
     approved = match.group(1) == "ok"
-    pending = _PENDING.pop(match.group(2), None)
-    _PENDING_AT.pop(match.group(2), None)
+    pending = _PENDING.get(match.group(2))
     if pending is None:
         return await _answer(event, _expired_text(settings))
 
@@ -934,6 +958,18 @@ async def assistant_confirm_callback(event):
         return await _safe_edit(
             event, _render("assistant_brain_error", {"value": detail})
         )
+    except Exception as er:
+        # Backstop: keep the pending retryable and never leave the card blank.
+        LOGS.exception(er)
+        detail = redact(str(er), [settings.api_key])
+        return await _safe_edit(
+            event, _render("assistant_brain_error", {"value": detail})
+        )
+    else:
+        # Only a successful resume consumes the pending, so a failed one can
+        # be retried from the same card.
+        _PENDING.pop(match.group(2), None)
+        _PENDING_AT.pop(match.group(2), None)
     finally:
         await _aclose(agent)
 
@@ -1021,7 +1057,7 @@ async def _direct_command(event, name, arguments):
             tool=name,
             args=arguments,
             decision="direct",
-            exit=None,
+            exit=result.exit,
             ms=int((_now() - started) * 1000),
         )
     await _safe_edit(placeholder, result.text or _EMPTY_REPLY)
