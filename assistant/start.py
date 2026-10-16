@@ -107,9 +107,6 @@ async def heartless(event):
                     [
                         Button.inline("✗ ꜱᴇʀᴠᴇʀ ᴘɪɴɢ ✗", data="ping"),
                     ],
-                    [
-                        Button.inline("✗ ᴛᴇxᴛ ᴛʀᴀɴꜱʟᴀᴛᴏʀ ✗", data="tlans"),
-                    ],
                 ],
             )
         else:
@@ -128,9 +125,6 @@ async def heartless(event):
                         ],
                         [
                             Button.inline("✗ ꜱᴇʀᴠᴇʀ ᴘɪɴɢ ✗", data="ping"),
-                        ],
-                        [
-                            Button.inline("✗ ᴛᴇxᴛ ᴛʀᴀɴꜱʟᴀᴛᴏʀ ✗", data="tlans"),
                         ],
                     ]
                     if Owner_info_msg
@@ -157,16 +151,6 @@ async def heartless(event):
 async def ekekdhdb(e):
     text = f"When New Visitor will visit your Assistant Bot. You will get this log message!\n\nTo Disable : {HNDLR}setdb OFF_START_LOG True"
     await e.answer(text, alert=True)
-
-
-@callback("tlans")
-async def tlans(event):
-    await event.delete()
-    await asst.send_message(
-        event.chat_id,
-        "✨ How to use:\n1⃣ `/tr LangaugeCode text` \n2⃣ `/tr Language Code` as reply to a message \n\nHere is the list of [Language Codes](https://telegra.ph/𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔-06-19)",
-        link_preview=False,
-    )
 
 
 @callback("chat")
