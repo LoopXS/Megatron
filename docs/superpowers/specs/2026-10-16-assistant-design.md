@@ -268,9 +268,10 @@ across restarts in v1 (memory is the durable layer); `/reset` clears it.
 2. Glue assembles `messages`: system prompt (persona + safety rules + tool
    list) + a "Things to remember" block + recent history + the new message.
 3. `Agent.step` runs the loop of §6.
-4. On `status="done"`, glue streams the reply (edit-in-place), delivers any
-   `ToolResult.files` (photos/documents), persists nothing but history, and
-   writes audit records.
+4. On `status="done"`, glue edits its "🧠 thinking…" placeholder into the final
+   reply (the client interface in §5 is non-streaming), delivers any
+   `ToolResult.files` (photos/documents), and appends to history. Audit records
+   were already written by the core as tools ran.
 5. On `status="awaiting_confirm"`, glue stores the `PendingAction`, posts a
    ✅/✖️ card showing `tool.summarize(args)`, and waits. The callback (owner
    gated) calls `Agent.resume` with approve/decline; expiry means decline.
