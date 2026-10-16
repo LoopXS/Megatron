@@ -51,6 +51,7 @@ _ALLOWED_FLAGS = tuple(
 
 _STORE = None
 _WORKER_TASK = None
+_ADOPTED = set()
 
 
 def _render(key, **fields):
@@ -178,15 +179,6 @@ async def _terminate(pid):
         await asyncio.to_thread(core.terminate_tree, pid, _KILL_GRACE)
 
 
-async def _stop_job(job):
-    """Terminate a running job's process group and mark it canceled."""
-    if job.state == "running" and job.pid:
-        await _terminate(job.pid)
-    if job.state in core.ACTIVE_STATES:
-        core.transition(job, "canceled", now=time.time())
-    _store().save()
-
-
 async def _cancel(e, rest):
     job_id = rest.split()[0] if rest.split() else ""
     if not job_id:
@@ -199,8 +191,15 @@ async def _cancel(e, rest):
     if job.state not in core.ACTIVE_STATES:
         await e.reply(_render("abliterix_canceled", id=job_id))
         return
-    await _stop_job(job)
+    # Mark the job canceled *before* signalling the process: the worker may
+    # observe the child exiting at any moment and must not then stamp the job
+    # ``failed`` over the user's cancellation.
+    pid = job.pid if job.state == "running" else None
+    core.transition(job, "canceled", now=time.time())
+    _store().save()
     await e.reply(_render("abliterix_cancel_ok", id=job_id))
+    if pid:
+        await _terminate(pid)
 
 
 async def _rm(e, rest):
@@ -237,12 +236,13 @@ async def _rm(e, rest):
     await e.reply(_render("abliterix_rm_ok", id=job_id))
 
 
-@callback(re.compile(r"axpurge_(yes|no)_(.+)"))
+@callback(re.compile(r"axpurge_(yes|no)_(.+)"), owner=True)
 async def _purge_cb(e):
     data = e.data.decode() if isinstance(e.data, bytes) else str(e.data)
     match = re.match(r"axpurge_(yes|no)_(.+)", data)
     if not match:
         return
+    await e.answer()
     action, job_id = match.group(1), match.group(2)
     job = _store().get(job_id)
     if action == "no" or job is None:
@@ -257,6 +257,7 @@ async def _purge_cb(e):
 
 @heartless_cmd(pattern="abliterix( (.*)|$)", owner_only=True)
 async def abliterix_cmd(e):
+    _ensure_adopted()
     arg = (e.pattern_match.group(1) or "").strip()
     sub, _, rest = arg.partition(" ")
     sub = sub.lower()
@@ -312,6 +313,9 @@ async def _run_job(job):
     process = await _spawn(spec)
     job.pid = process.pid
     _store().save()
+    if job.state != "running":
+        # Cancelled while we were spawning: stop the fresh process group now.
+        await _terminate(process.pid)
     monitor = asyncio.ensure_future(_monitor(job))
     try:
         if _MAX_RUNTIME:
@@ -398,7 +402,7 @@ async def _deliver(job, client=None):
             except Exception as err:  # noqa: BLE001 - delivery is best-effort
                 LOGS.info(f"abliterix: manifest delivery failed for {job.id}: {err}")
     elif job.state == "canceled":
-        await _safe_edit(client, job, _render("abliterix_canceled", id=job.id))
+        await _safe_edit(client, job, _render("abliterix_canceled_note", id=job.id))
     elif job.state == "lost":
         await _safe_edit(client, job, _render("abliterix_lost_note", id=job.id))
     else:
@@ -512,17 +516,62 @@ async def abliterate_cmd(e):
     await _enqueue(e, tokens[0], tokens[1:])
 
 
-def _reap_on_load():
-    """Mark jobs left ``running`` by a restart as ``lost``.
+async def _watch_adopted(job):
+    """Follow a job whose process survived a restart.
 
-    A worker cannot reattach to a child process it did not spawn, so any
-    ``running`` job whose pid is gone is stale and reported as lost rather
-    than left to look active forever.
+    We did not spawn this child, so its exit code is unknowable; when the pid
+    disappears the job is resolved by whether it produced a manifest
+    (``succeeded``) or not (``lost``).  This keeps such a job from sticking as
+    ``running`` forever and blocking a re-run of the same model.
+    """
+    try:
+        while job.pid and core.is_pid_alive(job.pid):
+            _refresh_progress(job)
+            await _safe_edit(heartless_bot, job, _status_text(job))
+            await asyncio.sleep(_POLL_SECONDS)
+    finally:
+        _ADOPTED.discard(job.id)
+    state = "succeeded" if _find_manifest(job.out_dir) else "lost"
+    try:
+        core.transition(job, state, now=time.time())
+    except ValueError:
+        return
+    _store().save()
+    try:
+        await _deliver(job)
+    except Exception as err:  # noqa: BLE001 - delivery is best-effort
+        LOGS.exception(err)
+
+
+def _ensure_adopted():
+    """Start watchers for live ``running`` jobs left over by a restart."""
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return
+    for job in _store().all():
+        if (
+            job.state == "running"
+            and job.pid
+            and job.id not in _ADOPTED
+            and core.is_pid_alive(job.pid)
+        ):
+            _ADOPTED.add(job.id)
+            asyncio.ensure_future(_watch_adopted(job))
+
+
+def _reap_on_load():
+    """Resolve jobs left ``running`` by a restart.
+
+    A job whose pid is gone is stale and marked ``lost``; a job whose process
+    is still alive is re-adopted for monitoring (spec: never silently drop a
+    run, never let a stale ``running`` block a model forever).
     """
     store = _store()
     changed = core.reap(list(store.all()))
     if changed:
         store.save()
+    _ensure_adopted()
     return changed
 
 

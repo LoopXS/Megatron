@@ -94,13 +94,20 @@ class JobStore:
         try:
             with open(self.path, encoding="utf-8") as handle:
                 raw = json.load(handle)
-            items = raw if isinstance(raw, list) else raw.get("jobs", [])
+            if isinstance(raw, list):
+                items = raw
+            elif isinstance(raw, dict):
+                items = raw.get("jobs", [])
+            else:
+                items = []
+            if not isinstance(items, list):
+                items = []
             self._jobs = {
                 item["id"]: Job.from_dict(item)
                 for item in items
                 if isinstance(item, dict) and "id" in item
             }
-        except (OSError, ValueError, TypeError, KeyError):
+        except (OSError, ValueError, TypeError, KeyError, AttributeError):
             self._jobs = {}
 
     def save(self):
