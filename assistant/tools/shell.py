@@ -61,15 +61,18 @@ async def run_shell(
     """Run ``command`` in a new session and return its capped output.
 
     ``sudo`` is refused before any process is spawned unless ``allow_sudo``
-    is set.  On timeout the whole process group is killed and an error result
-    is returned.  Output larger than ``cap`` is written whole to a file under
-    ``output_dir`` (default the current directory) whose path is returned in
-    ``files``.
+    is set.  The workspace directory is created when missing (the shared
+    creation point with the glue's shell build).  On timeout the whole
+    process group is killed and an error result is returned; otherwise the
+    result carries the child's exit code.  Output larger than ``cap`` is
+    written whole to a file under ``output_dir`` (default the current
+    directory) whose path is returned in ``files``.
     """
 
-    if re.search(r"\bsudo\b", command) and not allow_sudo:
+    if re.search(r"\bsudo\b", command, re.IGNORECASE) and not allow_sudo:
         return ToolResult("sudo is disabled (set AI_ALLOW_SUDO)", error=True)
 
+    os.makedirs(workdir, exist_ok=True)
     proc = await asyncio.create_subprocess_shell(
         command,
         cwd=workdir,
@@ -94,9 +97,9 @@ async def run_shell(
 
     if len(text) > cap:
         note, path = _spill(text, output_dir, cap)
-        return ToolResult(note, files=[path])
+        return ToolResult(note, files=[path], exit=proc.returncode)
 
-    return ToolResult(text)
+    return ToolResult(text, exit=proc.returncode)
 
 
 def build_shell_tools(
