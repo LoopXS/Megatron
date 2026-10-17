@@ -17,7 +17,7 @@ from CythonX.fns.helper import (
     numerize,
     time_formatter,
 )
-from CythonX.fns.ytdl import dler, get_buttons, get_formats, _inline_download
+from CythonX.fns.ytdl import dler, get_buttons, get_formats
 
 from . import LOGS, asst, callback, in_pattern, udB
 
@@ -138,44 +138,175 @@ async def _(e):
     owner=True,
 )
 async def _(event):
-    """
-    Handle a selected inline format.
+    url = event.pattern_match.group(1).strip().decode("UTF-8")
+    lets_split = url.split(":")
+    vid_id = lets_split[2]
+    link = _yt_base_url + vid_id
+    format = lets_split[1]
+    try:
+        ext = lets_split[3]
+    except IndexError:
+        ext = "mp3"
+    
+    # Define download options based on audio or video type
+    if lets_split[0] == "audio":
+        opts = {
+            "format": "bestaudio",
+            "addmetadata": True,
+            "key": "FFmpegMetadata",
+            "prefer_ffmpeg": True,
+            "geo_bypass": True,
+            "outtmpl": f"%(id)s.{ext}",
+            "logtostderr": False,
+            "postprocessors": [
+                {
+                    "key": "FFmpegExtractAudio",
+                    "preferredcodec": ext,
+                    "preferredquality": format,
+                },
+                {"key": "FFmpegMetadata"},
+            ],
+            "cookiefile": "cookies.txt",
+        }
 
-    The previous implementation hard-coded YouTube format 251 for audio,
-    guessed the output extension and relied on a handful of filename fallbacks.
-    The new path delegates the actual download to the EGM-style yt-dlp engine
-    in CythonX.fns.ytdl._inline_download.
-    """
-    raw = event.pattern_match.group(1).strip().decode("UTF-8")
-    parts = raw.split(":")
-    if len(parts) < 3:
-        return await event.answer("Invalid download request.", alert=True)
+        ytdl_data = await dler(event, link, opts, True)
+        title = ytdl_data["title"]
+        artist = ytdl_data.get("artist") or ytdl_data.get("creator") or ytdl_data.get("channel")
+        views = numerize(ytdl_data.get("view_count")) or 0
+        thumb, _ = await fast_download(ytdl_data["thumbnail"], filename=f"{vid_id}.jpg")
 
-    media_type, format_id, video_id = parts[:3]
-    ext = parts[3] if len(parts) >= 4 else ("mp3" if media_type == "audio" else "mp4")
+        likes = numerize(ytdl_data.get("like_count")) or 0
+        duration = ytdl_data.get("duration") or 0
+        description = (
+            ytdl_data["description"][:100]
+            if ytdl_data["description"] and len(ytdl_data["description"]) >= 100
+            else ytdl_data.get("description", "None")
+        )
+        
+        filepath = f"{vid_id}.{ext}"
+        if not os.path.exists(filepath):
+            filepath = f"{filepath}.{ext}"
+        if os.path.exists(filepath):
+            size = os.path.getsize(filepath)
+        else:
+            LOGS.error(f"File not found: {filepath}")
+            await event.edit("`Error: File not found after download.`")
+            return
 
-    if media_type not in ("audio", "video"):
-        return await event.answer("Unsupported media type.", alert=True)
+        file, _ = await event.client.fast_uploader(
+            filepath,
+            filename=f"{title}.{ext}",
+            show_progress=True,
+            event=event,
+            to_delete=True,
+        )
 
-    if not re.fullmatch(r"[A-Za-z0-9_.-]+", video_id):
-        return await event.answer("Invalid YouTube video ID.", alert=True)
+        attributes = [
+            DocumentAttributeAudio(
+                duration=int(duration),
+                title=title,
+                performer=artist,
+            ),
+        ]
 
-    if media_type == "video" and not re.fullmatch(r"[A-Za-z0-9_.-]+", format_id):
-        return await event.answer("Invalid video format.", alert=True)
+    elif lets_split[0] == "video":
+        opts = {
+            "format": str(format),
+            "addmetadata": True,
+            "key": "FFmpegMetadata",
+            "prefer_ffmpeg": True,
+            "geo_bypass": True,
+            "outtmpl": f"%(id)s.{ext}",
+            "logtostderr": False,
+            "postprocessors": [{"key": "FFmpegMetadata"}],
+            "cookiefile": "cookies.txt",
+        }
 
-    if media_type == "audio" and format_id not in {"128", "192", "320"}:
-        return await event.answer("Invalid audio quality.", alert=True)
+        ytdl_data = await dler(event, link, opts, True)
+        title = ytdl_data["title"]
+        artist = ytdl_data.get("artist") or ytdl_data.get("creator") or ytdl_data.get("channel")
+        views = numerize(ytdl_data.get("view_count")) or 0
+        thumb, _ = await fast_download(ytdl_data["thumbnail"], filename=f"{vid_id}.jpg")
+        description = (
+            ytdl_data.get("description", "None")
+            if ytdl_data.get("description") and len(ytdl_data["description"]) < 100
+            else (ytdl_data["description"][:100] if ytdl_data.get("description") else "None")
+        )
 
-    await event.answer("Starting download…")
+        try:
+            Image.open(thumb).save(thumb, "JPEG")
+        except Exception as er:
+            LOGS.exception(er)
+            thumb = None
 
-    await _inline_download(
-        event,
-        video_id=video_id,
-        media_type=media_type,
-        format_id=format_id,
-        quality=format_id if media_type == "audio" else "0",
-        ext=ext,
-    )
+        likes = numerize(ytdl_data.get("like_count")) or 0
+        hi, wi = ytdl_data.get("height") or 720, ytdl_data.get("width") or 1280
+        duration = ytdl_data.get("duration") or 0
+        filepath = f"{vid_id}.mkv"
+        if not os.path.exists(filepath):
+            filepath = f"{filepath}.webm"
+        if os.path.exists(filepath):
+            size = os.path.getsize(filepath)
+        if not os.path.exists(filepath):
+            filepath = f"{vid_id}.mp4.webm"
+        if os.path.exists(filepath):
+            size = os.path.getsize(filepath)
+        if not os.path.exists(filepath):
+            filepath = f"{vid_id}.mp4.mkv"
+        if os.path.exists(filepath):
+            size = os.path.getsize(filepath)
+        else:
+            LOGS.error(f"File not found: {filepath}")
+            await event.edit("`Error: File not found after download.`")
+            return
+
+        file, _ = await event.client.fast_uploader(
+            filepath,
+            filename=f"{title}.mkv",
+            show_progress=True,
+            event=event,
+            to_delete=True,
+        )
+
+        attributes = [
+            DocumentAttributeVideo(
+                duration=int(duration),
+                w=wi,
+                h=hi,
+                supports_streaming=True,
+            ),
+        ]
+
+    description = description if description != "" else "None"
+    text = f"**Title: [{title}]({_yt_base_url}{vid_id})**\n\n"
+    text += f"`📝 Description: {description}\n\n"
+    text += f"「 Duration: {time_formatter(int(duration)*1000)} 」\n"
+    text += f"「 Artist: {artist} 」\n"
+    text += f"「 Views: {views} 」\n"
+    text += f"「 Likes: {likes} 」\n"
+    text += f"「 Size: {humanbytes(size)} 」`"
+    button = Button.switch_inline("Search More", query="yt ", same_peer=True)
+
+    try:
+        await event.edit(
+            text,
+            file=file,
+            buttons=button,
+            attributes=attributes,
+            thumb=thumb,
+        )
+    except (FilePartLengthInvalidError, MediaEmptyError):
+        file = await asst.send_message(
+            udB.get_key("LOG_CHANNEL"),
+            text,
+            file=file,
+            buttons=button,
+            attributes=attributes,
+            thumb=thumb,
+        )
+        await event.edit(text, file=file.media, buttons=button)
+
+    await bash(f"rm {vid_id}.jpg")
 
 
 @callback(re.compile("ytdl_back:(.*)"), owner=True)
