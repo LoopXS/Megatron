@@ -7,9 +7,12 @@ from telethon.errors.rpcerrorlist import UserNotParticipantError
 from telethon.tl import functions, types
 
 try:
-    from .. import _ult_cache
+    from .. import LOGS, _ult_cache
     from .._misc import SUDO_M
 except ImportError:
+    import logging
+
+    LOGS = logging.getLogger("CythonX")
     _ult_cache = {}
     SUDO_M = None
 
@@ -109,7 +112,13 @@ async def admin_check(event, require=None, silent: bool = False):
             if not silent:
                 await event.reply("You need to join this chat First!")
             return False
-    if not perms.is_admin:
+        except (ValueError, TypeError) as er:
+            # PM / invalid peer — not a group/channel admin context.
+            LOGS.debug("admin_check get_permissions skipped: %s", er)
+            if not silent:
+                await event.eor("This command works in groups/channels only.", time=8)
+            return False
+    if not perms or not getattr(perms, "is_admin", False):
         if not silent:
             await event.eor("Only Admins can use this command!", time=8)
         return
