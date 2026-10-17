@@ -97,8 +97,8 @@
 • `{i}orderupall`
    Retarget every order to competitor top+0.01 (raise or lower).
 
-• `{i}autotop on` | `{i}autotop on 20` | `{i}autotop off`
-   Auto orderupall every N seconds (default 30).
+• `{i}autotop on` | `{i}autotop on 20s` | `{i}autotop 1m` | `{i}autotop off`
+   Auto orderupall every N seconds/minutes (default 30s).
    Active orders are stored in DB and recreated if missing.
    Turns itself off when no active orders remain.
 
@@ -112,6 +112,7 @@ Auto: missing/expired token regenerates from DB `SESSIONMRKT`.
 """
 
 import os
+import io
 import html
 import requests
 import asyncio
@@ -3939,6 +3940,39 @@ def _orderup_all_message(result):
     return "\n".join(lines).rstrip()
 
 
+def _parse_autotop_interval(raw):
+    """Parse ``20``, ``20s``, ``40s``, ``1m``, ``1.5m`` → seconds.
+
+    Returns ``None`` when the string is not a duration.
+    """
+    if raw is None:
+        return None
+    text = str(raw).strip().lower().replace(" ", "")
+    if not text:
+        return None
+    m = re.fullmatch(r"(\d+(?:\.\d+)?)(s|sec|secs|second|seconds|m|min|mins|minute|minutes)?", text)
+    if not m:
+        return None
+    amount = float(m.group(1))
+    unit = m.group(2) or "s"
+    if unit.startswith("m"):
+        return amount * 60.0
+    return amount
+
+
+def _fmt_autotop_interval(seconds):
+    try:
+        secs = float(seconds)
+    except Exception:
+        secs = float(AUTOTOP_DEFAULT_INTERVAL)
+    if secs >= 60 and abs(secs % 60) < 1e-9:
+        mins = int(round(secs / 60.0))
+        return f"{mins}m"
+    if abs(secs - int(secs)) < 1e-9:
+        return f"{int(secs)}s"
+    return f"{secs:g}s"
+
+
 def _clamp_autotop_interval(value):
     try:
         seconds = float(value)
@@ -3996,7 +4030,7 @@ def _autotop_status_message():
     pending = sum(1 for row in tracked if row.get("pending_recreate"))
     lines = [
         f"⏱ <b>Autotop:</b> <code>{state}</code>",
-        f"🔁 Interval: <code>{int(AUTOTOP_INTERVAL)}s</code>",
+        f"🔁 Interval: <code>{_fmt_autotop_interval(AUTOTOP_INTERVAL)}</code>",
         f"💾 Tracked orders: <code>{len(tracked)}</code>"
         + (f" (pending recreate: <code>{pending}</code>)" if pending else ""),
     ]
@@ -4020,75 +4054,36 @@ def _autotop_status_message():
 
 
 async def _autotop_notify_disabled(reason: str):
-    """Best-effort owner notice when autotop turns itself off."""
-    try:
-        owner = OWNER_ID or (owner_and_sudos() or [None])[0]
-        if not owner or not heartless_bot:
-            return
-        await heartless_bot.send_message(
-            int(owner),
-            "⏹ <b>Autotop disabled</b>\n"
-            f"{reason}\n\n"
-            f"Use <code>{_h('autotop')} on</code> to enable again.",
-            parse_mode="html",
-        )
-    except Exception:
-        LOGS.debug("Autotop disable notify failed", exc_info=True)
+    """Log when autotop turns itself off (no owner DM)."""
+    LOGS.info("Autotop disabled: %s", reason)
 
 
 async def _autotop_notify_problems(result: dict):
-    """Alert owner when autotop loses/restores orders or hits errors."""
+    """Log when autotop loses/restores orders or hits errors (no Saved Messages)."""
     lost = result.get("lost") or []
     restored = result.get("restored") or []
     recreated = result.get("recreated") or []
     errors = result.get("errors") or []
     if not lost and not restored and not recreated and not errors:
         return
-    try:
-        owner = OWNER_ID or (owner_and_sudos() or [None])[0]
-        if not owner or not heartless_bot:
-            return
-        lines = ["⚠️ <b>Autotop orderup warning</b>", ""]
-        if recreated:
-            lines.append(
-                f"💾 <b>DB-recreated missing:</b> <code>{len(recreated)}</code>"
-            )
-            for row in recreated[:8]:
-                lines.append(
-                    f"• {html.escape(str(row.get('label') or '?'))}"
-                )
-            lines.append("")
-        if lost:
-            lines.append(f"🚨 <b>Lost bids:</b> <code>{len(lost)}</code>")
-            for row in lost[:8]:
-                lines.append(
-                    f"• {html.escape(str(row.get('label') or '?'))}\n"
-                    f"  <code>{html.escape(str(row.get('error') or ''))}</code>"
-                )
-            lines.append("")
-        if restored:
-            lines.append(
-                f"♻️ <b>Restored at old price:</b> <code>{len(restored)}</code>"
-            )
-            for row in restored[:8]:
-                lines.append(
-                    f"• {html.escape(str(row.get('label') or '?'))}"
-                )
-            lines.append("")
-        if errors:
-            lines.append(f"❌ <b>Errors:</b> <code>{len(errors)}</code>")
-            for row in errors[:5]:
-                lines.append(
-                    f"• {html.escape(str(row.get('label') or '?'))}\n"
-                    f"  <code>{html.escape(str(row.get('error') or ''))}</code>"
-                )
-        await heartless_bot.send_message(
-            int(owner),
-            "\n".join(lines).rstrip(),
-            parse_mode="html",
-        )
-    except Exception:
-        LOGS.debug("Autotop problem notify failed", exc_info=True)
+    lines = ["Autotop orderup warning"]
+    if recreated:
+        lines.append(f"DB-recreated missing: {len(recreated)}")
+        for row in recreated[:8]:
+            lines.append(f"• {row.get('label') or '?'}")
+    if lost:
+        lines.append(f"Lost bids: {len(lost)}")
+        for row in lost[:8]:
+            lines.append(f"• {row.get('label') or '?'}: {row.get('error') or ''}")
+    if restored:
+        lines.append(f"Restored at old price: {len(restored)}")
+        for row in restored[:8]:
+            lines.append(f"• {row.get('label') or '?'}")
+    if errors:
+        lines.append(f"Errors: {len(errors)}")
+        for row in errors[:5]:
+            lines.append(f"• {row.get('label') or '?'}: {row.get('error') or ''}")
+    LOGS.warning("\n".join(lines))
 
 
 async def _autotop_cycle_once():
@@ -4282,47 +4277,6 @@ async def artemis_autotop(event):
     if not raw:
         return await event.eor(_autotop_status_message(), parse_mode="html")
 
-    on_match = re.match(
-        r"^(on|start|enable|1|true)(?:\s+(\d+(?:\.\d+)?)\s*s?)?$",
-        raw,
-    )
-    if on_match:
-        try:
-            await _ensure_artemis_token(event)
-        except ValueError as e:
-            return await event.eor(f"❌ {e}", parse_mode="html")
-        interval = (
-            float(on_match.group(2))
-            if on_match.group(2)
-            else AUTOTOP_DEFAULT_INTERVAL
-        )
-        interval = _autotop_set_interval(interval)
-        # Seed DB tracker from current live orders before the worker runs.
-        try:
-            async with ORDERUP_LOCK:
-                async with MRKTClient(token=ARTEMIS_TOKEN) as client:
-                    live = await _fetch_my_orders(client)
-                    _autotop_orders_sync_live(live)
-        except Exception as e:
-            LOGS.warning("Autotop seed sync failed: %s", e)
-        started = _autotop_start(interval)
-        if started:
-            msg = (
-                "🟢 <b>Autotop enabled.</b>\n\n"
-                f"🔁 Checking every <code>{int(interval)}s</code>.\n"
-                f"💾 Active orders are tracked in DB and recreated if missing.\n"
-                f"Use <code>{_h('autotop')} off</code> to disable."
-            )
-        else:
-            msg = (
-                "🟢 <b>Autotop is already running.</b>\n\n"
-                f"🔁 Interval updated to <code>{int(interval)}s</code>."
-            )
-        return await event.eor(
-            msg + "\n\n" + _autotop_status_message(),
-            parse_mode="html",
-        )
-
     if raw in ("off", "stop", "disable", "0", "false"):
         await _autotop_stop()
         return await event.eor(
@@ -4331,12 +4285,71 @@ async def artemis_autotop(event):
             parse_mode="html",
         )
 
+    interval_raw = None
+    on_match = re.match(
+        r"^(on|start|enable|true)(?:\s+(.+))?$",
+        raw,
+    )
+    if on_match:
+        interval_raw = (on_match.group(2) or "").strip() or None
+    else:
+        # Shorthand: `.autotop 20s` / `.autotop 1m` also enables.
+        parsed = _parse_autotop_interval(raw)
+        if parsed is not None:
+            interval_raw = raw
+        else:
+            return await event.eor(
+                "❌ <b>Usage:</b>\n"
+                f"<code>{_h('autotop')}</code>\n"
+                f"<code>{_h('autotop')} on</code> — default 30s\n"
+                f"<code>{_h('autotop')} on 20s</code> / "
+                f"<code>{_h('autotop')} 40s</code> / "
+                f"<code>{_h('autotop')} 1m</code>\n"
+                f"<code>{_h('autotop')} off</code>",
+                parse_mode="html",
+            )
+
+    try:
+        await _ensure_artemis_token(event)
+    except ValueError as e:
+        return await event.eor(f"❌ {e}", parse_mode="html")
+
+    if interval_raw:
+        parsed = _parse_autotop_interval(interval_raw)
+        if parsed is None:
+            return await event.eor(
+                "❌ Invalid interval. Use e.g. "
+                "<code>20s</code>, <code>40s</code>, <code>1m</code>.",
+                parse_mode="html",
+            )
+        interval = _autotop_set_interval(parsed)
+    else:
+        interval = _autotop_set_interval(AUTOTOP_DEFAULT_INTERVAL)
+
+    # Seed DB tracker from current live orders before the worker runs.
+    try:
+        async with ORDERUP_LOCK:
+            async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+                live = await _fetch_my_orders(client)
+                _autotop_orders_sync_live(live)
+    except Exception as e:
+        LOGS.warning("Autotop seed sync failed: %s", e)
+    started = _autotop_start(interval)
+    pretty = _fmt_autotop_interval(interval)
+    if started:
+        msg = (
+            "🟢 <b>Autotop enabled.</b>\n\n"
+            f"🔁 Checking every <code>{pretty}</code>.\n"
+            f"💾 Active orders are tracked in DB and recreated if missing.\n"
+            f"Use <code>{_h('autotop')} off</code> to disable."
+        )
+    else:
+        msg = (
+            "🟢 <b>Autotop is already running.</b>\n\n"
+            f"🔁 Interval updated to <code>{pretty}</code>."
+        )
     return await event.eor(
-        "❌ <b>Usage:</b>\n"
-        f"<code>{_h('autotop')}</code>\n"
-        f"<code>{_h('autotop')} on</code> — default 30s\n"
-        f"<code>{_h('autotop')} on 20</code> — custom interval\n"
-        f"<code>{_h('autotop')} off</code>",
+        msg + "\n\n" + _autotop_status_message(),
         parse_mode="html",
     )
 
@@ -6723,6 +6736,20 @@ async def _gift_inline_answer(event, articles, **kwargs):
         raise
 
 
+def _blank_media_file():
+    """1×1 transparent PNG — Telegram cannot turn media messages into text-only."""
+    # PNG IHDR 1x1 RGBA fully transparent
+    raw = (
+        b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
+        b"\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89"
+        b"\x00\x00\x00\nIDATx\x9cc\x00\x01\x00\x00\x05\x00\x01"
+        b"\r\n-\xb4\x00\x00\x00\x00IEND\xaeB`\x82"
+    )
+    bio = io.BytesIO(raw)
+    bio.name = "blank.png"
+    return bio
+
+
 async def _gift_inline_edit(event, text: str, buttons, *, parse_mode="md"):
     try:
         from telethon.errors import MessageNotModifiedError
@@ -6730,6 +6757,13 @@ async def _gift_inline_edit(event, text: str, buttons, *, parse_mode="md"):
     except Exception:
         MessageNotModifiedError = Exception  # noqa: N806
         InputBotInlineMessageID = type(None)  # noqa: N806
+
+    try:
+        is_inline = isinstance(
+            getattr(event.query, "msg_id", None), InputBotInlineMessageID
+        )
+    except Exception:
+        is_inline = False
 
     try:
         await event.edit(
@@ -6745,13 +6779,25 @@ async def _gift_inline_edit(event, text: str, buttons, *, parse_mode="md"):
             await event.answer()
         return
     except Exception as exc:
-        LOGS.debug("Inline g edit failed: %s", exc)
-        try:
-            is_inline = isinstance(
-                getattr(event.query, "msg_id", None), InputBotInlineMessageID
-            )
-        except Exception:
-            is_inline = False
+        LOGS.debug("Inline g text edit failed: %s", exc)
+
+    # Chart/media messages cannot become text-only via Bot API — swap to a
+    # tiny blank image and put the panel text in the caption.
+    try:
+        await event.edit(
+            text,
+            file=_blank_media_file(),
+            buttons=buttons,
+            parse_mode=parse_mode,
+            link_preview=False,
+        )
+        return
+    except MessageNotModifiedError:
+        with contextlib.suppress(Exception):
+            await event.answer()
+        return
+    except Exception as exc:
+        LOGS.debug("Inline g blank-media edit failed: %s", exc)
         if is_inline:
             with contextlib.suppress(Exception):
                 await event.answer(
@@ -7126,8 +7172,10 @@ async def artemis_gift_inline_floor_cb(event):
         if mode == "cmb" and not back:
             return await event.answer("Could not resolve backdrop.", alert=True)
 
-        # Floors are Satellite-only — no MRKT round-trip needed for floor panel.
-        message = await _build_gift_floor_only(None, coll, mod, back)
+        # Satellite floors + MRKT quick sell (client required for /orders/top).
+        await _ensure_artemis_token()
+        async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+            message = await _build_gift_floor_only(client, coll, mod, back)
     except Exception as e:
         LOGS.warning("Inline g floor failed: %s", e)
         return await event.answer(str(e)[:180], alert=True)
