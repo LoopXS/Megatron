@@ -36,7 +36,9 @@ API_COOLDOWN_SECONDS = 300
 MAX_CONCURRENT_API = 5
 STEP_TIMEOUT = 300
 TOTAL_TIMEOUT = 900
-NETWORK_TIMEOUT = 30
+# Per-call HTTP timeouts live in the core; this bounds a whole multi-call
+# helper (login + read + create retries) so it does not trip on slow creates.
+NETWORK_TIMEOUT = 120
 CODE_ATTEMPTS = 3
 INPUT_ATTEMPTS = 3
 FALLBACK_DATA = "apifallback"
