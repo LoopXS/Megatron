@@ -50,10 +50,15 @@ class SessionCancelled(Exception):
 
 
 def normalize_code(text):
-    """Keep only the digits from a login code ("1 2 3 4 5" -> "12345")."""
+    """Extract a login code, tolerating spaces/dashes.
+
+    Telegram codes may be numeric (``"12345"``) or alphanumeric
+    (``"M0YcbckTMdA"``) and users often paste them with spaces or dashes, so
+    keep every letter and digit and drop everything else.
+    """
     if not text:
         return ""
-    return "".join(ch for ch in str(text) if ch.isdigit())
+    return "".join(ch for ch in str(text) if ch.isascii() and ch.isalnum())
 
 
 def parse_api_id(text):
