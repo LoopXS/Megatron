@@ -23,7 +23,6 @@ cloudscraper>=1.2.71
 ntgcalls>=3.0.0,<4.0.0
 py-tgcalls>=3.0.0
 git+https://github.com/ToxygenX/floor.git
-git+https://github.com/ToxygenX/floorT.git
 nudenet
 # 4.5.2+ declares requires-python <3.15 (Python 3.14 OK); older pins fail to resolve
 spotdl>=4.5.2
