@@ -27,26 +27,29 @@
    List / cancel auto-buy monitors.
 
 • `{i}gift Collection`
-   Floors + sticker (transferable MRKT floor).
+   Transferable floors via Gift Satellite miniapp (all markets).
 
 • `{i}gift Collection, Model`
-   Floors + quick sells + up to 5 cheapest listings + sticker.
+   Floors + quick sells + up to 5 MRKT cheapest listings + monochromes.
 
 • `{i}gift Collection, Model, Backdrop`
-   Floors + quick sells + listings + latest sales + sticker.
+   Floors + quick sells + listings + latest sales (all markets).
 
 • `{i}gift https://t.me/nft/Name-123`
-   Resolve NFT attrs → full floors / listings / sales + sticker.
+   Resolve NFT attrs → full floors / listings / sales.
 
 • `{i}gift c Collection, Model, Backdrop`
-   Compact floors + matching quick sell only (no sticker).
+   Compact floors + matching quick sell only.
 
 • `{i}gift c https://t.me/nft/Name-123`
    Compact floors for that NFT's collection + model + backdrop.
 
 • Inline: `@AssisXBot g Collection[, Model][, Backdrop]`
 • Inline: `@AssisXBot g https://t.me/nft/Name-123`
-   First pick Floor Price 📉 or Gift Chart 📊, then the matching filters.
+   Hub: Floor Price 📉 / Gift Chart 📊 / NFT Sales 🧾 → market filters.
+
+• `{i}ch Collection[, Model]`
+   Send GiftCharts baseline chart in chat.
 
 • `{i}p usdt` | `{i}p ton` | `{i}p stars`
    Convert 1 unit (+ Tomans & USDT).
@@ -84,6 +87,10 @@
 • `{i}ordernew Collection, Model, MIN-MAX`
    Create a new order for model only.
 
+• `{i}ordernew` (reply to / paste `.orders` list)
+   Bulk recreate: for each numbered order, skip if that UUID is already
+   live; otherwise create from Collection, Model, Backdrop + 💰 MIN-MAX.
+
 • `{i}orderup N`
    Retarget order N to competitor top+0.01 (raise or lower).
 
@@ -104,7 +111,6 @@
 Auto: missing/expired token regenerates from DB `SESSIONMRKT`.
 """
 
-import io
 import os
 import html
 import requests
@@ -113,6 +119,7 @@ import contextlib
 import secrets
 import time
 import re
+from typing import Optional
 from uuid import UUID
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
@@ -140,6 +147,8 @@ from . import (
     in_pattern,
     callback,
 )
+from . import _satellite_tma as sat
+from . import _giftcharts as gc  # charts callbacks register via this import
 from CythonX._misc import owner_and_sudos
 
 
@@ -189,53 +198,26 @@ TELEGRAM_GIFTS = TelegramGifts(
     ttl_seconds=600,
 )
 
-TG_ASSETS_BASE = (
-    "https://raw.githubusercontent.com/"
-    "ssamy2/TelegramGiftsAssests/main"
-)
-
-# Direct gift sticker assets (TGS/WebP)
-TG_PHOTOS_BASE = (
-    "https://cdn.jsdelivr.net/gh/"
-    "ssamy2/TG_Photos@main"
-)
-
-# Gift Changes API — stickers + gift/model metadata/rarity
+# Gift Changes API — gift/model metadata/rarity (not stickers)
 # thanks to @GiftChanges for this API (api.changes.tg)
 CHANGES_API = "https://api.changes.tg"
 GIFT_CHANGES_CREDIT = "thanks to @GiftChanges for this API"
 
 TEHRAN_TZ = ZoneInfo("Asia/Tehran")
-FRAGMENT_GIFT_TGS = "https://nft.fragment.com/gift/{slug}.tgs"
 
-# Gift Satellite floors (Portal / Tonnel / Telegram / GetGems)
-SATELLITE_API = "https://gift-satellite.dev/api"
-SATELLITE_MARKETS = (
-    ("portals", "Portal"),
-    ("tonnel", "Tonnel"),
-    ("tg", "Telegram"),
-    ("getgems", "GetGems"),
+# Gift Satellite miniapp markets (display labels; floors+sales via sat TMA)
+SATELLITE_MARKETS = tuple(
+    (search, label) for search, label, _hist in sat.SAT_MARKETS
 )
-# API hard limit: ~1 request / second. Slightly over to avoid 429s.
-SATELLITE_MIN_INTERVAL = 1.05
-_SATELLITE_LOCK = asyncio.Lock()
-_SATELLITE_NEXT_AT = 0.0
-_SATELLITE_CACHE = {}
-_SATELLITE_CACHE_TTL = 45.0
 
 # Fragment-style Stars USD reference (override with DB key STAR_USD).
 DEFAULT_STAR_USD = Decimal("0.015")
 _RATE_CACHE = {"at": 0.0, "ton_usd": None, "usdt_toman": None}
 _RATE_CACHE_TTL = 60.0
 
-# GiftWiki monochrome backdrops for a model
-GIFTWIKI_API = "https://api.giftwiki.tg"
-_MONOCHROME_CACHE = {}
-_MONOCHROME_CACHE_TTL = 120.0
-
 
 def _h(*parts):
-    """Command usage with the active handler."""
+    """Command usage with the active Heartless handler."""
     return f"{HNDLR}{''.join(str(p) for p in parts)}"
 
 
@@ -437,7 +419,11 @@ def _ton2(value):
         Decimal("0.01"),
         rounding=ROUND_HALF_UP,
     )
-    return f"{d:.2f}"
+    text = f"{d:.2f}"
+    # 867.00 → 867 (only exact .00 cents)
+    if text.endswith(".00"):
+        return text[:-3]
+    return text
 
 
 def _rarity_pct(per_mille):
@@ -825,11 +811,6 @@ async def _refine_gift_names(client, collection, model=None, backdrop=None):
             backdrop = _title_from_compact(backdrop) or backdrop
 
     return collection, model, backdrop
-
-
-def _is_valid_tgs(data):
-    """Telegram .tgs files are gzip-compressed Lottie JSON."""
-    return bool(data) and data[:2] == b"\x1f\x8b"
 
 
 def _match_attr(candidate, target):
@@ -1659,7 +1640,7 @@ async def _fetch_my_orders(client):
 
 
 def _store_artemis_token(token):
-    """Persist token in memory + DB."""
+    """Persist token in memory + Heartless DB."""
     global ARTEMIS_TOKEN
     token = str(token or "").strip()
     if not token:
@@ -1671,17 +1652,21 @@ def _store_artemis_token(token):
 
 
 async def _generate_token_from_session(session):
+    global MRKT_API_ID, MRKT_API_HASH
     session = str(session or "").strip()
     if not session:
         raise ValueError("SESSIONMRKT is empty.")
+    # Always re-read DB creds — module-level cache can be stale after setdb.
+    MRKT_API_ID = udB.get_key("api_id") or MRKT_API_ID
+    MRKT_API_HASH = udB.get_key("api_hash") or MRKT_API_HASH
     if not MRKT_API_ID or not MRKT_API_HASH:
         raise ValueError(
-            "api_id / api_hash are missing from DB."
+            "api_id / api_hash are missing from Heartless DB."
         )
     async with MRKTClient() as client:
         token = await client.auth.login(
-            api_id=MRKT_API_ID,
-            api_hash=MRKT_API_HASH,
+            api_id=int(MRKT_API_ID),
+            api_hash=str(MRKT_API_HASH),
             session="mrkt",
             session_string=session,
             bot_username="mrkt",
@@ -1691,31 +1676,62 @@ async def _generate_token_from_session(session):
 
 
 def _is_token_expired_error(exc):
+    """True when MRKT rejects the stored Artemis token (needs SESSIONMRKT regen)."""
     if isinstance(exc, AuthError):
         return True
     status = getattr(exc, "status_code", None)
-    if status == 401:
+    if status is None:
+        status = getattr(exc, "status", None)
+    try:
+        status = int(status) if status is not None else None
+    except Exception:
+        status = None
+    if status in (401, 403):
         return True
     msg = str(exc or "").lower()
-    if "401" in msg or "unauthorized" in msg:
+    if any(
+        s in msg
+        for s in (
+            "401",
+            "403",
+            "unauthorized",
+            "forbidden",
+            "unauthenticated",
+        )
+    ):
         return True
-    if "expired" in msg and "token" in msg:
+    if "token" in msg and any(
+        s in msg
+        for s in ("expired", "invalid", "missing", "revoke", "jwt")
+    ):
         return True
-    if "invalid" in msg and "token" in msg:
+    if "re-authenticate" in msg or "reauthenticate" in msg:
+        return True
+    if "session" in msg and ("expired" in msg or "invalid" in msg):
         return True
     return False
 
 
+def _sessionmrkt():
+    raw = udB.get_key("SESSIONMRKT")
+    text = str(raw).strip() if raw else ""
+    return text or None
+
+
 async def _force_refresh_token(event=None, status=None):
     """Drop expired token and mint a new one from SESSIONMRKT."""
-    global ARTEMIS_TOKEN
+    global ARTEMIS_TOKEN, MRKT_API_ID, MRKT_API_HASH
     async with TOKEN_LOCK:
         ARTEMIS_TOKEN = None
         with contextlib.suppress(Exception):
             udB.del_key("ARTEMIS_TOKEN")
 
-        session = udB.get_key("SESSIONMRKT")
-        if not session or not str(session).strip():
+        # Refresh api creds in case DB was updated after plugin load.
+        MRKT_API_ID = udB.get_key("api_id")
+        MRKT_API_HASH = udB.get_key("api_hash")
+
+        session = _sessionmrkt()
+        if not session:
             raise ValueError(
                 "Artemis token expired and "
                 "<code>SESSIONMRKT</code> is not set.\n\n"
@@ -1727,13 +1743,13 @@ async def _force_refresh_token(event=None, status=None):
             if status is not None:
                 with contextlib.suppress(Exception):
                     status = await status.edit(
-                        "<b>Token expired — regenerating...</b>",
+                        "<b>Token expired — regenerating from SESSIONMRKT…</b>",
                         parse_mode="html",
                     )
             else:
                 with contextlib.suppress(Exception):
                     status = await event.eor(
-                        "<b>Token expired — regenerating...</b>",
+                        "<b>Token expired — regenerating from SESSIONMRKT…</b>",
                         parse_mode="html",
                     )
 
@@ -1753,7 +1769,7 @@ async def _ensure_artemis_token(event=None, status=None):
 
     Returns (token, status_message_or_None).
     """
-    global ARTEMIS_TOKEN
+    global ARTEMIS_TOKEN, MRKT_API_ID, MRKT_API_HASH
 
     async with TOKEN_LOCK:
         if ARTEMIS_TOKEN:
@@ -1764,8 +1780,11 @@ async def _ensure_artemis_token(event=None, status=None):
             ARTEMIS_TOKEN = str(stored).strip()
             return ARTEMIS_TOKEN, status
 
-        session = udB.get_key("SESSIONMRKT")
-        if not session or not str(session).strip():
+        MRKT_API_ID = udB.get_key("api_id")
+        MRKT_API_HASH = udB.get_key("api_hash")
+
+        session = _sessionmrkt()
+        if not session:
             raise ValueError(
                 "Artemis token is not configured.\n\n"
                 f"Use <code>{_h('buytoken')} YOUR_TOKEN</code>\n"
@@ -1776,12 +1795,12 @@ async def _ensure_artemis_token(event=None, status=None):
         if event is not None:
             if status is not None:
                 status = await status.edit(
-                    "<b>Generating Token...</b>",
+                    "<b>Generating Token from SESSIONMRKT…</b>",
                     parse_mode="html",
                 )
             else:
                 status = await event.eor(
-                    "<b>Generating Token...</b>",
+                    "<b>Generating Token from SESSIONMRKT…</b>",
                     parse_mode="html",
                 )
 
@@ -1802,18 +1821,29 @@ async def _mrkt_call(event, status, runner):
     except Exception as e:
         if not _is_token_expired_error(e):
             raise
-        LOGS.warning("Artemis auth failed (%s); refreshing token", e)
+        LOGS.warning("Artemis auth failed (%s); refreshing from SESSIONMRKT", e)
         _, status = await _force_refresh_token(event, status)
-        return await runner(), status
+        try:
+            return await runner(), status
+        except Exception as e2:
+            if _is_token_expired_error(e2):
+                LOGS.error(
+                    "Artemis still unauthorized after SESSIONMRKT regen: %s", e2,
+                )
+            raise
 
 
 async def _with_mrkt(event, status, work):
     """
     Run `await work(client)` with auto token refresh on expiry.
+    Always re-reads the current ARTEMIS_TOKEN after a refresh.
     Returns (result, status).
     """
     async def runner():
-        async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+        token = ARTEMIS_TOKEN
+        if not token:
+            raise AuthError("ARTEMIS_TOKEN is empty after ensure/refresh.")
+        async with MRKTClient(token=token) as client:
             return await work(client)
 
     return await _mrkt_call(event, status, runner)
@@ -2137,16 +2167,34 @@ def _parse_price_query(raw):
 
 
 async def _top_order(client, order_or_filter):
-    return await client.request(
-        "POST",
-        "/orders/top",
-        json={
-            "collectionName": order_or_filter.get("collectionName") or None,
-            "modelName": order_or_filter.get("modelName") or None,
-            "backdropName": order_or_filter.get("backdropName") or None,
-            "symbolName": order_or_filter.get("symbolName") or None,
-        },
-    )
+    """
+    POST /orders/top for a filter.
+
+    MRKT returns HTTP 400 for some filter shapes (expired attrs, empty
+    model/backdrop combos). Treat those as \"no top\" instead of aborting
+    orderup mid-flight — callers must not cancel when this returns None
+    due to a hard failure they did not already handle.
+    """
+    body = {
+        "collectionName": order_or_filter.get("collectionName") or None,
+        "modelName": order_or_filter.get("modelName") or None,
+        "backdropName": order_or_filter.get("backdropName") or None,
+        "symbolName": order_or_filter.get("symbolName") or None,
+    }
+    try:
+        return await client.request("POST", "/orders/top", json=body)
+    except RequestError as e:
+        status = getattr(e, "status", None) or getattr(e, "status_code", None)
+        msg = str(e)
+        if status == 400 or "HTTP 400" in msg or "400" in msg[:40]:
+            LOGS.warning(
+                "orders/top HTTP 400 for %s / %s / %s — treating as no top",
+                body.get("collectionName"),
+                body.get("modelName"),
+                body.get("backdropName"),
+            )
+            return None
+        raise
 
 
 def _parse_order_filter(raw):
@@ -2656,7 +2704,8 @@ def _parse_ordernew(value):
             "Usage:\n"
             f"{_h('ordernew')} Collection, Model, Backdrop, QTY, MIN-MAX\n"
             f"{_h('ordernew')} Collection, Model, Backdrop, MIN-MAX\n"
-            f"{_h('ordernew')} Collection, Model, MIN-MAX"
+            f"{_h('ordernew')} Collection, Model, MIN-MAX\n"
+            f"{_h('ordernew')}  (reply to / paste an .orders list)"
         )
     if not collection or not model:
         raise ValueError("Collection and Model cannot be empty.")
@@ -2670,6 +2719,175 @@ def _parse_ordernew(value):
     if min_ton > max_ton:
         raise ValueError("Minimum price cannot be greater than maximum price.")
     return collection, model, backdrop, quantity, min_ton, max_ton
+
+
+def _looks_like_orders_list(text: str) -> bool:
+    """True when text looks like a pasted `.orders` dump."""
+    raw = _normalize_orders_list_text(text)
+    if not raw.strip():
+        return False
+    if re.search(r"(?im)^\s*\d+\.\s+.+,", raw) and (
+        "💰" in raw
+        or re.search(r"(?i)\b\d+(?:\.\d+)?\s*-\s*\d+(?:\.\d+)?\s*TON\b", raw)
+    ):
+        return True
+    if re.search(r"(?i)active\s+orders", raw) and (
+        "💰" in raw or re.search(r"(?i)\d+\s*-\s*\d+.*TON", raw)
+    ):
+        return True
+    return False
+
+
+def _normalize_orders_list_text(text: str) -> str:
+    """Flatten HTML / entities from a replied `.orders` message."""
+    raw = str(text or "")
+    raw = re.sub(r"(?is)^\s*(?:\.|/)?ordernew\b", "", raw).strip()
+    raw = re.sub(r"(?is)<br\s*/?>", "\n", raw)
+    raw = re.sub(r"(?is)</(?:p|div|h\d|li|tr)>", "\n", raw)
+    raw = re.sub(r"(?is)<[^>]+>", "", raw)
+    raw = (
+        raw.replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&amp;", "&")
+        .replace("&nbsp;", " ")
+        .replace("\xa0", " ")
+        .replace("\u200b", "")
+    )
+    # Collapse fancy spaces but keep newlines.
+    raw = re.sub(r"[^\S\n]+", " ", raw)
+    raw = re.sub(r"\n{3,}", "\n\n", raw)
+    return raw.strip()
+
+
+def _parse_orders_list_bulk(text: str) -> list[dict]:
+    """
+    Parse a pasted `.orders` message into create-specs.
+
+    Expects blocks like::
+
+        1. Lucky Locket, Beauty Beast, Fire Engine
+           💰 0.50-39.10 TON ✅
+           📊 Max: 0.50-39.09 TON
+           🔢 Qty: 0/1
+           🆔 0ae3d6ba-...
+    """
+    raw = _normalize_orders_list_text(text)
+
+    # Split into numbered entries.
+    parts = re.split(r"(?m)(?=^\s*\d+\.\s+)", raw)
+    out = []
+    for part in parts:
+        part = part.strip()
+        if not part:
+            continue
+        m = re.match(
+            r"(?ms)^\s*(\d+)\.\s*(.+?)\s*$",
+            part.split("\n", 1)[0],
+        )
+        if not m:
+            continue
+        idx = int(m.group(1))
+        label = m.group(2).strip()
+        # Drop trailing status marks from the title line.
+        label = re.sub(r"\s*[✅❌✔️]?\s*$", "", label).strip()
+        label_parts = [p.strip() for p in label.split(",") if p.strip()]
+        if len(label_parts) < 2:
+            continue
+        collection = label_parts[0]
+        model = label_parts[1]
+        backdrop = label_parts[2] if len(label_parts) >= 3 else None
+        if backdrop and backdrop.lower() in ("any", "none", "null", "*", "-"):
+            backdrop = None
+
+        price_m = re.search(
+            r"💰\s*([\d.,]+)\s*-\s*([\d.,]+)\s*TON",
+            part,
+            flags=re.I,
+        )
+        if not price_m:
+            price_m = re.search(
+                r"(?i)(?:^|\n)\s*([\d.,]+)\s*-\s*([\d.,]+)\s*TON",
+                part,
+            )
+        if not price_m:
+            continue
+        try:
+            lo = _parse_ton(price_m.group(1).replace(",", ""))
+            hi = _parse_ton(price_m.group(2).replace(",", ""))
+        except Exception:
+            continue
+        if lo > hi:
+            lo, hi = hi, lo
+
+        qty = 1
+        qty_m = re.search(r"🔢\s*Qty:\s*(\d+)\s*/\s*(\d+)", part, flags=re.I)
+        if not qty_m:
+            qty_m = re.search(r"(?i)Qty:\s*(\d+)\s*/\s*(\d+)", part)
+        if qty_m:
+            done = int(qty_m.group(1))
+            total = int(qty_m.group(2))
+            qty = max(total - done, 1)
+
+        oid = None
+        oid_m = re.search(
+            r"🆔\s*(?:<code>)?([0-9a-fA-F-]{36})",
+            part,
+        )
+        if not oid_m:
+            oid_m = re.search(
+                r"(?i)\b([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-"
+                r"[0-9a-f]{4}-[0-9a-f]{12})\b",
+                part,
+            )
+        if oid_m:
+            oid = oid_m.group(1)
+
+        out.append(
+            {
+                "index": idx,
+                "collection": collection,
+                "model": model,
+                "backdrop": backdrop,
+                "quantity": qty,
+                "price_min": float(lo),
+                "price_max": float(hi),
+                "id": oid,
+                "label": ", ".join(
+                    p for p in (collection, model, backdrop) if p
+                ),
+            }
+        )
+    if not out:
+        raise ValueError(
+            "Could not parse any orders from that text.\n"
+            "Paste or reply to an `.orders` list."
+        )
+    # Keep original numbering order.
+    out.sort(key=lambda r: r["index"])
+    return out
+
+
+def _live_order_ids(orders) -> set[str]:
+    ids = set()
+    for order in orders or []:
+        if not isinstance(order, dict):
+            continue
+        oid = order.get("id")
+        if oid:
+            ids.add(str(oid).lower())
+    return ids
+
+
+def _live_order_keys(orders) -> set[str]:
+    keys = set()
+    for order in orders or []:
+        if not isinstance(order, dict):
+            continue
+        try:
+            keys.add(_order_snapshot(order)["key"])
+        except Exception:
+            continue
+    return keys
 
 
 async def _get_cached_order(idx):
@@ -3141,28 +3359,47 @@ def _autotop_orders_sync_live(orders, *, trusted=True):
     """
     Persist current live bids.
 
-    Keeps ``pending_recreate`` snapshots that are not present live so the
-    next cycle can restore them after cancel/create races or restarts.
+    Missing tracked bids are never hard-deleted here — they are marked
+    ``pending_recreate`` so a flaky/partial MRKT fetch (or orderup cancel
+    that failed mid-flight) cannot shrink 13 tracked orders down to 4.
 
-    An untrusted empty fetch (``trusted=False``) does not wipe the tracker —
-    that avoids dropping DB snapshots when MRKT briefly returns no rows.
+    An untrusted empty fetch (``trusted=False``) does not wipe the tracker.
     """
     live_snaps = []
     live_keys = set()
+    live_ids = set()
     for order in orders or []:
         if not isinstance(order, dict):
             continue
         snap = _order_snapshot(order, pending_recreate=False)
         live_snaps.append(snap)
         live_keys.add(snap["key"])
+        if snap.get("id"):
+            live_ids.add(str(snap["id"]))
     if not live_snaps and not trusted:
         return _autotop_orders_load()
-    pending = [
-        dict(row)
-        for row in _autotop_orders_load()
-        if row.get("pending_recreate") and row.get("key") not in live_keys
-    ]
-    _autotop_orders_save(live_snaps + pending)
+
+    prev = _autotop_orders_load()
+    merged = {snap["key"]: dict(snap) for snap in live_snaps}
+    for row in prev:
+        if not isinstance(row, dict):
+            continue
+        key = row.get("key")
+        if not key:
+            continue
+        oid = str(row.get("id") or "")
+        present = key in live_keys or (oid and oid in live_ids)
+        if present:
+            # Live row already in merged; keep any fresher qty/price from live.
+            continue
+        # Gone from live fetch — queue restore instead of dropping.
+        kept = dict(row)
+        kept["pending_recreate"] = True
+        kept["updated_at"] = time.time()
+        merged[key] = kept
+
+    out = list(merged.values())
+    _autotop_orders_save(out)
     return live_snaps
 
 
@@ -3338,7 +3575,27 @@ async def _orderup_one(client, order):
 
     cancelled = False
     try:
-        top = await _top_order(client, filt)
+        # Never cancel when top lookup hard-fails — HTTP 400 used to wipe bids.
+        try:
+            top = await _top_order(client, filt)
+        except Exception as top_err:
+            LOGS.warning(
+                "orderup top lookup failed for %s (skip, keep live): %s",
+                oid,
+                top_err,
+            )
+            _autotop_orders_upsert(
+                _order_snapshot(order, pending_recreate=False)
+            )
+            return {
+                "status": "error",
+                "label": label,
+                "oid": oid,
+                "old_min": old_min,
+                "old_max": old_max,
+                "error": f"top lookup failed: {top_err}",
+            }
+        # Soft 400 → None: still try competitor book; if nobody else, skip.
         competitor = await _competitor_top_ton(client, order, top=top)
         if competitor is None:
             top_max = old_max
@@ -3364,7 +3621,13 @@ async def _orderup_one(client, order):
 
         await _cancel_order(client, oid)
         cancelled = True
-        top = await _top_order(client, filt)
+        try:
+            top = await _top_order(client, filt)
+        except Exception as top_err:
+            LOGS.warning(
+                "orderup post-cancel top failed for %s: %s", oid, top_err,
+            )
+            top = None
         if top and top.get("priceMaxNanoTONs") is not None:
             top_max = nano_to_ton(top.get("priceMaxNanoTONs"))
         else:
@@ -4341,22 +4604,199 @@ async def artemis_orderdel(event):
         )
 
 
-@heartless_cmd(owner_only=True, pattern=r"ordernew(?:\s+(.+))?$")
+async def _ordernew_bulk(event, raw_text: str):
+    """Create missing orders from a pasted / replied `.orders` list."""
+    global ORDER_CACHE
+    try:
+        specs = _parse_orders_list_bulk(raw_text)
+    except Exception as e:
+        return await event.eor(f"❌ <code>{e}</code>", parse_mode="html")
+
+    status = await event.eor(
+        f"<b>Bulk ordernew:</b> parsing {len(specs)} entr"
+        f"{'y' if len(specs) == 1 else 'ies'}…",
+        parse_mode="html",
+    )
+    try:
+        async def work(client):
+            global ORDER_CACHE
+            live = await _fetch_my_orders(client)
+            live_ids = _live_order_ids(live)
+            live_keys = _live_order_keys(live)
+            created = []
+            skipped = []
+            failed = []
+
+            for spec in specs:
+                label = spec["label"]
+                oid = (spec.get("id") or "").lower() or None
+                track_key = _order_track_key_from_parts(
+                    spec["collection"],
+                    spec["model"],
+                    spec.get("backdrop"),
+                    None,
+                    spec["price_min"],
+                )
+                # Skip when UUID is still live, or same filter+min already live.
+                if oid and oid in live_ids:
+                    skipped.append((label, "already live (same id)"))
+                    continue
+                if track_key in live_keys:
+                    skipped.append((label, "already live (same filter/min)"))
+                    continue
+
+                try:
+                    coll, mod, back = await _resolve_gift_names(
+                        client,
+                        spec["collection"],
+                        spec["model"],
+                        spec.get("backdrop"),
+                    )
+                    if not mod:
+                        failed.append((label, "could not resolve model"))
+                        continue
+                    resp = await _create_order(
+                        client,
+                        collection=coll,
+                        model=mod,
+                        backdrop=back,
+                        price_min_ton=spec["price_min"],
+                        price_max_ton=spec["price_max"],
+                        quantity=spec.get("quantity") or 1,
+                    )
+                    new_id = _extract_created_order_id(resp)
+                    snap = _snapshot_from_parts(
+                        collection=coll,
+                        model=mod,
+                        backdrop=back,
+                        symbol=None,
+                        price_min=spec["price_min"],
+                        price_max=spec["price_max"],
+                        quantity=spec.get("quantity") or 1,
+                        oid=new_id,
+                        label=label,
+                        pending_recreate=False,
+                    )
+                    _autotop_orders_upsert(snap)
+                    live_keys.add(snap["key"])
+                    if new_id:
+                        live_ids.add(str(new_id).lower())
+                    created.append(
+                        (
+                            label,
+                            spec["price_min"],
+                            spec["price_max"],
+                            spec.get("quantity") or 1,
+                            new_id,
+                        )
+                    )
+                except Exception as e:
+                    LOGS.warning("bulk ordernew failed for %s: %s", label, e)
+                    failed.append((label, str(e)))
+
+            ORDER_CACHE = await _fetch_my_orders(client)
+            _autotop_orders_sync_live(
+                ORDER_CACHE, trusted=bool(ORDER_CACHE),
+            )
+            return {
+                "created": created,
+                "skipped": skipped,
+                "failed": failed,
+                "live": len(ORDER_CACHE),
+            }
+
+        result, status = await _with_mrkt(event, status, work)
+        lines = [
+            "📦 <b>Bulk ordernew</b>",
+            "",
+            f"✅ Created: <code>{len(result['created'])}</code>",
+            f"⏭️ Skipped: <code>{len(result['skipped'])}</code>",
+            f"❌ Failed: <code>{len(result['failed'])}</code>",
+            f"📋 Live now: <code>{result['live']}</code>",
+            "",
+        ]
+        if result["created"]:
+            lines.append("<b>Created</b>")
+            for label, lo, hi, qty, oid in result["created"][:20]:
+                oid_txt = f" · <code>{oid}</code>" if oid else ""
+                lines.append(
+                    f"• {label} — "
+                    f"<code>{_ton2(lo)}-{_ton2(hi)}</code> "
+                    f"×{qty}{oid_txt}"
+                )
+            if len(result["created"]) > 20:
+                lines.append(f"… +{len(result['created']) - 20} more")
+            lines.append("")
+        if result["skipped"]:
+            lines.append("<b>Skipped</b>")
+            for label, why in result["skipped"][:15]:
+                lines.append(f"• {label} — <i>{why}</i>")
+            if len(result["skipped"]) > 15:
+                lines.append(f"… +{len(result['skipped']) - 15} more")
+            lines.append("")
+        if result["failed"]:
+            lines.append("<b>Failed</b>")
+            for label, why in result["failed"][:15]:
+                lines.append(f"• {label} — <code>{why}</code>")
+            if len(result["failed"]) > 15:
+                lines.append(f"… +{len(result['failed']) - 15} more")
+        return await _edit_chunks(status, event, "\n".join(lines).rstrip())
+    except ValueError as e:
+        return await event.eor(f"❌ {e}", parse_mode="html")
+    except (TradingError, RequestError, AuthError) as e:
+        LOGS.warning("Artemis bulk ordernew request error: %s", e)
+        return await status.edit(
+            f"❌ <b>Bulk ordernew failed.</b>\n\n<code>{e}</code>",
+            parse_mode="html",
+        )
+    except Exception as e:
+        LOGS.exception("Artemis bulk ordernew failed: %s", e)
+        return await status.edit(
+            f"❌ <b>Bulk ordernew failed.</b>\n\n<code>{e}</code>",
+            parse_mode="html",
+        )
+
+
+@heartless_cmd(owner_only=True, pattern=r"ordernew(?:\s+([\s\S]+))?$")
 async def artemis_ordernew(event):
     global ORDER_CACHE
     raw = event.pattern_match.group(1)
+    raw = (raw or "").strip()
+
+    # Reply-to `.orders` dump, or a multi-line paste → bulk mode.
+    bulk_text = None
+    if raw and _looks_like_orders_list(raw):
+        bulk_text = raw
+    elif not raw and (event.is_reply or getattr(event, "reply_to_msg_id", None)):
+        reply = await event.get_reply_message()
+        reply_text = ""
+        if reply is not None:
+            reply_text = (
+                getattr(reply, "raw_text", None)
+                or getattr(reply, "text", None)
+                or getattr(reply, "message", None)
+                or ""
+            )
+            # HTML parse_mode messages: prefer message body before entities strip.
+            if not _looks_like_orders_list(reply_text) and getattr(reply, "message", None):
+                reply_text = reply.message
+        if _looks_like_orders_list(reply_text):
+            bulk_text = reply_text
+    if bulk_text:
+        return await _ordernew_bulk(event, bulk_text)
+
     if not raw:
         return await event.eor(
             "Usage:\n"
             f"<code>{_h('ordernew')} Collection, Model, Backdrop, QTY, MIN-MAX</code>\n"
             f"<code>{_h('ordernew')} Collection, Model, Backdrop, MIN-MAX</code>\n"
-            f"<code>{_h('ordernew')} Collection, Model, MIN-MAX</code>",
+            f"<code>{_h('ordernew')} Collection, Model, MIN-MAX</code>\n\n"
+            f"Bulk: reply to an <code>{_h('orders')}</code> list with "
+            f"<code>{_h('ordernew')}</code>, or paste the list after the command.",
             parse_mode="html",
         )
     try:
-        collection, model, backdrop, quantity, lo, hi = _parse_ordernew(
-            raw.strip()
-        )
+        collection, model, backdrop, quantity, lo, hi = _parse_ordernew(raw)
     except Exception as e:
         return await event.eor(f"❌ <code>{e}</code>", parse_mode="html")
 
@@ -4492,6 +4932,16 @@ def _lookup_attr_price(prices_map, target_name):
     return None
 
 
+def _changes_path_segment(value):
+    """URL path segment for changes.tg (spaces → dashes is fine; API is flexible)."""
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    from urllib.parse import quote
+
+    return quote(text, safe="")
+
+
 async def _changes_api_json(path, session=None):
     """GET JSON from api.changes.tg. path must start with '/'."""
     url = f"{CHANGES_API}{path}"
@@ -4616,156 +5066,48 @@ async def _changes_gift_snapshot(collection, model=None, session=None):
             await session.close()
 
 
-def _satellite_token():
-    token = udB.get_key("SATTELITE")
-    if token is None:
-        return None
-    token = str(token).strip()
-    return token or None
-
-
-def _satellite_cache_key(market, collection, model=None, backdrop=None):
-    return (
-        str(market or ""),
-        _loose_key(collection) if collection else "",
-        _loose_key(model) if model else "",
-        _loose_key(backdrop) if backdrop else "",
-    )
-
-
-def _satellite_cache_get(key):
-    row = _SATELLITE_CACHE.get(key)
-    if not row:
-        return False, None
-    expires, value = row
-    if time.monotonic() >= expires:
-        _SATELLITE_CACHE.pop(key, None)
-        return False, None
-    return True, value
-
-
-def _satellite_cache_set(key, value):
-    _SATELLITE_CACHE[key] = (
-        time.monotonic() + _SATELLITE_CACHE_TTL,
-        value,
-    )
-
-
-async def _satellite_acquire_slot():
-    """Serialize satellite calls to ~1 request / second."""
-    global _SATELLITE_NEXT_AT
-    async with _SATELLITE_LOCK:
-        now = time.monotonic()
-        wait = _SATELLITE_NEXT_AT - now
-        if wait > 0:
-            await asyncio.sleep(wait)
-        _SATELLITE_NEXT_AT = time.monotonic() + SATELLITE_MIN_INTERVAL
-
-
-async def _satellite_floor_once(
-    session,
-    market,
-    collection,
-    model=None,
-    backdrop=None,
-):
-    """
-    One rate-limited satellite search. Names are expected canonical
-    (post-_resolve_gift_names); no variant spam.
-    """
-    global _SATELLITE_NEXT_AT
-    from urllib.parse import quote
-
-    key = _satellite_cache_key(market, collection, model, backdrop)
-    hit, cached = _satellite_cache_get(key)
-    if hit:
-        return cached
-
-    await _satellite_acquire_slot()
-    url = (
-        f"{SATELLITE_API}/search/{market}/"
-        f"{quote(str(collection), safe='')}"
-    )
-    params = {}
-    if model:
-        params["models"] = model
-    if backdrop:
-        params["backdrops"] = backdrop
-
-    amount = None
-    try:
-        async with session.get(url, params=params or None) as resp:
-            if resp.status == 200:
-                data = await resp.json(content_type=None)
-                if isinstance(data, list) and data:
-                    amount = _as_floor(data[0].get("normalizedPrice"))
-            elif resp.status == 429:
-                LOGS.warning("Satellite rate-limited on %s/%s", market, collection)
-                # Back off one extra interval so the global queue recovers.
-                async with _SATELLITE_LOCK:
-                    _SATELLITE_NEXT_AT = (
-                        time.monotonic() + SATELLITE_MIN_INTERVAL * 2
-                    )
-            else:
-                LOGS.info(
-                    "Satellite HTTP %s for %s/%s",
-                    resp.status,
-                    market,
-                    collection,
-                )
-    except Exception as e:
-        LOGS.warning(
-            "Satellite floor failed (%s / %s): %s",
-            market,
-            collection,
-            e,
-        )
-
-    _satellite_cache_set(key, amount)
-    return amount
-
-
 async def _satellite_market_floors(collection, model=None, backdrop=None):
     """
-    Floors for Portal / Tonnel / Telegram / GetGems.
-    Returns (collection_floors, model_floors|None, full_floors|None).
+    Floors via Gift Satellite Mini App (all markets incl. MRKT).
 
-    Requests are queued at 1/s (API limit). Prefer starting this as a Task
-    while the sticker uploads so floors finish in the background.
+    Returns (collection_floors, model_floors|None, full_floors|None).
     """
     empty = {label: None for _, label in SATELLITE_MARKETS}
-    collection_floors = dict(empty)
-    model_floors = dict(empty) if model else None
-    full_floors = dict(empty) if (model and backdrop) else None
+    if not collection:
+        return dict(empty), (dict(empty) if model else None), (
+            dict(empty) if (model and backdrop) else None
+        )
 
-    token = _satellite_token()
-    if not token or not collection:
-        return collection_floors, model_floors, full_floors
-
-    jobs = []
-    for market, label in SATELLITE_MARKETS:
-        jobs.append(("coll", market, label, None, None))
-        if model:
-            jobs.append(("model", market, label, model, None))
-        if model and backdrop:
-            jobs.append(("full", market, label, model, backdrop))
-
-    headers = {"Authorization": f"Token {token}"}
-    timeout = aiohttp.ClientTimeout(total=20, connect=8)
-    async with aiohttp.ClientSession(
-        timeout=timeout, headers=headers,
-    ) as session:
-        for kind, market, label, mod, back in jobs:
-            price = await _satellite_floor_once(
-                session, market, collection, model=mod, backdrop=back,
+    tasks = [
+        asyncio.create_task(sat._all_market_floors(collection, None, None))
+    ]
+    if model:
+        tasks.append(
+            asyncio.create_task(sat._all_market_floors(collection, model, None))
+        )
+    if model and backdrop:
+        tasks.append(
+            asyncio.create_task(
+                sat._all_market_floors(collection, model, backdrop)
             )
-            if kind == "coll":
-                collection_floors[label] = price
-            elif kind == "model" and model_floors is not None:
-                model_floors[label] = price
-            elif kind == "full" and full_floors is not None:
-                full_floors[label] = price
+        )
+    results = await asyncio.gather(*tasks, return_exceptions=True)
 
+    def _ok(res, fallback):
+        if isinstance(res, Exception):
+            LOGS.warning("Satellite miniapp floors failed: %s", res)
+            return fallback
+        return res or fallback
+
+    collection_floors = _ok(results[0], dict(empty))
+    model_floors = None
+    full_floors = None
+    idx = 1
+    if model:
+        model_floors = _ok(results[idx], dict(empty))
+        idx += 1
+    if model and backdrop:
+        full_floors = _ok(results[idx], dict(empty))
     return collection_floors, model_floors, full_floors
 
 
@@ -4890,12 +5232,13 @@ async def _mrkt_cheapest(client, collection, model=None, backdrop=None, count=1)
             or raw.get("backdrop")
             or getattr(gift, "backdrop", None)
         )
-        if used_model and item_model and not _match_attr(item_model, used_model):
+        # Require exact filter match — missing attrs do not pass.
+        if used_model and (
+            not item_model or not _match_attr(item_model, used_model)
+        ):
             continue
-        if (
-            used_backdrop
-            and item_backdrop
-            and not _match_attr(item_backdrop, used_backdrop)
+        if used_backdrop and (
+            not item_backdrop or not _match_attr(item_backdrop, used_backdrop)
         ):
             continue
         price = getattr(gift, "price_ton", None)
@@ -4914,518 +5257,6 @@ async def _mrkt_cheapest(client, collection, model=None, backdrop=None, count=1)
     return best_price, matched[:want]
 
 
-async def _download_sticker_url(
-    url,
-    filename,
-    mime_type="application/x-tgsticker",
-    session=None,
-):
-    """Download a sticker URL into a BytesIO buffer. Rejects broken TGS/WebP."""
-    owns_session = session is None
-    try:
-        if owns_session:
-            timeout = aiohttp.ClientTimeout(total=20, connect=8)
-            session = aiohttp.ClientSession(timeout=timeout)
-        async with session.get(url) as resp:
-            if resp.status != 200:
-                LOGS.info("Sticker HTTP %s for %s", resp.status, url)
-                return None
-            data = await resp.read()
-        if not data:
-            return None
-        # Broken/non-gzip .tgs arrives as HTML/JSON and Telegram sends it as a file.
-        if mime_type == "application/x-tgsticker" and not _is_valid_tgs(data):
-            LOGS.info("Invalid TGS payload for %s (%s bytes)", url, len(data))
-            return None
-        if mime_type == "image/webp" and not data.startswith(b"RIFF"):
-            LOGS.info("Invalid WebP payload for %s (%s bytes)", url, len(data))
-            return None
-        buf = io.BytesIO(data)
-        buf.name = filename
-        buf.mime_type = mime_type
-        return buf
-    except Exception as e:
-        LOGS.warning("Sticker download failed for %s: %s", url, e)
-        return None
-    finally:
-        if owns_session and session is not None:
-            await session.close()
-
-
-async def _fetch_model_format(tg_gift, tg_model, ext, session=None):
-    """Download model `.tgs` or `.webp` from TelegramGiftsAssests (legacy fallback)."""
-    if not isinstance(tg_gift, dict) or not isinstance(tg_model, dict):
-        return None
-    short_name = tg_gift.get("short_name")
-    model_name = tg_model.get("name")
-    if not short_name or not model_name:
-        return None
-
-    links = tg_model.get("links") or {}
-    slug = str(model_name).strip().replace(" ", "_")
-    key = _name_key(model_name)
-    if ext == "tgs":
-        url = links.get("tgs") or (
-            f"{TG_ASSETS_BASE}/models/{short_name}/{slug}.tgs"
-        )
-        mime = "application/x-tgsticker"
-    else:
-        url = links.get("webp") or (
-            f"{TG_ASSETS_BASE}/models/{short_name}/{slug}.webp"
-        )
-        mime = "image/webp"
-    if not url:
-        return None
-    return await _download_sticker_url(url, f"{key}.{ext}", mime, session=session)
-
-
-def _changes_path_segment(value):
-    """URL path segment for changes.tg (spaces → dashes is fine; API is flexible)."""
-    text = str(value or "").strip()
-    if not text:
-        return ""
-    from urllib.parse import quote
-    return quote(text, safe="")
-
-
-async def _fetch_changes_model(collection, model, ext="tgs", session=None):
-    """
-    Model sticker from api.changes.tg — replaces TelegramGiftsAssets for stickers.
-    Prefer `.tgs` (animated). No WebP; PNG exists but is not used as sticker mime.
-    """
-    if not collection or not model or ext != "tgs":
-        return None
-    gift_seg = _changes_path_segment(collection)
-    model_seg = _changes_path_segment(model)
-    if not gift_seg or not model_seg:
-        return None
-    url = f"{CHANGES_API}/model/{gift_seg}/{model_seg}.tgs"
-    return await _download_sticker_url(
-        url,
-        f"{_name_key(model)}.tgs",
-        "application/x-tgsticker",
-        session=session,
-    )
-
-
-async def _fetch_changes_original(collection, ext="tgs", session=None):
-    """Collection/original sticker from api.changes.tg (un-upgraded gift)."""
-    if not collection or ext != "tgs":
-        return None
-    gift_seg = _changes_path_segment(collection)
-    if not gift_seg:
-        return None
-    url = f"{CHANGES_API}/original/{gift_seg}.tgs"
-    return await _download_sticker_url(
-        url,
-        f"{_name_key(collection)}.tgs",
-        "application/x-tgsticker",
-        session=session,
-    )
-
-
-async def _fetch_fragment_format(gift_name, ext, session=None):
-    """Fragment CDN `.tgs` / `.webp` for a concrete NFT slug (backdrop painted)."""
-    slug = str(gift_name or "").strip()
-    if not slug or "-" not in slug:
-        return None
-    mime = (
-        "application/x-tgsticker" if ext == "tgs" else "image/webp"
-    )
-    return await _download_sticker_url(
-        f"https://nft.fragment.com/gift/{slug}.{ext}",
-        f"{_name_key(slug)}.{ext}",
-        mime,
-        session=session,
-    )
-
-
-async def _fetch_photos_format(name, ext, session=None):
-    """TG_Photos collection sticker by name (legacy fallback)."""
-    slug = _name_key(name)
-    if not slug:
-        return None
-    if ext == "tgs":
-        url = f"{TG_PHOTOS_BASE}/tgs/by_name/{slug}.tgs"
-        mime = "application/x-tgsticker"
-    else:
-        url = f"{TG_PHOTOS_BASE}/webp/by_name/{slug}.webp"
-        mime = "image/webp"
-    return await _download_sticker_url(
-        url, f"{slug}.{ext}", mime, session=session,
-    )
-
-
-async def _listing_nft_names(
-    client,
-    collection,
-    model=None,
-    backdrop=None,
-    count=2,
-):
-    """NFT slugs from cheapest matching MRKT listings (small count for speed)."""
-    try:
-        _, items = await _mrkt_cheapest(
-            client,
-            collection,
-            model=model,
-            backdrop=backdrop,
-            count=count,
-        )
-    except Exception as e:
-        LOGS.warning("Fragment listing lookup failed: %s", e)
-        return []
-    names = []
-    for gift in items or []:
-        name = getattr(gift, "name", None) or _get_raw(gift).get("name")
-        if name and name not in names:
-            names.append(name)
-    return names
-
-
-async def _collect_gift_stickers(
-    client,
-    collection,
-    model=None,
-    backdrop=None,
-    tg_snap=None,
-    nft_slug=None,
-):
-    """
-    Build sticker candidates: every healthy TGS first, then WebP fallbacks.
-
-    Sticker sources (fast path first):
-      - NFT slug / model+backdrop → Fragment (backdrop painted; changes.tg cannot)
-      - Model only → api.changes.tg model TGS, then legacy assets / Fragment
-      - Collection → api.changes.tg original TGS, then TG_Photos
-
-    thanks to @GiftChanges for this API (api.changes.tg)
-    """
-    tg_snap = tg_snap or {}
-    tgs_out = []
-    webp_out = []
-    seen = set()
-
-    def _add(buf):
-        if not buf:
-            return
-        key = (getattr(buf, "name", None), getattr(buf, "mime_type", None))
-        if key in seen:
-            return
-        seen.add(key)
-        if getattr(buf, "mime_type", "") == "application/x-tgsticker":
-            tgs_out.append(buf)
-        else:
-            webp_out.append(buf)
-
-    timeout = aiohttp.ClientTimeout(total=20, connect=8)
-    async with aiohttp.ClientSession(timeout=timeout) as session:
-        # 1) Concrete NFT slug (link mode) — Fragment includes that NFT's backdrop
-        if nft_slug:
-            tgs_task = asyncio.create_task(
-                _fetch_fragment_format(nft_slug, "tgs", session=session),
-            )
-            webp_task = asyncio.create_task(
-                _fetch_fragment_format(nft_slug, "webp", session=session),
-            )
-            _add(await tgs_task)
-            _add(await webp_task)
-            return tgs_out + webp_out
-
-        # 2) Model + backdrop → Fragment listing (backdrop painted in WebP too)
-        if model and backdrop:
-            names = await _listing_nft_names(
-                client, collection, model=model, backdrop=backdrop, count=2,
-            )
-            for name in names[:2]:
-                _add(await _fetch_fragment_format(name, "tgs", session=session))
-                if tgs_out:
-                    break
-            for name in names[:2]:
-                _add(await _fetch_fragment_format(name, "webp", session=session))
-                if webp_out:
-                    break
-            return tgs_out + webp_out
-
-        # 3) Model only → changes.tg model TGS (no TelegramGiftsAssets / tg_snap)
-        if model:
-            _add(await _fetch_changes_model(
-                collection, model, "tgs", session=session,
-            ))
-            if not tgs_out:
-                gift = tg_snap.get("gift") or {}
-                tg_model = tg_snap.get("model") or {}
-                _add(await _fetch_model_format(
-                    gift, tg_model, "tgs", session=session,
-                ))
-            if not tgs_out:
-                names = await _listing_nft_names(
-                    client, collection, model=model, backdrop=None, count=2,
-                )
-                for name in names[:2]:
-                    _add(await _fetch_fragment_format(
-                        name, "tgs", session=session,
-                    ))
-                    if tgs_out:
-                        break
-            # Static WebP fallback (changes.tg has no webp)
-            gift = tg_snap.get("gift") or {}
-            tg_model = tg_snap.get("model") or {}
-            _add(await _fetch_model_format(
-                gift, tg_model, "webp", session=session,
-            ))
-            if not webp_out:
-                names = await _listing_nft_names(
-                    client, collection, model=model, backdrop=None, count=2,
-                )
-                for name in names[:2]:
-                    _add(await _fetch_fragment_format(
-                        name, "webp", session=session,
-                    ))
-                    if webp_out:
-                        break
-            if tgs_out or webp_out:
-                return tgs_out + webp_out
-
-        # 4) Collection sticker — changes.tg original, then TG_Photos
-        _add(await _fetch_changes_original(
-            collection, "tgs", session=session,
-        ))
-        if not tgs_out:
-            _add(await _fetch_photos_format(
-                collection, "tgs", session=session,
-            ))
-        if not webp_out:
-            _add(await _fetch_photos_format(
-                collection, "webp", session=session,
-            ))
-        return tgs_out + webp_out
-
-
-async def _send_gift_sticker(client, chat_id, sticker, *, reply_to=None):
-    """
-    Send one TGS/WebP buffer as a sticker via in-memory Telethon upload
-    (avoids slow temp-file round-trips).
-    Returns True only when Telegram accepted it as sticker media (not a raw file).
-    """
-    if not sticker:
-        return False
-    mime_type = getattr(
-        sticker,
-        "mime_type",
-        "application/x-tgsticker",
-    )
-    filename = getattr(sticker, "name", None) or (
-        "gift.tgs"
-        if mime_type == "application/x-tgsticker"
-        else "gift.webp"
-    )
-    if not str(filename).lower().endswith((".tgs", ".webp")):
-        filename = (
-            f"{filename}.tgs"
-            if mime_type == "application/x-tgsticker"
-            else f"{filename}.webp"
-        )
-    try:
-        sticker.seek(0)
-        data = sticker.read()
-        sticker.seek(0)
-    except Exception:
-        data = b""
-    if mime_type == "application/x-tgsticker" and not _is_valid_tgs(data):
-        LOGS.warning("Refusing to send invalid TGS sticker")
-        return False
-    if not data:
-        return False
-
-    msg = None
-    try:
-        file_obj = io.BytesIO(data)
-        file_obj.name = filename
-
-        try:
-            from telethon.tl.types import DocumentAttributeFilename
-            attrs = [DocumentAttributeFilename(os.path.basename(filename))]
-        except Exception:
-            attrs = None
-
-        # upload_file over MTProto is the fast path vs send_file(tmp_path).
-        try:
-            uploaded = await client.upload_file(
-                file_obj,
-                file_name=filename,
-                part_size_kb=512,
-            )
-        except TypeError:
-            file_obj.seek(0)
-            uploaded = await client.upload_file(file_obj, file_name=filename)
-
-        send_kwargs = {"force_document": False, "allow_cache": True}
-        if attrs is not None:
-            send_kwargs["attributes"] = attrs
-        if mime_type:
-            send_kwargs["mime_type"] = mime_type
-        if reply_to is not None:
-            send_kwargs["reply_to"] = reply_to
-
-        try:
-            msg = await client.send_file(chat_id, uploaded, **send_kwargs)
-        except TypeError:
-            send_kwargs.pop("mime_type", None)
-            try:
-                msg = await client.send_file(chat_id, uploaded, **send_kwargs)
-            except TypeError:
-                bare = {"force_document": False}
-                if reply_to is not None:
-                    bare["reply_to"] = reply_to
-                msg = await client.send_file(chat_id, uploaded, **bare)
-    except Exception:
-        LOGS.exception("Failed to send gift sticker as %s", mime_type)
-        return False
-
-    if msg is None:
-        return False
-    if getattr(msg, "photo", None) is not None:
-        return True
-
-    doc = getattr(msg, "document", None)
-    if doc is None:
-        return True
-
-    got_mime = (getattr(doc, "mime_type", None) or "").lower()
-    if mime_type == "application/x-tgsticker":
-        if got_mime == "application/x-tgsticker":
-            return True
-        LOGS.warning(
-            "Gift TGS landed as raw file (mime=%s) — removing, will try WebP",
-            got_mime,
-        )
-        with contextlib.suppress(Exception):
-            await msg.delete()
-        return False
-
-    if got_mime.startswith("image/") or "webp" in got_mime:
-        return True
-    if got_mime in ("application/octet-stream", "application/gzip"):
-        with contextlib.suppress(Exception):
-            await msg.delete()
-        return False
-    return True
-
-
-async def _send_best_gift_sticker(
-    client,
-    chat_id,
-    mrkt_client,
-    collection,
-    model=None,
-    backdrop=None,
-    tg_snap=None,
-    nft_slug=None,
-    reply_to=None,
-):
-    """
-    Try animated TGS first; if Telegram rejects it as a file, fall back to WebP
-    (Fragment WebP keeps the backdrop painted as sticker background).
-    """
-    candidates = await _collect_gift_stickers(
-        mrkt_client,
-        collection,
-        model=model,
-        backdrop=backdrop,
-        tg_snap=tg_snap,
-        nft_slug=nft_slug,
-    )
-    for sticker in candidates:
-        if getattr(sticker, "mime_type", "") != "application/x-tgsticker":
-            continue
-        if await _send_gift_sticker(
-            client, chat_id, sticker, reply_to=reply_to,
-        ):
-            return True
-
-    webp_candidates = [
-        s for s in candidates
-        if getattr(s, "mime_type", "") != "application/x-tgsticker"
-    ]
-    # Safety net: if collect somehow skipped WebP, fetch it now.
-    if not webp_candidates:
-        webp_candidates = await _collect_webp_fallbacks(
-            mrkt_client,
-            collection,
-            model=model,
-            backdrop=backdrop,
-            tg_snap=tg_snap,
-            nft_slug=nft_slug,
-        )
-
-    for sticker in webp_candidates:
-        if await _send_gift_sticker(
-            client, chat_id, sticker, reply_to=reply_to,
-        ):
-            return True
-    return False
-
-
-async def _collect_webp_fallbacks(
-    client,
-    collection,
-    model=None,
-    backdrop=None,
-    tg_snap=None,
-    nft_slug=None,
-):
-    """Late WebP-only fetch when TGS sent as a file and no WebP was buffered."""
-    out = []
-    tg_snap = tg_snap or {}
-    timeout = aiohttp.ClientTimeout(total=20, connect=8)
-    async with aiohttp.ClientSession(timeout=timeout) as session:
-        if nft_slug:
-            buf = await _fetch_fragment_format(
-                nft_slug, "webp", session=session,
-            )
-            if buf:
-                out.append(buf)
-            return out
-
-        if model and backdrop:
-            names = await _listing_nft_names(
-                client, collection, model=model, backdrop=backdrop, count=2,
-            )
-            for name in names[:2]:
-                buf = await _fetch_fragment_format(
-                    name, "webp", session=session,
-                )
-                if buf:
-                    out.append(buf)
-                    return out
-            return out
-
-        if model:
-            gift = (tg_snap or {}).get("gift") or {}
-            tg_model = (tg_snap or {}).get("model") or {}
-            buf = await _fetch_model_format(
-                gift, tg_model, "webp", session=session,
-            )
-            if buf:
-                out.append(buf)
-                return out
-            names = await _listing_nft_names(
-                client, collection, model=model, backdrop=None, count=2,
-            )
-            for name in names[:2]:
-                buf = await _fetch_fragment_format(
-                    name, "webp", session=session,
-                )
-                if buf:
-                    out.append(buf)
-                    return out
-            return out
-
-        buf = await _fetch_photos_format(collection, "webp", session=session)
-        if buf:
-            out.append(buf)
-    return out
 
 
 def _format_tehran(value):
@@ -5437,145 +5268,9 @@ def _format_tehran(value):
     return f"{dt.day}/{dt.month} - {dt.strftime('%H:%M:%S')}"
 
 
-async def _mrkt_latest_sales(
-    client,
-    collection,
-    model,
-    backdrop,
-    limit=5,
-):
-    """
-    Latest MRKT sales for collection+model+backdrop via POST /feed.
-    Returns list of dicts: {name, price_ton, date}.
-    """
-    if not collection or not model or not backdrop:
-        return []
-
-    sales = []
-    cursor = ""
-    try:
-        for _ in range(12):
-            data = await client.request(
-                "POST",
-                "/feed",
-                json={
-                    "collectionNames": [collection],
-                    "modelNames": [model],
-                    "backdropNames": [backdrop],
-                    "count": 20,
-                    "cursor": cursor or "",
-                },
-            )
-            items = (data or {}).get("items") or []
-            for item in items:
-                if str(item.get("type") or "").lower() != "sale":
-                    continue
-                gift = item.get("gift") if isinstance(item.get("gift"), dict) else {}
-                name = gift.get("name")
-                if not name:
-                    continue
-                amount = item.get("amount")
-                price = nano_to_ton(amount) if amount is not None else None
-                sales.append(
-                    {
-                        "name": name,
-                        "price_ton": price,
-                        "date": item.get("date"),
-                    }
-                )
-                if len(sales) >= limit:
-                    return sales
-            cursor = (data or {}).get("cursor") or ""
-            if not cursor or not items:
-                break
-    except Exception as e:
-        LOGS.warning("MRKT latest sales failed: %s", e)
-    return sales
-
-
-def _monochrome_token():
-    token = udB.get_key("MONOCHROME")
-    if token is None:
-        return None
-    token = str(token).strip()
-    return token or None
-
-
-def _fetch_monochromes_sync(collection, model):
-    """
-    GiftWiki monochrome backdrops for a collection+model.
-    Returns list of dicts: {backdrop_name, type}.
-    """
-    token = _monochrome_token()
-    if not token or not collection or not model:
-        return []
-
-    cache_key = (_loose_key(collection), _loose_key(model))
-    row = _MONOCHROME_CACHE.get(cache_key)
-    if row:
-        expires, value = row
-        if time.monotonic() < expires:
-            return list(value)
-
-    try:
-        response = requests.get(
-            f"{GIFTWIKI_API}/gifts/monochromes",
-            headers={"X-API-Key": token},
-            params={"model_name": model},
-            timeout=15,
-        )
-        if response.status_code != 200:
-            LOGS.info(
-                "GiftWiki monochrome HTTP %s for %s / %s",
-                response.status_code,
-                collection,
-                model,
-            )
-            return []
-        data = response.json()
-        if not isinstance(data, list):
-            return []
-
-        found = []
-        target = _loose_key(collection)
-        for item in data:
-            if not isinstance(item, dict):
-                continue
-            gift_name = item.get("gift_name") or item.get("collection") or ""
-            if _loose_key(gift_name) != target:
-                continue
-            backdrop_name = (
-                item.get("backdrop_name")
-                or item.get("backdrop")
-                or item.get("name")
-            )
-            if not backdrop_name:
-                continue
-            level = str(item.get("type") or item.get("level") or "").strip()
-            found.append({
-                "backdrop_name": str(backdrop_name).strip(),
-                "type": level.upper() if level else "",
-            })
-
-        _MONOCHROME_CACHE[cache_key] = (
-            time.monotonic() + _MONOCHROME_CACHE_TTL,
-            found,
-        )
-        return found
-    except Exception as e:
-        LOGS.warning(
-            "GiftWiki monochrome failed (%s / %s): %s",
-            collection,
-            model,
-            e,
-        )
-        return []
-
-
 async def _fetch_monochromes(collection, model):
-    return await asyncio.to_thread(
-        _fetch_monochromes_sync, collection, model,
-    )
+    """Monochrome backdrops via Gift Satellite Mini App (not GiftWiki API key)."""
+    return await sat._fetch_monochromes(collection, model)
 
 
 def _format_monochrome_block(rows, highlight_backdrop=None):
@@ -5585,7 +5280,7 @@ def _format_monochrome_block(rows, highlight_backdrop=None):
     """
     lines = ["🖤 <b>Monochrome:</b>", ""]
     if not rows:
-        lines.append("   —")
+        lines.append("<b>Model has no monochrome color -_-</b>")
         lines.append("")
         return lines
 
@@ -5604,46 +5299,54 @@ def _format_monochrome_block(rows, highlight_backdrop=None):
 
 
 async def _satellite_floors_for_filter(collection, model=None, backdrop=None):
-    """Satellite floors for exactly one filter level (collection / model / full)."""
-    floors = {label: None for _, label in SATELLITE_MARKETS}
-    token = _satellite_token()
-    if not token or not collection:
-        return floors
+    """Satellite miniapp floors for exactly one filter level."""
+    if not collection:
+        return {label: None for _, label in SATELLITE_MARKETS}
+    try:
+        return await sat._all_market_floors(collection, model, backdrop)
+    except Exception as e:
+        LOGS.warning("Satellite floors-for-filter failed: %s", e)
+        return {label: None for _, label in SATELLITE_MARKETS}
 
-    headers = {"Authorization": f"Token {token}"}
-    timeout = aiohttp.ClientTimeout(total=20, connect=8)
-    async with aiohttp.ClientSession(
-        timeout=timeout, headers=headers,
-    ) as session:
-        for market, label in SATELLITE_MARKETS:
-            floors[label] = await _satellite_floor_once(
-                session,
-                market,
-                collection,
-                model=model,
-                backdrop=backdrop,
-            )
-    return floors
+
+def _sat_floor_rows(floors: dict | None):
+    """Ordered (label, price) rows for all Satellite markets (incl. MRKT)."""
+    floors = floors or {}
+    return [(label, floors.get(label)) for _s, label in SATELLITE_MARKETS]
+
+
+def _format_sat_sales_section(sales_by_market: dict | None, *, limit_note=4):
+    """HTML block for multi-market latest sales (Satellite style)."""
+    lines = [f"🧾 <b>Latest Sales</b> ({limit_note} / market)", ""]
+    any_sales = False
+    for _s, label in SATELLITE_MARKETS:
+        sales = (sales_by_market or {}).get(label) or []
+        lines.extend(sat._format_sales_market_block(label, sales, html_mode=True))
+        lines.append("")
+        if sales:
+            any_sales = True
+    if not any_sales:
+        lines.append("<i>No matching sales found.</i>")
+        lines.append("")
+    return lines
 
 
 async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
     """
-    Compact `.gift c` output:
-    headers + one multi-market floor block for the filter + matching quick sell.
-    No sticker, listings, monochromes, or sales.
+    Compact `.gift c` / inline floor output:
+    headers + multi-market floors (Satellite) + matching quick sell (MRKT).
+    ``client`` may be None for Satellite-only floor panels (faster inline).
     """
-    mrkt_task = asyncio.create_task(
-        _mrkt_cheapest(
-            client, collection, model=model, backdrop=backdrop, count=1,
-        )
-    )
     sat_task = asyncio.create_task(
         _satellite_floors_for_filter(
             collection, model=model, backdrop=backdrop,
         )
     )
-    quick_task = asyncio.create_task(
-        _highest_order_ton(client, collection, model, backdrop)
+    quick_task = (
+        asyncio.create_task(
+            _highest_order_ton(client, collection, model, backdrop)
+        )
+        if client is not None else None
     )
     models_task = (
         asyncio.create_task(
@@ -5651,7 +5354,7 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
                 "POST", "/gifts/models", json={"collections": [collection]},
             )
         )
-        if model else None
+        if client is not None and model else None
     )
     backdrops_task = (
         asyncio.create_task(
@@ -5661,7 +5364,7 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
                 json={"collections": [collection]},
             )
         )
-        if model and backdrop else None
+        if client is not None and model and backdrop else None
     )
     tg_snap_task = (
         asyncio.create_task(_changes_gift_snapshot(collection, model))
@@ -5669,23 +5372,18 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
     )
 
     try:
-        mrkt_floor, _ = await mrkt_task
-        mrkt_floor = _as_floor(mrkt_floor)
-    except Exception as e:
-        LOGS.warning("Compact MRKT floor failed: %s", e)
-        mrkt_floor = None
-
-    try:
         sat_floors = await sat_task
     except Exception as e:
         LOGS.warning("Compact satellite floors failed: %s", e)
         sat_floors = {label: None for _, label in SATELLITE_MARKETS}
 
-    try:
-        quick = await quick_task
-    except Exception as e:
-        LOGS.warning("Compact quick sell failed: %s", e)
-        quick = None
+    quick = None
+    if quick_task is not None:
+        try:
+            quick = await quick_task
+        except Exception as e:
+            LOGS.warning("Compact quick sell failed: %s", e)
+            quick = None
 
     model_rarity = None
     backdrop_rarity = None
@@ -5754,13 +5452,7 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
             f"(`{_md(_rarity_pct(backdrop_rarity))}`)"
         )
     lines.append("")
-    for label, value in (
-        ("MRKT", mrkt_floor),
-        ("Portal", sat_floors.get("Portal")),
-        ("Tonnel", sat_floors.get("Tonnel")),
-        ("Telegram", sat_floors.get("Telegram")),
-        ("GetGems", sat_floors.get("GetGems")),
-    ):
+    for label, value in _sat_floor_rows(sat_floors):
         lines.append(f"💰 **{label}:** `{_md(_floor_ton(value))}`")
     lines.append("")
 
@@ -5778,6 +5470,7 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
         lines.append(
             f"📊 **Quick Sell Collection:** `{_md(quick_txt)} TON`"
         )
+    # labels already bold via **Label:** above
 
     return "\n".join(lines)
 
@@ -5814,19 +5507,11 @@ async def _build_gift_info(
 
     model_rarity = seed_rarities.get("model_rarity")
     backdrop_rarity = seed_rarities.get("backdrop_rarity")
-    mrkt_collection = None
-    mrkt_model = None
-    mrkt_full = None
     listing_items = []
     model_row = {}
     back_row = {}
 
-    # Kick off independent MRKT work in parallel with satellite.
-    # MRKT floors always come from transferable cheapest listings — never
-    # collection/model API floorPriceNanoTons (those include premarket).
-    cheap_coll_task = asyncio.create_task(
-        _mrkt_cheapest(client, collection, count=1),
-    )
+    # Artemis/MRKT: quick sells + cheapest listings only (floors via Satellite).
     quick_coll_task = asyncio.create_task(
         _highest_order_ton(client, collection),
     )
@@ -5859,16 +5544,14 @@ async def _build_gift_info(
         if model and backdrop else None
     )
     # Prefer full-filter listings when backdrop is set (one search covers both).
-    if model and backdrop:
-        model_list_task = asyncio.create_task(
-            _mrkt_cheapest(client, collection, model=model, count=5),
-        )
+    if model and backdrop and include_listings:
+        model_list_task = None
         full_list_task = asyncio.create_task(
             _mrkt_cheapest(
                 client, collection, model=model, backdrop=backdrop, count=5,
             ),
         )
-    elif model:
+    elif model and include_listings:
         model_list_task = asyncio.create_task(
             _mrkt_cheapest(client, collection, model=model, count=5),
         )
@@ -5877,21 +5560,7 @@ async def _build_gift_info(
         model_list_task = None
         full_list_task = None
 
-    try:
-        cheapest_coll, _ = await cheap_coll_task
-        mrkt_collection = _as_floor(cheapest_coll)
-    except Exception as e:
-        LOGS.warning("MRKT transferable collection floor failed: %s", e)
-        mrkt_collection = None
-
     if model:
-        try:
-            mrkt_model, listing_items = await model_list_task
-        except Exception as e:
-            LOGS.warning("MRKT model cheapest failed: %s", e)
-            mrkt_model, listing_items = None, []
-        mrkt_model = _as_floor(mrkt_model)
-
         try:
             models = await models_task if models_task else []
         except Exception:
@@ -5932,36 +5601,24 @@ async def _build_gift_info(
                         if backdrop_rarity is not None:
                             break
 
+        if include_listings:
             try:
-                mrkt_full, full_items = await full_list_task
+                if full_list_task is not None:
+                    _, listing_items = await full_list_task
+                elif model_list_task is not None:
+                    _, listing_items = await model_list_task
             except Exception as e:
-                LOGS.warning("MRKT full cheapest failed: %s", e)
-                mrkt_full, full_items = None, []
-            mrkt_full = _as_floor(mrkt_full)
-            if full_items:
-                listing_items = full_items
-        elif include_listings and len(listing_items) < 5:
-            try:
-                _, more = await _mrkt_cheapest(
-                    client, collection, model=model, count=5,
-                )
-                if more:
-                    listing_items = more
-            except Exception:
-                pass
+                LOGS.warning("MRKT cheapest listings failed: %s", e)
+                listing_items = []
 
-        if listing_items:
-            raw = _get_raw(listing_items[0])
-            if model_rarity is None:
-                model_rarity = raw.get("modelRarityPerMille")
-            if backdrop and backdrop_rarity is None:
-                backdrop_rarity = raw.get("backdropRarityPerMille")
-            if backdrop and mrkt_full is None:
-                mrkt_full = _as_floor(
-                    getattr(listing_items[0], "price_ton", None),
-                )
+            if listing_items:
+                raw = _get_raw(listing_items[0])
+                if model_rarity is None:
+                    model_rarity = raw.get("modelRarityPerMille")
+                if backdrop and backdrop_rarity is None:
+                    backdrop_rarity = raw.get("backdropRarityPerMille")
 
-    # Await satellite + quicksells together (satellite likely already done).
+    # Await satellite floors + quicksells together.
     sat_result, quick_collection = await asyncio.gather(
         sat_task, quick_coll_task, return_exceptions=True,
     )
@@ -5995,7 +5652,7 @@ async def _build_gift_info(
     def floor_block(title, values):
         lines = [title, ""]
         for label, value in values:
-            lines.append(f"   {label}: {_floor_ton(value)}")
+            lines.append(f"   <b>{label}</b>: {_floor_ton(value)}")
         lines.append("")
         return lines
 
@@ -6008,49 +5665,27 @@ async def _build_gift_info(
         lines.append("🎁 <b>NFT Info</b>")
     lines.append("")
 
-    collection_rows = [
-        ("MRKT", mrkt_collection),
-        ("Portal", sat_collection.get("Portal")),
-        ("Tonnel", sat_collection.get("Tonnel")),
-        ("Telegram", sat_collection.get("Telegram")),
-        ("GetGems", sat_collection.get("GetGems")),
-    ]
-
     lines.extend(
         floor_block(
             f"🎁 <b>Collection:</b> {collection}",
-            collection_rows,
+            _sat_floor_rows(sat_collection),
         )
     )
 
     if model:
-        model_rows = [
-            ("MRKT", mrkt_model),
-            ("Portal", (sat_model or {}).get("Portal")),
-            ("Tonnel", (sat_model or {}).get("Tonnel")),
-            ("Telegram", (sat_model or {}).get("Telegram")),
-            ("GetGems", (sat_model or {}).get("GetGems")),
-        ]
         lines.extend(
             floor_block(
                 f"🧩 <b>Model:</b> {model} ({_rarity_pct(model_rarity)})",
-                model_rows,
+                _sat_floor_rows(sat_model),
             )
         )
 
         if backdrop:
-            full_rows = [
-                ("MRKT", mrkt_full),
-                ("Portal", (sat_full or {}).get("Portal")),
-                ("Tonnel", (sat_full or {}).get("Tonnel")),
-                ("Telegram", (sat_full or {}).get("Telegram")),
-                ("GetGems", (sat_full or {}).get("GetGems")),
-            ]
             lines.extend(
                 floor_block(
                     f"🎨 <b>Backdrop:</b> {backdrop} "
                     f"({_rarity_pct(backdrop_rarity)})",
-                    full_rows,
+                    _sat_floor_rows(sat_full),
                 )
             )
         else:
@@ -6059,7 +5694,7 @@ async def _build_gift_info(
                 "",
             ])
 
-        # Monochrome backdrops for this model (GiftWiki).
+        # Monochrome backdrops for this model (Satellite miniapp).
         mono_rows = []
         if mono_task is not None:
             try:
@@ -6072,35 +5707,41 @@ async def _build_gift_info(
         )
 
     lines.append(
-        f"📊 Quick Sell Collection: "
+        f"📊 <b>Quick Sell Collection:</b> "
         f"{_ton2(quick_collection) if quick_collection is not None else '—'} TON"
     )
     if model:
         lines.append(
-            f"📊 Quick Sell Collection + Model: "
+            f"📊 <b>Quick Sell Collection + Model:</b> "
             f"{_ton2(quick_coll_model) if quick_coll_model is not None else '—'} TON"
         )
         if backdrop:
             lines.append(
-                f"📊 Quick Sell Collection + Model + Backdrop: "
+                f"📊 <b>Quick Sell Collection + Model + Backdrop:</b> "
                 f"{_ton2(quick_full) if quick_full is not None else '—'} TON"
             )
     lines.append("")
 
-    sales_task = None
-    if model and backdrop:
-        sales_task = asyncio.create_task(
-            _mrkt_latest_sales(
-                client, collection, model, backdrop, limit=5,
-            )
-        )
-
     if model and include_listings:
+        # Exact filter: C+Model, or C+Model+Backdrop when backdrop is set.
+        list_model = model
+        list_backdrop = backdrop if backdrop else None
         if not listing_items:
-            _, listing_items = await _mrkt_cheapest(
-                client, collection, model=model, backdrop=backdrop, count=5,
-            )
-        lines.append("🎁 <b>MRKT Cheapest Listings</b>")
+            try:
+                _, listing_items = await _mrkt_cheapest(
+                    client,
+                    collection,
+                    model=list_model,
+                    backdrop=list_backdrop,
+                    count=5,
+                )
+            except Exception:
+                listing_items = []
+        if list_backdrop:
+            list_title = "🎁 <b>MRKT Listings</b> (Collection + Model + Backdrop)"
+        else:
+            list_title = "🎁 <b>MRKT Listings</b> (Collection + Model)"
+        lines.append(list_title)
         lines.append("")
         shown = listing_items[:5]
         for i, gift in enumerate(shown, 1):
@@ -6117,28 +5758,8 @@ async def _build_gift_info(
         lines.append(f"📊 Found: {len(shown)}")
         lines.append("")
 
-    if model and backdrop:
-        try:
-            sales = await sales_task if sales_task else []
-        except Exception as e:
-            LOGS.warning("MRKT latest sales failed: %s", e)
-            sales = []
-        lines.append("🏪 <b>MRKT Latest Sales</b>")
-        lines.append("")
-        if not sales:
-            lines.append("   —")
-            lines.append("")
-        else:
-            for i, sale in enumerate(sales, 1):
-                nft_name = sale.get("name") or ""
-                lines.append(
-                    f'    {i}. <a href="{_nft_link(nft_name)}">NFT</a> - '
-                    f'🪙 {_ton2(sale.get("price_ton"))} TON'
-                )
-                lines.append(
-                    f'        🕒 {_format_tehran(sale.get("date"))}'
-                )
-                lines.append("")
+    # Multi-market sales live on inline NFT Sales — gift output
+    # only shows MRKT listings for the active filter.
 
     return "\n".join(lines).rstrip(), tg_gift, tg_model
 
@@ -6449,7 +6070,7 @@ async def artemis_balance(event):
         )
     except ValueError as e:
         return await event.eor(f"❌ {e}", parse_mode="html")
-    except (TradingError, RequestError) as e:
+    except (TradingError, RequestError, AuthError) as e:
         LOGS.warning("Artemis .b request error: %s", e)
         target = status or event
         return await target.edit(
@@ -6820,17 +6441,32 @@ def _md_escape_inline(value) -> str:
     )
 
 
+def _title_case_name(value: Optional[str]) -> str:
+    """Display-friendly Title Case for collection / model / backdrop."""
+    text = str(value or "").strip()
+    if not text:
+        return text
+    # Keep existing capitals for multi-word canonical names; fix all-lower.
+    if text != text.lower():
+        return text
+    return " ".join(w.capitalize() for w in text.split())
+
+
 def _gift_inline_info_lines(sess: dict) -> list[str]:
     """Gift-style Collection / Model / Backdrop header lines."""
     lines = [
-        f"🎁 **Collection:** `{_md_escape_inline(sess.get('collection') or '?')}`"
+        f"🎁 **Collection:** `{_md_escape_inline(_title_case_name(sess.get('collection') or '?'))}`"
     ]
     model = sess.get("model")
     if model:
-        lines.append(f"🧩 **Model:** `{_md_escape_inline(model)}`")
+        lines.append(
+            f"🧩 **Model:** `{_md_escape_inline(_title_case_name(model))}`"
+        )
     backdrop = sess.get("backdrop")
     if backdrop:
-        lines.append(f"🎨 **Backdrop:** `{_md_escape_inline(backdrop)}`")
+        lines.append(
+            f"🎨 **Backdrop:** `{_md_escape_inline(_title_case_name(backdrop))}`"
+        )
     return lines
 
 
@@ -6877,7 +6513,13 @@ def _gift_inline_hub_buttons(owner_id: int, token: str, raw: str):
                 "Gift Chart 📊",
                 data=f"gu:s:{owner_id}:{token}:c".encode(),
             ),
-        ]
+        ],
+        [
+            Button.inline(
+                "NFT Sales 🧾",
+                data=f"gu:s:{owner_id}:{token}:s".encode(),
+            ),
+        ],
     ]
     rows.extend(
         _gift_inline_action_row(
@@ -6888,6 +6530,60 @@ def _gift_inline_hub_buttons(owner_id: int, token: str, raw: str):
         )
     )
     return rows
+
+
+# Inline NFT Sales market keys → (history_key, display label)
+_GIFT_SALES_MARKETS = (
+    ("mrkt", "MRKT"),
+    ("portals", "Portal"),
+    ("tonnel", "Tonnel"),
+    ("telegram", "Telegram"),
+    ("getgems", "Getgems"),
+)
+
+
+def _gift_inline_sales_picker_text(sess: dict) -> str:
+    lines = _gift_inline_info_lines(sess)
+    lines.append("")
+    lines.append("🧾 **NFT Sales** — pick a market for the 10 latest sales.")
+    return "\n".join(lines)
+
+
+def _gift_inline_sales_picker_buttons(sess: dict, owner_id: int, token: str):
+    row1 = []
+    row2 = []
+    for i, (key, label) in enumerate(_GIFT_SALES_MARKETS):
+        btn = Button.inline(
+            label,
+            data=f"gs:m:{owner_id}:{token}:{key}".encode(),
+        )
+        if i < 3:
+            row1.append(btn)
+        else:
+            row2.append(btn)
+    buttons = [row1]
+    if row2:
+        buttons.append(row2)
+    buttons.extend(
+        _gift_inline_action_row(
+            sess.get("raw") or "",
+            show_back=True,
+            owner_id=owner_id,
+            token=token,
+            back_data=f"gu:h:{owner_id}:{token}".encode(),
+        )
+    )
+    return buttons
+
+
+def _gift_inline_sales_result_buttons(sess: dict, owner_id: int, token: str):
+    return _gift_inline_action_row(
+        sess.get("raw") or "",
+        show_back=True,
+        owner_id=owner_id,
+        token=token,
+        back_data=f"gs:b:{owner_id}:{token}".encode(),
+    )
 
 
 def _gift_inline_floor_picker_buttons(sess: dict, owner_id: int, token: str):
@@ -7230,9 +6926,9 @@ async def _gift_inline_resolve_session(sess: dict):
                 sess.get("model"),
                 sess.get("backdrop"),
             )
-    sess["collection"] = coll
-    sess["model"] = mod
-    sess["backdrop"] = back
+    sess["collection"] = _title_case_name(coll) or coll
+    sess["model"] = _title_case_name(mod) if mod else mod
+    sess["backdrop"] = _title_case_name(back) if back else back
     if mod:
         sess["depth"] = max(int(sess.get("depth") or 1), 2)
     if back:
@@ -7253,9 +6949,9 @@ def _gift_inline_mode_filter(sess: dict, mode: str):
     return coll, mod, back
 
 
-@callback(re.compile(rb"^gu:s:(\d+):([A-Za-z0-9_-]{6,16}):([fc])$"))
+@callback(re.compile(rb"^gu:s:(\d+):([A-Za-z0-9_-]{6,16}):([fcs])$"))
 async def artemis_gift_inline_hub_select_cb(event):
-    """Stage 1 → Floor picker or Chart picker."""
+    """Stage 1 → Floor picker / Chart picker / NFT Sales picker."""
     try:
         owner_id = int(event.data_match.group(1))
         token = event.data_match.group(2).decode()
@@ -7298,14 +6994,30 @@ async def artemis_gift_inline_hub_select_cb(event):
             parse_mode="md",
         )
 
+    if choice == "s":
+        if sess.get("nft_mode"):
+            sess["depth"] = 3
+        if not sess.get("resolved"):
+            await event.answer("Resolving…")
+            try:
+                sess = await _gift_inline_resolve_session(sess)
+            except Exception as e:
+                LOGS.warning("g sales resolve failed: %s", e)
+                return await event.answer(str(e)[:180], alert=True)
+        sess["view"] = "sales_pick"
+        sess["at"] = time.monotonic()
+        _GIFT_INLINE_SESSIONS[token] = sess
+        await event.answer("NFT Sales")
+        return await _gift_inline_edit(
+            event,
+            _gift_inline_sales_picker_text(sess),
+            _gift_inline_sales_picker_buttons(sess, owner_id, token),
+            parse_mode="md",
+        )
+
     # Gift Chart path — open giftcharts stage under the same hub token.
     if not sess.get("nft_mode"):
         await event.answer("Gift Chart")
-    try:
-        from . import giftcharts as gc
-    except Exception as e:
-        LOGS.warning("giftcharts import failed: %s", e)
-        return await event.answer("Charts unavailable.", alert=True)
 
     gift_q = sess.get("collection") or ""
     model_q = sess.get("model")
@@ -7401,7 +7113,9 @@ async def artemis_gift_inline_floor_cb(event):
     if mode == "cmb" and depth < 3:
         return await event.answer("Backdrop not in this query.", alert=True)
 
-    await event.answer("Loading floors…")
+    # Answer immediately so group buttons feel snappy.
+    with contextlib.suppress(Exception):
+        await event.answer("Loading floors…")
     try:
         if not sess.get("resolved") or sess.get("nft_mode"):
             sess = await _gift_inline_resolve_session(sess)
@@ -7412,9 +7126,8 @@ async def artemis_gift_inline_floor_cb(event):
         if mode == "cmb" and not back:
             return await event.answer("Could not resolve backdrop.", alert=True)
 
-        await _ensure_artemis_token()
-        async with MRKTClient(token=ARTEMIS_TOKEN) as client:
-            message = await _build_gift_floor_only(client, coll, mod, back)
+        # Floors are Satellite-only — no MRKT round-trip needed for floor panel.
+        message = await _build_gift_floor_only(None, coll, mod, back)
     except Exception as e:
         LOGS.warning("Inline g floor failed: %s", e)
         return await event.answer(str(e)[:180], alert=True)
@@ -7459,6 +7172,114 @@ async def artemis_gift_inline_back_cb(event):
         event,
         _gift_inline_floor_picker_text(sess),
         _gift_inline_floor_picker_buttons(sess, owner_id, token),
+        parse_mode="md",
+    )
+
+
+@callback(
+    re.compile(
+        rb"^gs:m:(\d+):([A-Za-z0-9_-]{6,16}):(mrkt|portals|tonnel|telegram|getgems)$"
+    )
+)
+async def artemis_gift_inline_sales_market_cb(event):
+    """NFT Sales market → 10 latest sales (Satellite miniapp)."""
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+        market_key = event.data_match.group(3).decode()
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    label = dict(_GIFT_SALES_MARKETS).get(market_key, market_key.title())
+    await event.answer(f"{label} sales…")
+    try:
+        if not sess.get("resolved"):
+            sess = await _gift_inline_resolve_session(sess)
+            _GIFT_INLINE_SESSIONS[token] = sess
+        coll = sess.get("collection")
+        mod = sess.get("model")
+        back = sess.get("backdrop")
+        if not coll:
+            return await event.answer("Could not resolve collection.", alert=True)
+
+        sales = await sat._latest_sales_for_market(
+            coll, market_key, mod, back, limit=10,
+        )
+        lines = [
+            "🧾 **NFT Sales**",
+            "",
+            *_gift_inline_info_lines(sess),
+            "",
+            f"🏪 **10 Latest {label} Sales**",
+            "",
+        ]
+        if not sales:
+            lines.append("**No Sale Found -_-**")
+        else:
+            for i, sale in enumerate(sales, 1):
+                price_txt = sale.get("price_display") or "—"
+                when = sat._fmt_sold_at(sale.get("sold_at")) or "—"
+                slug = sale.get("slug") or ""
+                url = sale.get("nft_url") or (
+                    f"https://t.me/nft/{slug}" if slug else None
+                )
+                title = sat._sale_number_label(sale)
+                if url:
+                    link = f"[{_md_escape_inline(title)}]({url})"
+                else:
+                    link = f"`{_md_escape_inline(title)}`"
+                lines.append(
+                    f"**{i}. {link} · {_md_escape_inline(price_txt)} · "
+                    f"{_md_escape_inline(when)}**"
+                )
+        text = "\n".join(lines)
+    except Exception as e:
+        LOGS.warning("Inline g sales failed: %s", e)
+        return await event.answer(str(e)[:180], alert=True)
+
+    sess["view"] = "sales_out"
+    sess["sales_market"] = market_key
+    sess["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = sess
+    return await _gift_inline_edit(
+        event,
+        text,
+        _gift_inline_sales_result_buttons(sess, owner_id, token),
+        parse_mode="md",
+    )
+
+
+@callback(re.compile(rb"^gs:b:(\d+):([A-Za-z0-9_-]{6,16})$"))
+async def artemis_gift_inline_sales_back_cb(event):
+    """Sales result → sales market picker."""
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    sess["view"] = "sales_pick"
+    sess["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = sess
+    await event.answer("Back")
+    return await _gift_inline_edit(
+        event,
+        _gift_inline_sales_picker_text(sess),
+        _gift_inline_sales_picker_buttons(sess, owner_id, token),
         parse_mode="md",
     )
 
@@ -7590,10 +7411,6 @@ async def _artemis_gift_handler(event):
             )
 
     status = None
-    status_deleted = False
-    # Prefer the message the user replied to. Never use event.id after we
-    # delete the edited "Fetching…" command (that id is gone).
-    reply_to = event.reply_to_msg_id
     try:
         status = await event.eor(
             "<b>Fetching floor...</b>" if compact else "<b>Fetching NFT Info...</b>",
@@ -7619,7 +7436,6 @@ async def _artemis_gift_handler(event):
                     "backdrop_rarity": extras.get("backdrop_rarity"),
                 }
                 nft_url = extras.get("nft_url")
-                nft_slug = extras.get("slug")
                 coll, mod, back = await _resolve_gift_names(
                     client, coll, mod, back,
                 )
@@ -7628,16 +7444,12 @@ async def _artemis_gift_handler(event):
                 coll, mod, back = await _resolve_gift_names(
                     client, collection, model, backdrop,
                 )
-                nft_slug = None
                 listings = include_listings
 
             if compact:
-                return {
-                    "message": await _build_gift_floor_only(
-                        client, coll, mod, back,
-                    ),
-                    "stickers": None,
-                }
+                return await _build_gift_floor_only(
+                    client, coll, mod, back,
+                )
 
             sat_task = asyncio.create_task(
                 _satellite_market_floors(
@@ -7645,88 +7457,20 @@ async def _artemis_gift_handler(event):
                 )
             )
             tg_snap = await _changes_gift_snapshot(coll, mod)
-            # Collect sticker buffers while MRKT client is still open.
-            sticker_task = asyncio.create_task(
-                _collect_gift_stickers(
-                    client,
-                    coll,
-                    model=mod,
-                    backdrop=back,
-                    tg_snap=tg_snap,
-                    nft_slug=nft_slug,
-                )
+            message, _, _ = await _build_gift_info(
+                client,
+                coll,
+                mod,
+                back,
+                include_listings=listings,
+                tg_snap=tg_snap,
+                seed_rarities=seed_rarities,
+                nft_url=nft_url,
+                sat_task=sat_task,
             )
-            info_task = asyncio.create_task(
-                _build_gift_info(
-                    client,
-                    coll,
-                    mod,
-                    back,
-                    include_listings=listings,
-                    tg_snap=tg_snap,
-                    seed_rarities=seed_rarities,
-                    nft_url=nft_url,
-                    sat_task=sat_task,
-                )
-            )
-            message, _, _ = await info_task
-            stickers = await sticker_task
-            return {
-                "message": message,
-                "stickers": stickers,
-                "sticker_fallback": {
-                    "collection": coll,
-                    "model": mod,
-                    "backdrop": back,
-                    "tg_snap": tg_snap,
-                    "nft_slug": nft_slug,
-                },
-            }
+            return message
 
-        payload, status = await _with_mrkt(event, status, work)
-        if isinstance(payload, dict):
-            message = payload.get("message") or ""
-            stickers = payload.get("stickers")
-            sticker_fallback = payload.get("sticker_fallback") or {}
-        else:
-            message = payload
-            stickers = None
-            sticker_fallback = {}
-
-        if stickers is not None:
-            # Sticker + text cannot live in the edited command — delete it,
-            # then reply both to the original reply target (or the command).
-            with contextlib.suppress(Exception):
-                await status.delete()
-                status_deleted = True
-            sent = False
-            ordered = list(stickers or [])
-            # TGS first, then WebP (already ordered by collector, but be safe).
-            ordered.sort(
-                key=lambda s: 0
-                if getattr(s, "mime_type", "") == "application/x-tgsticker"
-                else 1
-            )
-            for sticker in ordered:
-                if await _send_gift_sticker(
-                    event.client, event.chat_id, sticker, reply_to=reply_to,
-                ):
-                    sent = True
-                    break
-            if not sent:
-                LOGS.debug(
-                    "Gift sticker send failed for %s",
-                    sticker_fallback.get("collection"),
-                )
-            return await event.client.send_message(
-                event.chat_id,
-                message,
-                parse_mode="html",
-                link_preview=False,
-                reply_to=reply_to,
-            )
-
-        # Compact / text-only: keep the edited "Fetching…" message.
+        message, status = await _with_mrkt(event, status, work)
         return await status.edit(
             message,
             parse_mode="md" if compact else "html",
@@ -7738,10 +7482,8 @@ async def _artemis_gift_handler(event):
     except (TradingError, RequestError, AuthError) as e:
         LOGS.warning("Artemis gift request error: %s", e)
         err = f"❌ <b>Artemis request failed.</b>\n\n<code>{e}</code>"
-        if status_deleted or status is None:
-            return await event.client.send_message(
-                event.chat_id, err, parse_mode="html", reply_to=reply_to,
-            )
+        if status is None:
+            return await event.eor(err, parse_mode="html")
         return await status.edit(err, parse_mode="html")
     except Exception as e:
         LOGS.exception("Artemis gift failed: %s", e)
@@ -7749,10 +7491,8 @@ async def _artemis_gift_handler(event):
             "❌ <b>Failed to fetch NFT information.</b>\n\n"
             f"<code>{e}</code>"
         )
-        if status_deleted or status is None:
-            return await event.client.send_message(
-                event.chat_id, err, parse_mode="html", reply_to=reply_to,
-            )
+        if status is None:
+            return await event.eor(err, parse_mode="html")
         return await status.edit(err, parse_mode="html")
 
 
