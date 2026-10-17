@@ -4,7 +4,7 @@ from telethon.errors.rpcerrorlist import UserNotParticipantError
 from telethon.tl.custom import Button
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import GetFullChatRequest
-from telethon.tl.types import Channel, Chat
+from telethon.tl.types import Channel, Chat, MessageService
 from telethon.utils import get_display_name
 
 from CythonX.dB.base import KeyManager
@@ -19,6 +19,25 @@ CACHE = {}
 # --------------------------------------- Incoming -------------------------------------------- #
 
 
+async def _relay_to_owner(event):
+    """Forward a PM to the owner, copying it when Telegram refuses a forward.
+
+    Telegram rejects ``ForwardMessagesRequest`` for some messages (protected
+    ``noforwards`` content, expired or service messages, posts deleted while
+    in flight) with ``MessageIdInvalidError``.  Copying the message keeps the
+    owner in the loop instead of aborting the handler and dropping it.
+    """
+    try:
+        return await event.forward_to(OWNER_ID)
+    except Exception as er:
+        LOGS.warning("PmBot: forward to owner failed (%s); copying instead", er)
+    try:
+        return await asst.send_message(OWNER_ID, event.message)
+    except Exception as er:
+        LOGS.exception(f"PmBot: could not deliver message to owner: {er}")
+        return None
+
+
 @asst_cmd(
     load=AST_PLUGINS,
     incoming=True,
@@ -26,8 +45,11 @@ CACHE = {}
 )
 async def on_new_mssg(event):
     who = event.sender_id
+    # Service messages have no text and cannot be forwarded or copied.
+    if isinstance(event.message, MessageService):
+        return
     # doesn't reply to that user anymore
-    if event.text.startswith("/") or who == OWNER_ID:
+    if (event.text or "").startswith("/") or who == OWNER_ID:
         return
     if FSUB:
         MSG = ""
@@ -60,7 +82,9 @@ async def on_new_mssg(event):
                     LOGS.exception(f"Error On PmBot Force Sub!\n - {chat} \n{er}")
         if MSG and BTTS:
             return await event.reply(MSG, buttons=BTTS)
-    xx = await event.forward_to(OWNER_ID)
+    xx = await _relay_to_owner(event)
+    if xx is None:
+        return
     if event.fwd_from:
         await xx.reply(f"From {inline_mention(event.sender)} [`{event.sender_id}`]")
     add_stuff(xx.id, who)
