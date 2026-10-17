@@ -642,6 +642,7 @@ help_qrcode: " -\n\n• `{i}qrcode <text/reply to text>`\n   `Makes qrcode of te
 help_resize: " -\n\n•`{i}size <reply to media>`\n   To get size of it.\n\n•`{i}resize <number> <number>`\n   To resize image on x, y axis.\n   eg. `{i}resize 690 960`\n"
 help_schedulemsg: " -\n\n•`{i}schedule <text/reply to msg> <time>`\n    In time u can use second as number, or like 1h or 1m\n    eg. `{i}schedule Hello 100` It deliver msg after 100 sec.\n    eg. `{i}schedule Hello 1h` It deliver msg after an hour.\n"
 help_search: " -\n\n• `{i}saavn <search query>`\n    Download songs from Saavn.\n\n• `{i}go <query>`\n    For doing google search.\n\n• `{i}github <username>`\n    Get full information of the users github profile.\n\n• `{i}img <query>`\n  `{i}img <query> ; <no of results>`\n    For doing Images search.\n\n• `{i}reverse`\n    Reply an Image or sticker to find its sauce.\n"
+help_setduration: " -\n\n• `{i}setdur <duration>`  (alias: `{i}fakedur`)\n    Reply to an audio, voice note, video, video note or GIF to change the\n    duration Telegram displays for it. The file itself is re-uploaded\n    byte-for-byte, only the shown duration changes.\n\n    `<duration>` is a number of seconds (`90`) or a clock value\n    (`1:30` = 1min 30s, `1:02:03` = 1h 2min 3s). Maximum 7 days.\n\n    `Note:` Telegram shows the real duration again once the file starts\n    playing — only the preview is spoofed.\n"
 help_snips: " -\n\n• `{i}addsnip <word><reply to a message>`\n    add the used word as snip relating to replied message.\n\n• `{i}remsnip <word>`\n    Remove the snip word..\n\n• `{i}listsnip`\n    list all snips.\n\n• Use :\n    type `$(ur snip word)` get setted reply.\n"
 help_specialtools: " -\n\n• `{i}wspr <username>`\n    Send secret message..\n\n• `{i}q <color-optional>`\n• `{i}q @username`\n• `{i}q r <color-optional>`\n• `{i}q count` : `multiple quotes`\n    Create quotes..\n\n• `{i}sticker <query>`\n    Search Stickers as Per ur Wish..\n\n• `{i}getaudio <reply to an audio>`\n    Download Audio To put in ur Desired Video/Gif.\n\n• `{i}addaudio <reply to Video/gif>`\n    It will put the above audio to the replied video/gif.\n\n• `{i}dob <date of birth>`\n    Put in dd/mm/yy Format only(eg .dob 01/01/1999).\n\n• `{i}wall <query>`\n    Search Hd Wallpaper as Per ur Wish..\n"
 help_stickertools: " -\n\n• `{i}destroy <reply to animated sticker>`\n    To destroy the sticker.\n\n• `{i}tiny <reply to media>`\n    To create Tiny stickers.\n\n• `{i}kang <reply to image/sticker>`\n    Kang the sticker (add to your pack).\n\n• `{i}packkang <pack name>`\n    Kang the Complete sticker set (with custom name).\n\n• `{i}round <reply to any media>`\n    To extract round sticker.\n"
@@ -1071,3 +1072,14 @@ assistant_config_shown: "⚙️ Assistant configuration:\n\n{value}"
 assistant_config_updated: "✅ Updated {name} to {value}."
 assistant_enabled: "✅ The assistant is now {value}."
 assistant_reset: "🧹 Conversation history cleared."
+
+
+# setduration (fake display duration)
+setduration_1: "Reply to an audio, voice note, video, video note or GIF with this command."
+setduration_2: "That file is not playable media whose duration can be changed."
+setduration_3: "Invalid duration. Use seconds (`90`) or `[H:]M:S` (`1:30`, `1:02:03`), up to 7 days."
+setduration_4: "Fetching the replied file..."
+setduration_5: "Downloading the file..."
+setduration_6: "Uploading with the new duration..."
+setduration_7: "Failed to re-upload the file with the new duration."
+setduration_done: "Done — the displayed duration is now `{0}`.\n`Note:` Telegram shows the real duration once the file is played."
