@@ -778,27 +778,140 @@ async def Carbon(
     rayso=False,
     **kwargs,
 ):
+    """Render `code` as an image using the public Carbon API.
+
+    Returns a ``BytesIO`` (``download=False``) or the path of the written
+    image (``download=True``).  When the API answers with an error the
+    response used to be wrapped into a fake image with a ``.jpg`` name,
+    which Telegram then rejected with "Failure while processing image".
+    Instead a ``{"error": ...}`` dict is returned so callers can show a
+    meaningful message to the user.
+    """
     if rayso:
-        base_url = "https://rayso-api-desvhu-33.koyeb.app/generate"
-        kwargs["text"] = code
+        # ray.so has no public HTTP API; render with Carbon using the
+        # closest available theme so the command keeps working.
         kwargs["theme"] = kwargs.get("theme", "breeze")
-        kwargs["darkMode"] = kwargs.get("darkMode", True)
-        kwargs["title"] = kwargs.get("title", "Heartless")
+    kwargs["code"] = code
+
+    async def _fetch(response):
+        body = await response.read()
+        ctype = (response.headers.get("Content-Type") or "").lower()
+        return response.status, ctype, body
+
+    try:
+        status, ctype, con = await async_searcher(
+            base_url, post=True, json=kwargs, evaluate=_fetch
+        )
+    except Exception as er:
+        return {"error": f"Carbon request failed: {er}"}
+
+    if status >= 400 or not ctype.startswith("image/"):
+        try:
+            detail = con.decode("utf-8", "replace")
+        except Exception:
+            detail = str(con)
+        return {"error": f"Carbon API error (HTTP {status}): {detail.strip()[:200]}"}
+
+    if "png" in ctype:
+        ext = "png"
+    elif "jpeg" in ctype or "jpg" in ctype:
+        ext = "jpg"
+    elif "webp" in ctype:
+        ext = "webp"
+    elif "gif" in ctype:
+        ext = "gif"
     else:
-        kwargs["code"] = code
-    con = await async_searcher(base_url, post=True, json=kwargs, re_content=True)
+        ext = "png"
+
     if not download:
         file = BytesIO(con)
-        file.name = file_name + ".jpg"
-    else:
-        try:
-            return json_parser(con.decode())
-        except Exception:
-            pass
-        file = file_name + ".jpg"
-        with open(file, "wb") as f:
-            f.write(con)
+        file.name = f"{file_name}.{ext}"
+        return file
+
+    file = f"{file_name}.{ext}"
+    with open(file, "wb") as f:
+        f.write(con)
     return file
+
+
+async def upload_public_file(file_path, hosts=None):
+    """Upload a local file to a public host and return a direct URL.
+
+    Telegraph's ``/upload`` endpoint (``telegra.ph`` / ``graph.org``) now
+    answers every request with ``HTTP 400 "Unknown error"``, so catbox.moe
+    (which returns a direct link) is tried first, with Telegraph-style
+    hosts kept as a fallback.
+    """
+    if not file_path or not os.path.isfile(file_path):
+        raise FileNotFoundError(file_path)
+
+    hosts = hosts or ("catbox", "graph.org", "telegra.ph")
+    filename = os.path.basename(file_path)
+    timeout = aiohttp.ClientTimeout(total=300)
+    errors = []
+
+    for host in hosts:
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                with open(file_path, "rb") as fp:
+                    form = aiohttp.FormData()
+                    if host == "catbox":
+                        form.add_field("reqtype", "fileupload")
+                        form.add_field(
+                            "fileToUpload",
+                            fp,
+                            filename=filename,
+                            content_type="application/octet-stream",
+                        )
+                        url = "https://catbox.moe/user/api.php"
+                    else:
+                        form.add_field(
+                            "file",
+                            fp,
+                            filename=filename,
+                            content_type="application/octet-stream",
+                        )
+                        url = f"https://{host}/upload"
+                    async with session.post(
+                        url,
+                        data=form,
+                        headers={"User-Agent": "Mozilla/5.0 (compatible; Megatron)"},
+                    ) as response:
+                        status = response.status
+                        raw = await response.text()
+
+            if host == "catbox":
+                if status == 200 and raw.strip().startswith("http"):
+                    return raw.strip()
+                errors.append(f"catbox (HTTP {status}): {raw.strip()[:200]}")
+                continue
+
+            if status != 200:
+                errors.append(f"{host} (HTTP {status}): {raw[:200]}")
+                continue
+
+            try:
+                payload = json.loads(raw)
+            except JSONDecodeError:
+                payload = raw
+
+            item = payload[0] if isinstance(payload, list) and payload else payload
+            if isinstance(item, dict):
+                path = item.get("src") or item.get("url")
+            elif isinstance(item, str):
+                path = item
+            else:
+                path = None
+
+            if path:
+                if path.startswith(("http://", "https://")):
+                    return path
+                return f"https://{host}{path}"
+            errors.append(f"{host}: unexpected response {str(raw)[:150]}")
+        except aiohttp.ClientError as er:
+            errors.append(f"{host}: {er}")
+
+    raise RuntimeError("Upload failed: " + " | ".join(errors))
 
 
 async def get_file_link(msg, match: str):

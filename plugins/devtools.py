@@ -36,89 +36,14 @@ fn = functions
 
 
 async def _upload_to_graph(file_path, domain="graph.org"):
-    """Upload a local file to graph.org and return its public URL.
+    """Upload a local file to a public host and return its URL.
 
-    Use aiohttp directly here.  The previous version routed the multipart
-    request through async_searcher(), which can alter/handle multipart data
-    in a way that makes graph.org return HTTP 400.
+    Telegraph's upload endpoint (``graph.org`` / ``telegra.ph``) currently
+    rejects every request with ``HTTP 400 "Unknown error"``, so this now
+    delegates to :func:`upload_public_file`, which prefers catbox.moe and
+    keeps Telegraph-style hosts as a fallback.
     """
-    if not file_path or not os.path.isfile(file_path):
-        raise FileNotFoundError(file_path)
-
-    upload_url = f"https://{domain}/upload"
-
-    timeout = aiohttp.ClientTimeout(total=60)
-    try:
-        async with aiohttp.ClientSession(timeout=timeout) as session:
-            with open(file_path, "rb") as media:
-                form = aiohttp.FormData()
-                form.add_field(
-                    "file",
-                    media,
-                    filename=os.path.basename(file_path),
-                    content_type="application/octet-stream",
-                )
-
-                async with session.post(
-                    upload_url,
-                    data=form,
-                    headers={
-                        "User-Agent": (
-                            "Mozilla/5.0 (X11; Linux x86_64) "
-                            "AppleWebKit/537.36 (KHTML, like Gecko) "
-                            "Chrome/131.0 Safari/537.36"
-                        ),
-                    },
-                ) as response:
-                    raw = await response.read()
-                    status = response.status
-                    content_type = response.headers.get("Content-Type", "")
-
-    except aiohttp.ClientError as exc:
-        raise RuntimeError(f"Graph upload connection failed: {exc}") from exc
-
-    body = raw.decode("utf-8", errors="replace").strip()
-
-    if status >= 400:
-        raise RuntimeError(
-            f"Graph upload failed with HTTP {status}: {body[:500] or 'Unknown error'}"
-        )
-
-    try:
-        payload = json.loads(body)
-    except json.JSONDecodeError as exc:
-        raise RuntimeError(
-            f"Graph upload returned invalid JSON "
-            f"({content_type or 'unknown content type'}): {body[:500]}"
-        ) from exc
-
-    # graph.org/Telegraph normally returns:
-    # [{"src": "/file/...."}]
-    # Accept the common response variants as well.
-    path = None
-
-    if isinstance(payload, list) and payload:
-        item = payload[0]
-        if isinstance(item, dict):
-            path = item.get("src") or item.get("url")
-        elif isinstance(item, str):
-            path = item
-
-    elif isinstance(payload, dict):
-        if payload.get("error"):
-            raise RuntimeError(f"Graph upload error: {payload['error']}")
-        path = payload.get("src") or payload.get("url")
-
-    elif isinstance(payload, str):
-        path = payload
-
-    if not path:
-        raise RuntimeError(f"Unexpected Graph upload response: {payload!r}")
-
-    if path.startswith(("http://", "https://")):
-        return path
-
-    return f"https://{domain}{path}"
+    return await upload_public_file(file_path)
 
 
 @heartless_cmd(
@@ -126,40 +51,38 @@ async def _upload_to_graph(file_path, domain="graph.org"):
 )
 async def _(e):
     xx = await e.eor(get_pstring("com_1", "load"))
-    out = "neo.txt"
-    if os.path.exists(out):
-        remove(out)
-    x, y = await bash("neofetch|sed 's/\x1B\\[[0-9;\\?]*[a-zA-Z]//g' > " + out)
+    stdout, stderr = await bash(
+        "neofetch --stdout 2>/dev/null || neofetch | sed 's/\\x1B\\[[0-9;\\?]*[a-zA-Z]//g'"
+    )
+    if stderr and stderr.endswith("NOT_FOUND"):
+        return await xx.edit(
+            "`neofetch` is not installed!\nInstall it first "
+            "(e.g. `apt install neofetch` or `pkg install neofetch`)."
+        )
+    info = (stdout or "").replace("\n\n", "").strip()
+    if not info:
+        return await xx.edit(
+            "`Couldn't fetch system information.`\nIs `neofetch` installed and working?"
+        )
+    haa = None
     try:
-        if y and y.endswith("NOT_FOUND"):
-            return await xx.edit(f"Error: `{y}`")
-        with open(out, "r", encoding="utf-8") as neo:
-            p = (neo.read()).replace("\n\n", "")
-        haa = None
-        try:
-            haa = await Carbon(
-                code=p,
-                file_name="neofetch",
-                backgroundColor=choice(ATRA_COL),
-            )
-        except Exception as er:
-            # The public Carbon API is unreliable and often down;
-            # fall back to the raw neofetch output below.
-            LOGS.exception(er)
-        if isinstance(haa, dict):
-            await xx.edit(f"`{haa}`")
-        elif haa is not None:
-            await e.reply(file=haa, force_document=True)
-            await xx.delete()
-        else:
-            # Carbon failed - send the raw system info as a file.
-            info = BytesIO(p.encode("utf-8"))
-            info.name = "sysinfo.txt"
-            await e.reply(file=info, force_document=True)
-            await xx.delete()
-    finally:
-        if os.path.exists(out):
-            remove(out)
+        haa = await Carbon(
+            code=info,
+            file_name="sysinfo",
+            backgroundColor=choice(ATRA_COL),
+        )
+    except Exception as er:
+        # The public Carbon API is unreliable and often down;
+        # fall back to the raw neofetch output below.
+        LOGS.exception(er)
+    if isinstance(haa, dict):
+        # Carbon failed - send the plain text instead of an empty file.
+        return await xx.edit(f"`{info}`")
+    if haa is not None:
+        await e.reply(file=haa, caption="**System Information**", force_document=False)
+        await xx.delete()
+        return
+    await xx.edit(f"`{info}`")
 
 
 @heartless_cmd(pattern="bash", fullsudo=True, only_devs=True)

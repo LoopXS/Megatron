@@ -242,7 +242,9 @@ TOKEN_FILE = "resources/auths/auth_token.txt"
     owner=True,
 )
 async def send(eve):
-    key, name = (eve.data_match.group(1)).decode("UTF-8").split("_")
+    # Plugin names can contain "_" (e.g. "asst_cmd") - only split the
+    # category prefix off.
+    key, name = (eve.data_match.group(1)).decode("UTF-8").split("_", 1)
     thumb = "resources/extras/heartless.jpg"
     await eve.answer("■ Sending ■")
     data = f"uh_{key}_"

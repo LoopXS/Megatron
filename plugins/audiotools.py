@@ -1,6 +1,7 @@
 import os
 import time
 from datetime import datetime as dt
+from secrets import token_hex
 
 from CythonX.fns.tools import set_attributes
 
@@ -31,26 +32,38 @@ async def vnc(e):
     if not e.reply_to:
         return await eod(e, get_string("audiotools_1"))
     r = await e.get_reply_message()
-    if not mediainfo(r.media).startswith(("audio", "video")):
+    if not (r and r.media and mediainfo(r.media).startswith(("audio", "video"))):
         return await eod(e, get_string("spcltool_1"))
     xxx = await e.eor(get_pstring("com_1", "load"))
     file, _ = await e.client.fast_downloader(
         r.document,
     )
     await xxx.edit(get_string("audiotools_2"))
-    await bash(
-        f"ffmpeg -i '{file.name}' -map 0:a -codec:a libopus -b:a 100k -vbr on out.opus"
+    out = f"heartless_voice_{token_hex(4)}.ogg"
+    _, err = await bash(
+        f"ffmpeg -i '{file.name}' -map 0:a -codec:a libopus -b:a 100k -vbr on -y '{out}'"
     )
+    if not os.path.exists(out) or os.path.getsize(out) == 0:
+        os.remove(file.name)
+        if os.path.exists(out):
+            os.remove(out)
+        return await xxx.edit(f"`Failed to convert to voice!`\n`{err or 'no output'}`")
     try:
-        await e.client.send_message(
-            e.chat_id, file="out.opus", force_document=False, reply_to=r
+        # Send as an actual voice note (no caption / no text overlay).
+        await e.client.send_file(
+            e.chat_id,
+            out,
+            voice_note=True,
+            reply_to=r,
         )
     except Exception as er:
         LOGS.exception(er)
-        return await xxx.edit("`Failed to convert in Voice...`")
+        os.remove(file.name)
+        os.remove(out)
+        return await xxx.edit("`Failed to send the voice message...`")
     await xxx.delete()
     os.remove(file.name)
-    os.remove("out.opus")
+    os.remove(out)
 
 
 @heartless_cmd(pattern="atrim( (.*)|$)")
@@ -84,8 +97,9 @@ async def trim_aud(e):
         o_size = os.path.getsize(file.name)
         d_time = time.time()
         diff = time_formatter((d_time - c_time) * 1000)
-        file_name = (file.name).split("/")[-1]
-        out = file_name.replace(file_name.split(".")[-1], "_trimmed.aac")
+        file_name = file.name.split("/")[-1]
+        stem = file_name.rsplit(".", 1)[0]
+        out = f"{stem}_trimmed.m4a"
         if int(b) > int(await genss(file.name)):
             os.remove(file.name)
             return await eod(xxx, get_string("audiotools_6"))
@@ -93,23 +107,28 @@ async def trim_aud(e):
         xxx = await xxx.edit(
             f"Downloaded `{file.name}` of `{humanbytes(o_size)}` in `{diff}`.\n\nNow Trimming Audio from `{ss}` to `{dd}`..."
         )
-        cmd = f'ffmpeg -i "{file.name}" -preset ultrafast -ss {ss} -to {dd} -vn -acodec copy "{out}" -y'
-        await bash(cmd)
+        # Re-encode instead of stream-copying: "-acodec copy" into a raw .aac
+        # container frequently produces an empty/invalid file, which Telegram
+        # rejects with "The number of file parts is invalid".
+        cmd = f'ffmpeg -i "{file.name}" -ss {ss} -to {dd} -vn -c:a aac -b:a 192k "{out}" -y'
+        _, err = await bash(cmd)
         os.remove(file.name)
-        f_time = time.time()
-        mmmm = await uploader(out, out, f_time, xxx, f"Uploading {out}...")
+        if not os.path.exists(out) or os.path.getsize(out) == 0:
+            return await eod(xxx, f"`Failed to trim the audio!`\n`{err or 'no output'}`")
         attributes = await set_attributes(out)
-
         caption = get_string("audiotools_7").format(ss, dd)
-        await e.client.send_file(
-            e.chat_id,
-            mmmm,
-            thumb=ULTConfig.thumb,
-            caption=caption,
-            attributes=attributes,
-            force_document=False,
-            reply_to=e.reply_to_msg_id,
-        )
+        try:
+            await e.client.send_file(
+                e.chat_id,
+                out,
+                caption=caption,
+                attributes=attributes,
+                force_document=False,
+                reply_to=e.reply_to_msg_id,
+            )
+        finally:
+            if os.path.exists(out):
+                os.remove(out)
         await xxx.delete()
     else:
         await e.eor(get_string("audiotools_1"), time=5)

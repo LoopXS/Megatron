@@ -8,8 +8,9 @@ from decouple import config
 from git import Repo
 
 from .. import *
-from ..dB._core import HELP
+from ..dB._core import HELP, LIST
 from ..fns.helper import bash
+from ..fns.tools import cmd_regex_replace
 from ..loader import Loader
 from . import *
 from .utils import load_addons
@@ -18,28 +19,46 @@ from .utils import load_addons
 def _after_load(loader, module, plugin_name=""):
     if not module or plugin_name.startswith("_"):
         return
-    from strings import get_help
+    from strings import get_help, get_string
 
-    if doc_ := get_help(plugin_name) or module.__doc__:
-        # Only substitute `{i}` — `.format(**)` breaks docs that mention
-        # other braces (e.g. `{time}`, JSON examples).
+    doc_ = get_help(plugin_name) or module.__doc__
+    if not doc_:
+        # Some plugins register commands but define no help/doc string at
+        # all.  Build a basic listing from the registered commands so they
+        # still appear in the help panel instead of silently disappearing.
+        cmds = LIST.get(plugin_name) if loader.path == "plugins" else None
+        if cmds:
+            try:
+                doc_ = get_string("help_11").format(plugin_name)
+            except Exception:
+                doc_ = f"Commands in `{plugin_name}`:\n"
+            for pat in cmds:
+                try:
+                    doc_ += f"{HNDLR}{cmd_regex_replace(pat)}\n"
+                except Exception:
+                    doc_ += f"{HNDLR}{pat}\n"
+    if not doc_:
+        return
+
+    # Only substitute `{i}` — `.format(**)` breaks docs that mention
+    # other braces (e.g. `{time}`, JSON examples).
+    try:
+        doc = str(doc_).replace("{i}", str(HNDLR))
+    except Exception as er:
+        loader._logger.exception(er)
+        loader._logger.info(f"Error in {plugin_name}: {module}")
+        return
+    if loader.key in HELP.keys():
+        update_cmd = HELP[loader.key]
         try:
-            doc = str(doc_).replace("{i}", str(HNDLR))
-        except Exception as er:
+            update_cmd.update({plugin_name: doc})
+        except BaseException as er:
             loader._logger.exception(er)
-            loader._logger.info(f"Error in {plugin_name}: {module}")
-            return
-        if loader.key in HELP.keys():
-            update_cmd = HELP[loader.key]
-            try:
-                update_cmd.update({plugin_name: doc})
-            except BaseException as er:
-                loader._logger.exception(er)
-        else:
-            try:
-                HELP.update({loader.key: {plugin_name: doc}})
-            except BaseException as em:
-                loader._logger.exception(em)
+    else:
+        try:
+            HELP.update({loader.key: {plugin_name: doc}})
+        except BaseException as em:
+            loader._logger.exception(em)
 
 
 def load_other_plugins(addons=None, pmbot=None, manager=None, vcbot=None):

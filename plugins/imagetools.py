@@ -68,44 +68,12 @@ except ImportError:
     LOGS.info(f"{__file__}: PIL  not Installed.")
 
 async def _upload_to_telegraph(file_path):
-    """Upload a file to graph.org without relying on telegraph's old response parser."""
-    async with aiohttp.ClientSession() as session:
-        with open(file_path, "rb") as fp:
-            form = aiohttp.FormData()
-            form.add_field(
-                "file",
-                fp,
-                filename=os.path.basename(file_path),
-                content_type="application/octet-stream",
-            )
-            async with session.post("https://graph.org/upload", data=form) as response:
-                raw = await response.text()
+    """Upload a file to a public host and return its direct URL.
 
-                if response.status != 200:
-                    raise RuntimeError(
-                        f"Telegraph upload failed (HTTP {response.status}): {raw[:300]}"
-                    )
-
-                try:
-                    payload = json.loads(raw)
-                except json.JSONDecodeError:
-                    payload = raw
-
-    # Current Telegraph responses are normally a list containing an object
-    # with a `src` field, but accept the common response variants too.
-    item = payload[0] if isinstance(payload, list) and payload else payload
-
-    if isinstance(item, dict):
-        path = item.get("src") or item.get("url")
-    elif isinstance(item, str):
-        path = item
-    else:
-        path = None
-
-    if not path:
-        raise RuntimeError(f"Unexpected Telegraph upload response: {str(raw)[:500]}")
-
-    return [path]
+    Telegraph/graph.org uploads are currently broken (HTTP 400), so this
+    delegates to :func:`upload_public_file` (catbox.moe preferred).
+    """
+    return await upload_public_file(file_path)
 
 from telethon.errors.rpcerrorlist import (
     ChatSendMediaForbiddenError,
@@ -113,6 +81,7 @@ from telethon.errors.rpcerrorlist import (
 )
 
 from . import (
+    HNDLR,
     Redis,
     async_searcher,
     download_file,
@@ -120,6 +89,7 @@ from . import (
     get_pstring,
     requests,
     udB,
+    upload_public_file,
     heartless_cmd,
 )
 
@@ -133,24 +103,43 @@ async def _(event):
     image = await reply.download_media()
     img = cv2.VideoCapture(image)
     ret, frame = img.read()
+    img.release()
+    if not ret or frame is None:
+        os.remove(image)
+        return await xx.edit("`Couldn't read that media as an image!`")
     cv2.imwrite("heartless.jpg", frame)
-    if udB.get_key("DEEP_API"):
-        key = Redis("DEEP_API")
-    else:
-        key = "quickstart-QUdJIGlzIGNvbWluZy4uLi4K"
-    r = requests.post(
-        "https://api.deepai.org/api/colorizer",
-        files={"image": open("heartless.jpg", "rb")},
-        headers={"api-key": key},
-    )
-    os.remove("heartless.jpg")
-    os.remove(image)
-    if "status" in r.json():
-        return await event.edit(
-            r.json()["status"] + "\nGet api nd set `{i}setdb DEEP_API key`"
-        )
-    r_json = r.json()["output_url"]
-    await event.client.send_file(event.chat_id, r_json, reply_to=reply)
+    try:
+        key = Redis("DEEP_API") if udB.get_key("DEEP_API") else None
+        if not key:
+            return await xx.edit(
+                "**DeepAI now requires a (paid) API key for image colorization.**\n"
+                f"Set one with `{HNDLR}setdb DEEP_API <key>` and try again."
+            )
+        with open("heartless.jpg", "rb") as img_fp:
+            r = requests.post(
+                "https://api.deepai.org/api/colorizer",
+                files={"image": img_fp},
+                headers={"api-key": key},
+                timeout=120,
+            )
+        try:
+            data = r.json()
+        except ValueError:
+            data = {}
+        if r.status_code != 200 or "output_url" not in data:
+            detail = data.get("status") or data.get("err") or r.text[:200]
+            return await xx.edit(
+                f"**Colorization failed:** `{detail}`\n"
+                f"Set/refresh your key with `{HNDLR}setdb DEEP_API <key>`."
+            )
+    except Exception as er:
+        return await xx.edit(f"**Colorization failed:** `{er}`")
+    finally:
+        if os.path.exists("heartless.jpg"):
+            os.remove("heartless.jpg")
+        if image and os.path.exists(image):
+            os.remove(image)
+    await event.client.send_file(event.chat_id, data["output_url"], reply_to=reply)
     await xx.delete()
 
 
@@ -254,10 +243,9 @@ async def ultd(event):
         return
     ultt = await ureply.download_media()
     if ultt.endswith(".tgs"):
-        await xx.edit(get_string("sts_9"))
+        return await xx.edit(get_string("sts_9"))
     file = await con.convert(ultt, convert_to="png", outname="ult")
-    got = await _upload_to_telegraph(file)
-    lnk = f"https://graph.org{got[0]}"
+    lnk = await _upload_to_telegraph(file)
     r = await async_searcher(
         f"https://nekobot.xyz/api/imagegen?type=blurpify&image={lnk}", re_json=True
     )

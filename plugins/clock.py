@@ -47,7 +47,9 @@ from datetime import datetime
 from typing import Optional
 from zoneinfo import ZoneInfo
 
-from . import LOGS, Button, async_searcher, in_pattern
+from . import LOGS, Button, async_searcher, get_help, in_pattern
+
+__doc__ = get_help("help_clock") or __doc__
 
 
 # ============================================================================

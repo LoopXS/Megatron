@@ -199,7 +199,9 @@ async def help_func(ult):
 
 @callback(re.compile("uplugin_(.*)"), owner=True)
 async def uptd_plugin(event):
-    key, file = event.data_match.group(1).decode("utf-8").split("_")
+    # Plugin names may themselves contain "_" (e.g. "asst_cmd"), so only
+    # split off the leading category ("Official"/"Addons"/"VCBot").
+    key, file = event.data_match.group(1).decode("utf-8").split("_", 1)
     index = None
     if "|" in file:
         file, index = file.split("|")
