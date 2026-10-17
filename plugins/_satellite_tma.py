@@ -1,7 +1,9 @@
 """Shared Gift Satellite Mini App client (TMA initData).
 
-Used by ``plugins.satellite`` (``.sat``) and ``plugins.artemis`` (gift / inline g).
+Used by ``plugins.artemis`` (gift / inline g floors, sales, monochrome).
 Auth via Telegram WebView initData — not the rate-limited Token API.
+
+Credentials match Artemis: Heartless DB ``api_id`` / ``api_hash`` / ``SESSIONMRKT``.
 """
 
 from __future__ import annotations
@@ -32,17 +34,6 @@ SAT_API = "https://gift-satellite.dev/api"
 SAT_BOT = "gift_satellite_bot"
 SAT_WEBAPP = "https://gift-satellite.dev/"
 
-# Test credentials (override with DB keys SESSIONSAT / SAT_API_ID / SAT_API_HASH).
-_DEFAULT_API_ID = 1222520
-_DEFAULT_API_HASH = "7e7e46cdd61842035fb191013f0a2387"
-_DEFAULT_SESSION = (
-    "1BJWap1sBuwrYIDMoDF2mV16-HDTP4qp2mrYZfJebOkK42F_WWKVb0Ufh1bQkgxXmJ9IxPt2G6HYsS2x"
-    "fhns5DRE9QzFBaxCP-ut-PoBEqQC_AS7jy0PUjRmXPWE26GAV-ruB9nj1lZIFXw_uTLLUIRPTVMUx8PB"
-    "TGq-EcVSzSMo64MCtSzYifCg2uZZxg87mpDd_UIwU5oZRR8ia8SWcqbcuDQUtKMFPTZweiQOkRnjShPg"
-    "lqM89-a_M6zE4mSNvmDc9fm09yYOLydfxvNaJe04dPDnwKeiYdCkqMQ2rhzYLLuI3Vinvh_sQ8ZIk7-p"
-    "6dg70nEwZYfEMF2PB2VeUCfMTNKSeTYo="
-)
-
 # (search_path, display_label, history_markets_key)
 # Search uses `tg`; history sales filter uses `telegram`.
 SAT_MARKETS = (
@@ -69,27 +60,25 @@ _COLLECTIONS_CACHE: dict[str, Any] = {"at": 0.0, "names": []}
 
 
 # ---------------------------------------------------------------------------
-# Creds / helpers
+# Creds / helpers  (same DB keys as Artemis / GiftCharts)
 # ---------------------------------------------------------------------------
 
-def _api_id() -> int:
-    raw = udB.get_key("SAT_API_ID") or udB.get_key("api_id")
+def _api_id() -> Optional[int]:
+    raw = udB.get_key("api_id")
     try:
-        return int(raw) if raw is not None else _DEFAULT_API_ID
+        return int(raw) if raw is not None else None
     except Exception:
-        return _DEFAULT_API_ID
+        return None
 
 
-def _api_hash() -> str:
-    raw = udB.get_key("SAT_API_HASH") or udB.get_key("api_hash")
-    text = str(raw).strip() if raw else ""
-    return text or _DEFAULT_API_HASH
+def _api_hash() -> Optional[str]:
+    raw = udB.get_key("api_hash")
+    return str(raw).strip() if raw else None
 
 
-def _session_str() -> str:
-    raw = udB.get_key("SESSIONSAT") or udB.get_key("SESSIONMRKT")
-    text = str(raw).strip() if raw else ""
-    return text or _DEFAULT_SESSION
+def _session_str() -> Optional[str]:
+    raw = udB.get_key("SESSIONMRKT")
+    return str(raw).strip() if raw else None
 
 
 def _norm(value: Optional[str]) -> str:
@@ -106,12 +95,19 @@ def _fmt_ton(value: Any) -> str:
     except Exception:
         return "—"
     if amount >= 100:
-        return f"{amount:,.2f}"
-    if amount >= 10:
-        return f"{amount:.2f}"
-    if amount >= 1:
-        return f"{amount:.3f}".rstrip("0").rstrip(".")
-    return f"{amount:.4f}".rstrip("0").rstrip(".")
+        text = f"{amount:,.2f}"
+    elif amount >= 10:
+        text = f"{amount:.2f}"
+    elif amount >= 1:
+        text = f"{amount:.3f}".rstrip("0").rstrip(".")
+        return text or "0"
+    else:
+        text = f"{amount:.4f}".rstrip("0").rstrip(".")
+        return text or "0"
+    # 867.00 → 867 (only exact .00)
+    if text.endswith(".00"):
+        return text[:-3]
+    return text
 
 
 def _parse_query(raw: str) -> tuple[str, Optional[str], Optional[str]]:
@@ -168,11 +164,12 @@ def _match_attr(have: Optional[str], want: Optional[str]) -> bool:
 # ---------------------------------------------------------------------------
 
 async def _mint_tma_token() -> str:
+    """Request Mini App initData via SESSIONMRKT (same creds as Artemis)."""
     api_id, api_hash, session = _api_id(), _api_hash(), _session_str()
     if not api_id or not api_hash:
-        raise ValueError("SAT_API_ID / SAT_API_HASH (or api_id / api_hash) missing.")
+        raise ValueError("api_id / api_hash missing from Heartless DB.")
     if not session:
-        raise ValueError("SESSIONSAT (or SESSIONMRKT) is not set.")
+        raise ValueError("SESSIONMRKT is not set in Heartless DB.")
 
     async with _TG_LOCK:
         client = TelegramClient(
@@ -607,7 +604,8 @@ def _fmt_sold_at(value: Any) -> str:
             dt = datetime.fromisoformat(text)
             if dt.tzinfo is None:
                 dt = dt.replace(tzinfo=timezone.utc)
-        return dt.astimezone(TEHRAN_TZ).strftime("%Y-%m-%d %H:%M")
+        local = dt.astimezone(TEHRAN_TZ)
+        return f"{local.month}/{local.day} {local.strftime('%H:%M')}"
     except Exception:
         return str(value)[:16]
 
@@ -764,9 +762,21 @@ async def _latest_sales_by_market(
     return buckets
 
 
+def _sale_number_label(sale: dict) -> str:
+    num = sale.get("number")
+    if num is not None and str(num).strip() != "":
+        return f"#{num}"
+    slug = str(sale.get("slug") or "")
+    if "-" in slug:
+        with contextlib.suppress(Exception):
+            return f"#{int(slug.rsplit('-', 1)[-1])}"
+    return slug or "NFT"
+
+
 def _nft_anchor(sale: dict) -> str:
+    """HTML anchor showing #number (not full slug)."""
+    title = _sale_number_label(sale)
     slug = sale.get("slug") or ""
-    title = slug or (f"#{sale.get('number')}" if sale.get("number") else "NFT")
     url = sale.get("nft_url") or (f"https://t.me/nft/{slug}" if slug else None)
     if url:
         return f'<a href="{_esc(url)}">{_esc(title)}</a>'
@@ -791,29 +801,28 @@ def _build_message(
     for _search, label, _hist in SAT_MARKETS:
         price = floors.get(label)
         ton = f"{_fmt_ton(price)} TON" if price is not None else "—"
-        lines.append(f"   {label}: <code>{_esc(ton)}</code>")
+        lines.append(f"   <b>{_esc(label)}</b>: <code>{_esc(ton)}</code>")
     lines.append("")
     lines.append(f"🧾 <b>Latest sales</b> ({SALES_PER_MARKET} / market)")
     any_sales = False
     for _search, label, _hist in SAT_MARKETS:
         sales = sales_by_market.get(label) or []
         lines.append("")
-        lines.append(f"<b>{_esc(label)}</b>")
+        lines.append(f"<b>🏪 {SALES_PER_MARKET} Latest {_esc(label)} Sales</b>")
         if not sales:
-            lines.append("   <i>—</i>")
+            lines.append("   <b>No Sale Found -_-</b>")
             continue
         any_sales = True
         for i, sale in enumerate(sales, 1):
             price_txt = sale.get("price_display") or "—"
             when = _fmt_sold_at(sale.get("sold_at")) or "—"
-            # NFT link · price · Tehran date/time only
             lines.append(
-                f"   {i}. {_nft_anchor(sale)} — "
-                f"<b>{_esc(price_txt)}</b> · {_esc(when)}"
+                f"   <b>{i}. {_nft_anchor(sale)} · "
+                f"{_esc(price_txt)} · {_esc(when)}</b>"
             )
     if not any_sales:
         lines.append("")
-        lines.append("<i>No matching sales found.</i>")
+        lines.append("<b>No Sale Found -_-</b>")
     return "\n".join(lines)
 
 
@@ -893,25 +902,27 @@ def _format_sales_market_block(
     sales: list[dict],
     *,
     html_mode: bool = True,
+    limit_note: int = 10,
 ) -> list[str]:
     """Format one market's sales lines (Tehran time, Stars-aware price)."""
     lines: list[str] = []
+    header = f"🏪 {limit_note} Latest {label} Sales"
     if html_mode:
-        lines.append(f"<b>{_esc(label)}</b>")
+        lines.append(f"<b>{_esc(header)}</b>")
         if not sales:
-            lines.append("   <i>—</i>")
+            lines.append("   <b>No Sale Found -_-</b>")
             return lines
         for i, sale in enumerate(sales, 1):
             price_txt = sale.get("price_display") or "—"
             when = _fmt_sold_at(sale.get("sold_at")) or "—"
             lines.append(
-                f"   {i}. {_nft_anchor(sale)} — "
-                f"<b>{_esc(price_txt)}</b> · {_esc(when)}"
+                f"   <b>{i}. {_nft_anchor(sale)} · "
+                f"{_esc(price_txt)} · {_esc(when)}</b>"
             )
     else:
-        lines.append(f"**{label}**")
+        lines.append(f"**{header}**")
         if not sales:
-            lines.append("   —")
+            lines.append("   **No Sale Found -_-**")
             return lines
         for i, sale in enumerate(sales, 1):
             price_txt = sale.get("price_display") or "—"
@@ -920,12 +931,12 @@ def _format_sales_market_block(
             url = sale.get("nft_url") or (
                 f"https://t.me/nft/{slug}" if slug else None
             )
-            title = slug or (f"#{sale.get('number')}" if sale.get("number") else "NFT")
+            title = _sale_number_label(sale)
             if url:
                 link = f"[{title}]({url})"
             else:
                 link = f"`{title}`"
-            lines.append(f"   {i}. {link} — **{price_txt}** · {when}")
+            lines.append(f"   **{i}. {link} · {price_txt} · {when}**")
     return lines
 
 
