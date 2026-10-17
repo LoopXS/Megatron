@@ -855,8 +855,21 @@ def _is_inline_callback(event) -> bool:
         return False
 
 
+def _blank_media_file():
+    """1×1 transparent PNG — Telegram cannot turn media messages into text-only."""
+    raw = (
+        b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
+        b"\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89"
+        b"\x00\x00\x00\nIDATx\x9cc\x00\x01\x00\x00\x05\x00\x01"
+        b"\r\n-\xb4\x00\x00\x00\x00IEND\xaeB`\x82"
+    )
+    bio = io.BytesIO(raw)
+    bio.name = "blank.png"
+    return bio
+
+
 async def _edit_panel(event, text: str, buttons: list):
-    """Edit callback message back to a text panel (drop chart media if any)."""
+    """Edit callback message back to a text panel (strip chart media if possible)."""
     try:
         await event.edit(
             text,
@@ -871,10 +884,30 @@ async def _edit_panel(event, text: str, buttons: list):
             await event.answer()
         return
     except Exception as exc:
-        LOGS.debug("GiftCharts panel edit failed: %s", exc)
+        LOGS.debug("GiftCharts panel text edit failed: %s", exc)
+
+    # Bot API cannot convert a media message into text-only. Replace the chart
+    # with a tiny blank image and put the panel text in the caption.
+    try:
+        await event.edit(
+            text,
+            file=_blank_media_file(),
+            buttons=buttons,
+            parse_mode="md",
+            link_preview=False,
+        )
+        return
+    except MessageNotModifiedError:
+        with contextlib.suppress(Exception):
+            await event.answer()
+        return
+    except Exception as exc:
+        LOGS.debug("GiftCharts blank-media edit failed: %s", exc)
         if _is_inline_callback(event):
             with contextlib.suppress(Exception):
-                await event.answer("Couldn't update panel. Search again with g …", alert=True)
+                await event.answer(
+                    "Couldn't update panel. Search again with g …", alert=True,
+                )
             return
     try:
         await event.delete()
