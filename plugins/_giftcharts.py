@@ -236,11 +236,35 @@ def _share_query(gift: str, model: Optional[str] = None) -> str:
     return "g "
 
 
+def _sanitize_chart_points(points: list[dict]) -> list[dict]:
+    """Drop null/invalid GiftCharts points (longer TFs can include holes)."""
+    out: list[dict] = []
+    for p in points or []:
+        if not isinstance(p, dict):
+            continue
+        raw_val = p.get("value")
+        if raw_val is None or raw_val == "":
+            continue
+        raw_ts = p.get("timestamp")
+        if raw_ts is None or raw_ts == "":
+            continue
+        try:
+            val = float(raw_val)
+            ts = int(raw_ts)
+        except Exception:
+            continue
+        if val != val:  # NaN
+            continue
+        out.append({"value": val, "timestamp": ts})
+    return out
+
+
 def _pct_change(points: list[dict]) -> Optional[float]:
-    if len(points) < 2:
+    clean = _sanitize_chart_points(points)
+    if len(clean) < 2:
         return None
-    first = float(points[0]["value"])
-    last = float(points[-1]["value"])
+    first = float(clean[0]["value"])
+    last = float(clean[-1]["value"])
     if first == 0:
         return None
     return ((last - first) / first) * 100.0
@@ -549,7 +573,7 @@ async def _load_chart_bundle(
         chart = await _fetch_collection_chart(gift_name, timeframe)
         title = gift_name
 
-    points = list((chart or {}).get("data") or [])
+    points = _sanitize_chart_points(list((chart or {}).get("data") or []))
     if not points:
         raise RuntimeError("GiftCharts returned no chart points for this filter.")
 
@@ -621,6 +645,9 @@ def _render_baseline_chart(
     up = (46, 204, 113)
     down = (231, 76, 60)
 
+    points = _sanitize_chart_points(points)
+    if len(points) < 2:
+        raise RuntimeError("Not enough chart points to render.")
     values = np.array([float(p["value"]) for p in points], dtype=np.float64)
     times = [int(p["timestamp"]) for p in points]
     first, last = float(values[0]), float(values[-1])
@@ -744,16 +771,27 @@ def _action_row(token: str, owner_id: int, *, show_back: bool = False) -> list:
         share_q = f"g {raw}"
     else:
         share_q = _share_query(gift, model)
-    row = [
-        Button.switch_inline("🔎 Search again", query="g ", same_peer=True),
-        Button.switch_inline("🔗 Share", query=share_q, same_peer=False),
-    ]
-    if show_back:
-        return [
-            row,
-            [Button.inline("⬅️ Back", data=_back_data(token, owner_id))],
+    rows = [
+        [
+            Button.switch_inline("🔎 Search again", query="g ", same_peer=True),
+            Button.switch_inline("🔗 Share", query=share_q, same_peer=False),
         ]
-    return [row]
+    ]
+    hub_token = sess.get("hub_token")
+    hub_owner = int(sess.get("hub_owner") or owner_id)
+    # Refresh only on the rendered chart image — not Collection/Model pickers.
+    if hub_token and sess.get("chart_stage") == "chart":
+        rows.append(
+            [
+                Button.inline(
+                    "🔄 Refresh",
+                    data=f"gr:r:{hub_owner}:{hub_token}".encode(),
+                )
+            ]
+        )
+    if show_back:
+        rows.append([Button.inline("⬅️ Back", data=_back_data(token, owner_id))])
+    return rows
 
 
 def _picker_buttons(token: str, owner_id: int, *, show_back: bool = False) -> list:
@@ -818,7 +856,9 @@ def _intervals_text(sess: dict, mode: str) -> str:
 
 
 def _caption(bundle: dict[str, Any]) -> str:
-    points = bundle["points"]
+    points = _sanitize_chart_points(bundle.get("points") or [])
+    if not points:
+        return "📈 **Chart**\n_No chart points._"
     last = float(points[-1]["value"])
     change = _pct_change(points)
     ch = f"{change:+.2f}%" if change is not None else "—"
@@ -925,8 +965,22 @@ async def _edit_panel(event, text: str, buttons: list):
 async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token: str):
     sess = _SESSIONS.get(token) or {}
     sess["chart_stage"] = "chart"
+    sess["timeframe"] = bundle.get("timeframe") or sess.get("timeframe") or "24h"
     sess["at"] = time.monotonic()
     _SESSIONS[token] = sess
+    # Keep hub session view in sync so 🔄 Refresh works from Artemis.
+    hub_token = sess.get("hub_token")
+    if hub_token:
+        try:
+            from . import artemis as art
+            hub = art._gift_inline_load(hub_token)
+            if hub is not None:
+                hub["view"] = "chart_out"
+                hub["gc_token"] = token
+                hub["at"] = time.monotonic()
+                art._GIFT_INLINE_SESSIONS[hub_token] = hub
+        except Exception:
+            pass
     show_back = True  # stage 2+ always has Back
     png = await asyncio.to_thread(
         _render_baseline_chart,
@@ -1128,7 +1182,7 @@ async def giftcharts_back_cb(event):
             event,
             art._gift_inline_hub_text(hub),
             art._gift_inline_hub_buttons(
-                hub_owner, hub_token, hub.get("raw") or "",
+                hub_owner, hub_token, hub.get("raw") or "", hub,
             ),
             parse_mode="md",
         )
