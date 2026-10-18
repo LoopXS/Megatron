@@ -46,7 +46,8 @@
 
 • Inline: `@AssisXBot g Collection[, Model][, Backdrop]`
 • Inline: `@AssisXBot g https://t.me/nft/Name-123`
-   Hub: Floor Price 📉 / Gift Chart 📊 / NFT Sales 🧾 → market filters.
+   Hub: Floor Price 📉 / Gift Chart 📊 / NFT Sales 🧾 / Listings 🏷️.
+   NFT links also show (Link) + SeeTG Owner History (Gift Sent).
 
 • `{i}ch Collection[, Model]`
    Send GiftCharts baseline chart in chat.
@@ -134,7 +135,7 @@ from artemis import MRKTClient
 from artemis.exceptions import TradingError, RequestError, AuthError
 from artemis.utils import ton_to_nano, nano_to_ton
 
-from telethon import Button
+from telethon import Button, types as tl_types
 
 from . import (
     heartless_cmd,
@@ -150,6 +151,7 @@ from . import (
 )
 from . import _satellite_tma as sat
 from . import _giftcharts as gc  # charts callbacks register via this import
+from . import _seetg_tma as seetg
 from CythonX._misc import owner_and_sudos
 
 
@@ -593,11 +595,19 @@ def _match_known_name(target, known_names):
 
 
 def _floor_ton(value):
-    """Always `x.xx TON` or `— TON` when floor is missing."""
+    """Price + TON with a single space (no double-spacing)."""
     amount = _as_floor(value)
     if amount is None:
         return "— TON"
     return f"{_ton2(amount)} TON"
+
+
+def _floor_price_code(value):
+    """Markdown code-span price only (TON label stays outside)."""
+    amount = _as_floor(value)
+    if amount is None:
+        return "—"
+    return _ton2(amount)
 
 
 def _gift_full_name(gift):
@@ -5456,8 +5466,9 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
 
     lines = [f"🎁 **Collection:** `{_md(collection)}`"]
     if model:
+        rarity = _md(_rarity_pct(model_rarity))
         lines.append(
-            f"🧩 **Model:** `{_md(model)}` (`{_md(_rarity_pct(model_rarity))}`)"
+            f"🧩 **Model:** `{_md(model)}` (`{rarity}`)"
         )
     if backdrop:
         lines.append(
@@ -5466,26 +5477,38 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
         )
     lines.append("")
     for label, value in _sat_floor_rows(sat_floors):
-        lines.append(f"💰 **{label}:** `{_md(_floor_ton(value))}`")
+        # Price in code, single space, then TON (no extra space inside code).
+        lines.append(
+            f"💰 **{label}:** `{_md(_floor_price_code(value))}` TON"
+        )
     lines.append("")
 
     quick_txt = _ton2(quick) if quick is not None else "—"
     if model and backdrop:
         lines.append(
             f"📊 **Quick Sell Collection + Model + Backdrop:** "
-            f"`{_md(quick_txt)} TON`"
+            f"`{_md(quick_txt)}` TON"
         )
     elif model:
         lines.append(
-            f"📊 **Quick Sell Collection + Model:** `{_md(quick_txt)} TON`"
+            f"📊 **Quick Sell Collection + Model:** `{_md(quick_txt)}` TON"
         )
     else:
         lines.append(
-            f"📊 **Quick Sell Collection:** `{_md(quick_txt)} TON`"
+            f"📊 **Quick Sell Collection:** `{_md(quick_txt)}` TON"
         )
-    # labels already bold via **Label:** above
 
     return "\n".join(lines)
+
+
+def _floor_copy_text(message_md: str) -> str:
+    """Plain-text clipboard payload for floor panel (≤256 chars)."""
+    text = re.sub(r"[*_`]", "", message_md or "")
+    text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
+    text = re.sub(r"[ \t]+\n", "\n", text).strip()
+    if len(text) > 256:
+        text = text[:253] + "..."
+    return text
 
 
 async def _build_gift_info(
@@ -6465,6 +6488,20 @@ def _title_case_name(value: Optional[str]) -> str:
     return " ".join(w.capitalize() for w in text.split())
 
 
+def _gift_inline_nft_url(sess: dict) -> Optional[str]:
+    url = sess.get("nft_url")
+    if url:
+        return str(url)
+    slug = sess.get("slug")
+    if slug:
+        return f"https://t.me/nft/{slug}"
+    raw = sess.get("nft_raw") or sess.get("raw") or ""
+    parsed = _parse_nft_link(raw)
+    if parsed:
+        return f"https://t.me/nft/{parsed[0]}"
+    return None
+
+
 def _gift_inline_info_lines(sess: dict) -> list[str]:
     """Gift-style Collection / Model / Backdrop header lines."""
     lines = [
@@ -6472,9 +6509,13 @@ def _gift_inline_info_lines(sess: dict) -> list[str]:
     ]
     model = sess.get("model")
     if model:
-        lines.append(
+        model_line = (
             f"🧩 **Model:** `{_md_escape_inline(_title_case_name(model))}`"
         )
+        nft_url = _gift_inline_nft_url(sess)
+        if nft_url:
+            model_line += f" ([Link]({nft_url}))"
+        lines.append(model_line)
     backdrop = sess.get("backdrop")
     if backdrop:
         lines.append(
@@ -6491,6 +6532,34 @@ def _gift_inline_floor_picker_text(sess: dict) -> str:
     return "\n".join(_gift_inline_info_lines(sess))
 
 
+def _button_copy(text: str, label: str = "📋 Copy"):
+    """Clipboard button (same KeyboardButtonCopy approach as translate)."""
+    if not text:
+        return None
+    payload = text if len(text) <= 256 else text[:253] + "..."
+    constructor = getattr(tl_types, "KeyboardButtonCopy", None)
+    if constructor is None:
+        return None
+    try:
+        original = Button._is_inline
+        if not getattr(Button, "_heartless_copy_patch", False):
+            def _patched_is_inline(button):
+                if isinstance(button, constructor):
+                    return True
+                return original(button)
+            Button._is_inline = staticmethod(_patched_is_inline)
+            Button._heartless_copy_patch = True
+    except Exception:
+        return None
+    try:
+        return constructor(text=label, copy_text=payload)
+    except TypeError:
+        try:
+            return constructor(label, payload)
+        except Exception:
+            return None
+
+
 def _gift_inline_action_row(
     raw: str,
     *,
@@ -6498,6 +6567,8 @@ def _gift_inline_action_row(
     owner_id: int,
     token: str,
     back_data: bytes | None = None,
+    show_refresh: bool = False,
+    copy_text: str | None = None,
 ):
     rows = [
         [
@@ -6509,13 +6580,27 @@ def _gift_inline_action_row(
             ),
         ]
     ]
+    extra = []
+    if show_refresh:
+        extra.append(
+            Button.inline(
+                "🔄 Refresh",
+                data=f"gr:r:{owner_id}:{token}".encode(),
+            )
+        )
+    copy_btn = _button_copy(copy_text) if copy_text else None
+    if copy_btn is not None:
+        extra.append(copy_btn)
+    if extra:
+        rows.append(extra)
     if show_back:
         data = back_data or f"gf:b:{owner_id}:{token}".encode()
         rows.append([Button.inline("⬅️ Back", data=data)])
     return rows
 
 
-def _gift_inline_hub_buttons(owner_id: int, token: str, raw: str):
+def _gift_inline_hub_buttons(owner_id: int, token: str, raw: str, sess: dict | None = None):
+    sess = sess or {}
     rows = [
         [
             Button.inline(
@@ -6532,8 +6617,21 @@ def _gift_inline_hub_buttons(owner_id: int, token: str, raw: str):
                 "NFT Sales 🧾",
                 data=f"gu:s:{owner_id}:{token}:s".encode(),
             ),
+            Button.inline(
+                "Listings 🏷️",
+                data=f"gu:s:{owner_id}:{token}:l".encode(),
+            ),
         ],
     ]
+    if sess.get("nft_mode") or sess.get("slug") or _gift_inline_nft_url(sess):
+        rows.append(
+            [
+                Button.inline(
+                    "Owner History 📜",
+                    data=f"gu:s:{owner_id}:{token}:h".encode(),
+                )
+            ]
+        )
     rows.extend(
         _gift_inline_action_row(
             raw,
@@ -6545,7 +6643,7 @@ def _gift_inline_hub_buttons(owner_id: int, token: str, raw: str):
     return rows
 
 
-# Inline NFT Sales market keys → (history_key, display label)
+# Inline NFT Sales / Listings market keys → (history_key, display label)
 _GIFT_SALES_MARKETS = (
     ("mrkt", "MRKT"),
     ("portals", "Portal"),
@@ -6558,17 +6656,31 @@ _GIFT_SALES_MARKETS = (
 def _gift_inline_sales_picker_text(sess: dict) -> str:
     lines = _gift_inline_info_lines(sess)
     lines.append("")
-    lines.append("🧾 **NFT Sales** — pick a market for the 10 latest sales.")
+    lines.append("🧾 **Choose one for 10 latest sales**")
     return "\n".join(lines)
 
 
-def _gift_inline_sales_picker_buttons(sess: dict, owner_id: int, token: str):
+def _gift_inline_listings_picker_text(sess: dict) -> str:
+    lines = _gift_inline_info_lines(sess)
+    lines.append("")
+    lines.append("🏷️ **Choose one for 10 latest listings**")
+    return "\n".join(lines)
+
+
+def _gift_inline_market_picker_buttons(
+    sess: dict,
+    owner_id: int,
+    token: str,
+    *,
+    prefix: str,
+    back_data: bytes,
+):
     row1 = []
     row2 = []
     for i, (key, label) in enumerate(_GIFT_SALES_MARKETS):
         btn = Button.inline(
             label,
-            data=f"gs:m:{owner_id}:{token}:{key}".encode(),
+            data=f"{prefix}:{owner_id}:{token}:{key}".encode(),
         )
         if i < 3:
             row1.append(btn)
@@ -6583,10 +6695,26 @@ def _gift_inline_sales_picker_buttons(sess: dict, owner_id: int, token: str):
             show_back=True,
             owner_id=owner_id,
             token=token,
-            back_data=f"gu:h:{owner_id}:{token}".encode(),
+            back_data=back_data,
         )
     )
     return buttons
+
+
+def _gift_inline_sales_picker_buttons(sess: dict, owner_id: int, token: str):
+    return _gift_inline_market_picker_buttons(
+        sess, owner_id, token,
+        prefix="gs:m",
+        back_data=f"gu:h:{owner_id}:{token}".encode(),
+    )
+
+
+def _gift_inline_listings_picker_buttons(sess: dict, owner_id: int, token: str):
+    return _gift_inline_market_picker_buttons(
+        sess, owner_id, token,
+        prefix="gl:m",
+        back_data=f"gu:h:{owner_id}:{token}".encode(),
+    )
 
 
 def _gift_inline_sales_result_buttons(sess: dict, owner_id: int, token: str):
@@ -6596,6 +6724,18 @@ def _gift_inline_sales_result_buttons(sess: dict, owner_id: int, token: str):
         owner_id=owner_id,
         token=token,
         back_data=f"gs:b:{owner_id}:{token}".encode(),
+        show_refresh=True,
+    )
+
+
+def _gift_inline_listings_result_buttons(sess: dict, owner_id: int, token: str):
+    return _gift_inline_action_row(
+        sess.get("raw") or "",
+        show_back=True,
+        owner_id=owner_id,
+        token=token,
+        back_data=f"gl:b:{owner_id}:{token}".encode(),
+        show_refresh=True,
     )
 
 
@@ -6879,6 +7019,9 @@ async def artemis_gift_inline(event):
     owner_id = int(event.sender_id)
     # NFT links: resolve model/backdrop before answering so hub + share show them.
     if parsed.get("nft_mode"):
+        slug = parsed.get("slug")
+        if slug:
+            parsed["nft_url"] = f"https://t.me/nft/{slug}"
         try:
             coll, mod, back = await asyncio.wait_for(
                 _gift_inline_resolve_nft_fast(parsed.get("nft_raw") or raw),
@@ -6896,6 +7039,22 @@ async def artemis_gift_inline(event):
                 parsed["resolved"] = True
         except Exception as e:
             LOGS.debug("Inline g NFT pre-resolve skipped: %s", e)
+        # Best-effort SeeTG history (don't block past Telegram inline timeout).
+        if parsed.get("slug"):
+            try:
+                tmp = {
+                    **parsed,
+                    "owner_id": owner_id,
+                    "nft_mode": True,
+                }
+                tmp = await asyncio.wait_for(
+                    _gift_inline_load_transfer_history(tmp),
+                    timeout=3.5,
+                )
+                if tmp.get("transfer_history_md"):
+                    parsed["transfer_history_md"] = tmp["transfer_history_md"]
+            except Exception as e:
+                LOGS.debug("Inline g SeeTG history skipped: %s", e)
 
     token = _gift_inline_save(
         {
@@ -6919,7 +7078,9 @@ async def artemis_gift_inline(event):
         text=_gift_inline_hub_text(sess),
         parse_mode="md",
         link_preview=False,
-        buttons=_gift_inline_hub_buttons(owner_id, token, sess.get("raw") or ""),
+        buttons=_gift_inline_hub_buttons(
+            owner_id, token, sess.get("raw") or "", sess,
+        ),
     )
     return await _gift_inline_answer(event, [article], cache_time=0)
 
@@ -6957,9 +7118,10 @@ async def _gift_inline_resolve_nft_fast(raw: str):
 async def _gift_inline_resolve_session(sess: dict):
     """Resolve collection/model/backdrop names (and NFT attrs) via MRKT + user TG."""
     await _ensure_artemis_token()
+    extras = {}
     async with MRKTClient(token=ARTEMIS_TOKEN) as client:
         if sess.get("nft_mode"):
-            coll, mod, back, _extras = await _resolve_nft_gift(
+            coll, mod, back, extras = await _resolve_nft_gift(
                 client,
                 sess.get("nft_raw") or sess.get("raw") or "",
                 tg_client=heartless_bot,
@@ -6975,12 +7137,50 @@ async def _gift_inline_resolve_session(sess: dict):
     sess["collection"] = _title_case_name(coll) or coll
     sess["model"] = _title_case_name(mod) if mod else mod
     sess["backdrop"] = _title_case_name(back) if back else back
+    if extras.get("nft_url"):
+        sess["nft_url"] = extras["nft_url"]
+    if extras.get("slug"):
+        sess["slug"] = extras["slug"]
+    elif sess.get("nft_mode"):
+        parsed = _parse_nft_link(sess.get("nft_raw") or sess.get("raw") or "")
+        if parsed:
+            sess["slug"] = parsed[0]
+            sess["nft_url"] = sess.get("nft_url") or f"https://t.me/nft/{parsed[0]}"
     if mod:
         sess["depth"] = max(int(sess.get("depth") or 1), 2)
     if back:
         sess["depth"] = max(int(sess.get("depth") or 1), 3)
     sess["resolved"] = True
     sess["at"] = time.monotonic()
+    return sess
+
+
+async def _gift_inline_load_transfer_history(sess: dict) -> dict:
+    """Attach SeeTG Owner History (Gift Sent only) when session is an NFT link."""
+    from urllib.parse import quote as _quote
+
+    if not sess.get("nft_mode"):
+        return sess
+    slug = sess.get("slug")
+    if not slug:
+        parsed = _parse_nft_link(sess.get("nft_raw") or sess.get("raw") or "")
+        if parsed:
+            slug = parsed[0]
+            sess["slug"] = slug
+    if not slug:
+        return sess
+    see_url = f"https://t.me/seetgbot/nft?startapp={_quote(slug, safe='')}"
+    try:
+        rows = await seetg.fetch_transfer_history(slug, limit=10, sent_only=True)
+        sess["transfer_history_md"] = "\n".join(
+            seetg.format_history_md(rows, nft_url=see_url)
+        )
+    except Exception as e:
+        LOGS.warning("SeeTG owner history failed for %s: %s", slug, e)
+        # Soft-fail: show empty-state copy rather than a scary error panel.
+        sess["transfer_history_md"] = "\n".join(
+            seetg.format_history_md([], nft_url=see_url)
+        )
     return sess
 
 
@@ -6995,9 +7195,9 @@ def _gift_inline_mode_filter(sess: dict, mode: str):
     return coll, mod, back
 
 
-@callback(re.compile(rb"^gu:s:(\d+):([A-Za-z0-9_-]{6,16}):([fcs])$"))
+@callback(re.compile(rb"^gu:s:(\d+):([A-Za-z0-9_-]{6,16}):([fcslh])$"))
 async def artemis_gift_inline_hub_select_cb(event):
-    """Stage 1 → Floor picker / Chart picker / NFT Sales picker."""
+    """Stage 1 → Floor / Chart / Sales / Listings / Owner History."""
     try:
         owner_id = int(event.data_match.group(1))
         token = event.data_match.group(2).decode()
@@ -7023,6 +7223,39 @@ async def artemis_gift_inline_hub_select_cb(event):
         except Exception as e:
             LOGS.warning("g hub NFT resolve failed: %s", e)
             return await event.answer(str(e)[:180], alert=True)
+
+    if choice == "h":
+        if not (sess.get("nft_mode") or sess.get("slug") or _gift_inline_nft_url(sess)):
+            return await event.answer("Owner history needs an NFT link.", alert=True)
+        await event.answer("Owner History…")
+        try:
+            sess = await _gift_inline_load_transfer_history(sess)
+        except Exception as e:
+            LOGS.warning("g owner history failed: %s", e)
+            return await event.answer(str(e)[:180], alert=True)
+        text = sess.get("transfer_history_md") or (
+            "📜 **Owner History**\n\nNo History Found -_-"
+        )
+        # Prepend collection/model header
+        text = "\n".join(
+            [*_gift_inline_info_lines(sess), "", text]
+        )
+        sess["view"] = "history_out"
+        sess["at"] = time.monotonic()
+        _GIFT_INLINE_SESSIONS[token] = sess
+        return await _gift_inline_edit(
+            event,
+            text,
+            _gift_inline_action_row(
+                sess.get("raw") or "",
+                show_back=True,
+                owner_id=owner_id,
+                token=token,
+                back_data=f"gu:h:{owner_id}:{token}".encode(),
+                show_refresh=True,
+            ),
+            parse_mode="md",
+        )
 
     if choice == "f":
         # NFT always has collection+model+backdrop depth once resolved.
@@ -7058,6 +7291,27 @@ async def artemis_gift_inline_hub_select_cb(event):
             event,
             _gift_inline_sales_picker_text(sess),
             _gift_inline_sales_picker_buttons(sess, owner_id, token),
+            parse_mode="md",
+        )
+
+    if choice == "l":
+        if sess.get("nft_mode"):
+            sess["depth"] = 3
+        if not sess.get("resolved"):
+            await event.answer("Resolving…")
+            try:
+                sess = await _gift_inline_resolve_session(sess)
+            except Exception as e:
+                LOGS.warning("g listings resolve failed: %s", e)
+                return await event.answer(str(e)[:180], alert=True)
+        sess["view"] = "listings_pick"
+        sess["at"] = time.monotonic()
+        _GIFT_INLINE_SESSIONS[token] = sess
+        await event.answer("Listings")
+        return await _gift_inline_edit(
+            event,
+            _gift_inline_listings_picker_text(sess),
+            _gift_inline_listings_picker_buttons(sess, owner_id, token),
             parse_mode="md",
         )
 
@@ -7132,7 +7386,9 @@ async def artemis_gift_inline_hub_cb(event):
     return await _gift_inline_edit(
         event,
         _gift_inline_hub_text(sess),
-        _gift_inline_hub_buttons(owner_id, token, sess.get("raw") or ""),
+        _gift_inline_hub_buttons(
+            owner_id, token, sess.get("raw") or "", sess,
+        ),
         parse_mode="md",
     )
 
@@ -7182,15 +7438,18 @@ async def artemis_gift_inline_floor_cb(event):
 
     sess["last_mode"] = mode
     sess["view"] = "floor_out"
+    sess["last_floor_text"] = message
     sess["at"] = time.monotonic()
     _GIFT_INLINE_SESSIONS[token] = sess
-    # Always Back from floor output (stage 3) → floor picker (stage 2).
+    # Floor panel: refresh + copy + back → floor picker.
     buttons = _gift_inline_action_row(
         sess.get("raw") or "",
         show_back=True,
         owner_id=owner_id,
         token=token,
         back_data=f"gf:b:{owner_id}:{token}".encode(),
+        show_refresh=True,
+        copy_text=_floor_copy_text(message),
     )
     return await _gift_inline_edit(event, message, buttons, parse_mode="md")
 
@@ -7251,9 +7510,10 @@ async def artemis_gift_inline_sales_market_cb(event):
         if not sess.get("resolved"):
             sess = await _gift_inline_resolve_session(sess)
             _GIFT_INLINE_SESSIONS[token] = sess
-        coll = sess.get("collection")
-        mod = sess.get("model")
-        back = sess.get("backdrop")
+        # Filter depth matches search: c / c+m / c+m+b
+        depth = int(sess.get("depth") or 1)
+        mode = "cmb" if depth >= 3 else "cm" if depth >= 2 else "c"
+        coll, mod, back = _gift_inline_mode_filter(sess, mode)
         if not coll:
             return await event.answer("Could not resolve collection.", alert=True)
 
@@ -7330,6 +7590,292 @@ async def artemis_gift_inline_sales_back_cb(event):
         _gift_inline_sales_picker_buttons(sess, owner_id, token),
         parse_mode="md",
     )
+
+
+async def _gift_inline_build_listings_text(sess: dict, market_key: str) -> str:
+    label = dict(_GIFT_SALES_MARKETS).get(market_key, market_key.title())
+    depth = int(sess.get("depth") or 1)
+    mode = "cmb" if depth >= 3 else "cm" if depth >= 2 else "c"
+    coll, mod, back = _gift_inline_mode_filter(sess, mode)
+    if not coll:
+        raise ValueError("Could not resolve collection.")
+    listings = await sat._latest_listings_for_market(
+        coll, market_key, mod, back, limit=10,
+    )
+    lines = [
+        "🏷️ **Listings**",
+        "",
+        *_gift_inline_info_lines(sess),
+        "",
+        f"🏪 **10 Latest {label} Listings**",
+        "",
+    ]
+    mkey = sat._norm_market_key(market_key)
+    no_time_markets = {"telegram", "tg", "getgems"}
+    buy_markets = {"mrkt", "portals", "tonnel"}
+    if not listings:
+        lines.append("**No Listing Found -_-**")
+    else:
+        for i, row in enumerate(listings, 1):
+            price_txt = row.get("price_display") or "—"
+            slug = row.get("slug") or ""
+            url = row.get("nft_url") or (
+                f"https://t.me/nft/{slug}" if slug else None
+            )
+            title = sat._sale_number_label(row)
+            if url:
+                link = f"[{_md_escape_inline(title)}]({url})"
+            else:
+                link = f"`{_md_escape_inline(title)}`"
+            # MRKT / Portal / Tonnel: hyperlinked (buy) next to NFT #
+            buy_url = row.get("buy_url")
+            if mkey in buy_markets and buy_url:
+                link = f"{link} ([{_md_escape_inline('buy')}]({buy_url}))"
+            parts = [f"**{i}. {link} · {_md_escape_inline(price_txt)}**"]
+            # Telegram / Getgems have no listing time in Satellite — omit the dash.
+            if mkey not in no_time_markets:
+                when = sat._fmt_sold_at(row.get("listed_at"))
+                if when:
+                    parts[0] = (
+                        f"**{i}. {link} · {_md_escape_inline(price_txt)} · "
+                        f"{_md_escape_inline(when)}**"
+                    )
+            lines.append(parts[0])
+    return "\n".join(lines)
+
+
+@callback(
+    re.compile(
+        rb"^gl:m:(\d+):([A-Za-z0-9_-]{6,16}):(mrkt|portals|tonnel|telegram|getgems)$"
+    )
+)
+async def artemis_gift_inline_listings_market_cb(event):
+    """Listings market → 10 latest transferable listings (skip premarket)."""
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+        market_key = event.data_match.group(3).decode()
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    label = dict(_GIFT_SALES_MARKETS).get(market_key, market_key.title())
+    await event.answer(f"{label} listings…")
+    try:
+        if not sess.get("resolved"):
+            sess = await _gift_inline_resolve_session(sess)
+            _GIFT_INLINE_SESSIONS[token] = sess
+        text = await _gift_inline_build_listings_text(sess, market_key)
+    except Exception as e:
+        LOGS.warning("Inline g listings failed: %s", e)
+        return await event.answer(str(e)[:180], alert=True)
+
+    sess["view"] = "listings_out"
+    sess["listings_market"] = market_key
+    sess["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = sess
+    return await _gift_inline_edit(
+        event,
+        text,
+        _gift_inline_listings_result_buttons(sess, owner_id, token),
+        parse_mode="md",
+    )
+
+
+@callback(re.compile(rb"^gl:b:(\d+):([A-Za-z0-9_-]{6,16})$"))
+async def artemis_gift_inline_listings_back_cb(event):
+    """Listings result → listings market picker."""
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    sess["view"] = "listings_pick"
+    sess["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = sess
+    await event.answer("Back")
+    return await _gift_inline_edit(
+        event,
+        _gift_inline_listings_picker_text(sess),
+        _gift_inline_listings_picker_buttons(sess, owner_id, token),
+        parse_mode="md",
+    )
+
+
+@callback(re.compile(rb"^gr:r:(\d+):([A-Za-z0-9_-]{6,16})$"))
+async def artemis_gift_inline_refresh_cb(event):
+    """Re-fetch the active floor / sales / listings / chart panel."""
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    view = sess.get("view") or ""
+    await event.answer("Refreshing…")
+
+    try:
+        if view == "floor_out":
+            mode = sess.get("last_mode") or "c"
+            if not sess.get("resolved") or sess.get("nft_mode"):
+                sess = await _gift_inline_resolve_session(sess)
+            coll, mod, back = _gift_inline_mode_filter(sess, mode)
+            await _ensure_artemis_token()
+            async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+                message = await _build_gift_floor_only(client, coll, mod, back)
+            sess["last_floor_text"] = message
+            sess["at"] = time.monotonic()
+            _GIFT_INLINE_SESSIONS[token] = sess
+            return await _gift_inline_edit(
+                event,
+                message,
+                _gift_inline_action_row(
+                    sess.get("raw") or "",
+                    show_back=True,
+                    owner_id=owner_id,
+                    token=token,
+                    back_data=f"gf:b:{owner_id}:{token}".encode(),
+                    show_refresh=True,
+                    copy_text=_floor_copy_text(message),
+                ),
+                parse_mode="md",
+            )
+
+        if view == "sales_out":
+            market_key = sess.get("sales_market") or "mrkt"
+            if not sess.get("resolved"):
+                sess = await _gift_inline_resolve_session(sess)
+            depth = int(sess.get("depth") or 1)
+            mode = "cmb" if depth >= 3 else "cm" if depth >= 2 else "c"
+            coll, mod, back = _gift_inline_mode_filter(sess, mode)
+            label = dict(_GIFT_SALES_MARKETS).get(market_key, market_key.title())
+            sales = await sat._latest_sales_for_market(
+                coll, market_key, mod, back, limit=10,
+            )
+            lines = [
+                "🧾 **NFT Sales**",
+                "",
+                *_gift_inline_info_lines(sess),
+                "",
+                f"🏪 **10 Latest {label} Sales**",
+                "",
+            ]
+            if not sales:
+                lines.append("**No Sale Found -_-**")
+            else:
+                for i, sale in enumerate(sales, 1):
+                    price_txt = sale.get("price_display") or "—"
+                    when = sat._fmt_sold_at(sale.get("sold_at")) or "—"
+                    slug = sale.get("slug") or ""
+                    url = sale.get("nft_url") or (
+                        f"https://t.me/nft/{slug}" if slug else None
+                    )
+                    title = sat._sale_number_label(sale)
+                    if url:
+                        link = f"[{_md_escape_inline(title)}]({url})"
+                    else:
+                        link = f"`{_md_escape_inline(title)}`"
+                    lines.append(
+                        f"**{i}. {link} · {_md_escape_inline(price_txt)} · "
+                        f"{_md_escape_inline(when)}**"
+                    )
+            sess["at"] = time.monotonic()
+            _GIFT_INLINE_SESSIONS[token] = sess
+            return await _gift_inline_edit(
+                event,
+                "\n".join(lines),
+                _gift_inline_sales_result_buttons(sess, owner_id, token),
+                parse_mode="md",
+            )
+
+        if view == "listings_out":
+            market_key = sess.get("listings_market") or "mrkt"
+            if not sess.get("resolved"):
+                sess = await _gift_inline_resolve_session(sess)
+            text = await _gift_inline_build_listings_text(sess, market_key)
+            sess["at"] = time.monotonic()
+            _GIFT_INLINE_SESSIONS[token] = sess
+            return await _gift_inline_edit(
+                event,
+                text,
+                _gift_inline_listings_result_buttons(sess, owner_id, token),
+                parse_mode="md",
+            )
+
+        if view == "history_out":
+            sess = await _gift_inline_load_transfer_history(sess)
+            text = sess.get("transfer_history_md") or (
+                "📜 **Owner History**\n\nNo History Found -_-"
+            )
+            text = "\n".join([*_gift_inline_info_lines(sess), "", text])
+            sess["at"] = time.monotonic()
+            _GIFT_INLINE_SESSIONS[token] = sess
+            return await _gift_inline_edit(
+                event,
+                text,
+                _gift_inline_action_row(
+                    sess.get("raw") or "",
+                    show_back=True,
+                    owner_id=owner_id,
+                    token=token,
+                    back_data=f"gu:h:{owner_id}:{token}".encode(),
+                    show_refresh=True,
+                ),
+                parse_mode="md",
+            )
+
+        # Chart panels live in giftcharts session
+        gc_token = sess.get("gc_token")
+        if gc_token and view in ("chart_root", "chart_out", "chart"):
+            gc_sess = gc._load_session(gc_token)
+            if not gc_sess:
+                return await event.answer("Chart session expired.", alert=True)
+            tf = gc_sess.get("timeframe") or "24h"
+            gift_q, model_q = gc._chart_queries(gc_sess)
+            bundle = await gc._load_chart_bundle(gift_q, model_q, tf)
+            return await gc._deliver_chart(
+                event, bundle, owner_id=owner_id, token=gc_token,
+            )
+
+        if sess.get("nft_mode"):
+            sess = await _gift_inline_resolve_session(sess)
+            sess["view"] = "hub"
+            sess["at"] = time.monotonic()
+            _GIFT_INLINE_SESSIONS[token] = sess
+            return await _gift_inline_edit(
+                event,
+                _gift_inline_hub_text(sess),
+                _gift_inline_hub_buttons(
+                    owner_id, token, sess.get("raw") or "", sess,
+                ),
+                parse_mode="md",
+            )
+    except Exception as e:
+        LOGS.warning("Inline g refresh failed: %s", e)
+        return await event.answer(str(e)[:180], alert=True)
+
+    return await event.answer("Nothing to refresh.", alert=True)
 
 
 async def _notify_owner_asst_cmd(event):
