@@ -57,6 +57,11 @@ _HISTORY_LOCK = asyncio.Lock()
 _HISTORY_NEXT_AT = 0.0
 _AUTH_CACHE: dict[str, Any] = {"token": None, "at": 0.0}
 _COLLECTIONS_CACHE: dict[str, Any] = {"at": 0.0, "names": []}
+_TON_USD_CACHE: dict[str, Any] = {"rate": None, "at": 0.0}
+# Satellite miniapp: stars ≈ ton_price * ton_usd / STAR_USD
+STAR_USD = 0.015
+TON_USD_URL = "https://tonapi.io/v2/rates?tokens=ton&currencies=usd"
+TON_USD_TTL = 10 * 60
 
 
 # ---------------------------------------------------------------------------
@@ -501,37 +506,132 @@ def _history_content(payload: Any) -> list[dict]:
     return [r for r in rows if isinstance(r, dict)]
 
 
+def _as_boolish(value: Any) -> Optional[bool]:
+    """Normalize API bools that sometimes arrive as 0/1/strings."""
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        if value == 0:
+            return False
+        if value == 1:
+            return True
+        return None
+    text = str(value).strip().lower()
+    if text in ("false", "0", "no", "off"):
+        return False
+    if text in ("true", "1", "yes", "on"):
+        return True
+    return None
+
+
 def _sale_is_stars(row: dict) -> bool:
-    """True when the sale is priced in Stars (Telegram market)."""
-    cur = str(row.get("currency") or "").strip().upper()
+    """True when priced in Stars.
+
+    Sales history: ``currency == "STARS"`` + star ``originalPrice``.
+    Telegram search listings: ``isTonOnly === false`` (currency stays ``ton``;
+    Satellite estimates stars from TON×rate — see ``_stars_from_ton``).
+    """
+    cur = str(
+        row.get("currency")
+        or row.get("priceCurrency")
+        or row.get("originalCurrency")
+        or ""
+    ).strip().upper()
     if cur in ("STARS", "STAR", "XTR"):
         return True
-    if row.get("isStars") is True:
+    if _as_boolish(row.get("isStars")) is True:
         return True
-    # Mini app uses isTonOnly=False for stars listings/sales.
-    if row.get("isTonOnly") is False:
+    # Mini app: isStars := (isTonOnly === false). Check BEFORE currency=ton reject —
+    # /search/tg always ships currency="ton" even for Stars listings.
+    ton_only = _as_boolish(row.get("isTonOnly"))
+    if ton_only is False:
         return True
+    if ton_only is True:
+        return False
+    if cur in ("TON", "GRAM", "NANOTON", "USDT"):
+        return False
     return False
 
 
-def _sale_price_display(row: dict) -> str:
+def _fmt_stars(raw: Any) -> Optional[str]:
+    try:
+        stars = float(raw)
+    except Exception:
+        return None
+    # nano-style integers are TON, not Stars — reject those here.
+    if stars > 1_000_000:
+        return None
+    if stars <= 0:
+        return None
+    if abs(stars - round(stars)) < 1e-9:
+        return f"{int(round(stars))} Stars"
+    return f"{stars:.2f}".rstrip("0").rstrip(".") + " Stars"
+
+
+async def _ton_usd_rate() -> Optional[float]:
+    """USD per TON (Satellite uses tonapi.io rates)."""
+    now = time.monotonic()
+    cached = _TON_USD_CACHE.get("rate")
+    if cached and now - float(_TON_USD_CACHE.get("at") or 0) < TON_USD_TTL:
+        return float(cached)
+    try:
+        async with aiohttp.ClientSession(timeout=HTTP_TIMEOUT) as session:
+            async with session.get(TON_USD_URL) as resp:
+                if resp.status != 200:
+                    return float(cached) if cached else None
+                data = await resp.json(content_type=None)
+        prices = (
+            (((data or {}).get("rates") or {}).get("TON") or {}).get("prices") or {}
+        )
+        rate = float(prices.get("USD"))
+        if rate > 0:
+            _TON_USD_CACHE["rate"] = rate
+            _TON_USD_CACHE["at"] = now
+            return rate
+    except Exception as e:
+        LOGS.debug("TON/USD rate fetch failed: %s", e)
+    return float(cached) if cached else None
+
+
+def _stars_from_ton(ton_price: float, ton_usd: float) -> Optional[int]:
+    """Mirror Satellite miniapp: stars = ton * tonUsd / 0.015."""
+    try:
+        if ton_price <= 0 or ton_usd <= 0:
+            return None
+        stars = ton_price * ton_usd / STAR_USD
+        if stars <= 0:
+            return None
+        return max(int(round(stars)), 1)
+    except Exception:
+        return None
+
+
+def _sale_price_display(row: dict, *, ton_usd: Optional[float] = None) -> str:
     """
-    Human price for a sale row.
-    Telegram Stars sales → star amount (not TON equivalent).
+    Human price for a sale/listing row.
+    Stars sales (currency=STARS) → originalPrice star count.
+    Stars listings (isTonOnly=false) → estimated stars from TON.
     """
     if _sale_is_stars(row):
-        raw = row.get("originalPrice")
-        if raw is None:
-            raw = row.get("price")
-        try:
-            stars = float(raw)
-            if stars > 1_000_000:
-                stars = stars / 1_000_000_000.0
-            if stars == int(stars):
-                return f"{int(stars)} Stars"
-            return f"{stars:.2f}".rstrip("0").rstrip(".") + " Stars"
-        except Exception:
-            pass
+        cur = str(row.get("currency") or "").strip().upper()
+        # Real star count from sales history
+        if cur in ("STARS", "STAR", "XTR"):
+            for key in ("originalPrice", "starsPrice", "priceInStars", "price"):
+                shown = _fmt_stars(row.get(key))
+                if shown:
+                    return shown
+        # Listing search: estimate stars from TON (Satellite card formula)
+        ton_price = _item_price(row)
+        if ton_price is not None and ton_usd:
+            stars = _stars_from_ton(ton_price, ton_usd)
+            if stars is not None:
+                return f"{stars} Stars"
+        # Fall back: try raw originalPrice if it looks like a star count
+        shown = _fmt_stars(row.get("originalPrice"))
+        if shown:
+            return shown
     price = _item_price(row)
     if price is None:
         return "—"
@@ -981,3 +1081,148 @@ async def _latest_sales_for_market(
         if len(matched) >= limit:
             break
     return _trim_sales(matched, limit)
+
+
+def _listing_ts(item: dict) -> float:
+    for key in (
+        "listedAt", "listingAt", "createdAt", "updatedAt",
+        "date", "timestamp", "ts",
+    ):
+        raw = item.get(key)
+        if raw is None or raw == "":
+            continue
+        try:
+            if isinstance(raw, (int, float)):
+                ts = float(raw)
+                return ts / 1000.0 if ts > 1e12 else ts
+            text = str(raw).replace("Z", "+00:00")
+            return datetime.fromisoformat(text).timestamp()
+        except Exception:
+            continue
+    return 0.0
+
+
+def _listing_buy_url(item: dict, market_hint: Optional[str] = None) -> Optional[str]:
+    """Marketplace buy deep-link (Satellite miniapp templates)."""
+    market = _norm_market_key(item.get("market") or market_hint)
+    gift_id = item.get("giftId") or item.get("gift_id") or item.get("id")
+    # Prefer explicit link from API when present (getgems / telegram).
+    direct = item.get("link") or item.get("url") or item.get("buyUrl")
+    if market == "portals" and gift_id:
+        return (
+            f"https://t.me/portals_market_bot/market"
+            f"?startapp=gift_{gift_id}_kqh2rm"
+        )
+    if market == "mrkt" and gift_id:
+        return f"https://t.me/mrkt/app?startapp={gift_id}"
+    if market == "tonnel" and gift_id:
+        return f"https://t.me/tonnel_network_bot/gift?startapp={gift_id}"
+    if direct:
+        return str(direct)
+    return None
+
+
+def _listing_row(
+    item: dict,
+    *,
+    market_hint: Optional[str] = None,
+    ton_usd: Optional[float] = None,
+) -> dict:
+    slug = str(
+        item.get("slug")
+        or item.get("giftSlug")
+        or item.get("name")
+        or ""
+    ).strip()
+    number = item.get("number") or item.get("num")
+    if number is None and slug and "-" in slug:
+        with contextlib.suppress(Exception):
+            number = int(slug.rsplit("-", 1)[-1])
+    price = _item_price(item)
+    market = item.get("market") or market_hint or "?"
+    listed_at = (
+        item.get("listedAt")
+        or item.get("listingAt")
+        or item.get("createdAt")
+        or item.get("updatedAt")
+        or item.get("date")
+    )
+    # Telegram / Getgems search rows have no listing timestamp in Satellite.
+    mkey = _norm_market_key(market)
+    if mkey in ("telegram", "tg", "getgems"):
+        listed_at = None
+    # Telegram: isTonOnly===false → Stars (estimate via ton×usd/0.015).
+    is_stars = bool(mkey in ("telegram", "tg") and _sale_is_stars(item))
+    if is_stars:
+        # tonapi rate preferred; fall back so Stars listings never flip to TON.
+        rate = ton_usd or _TON_USD_CACHE.get("rate") or 1.5
+        price_display = _sale_price_display(item, ton_usd=float(rate))
+        if not str(price_display).endswith("Stars"):
+            price_display = (
+                f"{_fmt_ton(price)} TON" if price is not None else "—"
+            )
+            is_stars = False
+    else:
+        price_display = (
+            f"{_fmt_ton(price)} TON" if price is not None else "—"
+        )
+    return {
+        "market": market,
+        "slug": slug,
+        "number": number,
+        "gift_id": item.get("giftId") or item.get("gift_id") or item.get("id"),
+        "price": price,
+        "price_display": price_display,
+        "is_stars": is_stars,
+        "listed_at": listed_at,
+        "nft_url": f"https://t.me/nft/{slug}" if slug else None,
+        "buy_url": _listing_buy_url(item, market_hint=market),
+        "raw": item,
+    }
+
+
+def _search_key_for_hist(market_hist_key: str) -> str:
+    """Map sales history key → Satellite /search/ path key."""
+    want = _norm_market_key(market_hist_key)
+    for search_key, _label, hist_key in SAT_MARKETS:
+        if _norm_market_key(hist_key) == want or _norm_market_key(search_key) == want:
+            return search_key
+    return want
+
+
+async def _latest_listings_for_market(
+    collection: str,
+    market_hist_key: str,
+    model: Optional[str] = None,
+    backdrop: Optional[str] = None,
+    *,
+    limit: int = 10,
+) -> list[dict]:
+    """
+    Up to ``limit`` transferable (non-premarket) listings for one market.
+    Uses Satellite ``/search/{market}/{collection}`` — skips timer/locked rows.
+    """
+    auth = await _get_auth()
+    search_key = _search_key_for_hist(market_hist_key)
+    try:
+        items = await _search_market(
+            search_key, collection, model, backdrop, auth=auth,
+        )
+    except Exception as e:
+        LOGS.info(
+            "Satellite listings %s/%s failed: %s",
+            collection, market_hist_key, e,
+        )
+        return []
+    transferable = [it for it in items if isinstance(it, dict) and not _is_premarket(it)]
+    transferable.sort(key=_listing_ts, reverse=True)
+    ton_usd = None
+    if _norm_market_key(market_hist_key) in ("telegram", "tg"):
+        with contextlib.suppress(Exception):
+            ton_usd = await _ton_usd_rate()
+    out = [
+        _listing_row(it, market_hint=market_hist_key, ton_usd=ton_usd)
+        for it in transferable
+        if _item_price(it) is not None
+    ]
+    return out[: max(int(limit or 10), 1)]
