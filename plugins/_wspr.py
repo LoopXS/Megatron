@@ -2,24 +2,27 @@
 
 A secret message is created through the assistant's inline mode:
 
-    @YourAssistantBot wspr <username|id> <message>
+    @YourAssistantBot wspr <username|id>[,<username|id>...] <message>
 
-The inline result carries three buttons — *Read Message*, *Readers* and
+Recipients are comma separated (up to :data:`MAX_RECIPIENTS`); the same
+form works with the ``.wspr`` command, e.g. ``.wspr @a,@b Hello``.  The
+inline result carries three buttons — *Read Message*, *Readers* and
 *Delete Message*.  Secrets live in an in-memory :class:`SecretStore`
-keyed by the inline result id, so a restart invalidates old buttons
-(they report that the secret is gone), which is also what the previous
-implementation did.
+keyed by a random id, so a restart invalidates old buttons (they report
+that the secret is gone), which is also what the previous implementation
+did.
 
 Every click on *Read Message* is attributed to a role:
 
-* ``recipient`` — the intended recipient, the only one allowed to read;
+* ``recipient`` — any intended recipient, the only ones allowed to read;
 * ``author`` — the user who created the secret, exempt from the
   "unauthorized" list because they already know the content;
 * ``unauthorized`` — anybody else.  Their identity is recorded (name,
   username, id, time and click count) and they get a refusal alert.
 
 The *Readers* button shows the creator (or the bot owner/sudos) a private
-list of everybody who clicked, flagging unauthorized readers.
+list of everybody who clicked, flagging unauthorized readers.  Only the
+author (or the bot owner/sudos) may delete a secret — recipients cannot.
 """
 
 import re
@@ -62,6 +65,9 @@ MAX_SECRETS = 1000
 READER_LIMIT = 50
 ALERT_LIMIT = 200
 
+# A secret can be addressed to at most this many recipients at once.
+MAX_RECIPIENTS = 10
+
 _KEY_RE = re.compile(r"^[0-9a-f]{6,64}$")
 
 
@@ -101,38 +107,39 @@ class Reader:
         self.clicks += 1
 
 
+class Recipient:
+    """One intended recipient of a secret message."""
+
+    __slots__ = ("user_id", "name", "username")
+
+    def __init__(self, user_id, name=None, username=None):
+        self.user_id = int(user_id)
+        self.name = name or f"User {user_id}"
+        self.username = username
+
+
 class Secret:
     """A secret message and everyone who tried to open it."""
 
     __slots__ = (
         "key",
-        "recipient_id",
-        "recipient_name",
-        "recipient_username",
+        "recipients",
         "author_id",
         "text",
         "created",
         "readers",
     )
 
-    def __init__(
-        self,
-        key,
-        recipient_id,
-        author_id,
-        text,
-        recipient_name="",
-        recipient_username=None,
-        now=None,
-    ):
+    def __init__(self, key, author_id, text, recipients, now=None):
         self.key = key
-        self.recipient_id = int(recipient_id)
-        self.recipient_name = recipient_name or f"User {recipient_id}"
-        self.recipient_username = recipient_username
         self.author_id = int(author_id)
         self.text = text
+        self.recipients = {r.user_id: r for r in recipients}
         self.created = time.time() if now is None else now
         self.readers = {}
+
+    def is_recipient(self, user_id):
+        return user_id in self.recipients
 
     def unauthorized(self):
         return [
@@ -161,25 +168,9 @@ class SecretStore:
             oldest = min(self._items.values(), key=lambda s: s.created)
             self._items.pop(oldest.key, None)
 
-    def add(
-        self,
-        key,
-        recipient_id,
-        author_id,
-        text,
-        recipient_name="",
-        recipient_username=None,
-    ):
+    def add(self, key, author_id, text, recipients):
         now = self._clock()
-        secret = Secret(
-            key,
-            recipient_id,
-            author_id,
-            text,
-            recipient_name,
-            recipient_username,
-            now=now,
-        )
+        secret = Secret(key, author_id, text, recipients, now=now)
         self._items[key] = secret
         self._prune(now)
         return secret
@@ -216,11 +207,36 @@ STORE = SecretStore()
 
 def role_for(secret, user_id):
     """Classify a clicker relative to ``secret``."""
-    if user_id == secret.recipient_id:
+    if secret.is_recipient(user_id):
         return ROLE_RECIPIENT
     if user_id == secret.author_id:
         return ROLE_AUTHOR
     return ROLE_UNAUTHORIZED
+
+
+def split_recipients_and_message(raw):
+    """Split ``"@a,@b hello"`` into ``(["@a", "@b"], "hello")``.
+
+    Recipients are comma separated; anything after the first space that is
+    not part of an open (comma-terminated) list is the message.  Spaces
+    after commas are tolerated, duplicates are removed and order kept.
+    """
+    raw = (raw or "").strip()
+    if not raw:
+        return [], ""
+    blob, _, rest = raw.partition(" ")
+    message = rest.strip()
+    while blob.endswith(",") and message:
+        nxt, _, message = message.partition(" ")
+        blob += nxt
+        message = message.strip()
+    seen = set()
+    targets = []
+    for token in (part.strip() for part in blob.split(",")):
+        if token and token not in seen:
+            seen.add(token)
+            targets.append(token)
+    return targets, message
 
 
 def _display_name(sender):
@@ -248,22 +264,27 @@ def _elapsed(seconds):
     return f"{days}d"
 
 
-def _reader_line(reader, unauthorized=False):
-    name = inline_mention(
-        types.User(
-            id=reader.user_id,
-            first_name=reader.name,
-            username=reader.username,
-        )
+def _mention_person(user_id, name, username=None):
+    """Markdown mention for a stored (id, name, username) triple."""
+    return inline_mention(
+        types.User(id=user_id, first_name=name, username=username)
     )
+
+
+def _reader_line(reader):
+    name = _mention_person(reader.user_id, reader.name, reader.username)
     parts = [f"• {name} — `{reader.user_id}`"]
     if reader.username:
         parts.append(f"@{reader.username}")
     parts.append(f"🕒 {_elapsed(time.time() - reader.first_seen)} ago")
     if reader.clicks > 1:
         parts.append(f"{reader.clicks}×")
-    if unauthorized:
-        parts.append(get_string("wspr_14"))
+    marker = {
+        ROLE_UNAUTHORIZED: get_string("wspr_14"),
+        ROLE_RECIPIENT: get_string("wspr_17"),
+    }.get(reader.role)
+    if marker:
+        parts.append(marker)
     return " ".join(parts)
 
 
@@ -273,18 +294,18 @@ def format_readers(secret):
     if not readers:
         return get_string("wspr_8")
 
+    people = ", ".join(
+        _mention_person(r.user_id, r.name, r.username)
+        for r in secret.recipients.values()
+    )
     lines = [
         get_string("wspr_9"),
-        (
-            f"{get_string('wspr_12')} "
-            f"{inline_mention(types.User(id=secret.recipient_id, first_name=secret.recipient_name, username=secret.recipient_username))}"
-            f" — `{secret.recipient_id}`"
-        ),
+        f"{get_string('wspr_12')} {people}",
         get_string("wspr_13").format(len(readers)),
         "",
     ]
     for reader in readers[:READER_LIMIT]:
-        lines.append(_reader_line(reader, reader.role == ROLE_UNAUTHORIZED))
+        lines.append(_reader_line(reader))
     if len(readers) > READER_LIMIT:
         lines.append(get_string("wspr_10").format(len(readers) - READER_LIMIT))
     return "\n".join(lines)
@@ -303,33 +324,45 @@ def _buttons(key):
 
 @heartless_cmd(pattern="wspr( (.*)|$)")
 async def wspr_cmd(e):
+    raw = (e.pattern_match.group(1) or "").strip()
     if e.reply_to_msg_id:
         reply = await e.get_reply_message()
         sender = getattr(reply, "sender", None) if reply else None
         username = getattr(sender, "username", None) if sender else None
         target = f"@{username}" if username else (reply.sender_id if reply else "")
+        targets = [target] if target else []
+        message = raw
     else:
-        target = (e.pattern_match.group(1) or "").strip()
-    if not target:
+        targets, message = split_recipients_and_message(raw)
+
+    if not targets:
         return await e.eor(get_string("wspr_3"))
+    if message:
+        query = f"wspr {','.join(str(t) for t in targets)} {message}"
+    elif len(targets) == 1:
+        query = f"msg {targets[0]}"
+    else:
+        return await e.eor(get_string("wspr_16"))
+
     try:
-        results = await e.client.inline_query(asst.me.username, f"msg {target}")
+        results = await e.client.inline_query(asst.me.username, query)
     except BotResponseTimeoutError:
         return await e.eor(get_string("help_2").format(HNDLR))
     except BotInlineDisabledError:
         return await e.eor(get_string("help_3"))
     if not results:
-        return await e.eor(get_string("wspr_4").format(target))
+        return await e.eor(get_string("wspr_4").format(targets[0]))
     await results[0].click(e.chat_id, reply_to=e.reply_to_msg_id, hide_via=True)
     return await e.delete()
 
 
 @in_pattern("wspr", owner=True)
 async def wspr_inline(e):
-    parts = e.text.split(maxsplit=2)
-    try:
-        query = parts[1]
-    except IndexError:
+    parts = e.text.split(maxsplit=1)
+    raw = parts[1] if len(parts) > 1 else ""
+    targets, message = split_recipients_and_message(raw)
+
+    if not targets:
         return await e.answer(
             [
                 await e.builder.article(
@@ -339,19 +372,29 @@ async def wspr_inline(e):
                 )
             ]
         )
+    if len(targets) > MAX_RECIPIENTS:
+        text = get_string("wspr_15").format(MAX_RECIPIENTS)
+        return await e.answer([await e.builder.article(title=text, text=text)])
 
-    try:
-        entity = await heartless_bot.get_entity(int(query) if query.isdigit() else query)
-        if not isinstance(entity, types.User):
-            raise ValueError("Invalid Username.")
-    except Exception as er:
-        LOGS.exception(er)
-        name = get_string("wspr_4").format(query)
-        return await e.answer([await e.builder.article(title=name, text=name)])
+    recipients = []
+    seen = set()
+    for target in targets:
+        try:
+            entity = await heartless_bot.get_entity(
+                int(target) if target.isdigit() else target
+            )
+            if not isinstance(entity, types.User):
+                raise ValueError("Invalid Username.")
+        except Exception as er:
+            LOGS.exception(er)
+            text = get_string("wspr_4").format(target)
+            return await e.answer([await e.builder.article(title=text, text=text)])
+        if entity.id in seen:
+            continue
+        seen.add(entity.id)
+        recipients.append(Recipient(entity.id, entity.first_name, entity.username))
 
-    try:
-        message = parts[2]
-    except IndexError:
+    if not message:
         return await e.answer(
             [
                 await e.builder.article(
@@ -362,19 +405,14 @@ async def wspr_inline(e):
         )
 
     key = new_key()
-    STORE.add(
-        key,
-        recipient_id=entity.id,
-        author_id=e.query.user_id,
-        text=message,
-        recipient_name=entity.first_name,
-        recipient_username=entity.username,
+    STORE.add(key, author_id=e.query.user_id, text=message, recipients=recipients)
+    people = ", ".join(
+        _mention_person(r.user_id, r.name, r.username) for r in recipients
     )
-    label = entity.username or entity.first_name
     article = await e.builder.article(
-        title=entity.first_name,
+        title=recipients[0].name,
         description=message,
-        text=get_string("wspr_1").format(label),
+        text=get_string("wspr_1").format(people),
         buttons=_buttons(key),
     )
     await e.answer([article])
@@ -505,7 +543,9 @@ async def _handle_readers(e, secret):
 
 
 async def _handle_delete(e, secret, role):
-    if role not in (ROLE_AUTHOR, ROLE_RECIPIENT) and e.sender_id not in owner_and_sudos():
+    # Only the original sender (and the bot owner/sudos) may delete a
+    # secret; intended recipients are explicitly not allowed to.
+    if role != ROLE_AUTHOR and e.sender_id not in owner_and_sudos():
         return await e.answer(get_string("wspr_5"), alert=True)
     STORE.remove(secret.key)
     try:
