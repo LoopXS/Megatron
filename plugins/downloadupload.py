@@ -34,7 +34,7 @@ from . import (
 )
 async def down(event):
     matched = event.pattern_match.group(1).strip()
-    msg = await event.eor(get_string("udl_4"))
+    msg = await event.eor(get_pstring("udl_4", "load"))
     if not matched:
         return await eor(msg, get_string("udl_5"), time=5)
     try:
@@ -121,7 +121,7 @@ async def download(event):
         )
     e = dt.now()
     t = time_formatter(((e - s).seconds) * 1000)
-    await xx.eor(get_string("udl_2").format(file_name, t))
+    await xx.eor(get_pstring("udl_2", "load", "load", "load").format(file_name, t))
 
 
 @heartless_cmd(

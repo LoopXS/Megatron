@@ -813,16 +813,22 @@ def cusmo(document_id):
 def get_pstring(string: str, *emojis: str) -> Any:
     """Format a localized string with optional premium custom emojis.
 
-    Uses ``heartless_bot.me`` (already loaded at startup) instead of
-    ``asyncio.run(get_me())``, which breaks under Python 3.14.
+    Reads the *raw* translation (``{p}`` placeholders intact) so they can be
+    swapped for custom emojis.  Uses ``heartless_bot.me`` (already loaded at
+    startup) instead of ``asyncio.run(get_me())``, which breaks under Python
+    3.14.
+
+    Every ``{p}`` is always consumed: non-premium strips it, premium replaces
+    it per emoji, and any leftover ``{p}`` (fewer emojis than placeholders) is
+    stripped so a later ``str.format()`` can never raise ``KeyError: 'p'``.
     """
     from .. import heartless_bot
-    from strings import get_string
+    from strings import _get_string_raw
 
     me = getattr(heartless_bot, "me", None)
     is_premium = bool(getattr(me, "premium", False))
 
-    resolved = get_string(string)
+    resolved = _get_string_raw(string)
     if isinstance(resolved, str) and resolved.startswith("Warning"):
         resolved = string
 
@@ -836,4 +842,4 @@ def get_pstring(string: str, *emojis: str) -> Any:
             result = result[:position] + cusmo(emoji) + result[position + 3 :]
         else:
             result += cusmo(emoji)
-    return result
+    return result.replace("{p}", "")

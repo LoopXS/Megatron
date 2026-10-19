@@ -36,7 +36,12 @@ def load(file):
 load(PATH.format(ULTConfig.lang))
 
 
-def get_string(key: str, _res: bool = True) -> Any:
+def _get_string_raw(key: str, _res: bool = True) -> Any:
+    """Look up a translation leaving ``{p}`` premium placeholders intact.
+
+    Only :func:`CythonX.fns.helper.get_pstring` should use this; everything
+    else wants :func:`get_string`, which neutralises ``{p}``.
+    """
     lang = ULTConfig.lang or "en"
     try:
         return languages[lang][key]
@@ -62,6 +67,22 @@ def get_string(key: str, _res: bool = True) -> Any:
         if not _res:
             return None
         return languages["en"].get(key) or f"Failed to load language string '{key}'"
+
+
+def get_string(key: str, _res: bool = True) -> Any:
+    """Look up a translation, neutralising any premium ``{p}`` placeholder.
+
+    ``{p}`` is resolved by :func:`CythonX.fns.helper.get_pstring`.  A caller
+    that goes through plain ``get_string`` cannot resolve it, and leaving it
+    in place both leaks a literal ``{p}`` to the user and makes a later
+    ``str.format()`` raise ``KeyError: 'p'``.  Dropping it here makes
+    ``get_string`` safe for every caller; premium emojis are still injected
+    by ``get_pstring`` through :func:`_get_string_raw`.
+    """
+    value = _get_string_raw(key, _res)
+    if isinstance(value, str) and "{p}" in value:
+        return value.replace("{p}", "")
+    return value
 
 
 def get_help(key):
