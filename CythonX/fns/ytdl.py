@@ -19,7 +19,7 @@ except ImportError:
     LOGS.warning("'spotifysearch' not installed!")
     
 try:
-    from youtubesearchpython import Playlist, VideosSearch
+    from .ytsearch import Playlist, VideosSearch
 except ImportError:
     Playlist, VideosSearch = None, None
 

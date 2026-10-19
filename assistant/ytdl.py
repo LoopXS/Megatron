@@ -22,7 +22,7 @@ from CythonX.fns.ytdl import dler, get_buttons, get_formats
 from . import LOGS, asst, callback, in_pattern, udB
 
 try:
-    from youtubesearchpython import VideosSearch
+    from CythonX.fns.ytsearch import VideosSearch
 except ImportError:
     LOGS.info("'youtubesearchpython' not installed!")
     VideosSearch = None
@@ -51,9 +51,28 @@ async def _(event):
         await event.answer([fuk])
         return
     results = []
-    search = VideosSearch(string, limit=50)
-    nub = search.result()
-    nibba = nub["result"]
+    try:
+        search = VideosSearch(string, limit=50)
+        nibba = search.result()["result"]
+    except Exception as er:
+        LOGS.exception(er)
+        return await event.answer(
+            [
+                await event.builder.article(
+                    title="No Results",
+                    thumb=wb(ytt, 0, "image/jpeg", []),
+                    text=(
+                        "**YᴏᴜTᴜʙᴇ Sᴇᴀʀᴄʜ**\n\n"
+                        f"Couldn't fetch results for `{string}`. Please try again."
+                    ),
+                    buttons=Button.switch_inline(
+                        "Sᴇᴀʀᴄʜ Aɢᴀɪɴ",
+                        query="yt ",
+                        same_peer=True,
+                    ),
+                )
+            ]
+        )
     for v in nibba:
         ids = v["id"]
         link = _yt_base_url + ids
