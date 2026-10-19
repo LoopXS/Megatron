@@ -1,4 +1,30 @@
+"""Secret ("whisper") messages with reader tracking.
+
+A secret message is created through the assistant's inline mode:
+
+    @YourAssistantBot wspr <username|id> <message>
+
+The inline result carries three buttons — *Read Message*, *Readers* and
+*Delete Message*.  Secrets live in an in-memory :class:`SecretStore`
+keyed by the inline result id, so a restart invalidates old buttons
+(they report that the secret is gone), which is also what the previous
+implementation did.
+
+Every click on *Read Message* is attributed to a role:
+
+* ``recipient`` — the intended recipient, the only one allowed to read;
+* ``author`` — the user who created the secret, exempt from the
+  "unauthorized" list because they already know the content;
+* ``unauthorized`` — anybody else.  Their identity is recorded (name,
+  username, id, time and click count) and they get a refusal alert.
+
+The *Readers* button shows the creator (or the bot owner/sudos) a private
+list of everybody who clicked, flagging unauthorized readers.
+"""
+
 import re
+import time
+from secrets import token_hex
 
 from telethon import Button
 from telethon.errors.rpcerrorlist import (
@@ -9,191 +35,480 @@ from telethon.errors.rpcerrorlist import (
 from telethon.tl import types
 from telethon.tl.functions.users import GetFullUserRequest as gu
 
+from CythonX._misc import owner_and_sudos
+
 from . import (
     HNDLR,
     LOGS,
     asst,
     callback,
     get_string,
-    in_pattern,
-    inline_mention,
     heartless_bot,
     heartless_cmd,
+    in_pattern,
+    inline_mention,
 )
 
-buddhhu = {}
+# Roles a clicker can have for a given secret.
+ROLE_RECIPIENT = "recipient"
+ROLE_AUTHOR = "author"
+ROLE_UNAUTHORIZED = "unauthorized"
+
+# A secret expires after a day and the store keeps at most this many.
+SECRET_TTL = 24 * 60 * 60
+MAX_SECRETS = 1000
+
+# Readers shown in one report, and the popup length Telegram accepts.
+READER_LIMIT = 50
+ALERT_LIMIT = 200
+
+_KEY_RE = re.compile(r"^[0-9a-f]{6,64}$")
 
 
-@heartless_cmd(
-    pattern="wspr( (.*)|$)",
-)
-async def _(e):
+def new_key():
+    """Return a fresh, URL/pattern safe id for a secret message."""
+    return token_hex(8)
+
+
+class Reader:
+    """One user who clicked *Read Message* on a secret."""
+
+    __slots__ = (
+        "user_id",
+        "name",
+        "username",
+        "first_seen",
+        "last_seen",
+        "clicks",
+        "role",
+    )
+
+    def __init__(self, user_id, name, username, role, now):
+        self.user_id = user_id
+        self.name = name or f"User {user_id}"
+        self.username = username
+        self.role = role
+        self.first_seen = now
+        self.last_seen = now
+        self.clicks = 1
+
+    def touch(self, name, username, role, now):
+        # Keep the freshest identity in case the user renamed themselves.
+        self.name = name or self.name
+        self.username = username or self.username
+        self.role = role
+        self.last_seen = now
+        self.clicks += 1
+
+
+class Secret:
+    """A secret message and everyone who tried to open it."""
+
+    __slots__ = (
+        "key",
+        "recipient_id",
+        "recipient_name",
+        "recipient_username",
+        "author_id",
+        "text",
+        "created",
+        "readers",
+    )
+
+    def __init__(
+        self,
+        key,
+        recipient_id,
+        author_id,
+        text,
+        recipient_name="",
+        recipient_username=None,
+        now=None,
+    ):
+        self.key = key
+        self.recipient_id = int(recipient_id)
+        self.recipient_name = recipient_name or f"User {recipient_id}"
+        self.recipient_username = recipient_username
+        self.author_id = int(author_id)
+        self.text = text
+        self.created = time.time() if now is None else now
+        self.readers = {}
+
+    def unauthorized(self):
+        return [
+            reader
+            for reader in self.readers.values()
+            if reader.role == ROLE_UNAUTHORIZED
+        ]
+
+
+class SecretStore:
+    """Bounded, self-expiring in-memory store of secret messages."""
+
+    def __init__(self, ttl=SECRET_TTL, max_entries=MAX_SECRETS, clock=time.time):
+        self.ttl = ttl
+        self.max_entries = max_entries
+        self._clock = clock
+        self._items = {}
+
+    def _expired(self, secret, now):
+        return self.ttl is not None and now - secret.created > self.ttl
+
+    def _prune(self, now):
+        for key in [k for k, v in self._items.items() if self._expired(v, now)]:
+            self._items.pop(key, None)
+        while len(self._items) > self.max_entries:
+            oldest = min(self._items.values(), key=lambda s: s.created)
+            self._items.pop(oldest.key, None)
+
+    def add(
+        self,
+        key,
+        recipient_id,
+        author_id,
+        text,
+        recipient_name="",
+        recipient_username=None,
+    ):
+        now = self._clock()
+        secret = Secret(
+            key,
+            recipient_id,
+            author_id,
+            text,
+            recipient_name,
+            recipient_username,
+            now=now,
+        )
+        self._items[key] = secret
+        self._prune(now)
+        return secret
+
+    def get(self, key):
+        secret = self._items.get(key)
+        if secret is None:
+            return None
+        now = self._clock()
+        if self._expired(secret, now):
+            self._items.pop(key, None)
+            return None
+        return secret
+
+    def remove(self, key):
+        return self._items.pop(key, None) is not None
+
+    def record(self, key, user_id, name, username, role):
+        secret = self.get(key)
+        if secret is None:
+            return None
+        now = self._clock()
+        reader = secret.readers.get(user_id)
+        if reader is None:
+            reader = Reader(user_id, name, username, role, now)
+            secret.readers[user_id] = reader
+        else:
+            reader.touch(name, username, role, now)
+        return reader
+
+
+STORE = SecretStore()
+
+
+def role_for(secret, user_id):
+    """Classify a clicker relative to ``secret``."""
+    if user_id == secret.recipient_id:
+        return ROLE_RECIPIENT
+    if user_id == secret.author_id:
+        return ROLE_AUTHOR
+    return ROLE_UNAUTHORIZED
+
+
+def _display_name(sender):
+    if sender is None:
+        return None
+    return getattr(sender, "first_name", None) or getattr(sender, "title", None)
+
+
+def _username(sender):
+    return getattr(sender, "username", None) if sender is not None else None
+
+
+def _elapsed(seconds):
+    """Compact human duration for the reader report (``0s``, ``5m``, ``2h``)."""
+    seconds = max(0, int(seconds))
+    if seconds < 60:
+        return f"{seconds}s"
+    minutes, seconds = divmod(seconds, 60)
+    if minutes < 60:
+        return f"{minutes}m"
+    hours, minutes = divmod(minutes, 60)
+    if hours < 24:
+        return f"{hours}h"
+    days, hours = divmod(hours, 24)
+    return f"{days}d"
+
+
+def _reader_line(reader, unauthorized=False):
+    name = inline_mention(
+        types.User(
+            id=reader.user_id,
+            first_name=reader.name,
+            username=reader.username,
+        )
+    )
+    parts = [f"• {name} — `{reader.user_id}`"]
+    if reader.username:
+        parts.append(f"@{reader.username}")
+    parts.append(f"🕒 {_elapsed(time.time() - reader.first_seen)} ago")
+    if reader.clicks > 1:
+        parts.append(f"{reader.clicks}×")
+    if unauthorized:
+        parts.append(get_string("wspr_14"))
+    return " ".join(parts)
+
+
+def format_readers(secret):
+    """Render the reader report for ``secret`` as Markdown."""
+    readers = sorted(secret.readers.values(), key=lambda r: r.first_seen)
+    if not readers:
+        return get_string("wspr_8")
+
+    lines = [
+        get_string("wspr_9"),
+        (
+            f"{get_string('wspr_12')} "
+            f"{inline_mention(types.User(id=secret.recipient_id, first_name=secret.recipient_name, username=secret.recipient_username))}"
+            f" — `{secret.recipient_id}`"
+        ),
+        get_string("wspr_13").format(len(readers)),
+        "",
+    ]
+    for reader in readers[:READER_LIMIT]:
+        lines.append(_reader_line(reader, reader.role == ROLE_UNAUTHORIZED))
+    if len(readers) > READER_LIMIT:
+        lines.append(get_string("wspr_10").format(len(readers) - READER_LIMIT))
+    return "\n".join(lines)
+
+
+def _buttons(key):
+    """Buttons shared by every viewer of a secret message."""
+    return [
+        [
+            Button.inline("• Rᥱᥲɗ 𐌑ᥱssᥲgᥱ", data=f"read_{key}"),
+            Button.inline(get_string("wspr_7"), data=f"readers_{key}"),
+        ],
+        [Button.inline("𑀥ᥱᥣᥱᴛᥱ 𐌑ᥱssᥲgᥱ •", data=f"del_{key}")],
+    ]
+
+
+@heartless_cmd(pattern="wspr( (.*)|$)")
+async def wspr_cmd(e):
     if e.reply_to_msg_id:
-        okk = await e.get_reply_message()
-        put = f"@{okk.sender.username}" if okk.sender.username else okk.sender_id
+        reply = await e.get_reply_message()
+        sender = getattr(reply, "sender", None) if reply else None
+        username = getattr(sender, "username", None) if sender else None
+        target = f"@{username}" if username else (reply.sender_id if reply else "")
     else:
-        put = e.pattern_match.group(1).strip()
-    if put:
-        try:
-            results = await e.client.inline_query(asst.me.username, f"msg {put}")
-        except BotResponseTimeoutError:
-            return await e.eor(
-                get_string("help_2").format(HNDLR),
-            )
-        except BotInlineDisabledError:
-            return await e.eor(get_string("help_3"))
-        await results[0].click(e.chat_id, reply_to=e.reply_to_msg_id, hide_via=True)
-        return await e.delete()
-    await e.eor(get_string("wspr_3"))
+        target = (e.pattern_match.group(1) or "").strip()
+    if not target:
+        return await e.eor(get_string("wspr_3"))
+    try:
+        results = await e.client.inline_query(asst.me.username, f"msg {target}")
+    except BotResponseTimeoutError:
+        return await e.eor(get_string("help_2").format(HNDLR))
+    except BotInlineDisabledError:
+        return await e.eor(get_string("help_3"))
+    if not results:
+        return await e.eor(get_string("wspr_4").format(target))
+    await results[0].click(e.chat_id, reply_to=e.reply_to_msg_id, hide_via=True)
+    return await e.delete()
 
 
 @in_pattern("wspr", owner=True)
-async def _(e):
-    iuser = e.query.user_id
-    zzz = e.text.split(maxsplit=2)
+async def wspr_inline(e):
+    parts = e.text.split(maxsplit=2)
     try:
-        query = zzz[1]
-        if query.isdigit():
-            query = int(query)
-        logi = await heartless_bot.get_entity(query)
-        if not isinstance(logi, types.User):
+        query = parts[1]
+    except IndexError:
+        return await e.answer(
+            [
+                await e.builder.article(
+                    title="Give Username",
+                    description="You Didn't Type Username (or) ID.",
+                    text="You Didn't Type Username (or) ID.",
+                )
+            ]
+        )
+
+    try:
+        entity = await heartless_bot.get_entity(int(query) if query.isdigit() else query)
+        if not isinstance(entity, types.User):
             raise ValueError("Invalid Username.")
-    except IndexError:
-        sur = await e.builder.article(
-            title="Give Username",
-            description="You Didn't Type Username (or) ID.",
-            text="You Didn't Type Username (or) ID.",
-        )
-        return await e.answer([sur])
-    except ValueError as er:
+    except Exception as er:
         LOGS.exception(er)
-        sur = await e.builder.article(
-            title="User Not Found",
-            description="Make sure username or id is correct.",
-            text="Make sure username or id is correct.",
-        )
-        return await e.answer([sur])
+        name = get_string("wspr_4").format(query)
+        return await e.answer([await e.builder.article(title=name, text=name)])
+
     try:
-        desc = zzz[2]
+        message = parts[2]
     except IndexError:
-        sur = await e.builder.article(
-            title="ᴛʏᴘᴇ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ", text="ᴛʏᴘᴇ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ"
+        return await e.answer(
+            [
+                await e.builder.article(
+                    title="ᴛʏᴘᴇ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ",
+                    text="ᴛʏᴘᴇ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ",
+                )
+            ]
         )
-        return await e.answer([sur])
-    button = [
-        [
-            Button.inline("• Rᥱᥲɗ 𐌑ᥱssᥲgᥱ", data=f"dd_{e.id}"),
-            Button.inline("𑀥ᥱᥣᥱᴛᥱ 𐌑ᥱssᥲgᥱ •", data=f"del_{e.id}"),
-        ],
-        [
-            Button.switch_inline(
-                "✗ 𐌽ᥱᥕ 𐍃ᥱᥴrᥱᴛ ✗",
-                query=f"wspr {logi.username or logi.id}",
-                same_peer=True,
-            )
-        ],
-    ]
-    us = logi.username or logi.first_name
-    sur = await e.builder.article(
-        title=logi.first_name,
-        description=desc,
-        text=get_string("wspr_1").format(us),
-        buttons=button,
+
+    key = new_key()
+    STORE.add(
+        key,
+        recipient_id=entity.id,
+        author_id=e.query.user_id,
+        text=message,
+        recipient_name=entity.first_name,
+        recipient_username=entity.username,
     )
-    buddhhu.update({e.id: [logi.id, iuser, desc]})
-    await e.answer([sur])
+    label = entity.username or entity.first_name
+    article = await e.builder.article(
+        title=entity.first_name,
+        description=message,
+        text=get_string("wspr_1").format(label),
+        buttons=_buttons(key),
+    )
+    await e.answer([article])
 
 
 @in_pattern("msg", owner=True)
-async def _(e):
-    zzz = e.text.split(maxsplit=1)
-    desc = "Touch me"
+async def msg_inline(e):
+    parts = e.text.split(maxsplit=1)
     try:
-        query = zzz[1]
-        if query.isdigit():
-            query = int(query)
-        logi = await heartless_bot(gu(id=query))
-        user = logi.users[0]
-        mention = inline_mention(user)
-        x = user.status
-        if isinstance(x, types.UserStatusOnline):
-            status = "Online"
-        elif isinstance(x, types.UserStatusOffline):
-            status = "Offline"
-        elif isinstance(x, types.UserStatusRecently):
-            status = "Last Seen Recently"
-        elif isinstance(x, types.UserStatusLastMonth):
-            status = "Last seen months ago"
-        elif isinstance(x, types.UserStatusLastWeek):
-            status = "Last seen weeks ago"
-        else:
-            status = "Can't Tell"
-        text = f"**Ⲛⲁⲙⲉ:**    `{user.first_name}`\n"
-        text += f"**ⲒⲆ:**    `{user.id}`\n"
-        if user.username:
-            text += f"**Ⳙⲋⲉʀⲛⲁⲙⲉ:**    `{user.username}`\n"
-            url = f"https://t.me/{user.username}"
-        else:
-            text += f"**Mention:**    `{mention}`\n"
-            url = f"tg://user?id={user.id}"
-        text += f"**Ⲋⲧⲁⲧυⲋ:**    `{status}`\n"
-        text += f"**Ⲁⲃⲟυⲧ:**    `{logi.full_user.about}`"
-        button = [
-            Button.url("Privᴀᴛᴇ", url=url),
-            Button.switch_inline(
-                "Sᴇᴄrᴇᴛ Mᴇssᴀgᴇ",
-                query=f"wspr {query} Hello 👋",
-                same_peer=True,
-            ),
-        ]
-        sur = e.builder.article(
-            title=user.first_name,
-            description=desc,
-            text=text,
-            buttons=button,
-        )
+        query = parts[1]
+        entity = await heartless_bot(gu(id=int(query) if query.isdigit() else query))
+        user = entity.users[0]
     except IndexError:
-        sur = e.builder.article(
-            title="Give Username",
-            description="You Didn't Type Username or id.",
-            text="You Didn't Type Username or id.",
+        return await e.answer(
+            [
+                await e.builder.article(
+                    title="Give Username",
+                    description="You Didn't Type Username or id.",
+                    text="You Didn't Type Username or id.",
+                )
+            ]
         )
     except BaseException as er:
         LOGS.exception(er)
-        name = get_string("wspr_4").format(query)
-        sur = e.builder.article(
-            title=name,
-            text=name,
-        )
+        name = get_string("wspr_4").format(parts[1] if len(parts) > 1 else "")
+        return await e.answer([await e.builder.article(title=name, text=name)])
 
-    await e.answer([sur])
-
-
-@callback(
-    re.compile(
-        "dd_(.*)",
-    ),
-)
-async def _(e):
-    ids = int(e.pattern_match.group(1).strip().decode("UTF-8"))
-    if buddhhu.get(ids):
-        if e.sender_id in buddhhu[ids]:
-            await e.answer(buddhhu[ids][-1], alert=True)
-        else:
-            await e.answer("don't spy at my secret message bitch", alert=True)
+    status = getattr(user, "status", None)
+    if isinstance(status, types.UserStatusOnline):
+        state = "Online"
+    elif isinstance(status, types.UserStatusOffline):
+        state = "Offline"
+    elif isinstance(status, types.UserStatusRecently):
+        state = "Last Seen Recently"
+    elif isinstance(status, types.UserStatusLastMonth):
+        state = "Last seen months ago"
+    elif isinstance(status, types.UserStatusLastWeek):
+        state = "Last seen weeks ago"
     else:
-        await e.answer(get_string("wspr_2"), alert=True)
+        state = "Can't Tell"
+
+    url = (
+        f"https://t.me/{user.username}"
+        if user.username
+        else f"tg://user?id={user.id}"
+    )
+    text = f"**Ⲛⲁⲙⲉ:**    `{user.first_name}`\n**ⲒⲆ:**    `{user.id}`\n"
+    if user.username:
+        text += f"**Ⳙⲋⲉʀⲛⲁⲙⲉ:**    `{user.username}`\n"
+    else:
+        text += f"**Mention:**    `{inline_mention(user)}`\n"
+    about = entity.full_user.about or "—"
+    text += f"**Ⲋⲧⲁⲧυⲋ:**    `{state}`\n**Ⲁⲃⲟυⲧ:**    `{about}`"
+
+    article = await e.builder.article(
+        title=user.first_name,
+        description="Touch me",
+        text=text,
+        buttons=[
+            Button.url("Privᴀᴛᴇ", url=url),
+            Button.switch_inline(
+                "Sᴇᴄrᴇᴛ Mᴇssᴀɢᴇ",
+                query=f"wspr {query} Hello 👋",
+                same_peer=True,
+            ),
+        ],
+    )
+    await e.answer([article])
 
 
-@callback(re.compile("del_(.*)"))
-async def _(e):
-    ids = int(e.pattern_match.group(1).strip().decode("UTF-8"))
-    if buddhhu.get(ids):
-        if e.sender_id in buddhhu[ids]:
-            buddhhu.pop(ids)
-            try:
-                await e.edit(get_string("wspr_2"))
-            except MessageNotModifiedError:
-                pass
-        else:
-            await e.answer(get_string("wspr_5"), alert=True)
+def _group_text(value):
+    """Telethon returns callback pattern groups as bytes; tests pass str."""
+    if isinstance(value, (bytes, bytearray)):
+        return value.decode("UTF-8", "replace")
+    return str(value)
+
+
+@callback(re.compile(r"^(readers|read|del)_(.+)$"))
+async def whisper_callback(e):
+    action = _group_text(e.pattern_match.group(1))
+    key = _group_text(e.pattern_match.group(2))
+    if not _KEY_RE.match(key):
+        return await e.answer(get_string("wspr_2"), alert=True)
+
+    secret = STORE.get(key)
+    if secret is None:
+        return await e.answer(get_string("wspr_2"), alert=True)
+
+    sender = await e.get_sender()
+    role = role_for(secret, e.sender_id)
+
+    if action == "read":
+        # Only "Read Message" clicks count as reads; opening the reader
+        # list or deleting the secret must not show up in that list.
+        STORE.record(key, e.sender_id, _display_name(sender), _username(sender), role)
+        return await _handle_read(e, secret, role)
+    if action == "readers":
+        return await _handle_readers(e, secret)
+    return await _handle_delete(e, secret, role)
+
+
+async def _handle_read(e, secret, role):
+    if role == ROLE_UNAUTHORIZED:
+        return await e.answer(get_string("wspr_6"), alert=True)
+    if len(secret.text) <= ALERT_LIMIT:
+        return await e.answer(secret.text, alert=True)
+    try:
+        await e.client.send_message(e.sender_id, secret.text)
+    except Exception as er:
+        LOGS.exception(er)
+        return await e.answer(secret.text[:ALERT_LIMIT], alert=True)
+    await e.answer(get_string("wspr_11"), alert=True)
+
+
+async def _handle_readers(e, secret):
+    allowed = {secret.author_id, *owner_and_sudos()}
+    if e.sender_id not in allowed:
+        return await e.answer(get_string("wspr_5"), alert=True)
+    report = format_readers(secret)
+    try:
+        await e.client.send_message(e.sender_id, report, parse_mode="md")
+    except Exception as er:
+        # The bot may not have a private chat with the viewer. Fall back to
+        # a compact popup instead of losing the information entirely.
+        LOGS.exception(er)
+        return await e.answer(report[:ALERT_LIMIT], alert=True)
+    await e.answer()
+
+
+async def _handle_delete(e, secret, role):
+    if role not in (ROLE_AUTHOR, ROLE_RECIPIENT) and e.sender_id not in owner_and_sudos():
+        return await e.answer(get_string("wspr_5"), alert=True)
+    STORE.remove(secret.key)
+    try:
+        await e.edit(get_string("wspr_2"), buttons=None)
+    except MessageNotModifiedError:
+        pass
