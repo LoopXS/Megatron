@@ -20,9 +20,11 @@ Every click on *Read Message* is attributed to a role:
 * ``unauthorized`` — anybody else.  Their identity is recorded (name,
   username, id, time and click count) and they get a refusal alert.
 
-The *Readers* button shows the creator (or the bot owner/sudos) a private
-list of everybody who clicked, flagging unauthorized readers.  Only the
-author (or the bot owner/sudos) may delete a secret — recipients cannot.
+The *Readers* button immediately pops up an alert-sized report of everybody
+who clicked, flagging unauthorized readers; nothing is sent to the assistant.
+When a recipient reads, the original message is edited to show who has read
+it.  Only the bot owner/sudos may delete a secret — the creator and the
+recipients cannot.
 """
 
 import re
@@ -61,8 +63,7 @@ ROLE_UNAUTHORIZED = "unauthorized"
 SECRET_TTL = 24 * 60 * 60
 MAX_SECRETS = 1000
 
-# Readers shown in one report, and the popup length Telegram accepts.
-READER_LIMIT = 50
+# The popup length Telegram accepts for a callback answer.
 ALERT_LIMIT = 200
 
 # A secret can be addressed to at most this many recipients at once.
@@ -249,21 +250,6 @@ def _username(sender):
     return getattr(sender, "username", None) if sender is not None else None
 
 
-def _elapsed(seconds):
-    """Compact human duration for the reader report (``0s``, ``5m``, ``2h``)."""
-    seconds = max(0, int(seconds))
-    if seconds < 60:
-        return f"{seconds}s"
-    minutes, seconds = divmod(seconds, 60)
-    if minutes < 60:
-        return f"{minutes}m"
-    hours, minutes = divmod(minutes, 60)
-    if hours < 24:
-        return f"{hours}h"
-    days, hours = divmod(hours, 24)
-    return f"{days}d"
-
-
 def _mention_person(user_id, name, username=None):
     """Markdown mention for a stored (id, name, username) triple."""
     return inline_mention(
@@ -271,44 +257,74 @@ def _mention_person(user_id, name, username=None):
     )
 
 
-def _reader_line(reader):
-    name = _mention_person(reader.user_id, reader.name, reader.username)
-    parts = [f"• {name} — `{reader.user_id}`"]
+def _popup_line(reader):
+    """One compact, plain-text reader line for the callback popup."""
+    who = reader.name
     if reader.username:
-        parts.append(f"@{reader.username}")
-    parts.append(f"🕒 {_elapsed(time.time() - reader.first_seen)} ago")
-    if reader.clicks > 1:
-        parts.append(f"{reader.clicks}×")
-    marker = {
-        ROLE_UNAUTHORIZED: get_string("wspr_14"),
-        ROLE_RECIPIENT: get_string("wspr_17"),
-    }.get(reader.role)
-    if marker:
-        parts.append(marker)
-    return " ".join(parts)
+        who = f"{who} (@{reader.username})"
+    marker = "✅" if reader.role == ROLE_RECIPIENT else "⚠️"
+    return f"• {who} {marker}"
 
 
-def format_readers(secret):
-    """Render the reader report for ``secret`` as Markdown."""
+def format_readers(secret, limit=ALERT_LIMIT):
+    """Render a compact, plain-text reader report sized for an alert popup.
+
+    Telegram caps callback answers at :data:`ALERT_LIMIT` characters, so long
+    lists are trimmed with an "…and N more" suffix instead of overflowing.
+    """
     readers = sorted(secret.readers.values(), key=lambda r: r.first_seen)
     if not readers:
         return get_string("wspr_8")
 
+    lines = [get_string("wspr_19").format(len(readers))]
+    shown = 0
+    for reader in readers:
+        line = _popup_line(reader)
+        remaining = len(readers) - shown - 1
+        suffix = get_string("wspr_10").format(remaining).strip() if remaining else ""
+        projected = "\n".join(lines + [line] + ([suffix] if suffix else []))
+        if len(projected) > limit:
+            break
+        lines.append(line)
+        shown += 1
+
+    if shown < len(readers):
+        suffix = get_string("wspr_10").format(len(readers) - shown).strip()
+        while shown and len("\n".join(lines + [suffix])) > limit:
+            lines.pop()
+            shown -= 1
+        lines.append(suffix)
+    return "\n".join(lines)[:limit]
+
+
+def format_secret_message(secret):
+    """The message shown in chat, annotated with who has read it so far."""
     people = ", ".join(
         _mention_person(r.user_id, r.name, r.username)
         for r in secret.recipients.values()
     )
-    lines = [
-        get_string("wspr_9"),
-        f"{get_string('wspr_12')} {people}",
-        get_string("wspr_13").format(len(readers)),
-        "",
+    text = get_string("wspr_1").format(people)
+    readers = [
+        reader
+        for reader in sorted(secret.readers.values(), key=lambda r: r.first_seen)
+        if reader.role == ROLE_RECIPIENT
     ]
-    for reader in readers[:READER_LIMIT]:
-        lines.append(_reader_line(reader))
-    if len(readers) > READER_LIMIT:
-        lines.append(get_string("wspr_10").format(len(readers) - READER_LIMIT))
-    return "\n".join(lines)
+    if readers:
+        who = ", ".join(
+            _mention_person(r.user_id, r.name, r.username) for r in readers
+        )
+        text += "\n\n" + get_string("wspr_18").format(who)
+    return text
+
+
+async def _update_read_status(e, secret):
+    """Edit the original message to show which recipients have read it."""
+    try:
+        await e.edit(format_secret_message(secret), buttons=_buttons(secret.key))
+    except MessageNotModifiedError:
+        pass
+    except Exception as er:
+        LOGS.exception(er)
 
 
 def _buttons(key):
@@ -511,44 +527,51 @@ async def whisper_callback(e):
         return await _handle_read(e, secret, role)
     if action == "readers":
         return await _handle_readers(e, secret)
-    return await _handle_delete(e, secret, role)
+    return await _handle_delete(e, secret)
 
 
 async def _handle_read(e, secret, role):
     if role == ROLE_UNAUTHORIZED:
         return await e.answer(get_string("wspr_6"), alert=True)
+
+    # Reveal the secret.  Answering here first also marks the callback as
+    # answered, so the ``answer()`` scheduled by ``e.edit`` below is a no-op.
     if len(secret.text) <= ALERT_LIMIT:
-        return await e.answer(secret.text, alert=True)
-    try:
-        await e.client.send_message(e.sender_id, secret.text)
-    except Exception as er:
-        LOGS.exception(er)
-        return await e.answer(secret.text[:ALERT_LIMIT], alert=True)
-    await e.answer(get_string("wspr_11"), alert=True)
+        await e.answer(secret.text, alert=True)
+    else:
+        try:
+            await e.client.send_message(e.sender_id, secret.text)
+        except Exception as er:
+            LOGS.exception(er)
+            await e.answer(secret.text[:ALERT_LIMIT], alert=True)
+        else:
+            await e.answer(get_string("wspr_11"), alert=True)
+
+    # Show in the original message that an intended recipient has opened it.
+    # The author already knows the content and unauthorized users are refused,
+    # so only recipients are reflected there.
+    if role == ROLE_RECIPIENT:
+        await _update_read_status(e, secret)
 
 
 async def _handle_readers(e, secret):
     allowed = {secret.author_id, *owner_and_sudos()}
     if e.sender_id not in allowed:
         return await e.answer(get_string("wspr_5"), alert=True)
-    report = format_readers(secret)
-    try:
-        await e.client.send_message(e.sender_id, report, parse_mode="md")
-    except Exception as er:
-        # The bot may not have a private chat with the viewer. Fall back to
-        # a compact popup instead of losing the information entirely.
-        LOGS.exception(er)
-        return await e.answer(report[:ALERT_LIMIT], alert=True)
-    await e.answer()
+    # Show the statistics straight away as an inline popup; nothing is sent
+    # through (or to) the assistant.
+    return await e.answer(format_readers(secret), alert=True)
 
 
-async def _handle_delete(e, secret, role):
-    # Only the original sender (and the bot owner/sudos) may delete a
-    # secret; intended recipients are explicitly not allowed to.
-    if role != ROLE_AUTHOR and e.sender_id not in owner_and_sudos():
+async def _handle_delete(e, secret):
+    # Deletion is reserved for the bot owner and its sudos.  Even the user
+    # who created the secret — and every recipient — is refused.
+    if e.sender_id not in owner_and_sudos():
         return await e.answer(get_string("wspr_5"), alert=True)
     STORE.remove(secret.key)
     try:
-        await e.edit(get_string("wspr_2"), buttons=None)
+        # An empty inline markup explicitly clears the keyboard; passing
+        # ``None`` would leave the now-dead buttons in place.
+        await e.edit(get_string("wspr_2"), buttons=types.ReplyInlineMarkup([]))
     except MessageNotModifiedError:
         pass
