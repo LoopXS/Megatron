@@ -30,7 +30,12 @@ from yt_dlp import YoutubeDL
 from .helper import download_file, humanbytes, run_async, time_formatter, cusmo, get_pstring
 from .tools import set_attributes
 from .ytdl_cookies import find_cookie_file, first_existing_cookie
-from .ytdl_errors import is_youtube_auth_error, one_line_error
+from .ytdl_errors import (
+    is_youtube_auth_error,
+    is_youtube_js_challenge_error,
+    one_line_error,
+)
+from .ytdl_runtime import JS_RUNTIME_HINT, detect_js_runtimes
 
 
 # ---------------Spotify---------------#
@@ -562,6 +567,7 @@ def get_yt_link(query):
 
 
 _cookie_warning_shown = False
+_js_runtime_warning_shown = False
 
 
 def _yt_runtime_options(with_cookies=True):
@@ -571,7 +577,7 @@ def _yt_runtime_options(with_cookies=True):
     EGM currently relies on modern yt-dlp + EJS + a JavaScript runtime,
     curl_cffi and bgutil-ytdlp-pot-provider for current YouTube extraction.
     """
-    global _cookie_warning_shown
+    global _cookie_warning_shown, _js_runtime_warning_shown
 
     options = {
         "remote_components": ["ejs:github"],
@@ -588,14 +594,15 @@ def _yt_runtime_options(with_cookies=True):
     }
 
     # Enable every JavaScript runtime that is actually installed. Passing only
-    # one runtime would override yt-dlp's default (deno).
-    runtimes = {}
-    for runtime in ("deno", "node", "bun"):
-        path = shutil.which(runtime)
-        if path:
-            runtimes[runtime] = {"path": path}
+    # one runtime would override yt-dlp's default (deno). Without a runtime,
+    # authenticated YouTube extraction fails with "The page needs to be
+    # reloaded" because the EJS challenge solver cannot run.
+    runtimes = detect_js_runtimes()
     if runtimes:
         options["js_runtimes"] = runtimes
+    elif not _js_runtime_warning_shown:
+        LOGS.warning("No supported JavaScript runtime found. %s", JS_RUNTIME_HINT)
+        _js_runtime_warning_shown = True
 
     # yt-dlp only accepts tab-separated Netscape cookie files. Resolve the
     # file from the project root (not the process CWD) and hand yt-dlp a
@@ -1146,7 +1153,15 @@ async def _report_ytdl_error(event, error):
     """Log once and show one concise, actionable message to the user."""
     text = one_line_error(error)
 
-    if is_youtube_auth_error(error):
+    if is_youtube_js_challenge_error(error):
+        LOGS.warning(
+            "YouTube JavaScript challenge failed: %s. %s", text, JS_RUNTIME_HINT
+        )
+        message = (
+            "`YouTube could not solve the player challenge.`\n"
+            "`Install Node.js 22+ (or Deno 2.3+) on the server and restart the bot.`"
+        )
+    elif is_youtube_auth_error(error):
         LOGS.warning("YouTube requires a signed-in session: %s", text)
         message = (
             "`YouTube is blocking this request (sign-in required).`\n"
