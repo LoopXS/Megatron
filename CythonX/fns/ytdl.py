@@ -683,6 +683,40 @@ def _find_downloaded_file(directory, video_id=None, preferred_ext=None):
     return max(candidates, key=os.path.getmtime)
 
 
+def video_download_options(format_id, container, temp_dir):
+    """Build yt-dlp options for one inline video quality choice.
+
+    The inline buttons expose adaptive video-only streams, so the selected
+    stream must be merged with the best audio.  The target container is chosen
+    from the stream's own extension (``mp4`` or ``mkv``).
+    """
+    container = str(container or "mp4").lower()
+    if container not in ("mp4", "mkv"):
+        container = "mp4"
+
+    ffmpeg_args = ["-c:v", "copy"]
+    if container == "mp4":
+        # YouTube's best audio is usually Opus, which is not reliably playable
+        # inside MP4, so transcode it to AAC while copying the video stream.
+        ffmpeg_args += ["-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart"]
+    else:
+        ffmpeg_args += ["-c:a", "copy"]
+
+    return {
+        "format": f"{format_id}+bestaudio/bestvideo+bestaudio/best",
+        "merge_output_format": container,
+        "addmetadata": True,
+        "key": "FFmpegMetadata",
+        "prefer_ffmpeg": True,
+        "geo_bypass": True,
+        "outtmpl": os.path.join(temp_dir, "%(id)s.%(ext)s"),
+        "overwrites": True,
+        "logtostderr": False,
+        "postprocessor_args": {"ffmpeg": ffmpeg_args},
+        "postprocessors": [{"key": "FFmpegMetadata"}],
+    }
+
+
 async def download_yt(event, link, ytd):
     """
     Normal command downloader.
@@ -875,6 +909,12 @@ def get_formats(type, id, data):
             continue
 
         if vcodec == "none":
+            continue
+
+        # Keep only adaptive (video-only) streams. The downloader pairs every
+        # choice with the best audio; a muxed stream would add a second audio
+        # track or fail to merge.
+        if acodec != "none":
             continue
 
         height = fmt.get("height")

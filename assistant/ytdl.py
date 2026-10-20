@@ -1,5 +1,6 @@
 import os
 import re
+import tempfile
 
 try:
     from PIL import Image
@@ -17,7 +18,14 @@ from CythonX.fns.helper import (
     numerize,
     time_formatter,
 )
-from CythonX.fns.ytdl import dler, get_buttons, get_formats
+from CythonX.fns.tools import set_attributes
+from CythonX.fns.ytdl import (
+    _find_downloaded_file,
+    dler,
+    get_buttons,
+    get_formats,
+    video_download_options,
+)
 
 from . import LOGS, asst, callback, in_pattern, udB
 
@@ -234,73 +242,84 @@ async def _(event):
         ]
 
     elif lets_split[0] == "video":
-        opts = {
-            "format": str(format),
-            "addmetadata": True,
-            "key": "FFmpegMetadata",
-            "prefer_ffmpeg": True,
-            "geo_bypass": True,
-            "outtmpl": f"%(id)s.{ext}",
-            "logtostderr": False,
-            "postprocessors": [{"key": "FFmpegMetadata"}],
-        }
+        container = (ext or "mp4").lower()
+        if container not in ("mp4", "mkv"):
+            container = "mp4"
 
-        ytdl_data = await dler(event, link, opts, True)
-        if not ytdl_data:
-            return
-        title = ytdl_data["title"]
-        artist = ytdl_data.get("artist") or ytdl_data.get("creator") or ytdl_data.get("channel")
-        views = numerize(ytdl_data.get("view_count")) or 0
-        thumb, _ = await fast_download(ytdl_data["thumbnail"], filename=f"{vid_id}.jpg")
-        description = (
-            ytdl_data.get("description", "None")
-            if ytdl_data.get("description") and len(ytdl_data["description"]) < 100
-            else (ytdl_data["description"][:100] if ytdl_data.get("description") else "None")
-        )
+        with tempfile.TemporaryDirectory(prefix=f"ytdl_{vid_id}_") as temp_dir:
+            opts = video_download_options(format, container, temp_dir)
 
-        try:
-            Image.open(thumb).save(thumb, "JPEG")
-        except Exception as er:
-            LOGS.exception(er)
-            thumb = None
+            ytdl_data = await dler(event, link, opts, True)
+            if not ytdl_data:
+                return
 
-        likes = numerize(ytdl_data.get("like_count")) or 0
-        hi, wi = ytdl_data.get("height") or 720, ytdl_data.get("width") or 1280
-        duration = ytdl_data.get("duration") or 0
-        filepath = f"{vid_id}.mkv"
-        if not os.path.exists(filepath):
-            filepath = f"{filepath}.webm"
-        if os.path.exists(filepath):
+            title = ytdl_data["title"]
+            artist = ytdl_data.get("artist") or ytdl_data.get("creator") or ytdl_data.get("channel")
+            views = numerize(ytdl_data.get("view_count")) or 0
+            description = (
+                ytdl_data.get("description", "None")
+                if ytdl_data.get("description") and len(ytdl_data["description"]) < 100
+                else (ytdl_data["description"][:100] if ytdl_data.get("description") else "None")
+            )
+
+            try:
+                thumb, _ = await fast_download(
+                    ytdl_data["thumbnail"], filename=f"{vid_id}.jpg"
+                )
+                Image.open(thumb).save(thumb, "JPEG")
+            except Exception as er:
+                LOGS.exception(er)
+                thumb = None
+
+            likes = numerize(ytdl_data.get("like_count")) or 0
+            duration = ytdl_data.get("duration") or 0
+
+            # Never guess the filename: yt-dlp may merge the selected stream
+            # with audio and pick a container different from the button label.
+            filepath = _find_downloaded_file(
+                temp_dir,
+                video_id=vid_id,
+                preferred_ext=f".{container}",
+            )
+            if not filepath:
+                filepath = _find_downloaded_file(temp_dir, video_id=vid_id)
+
+            if not filepath:
+                LOGS.error(
+                    "Video download produced no media file in %s (files: %s)",
+                    temp_dir,
+                    ", ".join(sorted(os.listdir(temp_dir))) or "none",
+                )
+                await event.edit("`Error: File not found after download.`")
+                return
+
             size = os.path.getsize(filepath)
-        if not os.path.exists(filepath):
-            filepath = f"{vid_id}.mp4.webm"
-        if os.path.exists(filepath):
-            size = os.path.getsize(filepath)
-        if not os.path.exists(filepath):
-            filepath = f"{vid_id}.mp4.mkv"
-        if os.path.exists(filepath):
-            size = os.path.getsize(filepath)
-        else:
-            LOGS.error(f"File not found: {filepath}")
-            await event.edit("`Error: File not found after download.`")
-            return
+            actual_ext = os.path.splitext(filepath)[1] or f".{container}"
+            safe_title = re.sub(r'[\\/:*?"<>|]+', "_", title).strip()[:180] or vid_id
 
-        file, _ = await event.client.fast_uploader(
-            filepath,
-            filename=f"{title}.mkv",
-            show_progress=True,
-            event=event,
-            to_delete=True,
-        )
+            try:
+                attributes = await set_attributes(filepath)
+            except Exception as er:
+                LOGS.exception(er)
+                attributes = None
+            if not attributes:
+                hi, wi = ytdl_data.get("height") or 720, ytdl_data.get("width") or 1280
+                attributes = [
+                    DocumentAttributeVideo(
+                        duration=int(duration),
+                        w=wi,
+                        h=hi,
+                        supports_streaming=True,
+                    ),
+                ]
 
-        attributes = [
-            DocumentAttributeVideo(
-                duration=int(duration),
-                w=wi,
-                h=hi,
-                supports_streaming=True,
-            ),
-        ]
+            file, _ = await event.client.fast_uploader(
+                filepath,
+                filename=f"{safe_title}{actual_ext}",
+                show_progress=True,
+                event=event,
+                to_delete=False,
+            )
 
     description = description if description != "" else "None"
     text = f"**Title: [{title}]({_yt_base_url}{vid_id})**\n\n"
