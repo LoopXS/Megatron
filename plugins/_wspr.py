@@ -570,8 +570,13 @@ async def _handle_delete(e, secret):
         return await e.answer(get_string("wspr_5"), alert=True)
     STORE.remove(secret.key)
     try:
-        # An empty inline markup explicitly clears the keyboard; passing
-        # ``None`` would leave the now-dead buttons in place.
-        await e.edit(get_string("wspr_2"), buttons=types.ReplyInlineMarkup([]))
+        # Only the text is edited.  The secret card is an inline ("via bot")
+        # message, and Telegram rejects an empty ReplyInlineMarkup for
+        # ``editInlineBotMessage`` with ReplyMarkupInvalidError.  Its buttons
+        # therefore stay in place, but tapping one now answers
+        # "Secret Message Deleted!" because the store entry is gone.
+        await e.edit(get_string("wspr_2"))
     except MessageNotModifiedError:
         pass
+    except Exception as er:
+        LOGS.exception(er)

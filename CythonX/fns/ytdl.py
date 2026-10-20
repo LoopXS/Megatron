@@ -1,6 +1,8 @@
+import asyncio
 import glob
 import os
 import re
+import shutil
 import time
 import requests
 from bs4 import BeautifulSoup
@@ -495,56 +497,6 @@ async def insps(query, limit=8):
                 }
                 results.append(track_info)
             return results
-
-
-# ---------------Spotify---------------#
-
-
-
-    if len(title) > 20:
-        title = title[:17] + "..."
-    id_ = info["id"]
-    thumb = id_ + ".jpg"
-    await download_file(
-        info.get("thumbnail", None) or f"https://i.ytimg.com/vi/{id_}/hqdefault.jpg",
-        thumb,
-    )
-    ext = "." + ytd["outtmpl"]["default"].split(".")[-1]
-    for _ext in [".m4a", ".mp3", ".opus"]:
-        if ext == _ext:
-            ext = _ext
-            break
-    id = None
-    for x in glob.glob(f"{id_}*"):
-        if not x.endswith("jpg"):
-            id = x
-    if not id:
-        return
-    ext = "." + id.split(".")[-1]
-    file = title + ext
-    try:
-        os.rename(id, file)
-    except FileNotFoundError:
-        os.rename(id + ext, file)
-    attributes = await set_attributes(file)
-    res, _ = await event.client.fast_uploader(
-        file, show_progress=True, event=event, to_delete=True
-    )
-    caption = f"`{info['title']}`"
-    await event.client.send_file(
-        event.chat_id,
-        file=res,
-        caption=caption,
-        attributes=attributes,
-        supports_streaming=True,
-        thumb=thumb,
-        reply_to=reply_to,
-    )
-    os.remove(thumb)
-    try:
-        await event.delete()
-    except BaseException:
-        pass
 
 
 # ---------------YouTube Downloader Inline---------------
