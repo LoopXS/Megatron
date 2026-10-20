@@ -31,10 +31,12 @@ from .helper import download_file, humanbytes, run_async, time_formatter, cusmo,
 from .tools import set_attributes
 from .ytdl_cookies import find_cookie_file, first_existing_cookie
 from .ytdl_errors import (
+    is_ffmpeg_missing_error,
     is_youtube_auth_error,
     is_youtube_js_challenge_error,
     one_line_error,
 )
+from .ytdl_ffmpeg import FFMPEG_HINT, find_ffmpeg_location
 from .ytdl_runtime import JS_RUNTIME_HINT, detect_js_runtimes
 
 
@@ -568,6 +570,7 @@ def get_yt_link(query):
 
 _cookie_warning_shown = False
 _js_runtime_warning_shown = False
+_ffmpeg_warning_shown = False
 
 
 def _yt_runtime_options(with_cookies=True):
@@ -577,7 +580,7 @@ def _yt_runtime_options(with_cookies=True):
     EGM currently relies on modern yt-dlp + EJS + a JavaScript runtime,
     curl_cffi and bgutil-ytdlp-pot-provider for current YouTube extraction.
     """
-    global _cookie_warning_shown, _js_runtime_warning_shown
+    global _cookie_warning_shown, _js_runtime_warning_shown, _ffmpeg_warning_shown
 
     options = {
         "remote_components": ["ejs:github"],
@@ -603,6 +606,18 @@ def _yt_runtime_options(with_cookies=True):
     elif not _js_runtime_warning_shown:
         LOGS.warning("No supported JavaScript runtime found. %s", JS_RUNTIME_HINT)
         _js_runtime_warning_shown = True
+
+    # Postprocessing (audio extraction, metadata embedding, stream merging)
+    # needs both ffmpeg and ffprobe. Resolve them explicitly because the bot
+    # service may run with a minimal PATH.
+    ffmpeg_location = find_ffmpeg_location(
+        udB.get_key("FFMPEG_LOCATION") or os.environ.get("FFMPEG_LOCATION")
+    )
+    if ffmpeg_location:
+        options["ffmpeg_location"] = ffmpeg_location
+    elif not _ffmpeg_warning_shown:
+        LOGS.warning("ffmpeg/ffprobe not found. %s", FFMPEG_HINT)
+        _ffmpeg_warning_shown = True
 
     # yt-dlp only accepts tab-separated Netscape cookie files. Resolve the
     # file from the project root (not the process CWD) and hand yt-dlp a
@@ -1153,7 +1168,14 @@ async def _report_ytdl_error(event, error):
     """Log once and show one concise, actionable message to the user."""
     text = one_line_error(error)
 
-    if is_youtube_js_challenge_error(error):
+    if is_ffmpeg_missing_error(error):
+        LOGS.warning("ffmpeg/ffprobe missing: %s. %s", text, FFMPEG_HINT)
+        message = (
+            "`ffmpeg/ffprobe is not installed on the server.`\n"
+            "`Install it with: sudo apt install -y ffmpeg`\n"
+            "`Then restart the bot.`"
+        )
+    elif is_youtube_js_challenge_error(error):
         LOGS.warning(
             "YouTube JavaScript challenge failed: %s. %s", text, JS_RUNTIME_HINT
         )

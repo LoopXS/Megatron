@@ -25,6 +25,14 @@ _JS_CHALLENGE_MARKERS = (
     "no supported javascript runtime",
 )
 
+# Postprocessing failures caused by a missing ffmpeg/ffprobe install.
+_FFMPEG_MARKERS = (
+    "ffprobe and ffmpeg not found",
+    "ffmpeg not found",
+    "ffprobe not found",
+    "ffmpeg-location",
+)
+
 
 def one_line_error(error):
     """Collapse an error into one line and strip ANSI colour escapes."""
@@ -42,3 +50,9 @@ def is_youtube_js_challenge_error(error):
     """Return ``True`` when the player JavaScript challenge could not run."""
     text = one_line_error(error).lower()
     return any(marker in text for marker in _JS_CHALLENGE_MARKERS)
+
+
+def is_ffmpeg_missing_error(error):
+    """Return ``True`` when postprocessing failed due to missing ffmpeg."""
+    text = one_line_error(error).lower()
+    return any(marker in text for marker in _FFMPEG_MARKERS)
