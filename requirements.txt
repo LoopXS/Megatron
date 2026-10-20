@@ -3,7 +3,8 @@ gitpython>=3.1.52
 dnspython
 # CipherX Telethon fork (ufoptg/Lonami v1.45 + CustomMarkdown + Py3.14 loop fix)
 git+https://github.com/ToxygenX/Telethon.git@4d420ff527bb2b4866742791cf8b9d52e4c8df68
-https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/refs/heads/master.zip
+# The yt-dlp-youtube-oauth2 plugin is obsolete/archived; yt-dlp has supported
+# YouTube OAuth natively since 2024.10.22 (--username oauth2 --password '').
 yt-dlp>=2025.1.15
 python-decouple>=3.8
 python-dotenv>=1.2.2

@@ -140,6 +140,10 @@ async def _(e):
     _e = e.pattern_match.group(1).strip().decode("UTF-8")
     _lets_split = _e.split(":")
     _ytdl_data = await dler(e, _yt_base_url + _lets_split[1])
+    if not _ytdl_data:
+        # dler() already showed a concise reason (for example, YouTube
+        # requiring fresh cookies).
+        return
     _data = get_formats(_lets_split[0], _lets_split[1], _ytdl_data)
     _buttons = get_buttons(_data)
     _text = (
@@ -185,10 +189,11 @@ async def _(event):
                 },
                 {"key": "FFmpegMetadata"},
             ],
-            "cookiefile": "cookies.txt",
         }
 
         ytdl_data = await dler(event, link, opts, True)
+        if not ytdl_data:
+            return
         title = ytdl_data["title"]
         artist = ytdl_data.get("artist") or ytdl_data.get("creator") or ytdl_data.get("channel")
         views = numerize(ytdl_data.get("view_count")) or 0
@@ -238,10 +243,11 @@ async def _(event):
             "outtmpl": f"%(id)s.{ext}",
             "logtostderr": False,
             "postprocessors": [{"key": "FFmpegMetadata"}],
-            "cookiefile": "cookies.txt",
         }
 
         ytdl_data = await dler(event, link, opts, True)
+        if not ytdl_data:
+            return
         title = ytdl_data["title"]
         artist = ytdl_data.get("artist") or ytdl_data.get("creator") or ytdl_data.get("channel")
         views = numerize(ytdl_data.get("view_count")) or 0

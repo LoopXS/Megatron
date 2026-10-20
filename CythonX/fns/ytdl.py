@@ -29,6 +29,8 @@ from yt_dlp import YoutubeDL
 
 from .helper import download_file, humanbytes, run_async, time_formatter, cusmo, get_pstring
 from .tools import set_attributes
+from .ytdl_cookies import find_cookie_file, first_existing_cookie
+from .ytdl_errors import is_youtube_auth_error, one_line_error
 
 
 # ---------------Spotify---------------#
@@ -559,13 +561,18 @@ def get_yt_link(query):
         return None
 
 
-def _yt_runtime_options():
+_cookie_warning_shown = False
+
+
+def _yt_runtime_options(with_cookies=True):
     """
     EGM-Downloader style yt-dlp runtime configuration.
 
     EGM currently relies on modern yt-dlp + EJS + a JavaScript runtime,
     curl_cffi and bgutil-ytdlp-pot-provider for current YouTube extraction.
     """
+    global _cookie_warning_shown
+
     options = {
         "remote_components": ["ejs:github"],
         "retries": 25,
@@ -580,26 +587,44 @@ def _yt_runtime_options():
         "geo_bypass": True,
     }
 
-    # Current yt-dlp supports Node >= 22 for EJS. Dockerfile installs Node 22
-    # and the bgutil provider in /root/bgutil-ytdlp-pot-provider.
-    node = shutil.which("node") or "/usr/local/bin/node"
-    if os.path.isfile(node) and os.access(node, os.X_OK):
-        options["js_runtimes"] = {"node": {"path": node}}
+    # Enable every JavaScript runtime that is actually installed. Passing only
+    # one runtime would override yt-dlp's default (deno).
+    runtimes = {}
+    for runtime in ("deno", "node", "bun"):
+        path = shutil.which(runtime)
+        if path:
+            runtimes[runtime] = {"path": path}
+    if runtimes:
+        options["js_runtimes"] = runtimes
 
-    # Only use cookies when the file actually exists. Passing a missing
-    # cookiefile can make an otherwise valid public-video request fail.
-    cookiefile = os.path.abspath("cookies.txt")
-    if os.path.isfile(cookiefile) and os.path.getsize(cookiefile) > 0:
-        options["cookiefile"] = cookiefile
+    # yt-dlp only accepts tab-separated Netscape cookie files. Resolve the
+    # file from the project root (not the process CWD) and hand yt-dlp a
+    # normalised copy so a space-separated export still works and yt-dlp
+    # cannot rewrite the user's original file.
+    if with_cookies:
+        configured_cookie = udB.get_key("YTDL_COOKIES")
+        cookiefile = find_cookie_file(configured_cookie)
+        if cookiefile:
+            options["cookiefile"] = cookiefile
+        elif not _cookie_warning_shown:
+            existing_cookie = first_existing_cookie(configured_cookie)
+            if existing_cookie:
+                LOGS.warning(
+                    "YouTube cookies in %s could not be parsed; continuing "
+                    "without cookies. Export a tab-separated Netscape "
+                    "cookies.txt.",
+                    existing_cookie,
+                )
+                _cookie_warning_shown = True
 
     return options
 
 
 def _merge_yt_options(user_options=None):
     """Merge caller options without mutating the caller's dictionary."""
-    merged = _yt_runtime_options()
-    if user_options:
-        merged.update(dict(user_options))
+    supplied = dict(user_options or {})
+    merged = _yt_runtime_options(with_cookies="cookiefile" not in supplied)
+    merged.update(supplied)
 
     # Keep EGM-style reliability options unless the caller explicitly overrides.
     merged.setdefault("retries", 25)
@@ -936,7 +961,7 @@ async def _inline_download(event, video_id, media_type, format_id, quality, ext)
     try:
         # Fetch metadata separately from the download so the output filename,
         # duration and thumbnail are known before upload.
-        info = await extract_info(
+        info = await _extract_with_cookie_fallback(
             link,
             _merge_yt_options(
                 {
@@ -1015,7 +1040,7 @@ async def _inline_download(event, video_id, media_type, format_id, quality, ext)
             f"`{safe_title}`"
         )
 
-        await ytdownload(link, opts)
+        await _download_with_cookie_fallback(link, opts)
 
         output = _find_downloaded_file(
             temp_dir,
@@ -1077,16 +1102,64 @@ async def _inline_download(event, video_id, media_type, format_id, quality, ext)
             ),
         )
     except Exception as ex:
-        LOGS.exception("Inline YouTube download failed")
-        try:
-            await event.edit(
-                "`YouTube download failed.`\n\n"
-                f"`{str(ex)[:900]}`"
-            )
-        except Exception:
-            pass
+        await _report_ytdl_error(event, ex)
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
+
+
+def _without_cookies(options):
+    retry = dict(options)
+    retry["cookiefile"] = None
+    retry.pop("cookiesfrombrowser", None)
+    return retry
+
+
+async def _extract_with_cookie_fallback(url, options):
+    """Extract metadata, retrying anonymously if saved cookies are rejected."""
+    try:
+        return await extract_info(url, options)
+    except Exception as ex:
+        if not options.get("cookiefile") or not is_youtube_auth_error(ex):
+            raise
+        LOGS.warning(
+            "YouTube rejected the saved cookies; retrying without them. "
+            "Export fresh cookies if this keeps happening."
+        )
+        return await extract_info(url, _without_cookies(options))
+
+
+async def _download_with_cookie_fallback(url, options):
+    """Download media, retrying anonymously if saved cookies are rejected."""
+    try:
+        return await ytdownload(url, options)
+    except Exception as ex:
+        if not options.get("cookiefile") or not is_youtube_auth_error(ex):
+            raise
+        LOGS.warning(
+            "YouTube rejected the saved cookies during download; retrying "
+            "without them."
+        )
+        return await ytdownload(url, _without_cookies(options))
+
+
+async def _report_ytdl_error(event, error):
+    """Log once and show one concise, actionable message to the user."""
+    text = one_line_error(error)
+
+    if is_youtube_auth_error(error):
+        LOGS.warning("YouTube requires a signed-in session: %s", text)
+        message = (
+            "`YouTube is blocking this request (sign-in required).`\n"
+            "`Export fresh YouTube cookies to cookies.txt and restart the bot.`"
+        )
+    else:
+        LOGS.error("yt-dlp extraction failed: %s", text)
+        message = "`YouTube extraction failed.`\n" + f"`{text[:900]}`"
+
+    try:
+        await event.edit(message)
+    except Exception:
+        pass
 
 
 async def dler(event, url, opts=None, download=False):
@@ -1103,33 +1176,21 @@ async def dler(event, url, opts=None, download=False):
     except Exception:
         pass
 
-    if download:
-        await ytdownload(url, merged)
-
     try:
-        return await extract_info(url, merged)
+        if download:
+            await _download_with_cookie_fallback(url, merged)
+        return await _extract_with_cookie_fallback(url, merged)
     except Exception as ex:
-        LOGS.exception("yt-dlp extract_info failed")
-        try:
-            await event.edit(
-                "`YouTube extraction failed.`\n"
-                f"`{str(ex)[:900]}`"
-            )
-        except Exception:
-            pass
+        await _report_ytdl_error(event, ex)
         return None
 
 
 @run_async
 def ytdownload(url, opts):
     """Run yt-dlp with the modern EGM-compatible configuration."""
-    try:
-        options = _merge_yt_options(opts)
-        with YoutubeDL(options) as ydl:
-            return ydl.download([url])
-    except Exception as ex:
-        LOGS.exception(f"yt-dlp download failed: {ex}")
-        raise
+    options = _merge_yt_options(opts)
+    with YoutubeDL(options) as ydl:
+        return ydl.download([url])
 
 
 @run_async
@@ -1139,13 +1200,9 @@ def extract_info(url, opts=None):
     options.setdefault("noplaylist", True)
     options["skip_download"] = True
 
-    try:
-        with YoutubeDL(options) as ydl:
-            info = ydl.extract_info(url=url, download=False)
-            return ydl.sanitize_info(info)
-    except Exception as ex:
-        LOGS.exception(f"yt-dlp extract failed: {ex}")
-        raise
+    with YoutubeDL(options) as ydl:
+        info = ydl.extract_info(url=url, download=False)
+        return ydl.sanitize_info(info)
 
 
 @run_async
