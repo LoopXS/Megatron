@@ -13,12 +13,16 @@
 • `{i}nfts`
    Show your listed MRKT NFTs + model floors.
 
-• `{i}add <id|@username>`
-   Allow a user for assistant `/gift` `/gift c` `/p` `/order` `/ordertop`
-   and inline `g` / `ch`.
+• `{i}add <id|@username> [days]`
+   Allow a user for assistant NFT cmds / inline `g` `a` `ch`.
+   Optional days (e.g. 24 / 30) sets timed access; omit for permanent.
 
 • `{i}rm <id|@username>`
    Remove a user from that allow-list.
+
+• Assistant `/pay` | `t.me/AssisXBot?start=pay`
+   Subscribe: **250 Stars** or **2.79 TON** (+ unique cents).
+   Success → NFTIDS for **30 days** (udB: `TON_WALLET`, `TONAPI_KEY`).
 
 • `{i}buy Collection, Model, Backdrop, MIN-MAX`
    Auto buy (owner) — without transfer lock only.
@@ -49,6 +53,9 @@
    Hub: Floor Price 📉 / Gift Chart 📊 / NFT Sales 🧾 / Listings 🏷️.
    NFT links also show (Link) + SeeTG Owner History (Gift Sent).
 
+• Inline: `@AssisXBot a`
+   NFT Heatmap — choose timeline (24H…All), then Search again / Share.
+
 • `{i}ch Collection[, Model]`
    Send GiftCharts baseline chart in chat.
 
@@ -63,6 +70,12 @@
 
 • `{i}p 1000000 t ton` | `{i}p 1000000 t usdt` | `{i}p 1000000 t stars`
    Convert Tomans (`t`) → TON / USDT / Stars (no Tomans line in output).
+
+• `{i}s 9200`
+   NFT Stars listing → net after 20% fee; Fragment keeps 0.013/0.015 Stars then → TON.
+
+• `{i}ds 67`
+   Desired TON after Fragment → restore Stars (0.013→0.015) then +20% listing.
 
 • `{i}order Collection`
    Offer count + highest + top 5 ranges.
@@ -115,10 +128,12 @@ Auto: missing/expired token regenerates from DB `SESSIONMRKT`.
 import os
 import io
 import html
+import random
 import requests
 import asyncio
 import contextlib
 import secrets
+import base64
 import time
 import re
 from typing import Optional
@@ -135,7 +150,19 @@ from artemis import MRKTClient
 from artemis.exceptions import TradingError, RequestError, AuthError
 from artemis.utils import ton_to_nano, nano_to_ton
 
-from telethon import Button, types as tl_types
+from telethon import Button, events, functions, types as tl_types
+from telethon.tl.custom.message import CustomMarkdown
+from telethon.tl.types import (
+    DataJSON,
+    InputMediaInvoice,
+    InputWebDocument,
+    Invoice,
+    KeyboardButtonStyle,
+    LabeledPrice,
+    MessageActionPaymentSentMe,
+    UpdateBotPrecheckoutQuery,
+)
+from urllib.parse import quote as _url_quote
 
 from . import (
     heartless_cmd,
@@ -153,6 +180,14 @@ from . import _satellite_tma as sat
 from . import _giftcharts as gc  # charts callbacks register via this import
 from . import _seetg_tma as seetg
 from CythonX._misc import owner_and_sudos
+from CythonX.fns.helper import cusmo
+
+# ToxygenX Telethon: enable CustomMarkdown on assistant (tg-emoji / emoji/ links).
+try:
+    if asst is not None:
+        asst.parse_mode = CustomMarkdown()
+except Exception:
+    pass
 
 
 # ============================================================
@@ -204,7 +239,14 @@ TELEGRAM_GIFTS = TelegramGifts(
 # Gift Changes API — gift/model metadata/rarity (not stickers)
 # thanks to @GiftChanges for this API (api.changes.tg)
 CHANGES_API = "https://api.changes.tg"
+CHANGES_CDN = "https://cdn.changes.tg"
 GIFT_CHANGES_CREDIT = "thanks to @GiftChanges for this API"
+
+# Custom-emoji pack cache: collection → {collection, models{}, backdrops{}, models_list[]}
+# Memory-only (Changes customEmojiId); no udB persistence.
+_EMOJI_PACK_CACHE: dict = {}
+_EMOJI_PACK_TTL = 45 * 60
+_MODELS_PAGE_SIZE = 10  # 5 rows × 2 cols
 
 TEHRAN_TZ = ZoneInfo("Asia/Tehran")
 
@@ -215,6 +257,12 @@ SATELLITE_MARKETS = tuple(
 
 # Fragment-style Stars USD reference (override with DB key STAR_USD).
 DEFAULT_STAR_USD = Decimal("0.015")
+# Fragment Stars→TON: of every 0.015 Stars, Fragment keeps 0.013 (drops 0.002),
+# then that reduced Stars sum is converted to TON at the normal STAR_USD rate.
+FRAGMENT_STARS_BASE = Decimal("0.015")
+FRAGMENT_STARS_KEEP = Decimal("0.013")
+# Telegram NFT Stars sale commission.
+NFT_STARS_FEE_RATE = Decimal("0.20")
 _RATE_CACHE = {"at": 0.0, "ton_usd": None, "usdt_toman": None}
 _RATE_CACHE_TTL = 60.0
 
@@ -274,23 +322,91 @@ def _set_nftids(ids):
     return clean
 
 
-def _add_nftid(user_id):
+def _get_nft_subs() -> dict:
+    """user_id(str) → expiry unix. Missing / 0 = permanent (list-only)."""
+    raw = udB.get_key("NFTSUBS")
+    if not isinstance(raw, dict):
+        return {}
+    out = {}
+    for k, v in raw.items():
+        try:
+            out[str(int(k))] = int(v)
+        except Exception:
+            continue
+    return out
+
+
+def _set_nft_subs(mapping: dict):
+    clean = {}
+    for k, v in (mapping or {}).items():
+        try:
+            clean[str(int(k))] = int(v)
+        except Exception:
+            continue
+    udB.set_key("NFTSUBS", clean)
+    return clean
+
+
+def _purge_expired_nft_subs() -> list[int]:
+    """Drop timed subscribers whose expiry has passed. Returns removed ids."""
+    now = int(time.time())
+    subs = _get_nft_subs()
+    removed = []
+    keep = {}
+    for k, exp in subs.items():
+        try:
+            uid = int(k)
+            exp_i = int(exp)
+        except Exception:
+            continue
+        if exp_i > 0 and exp_i <= now:
+            removed.append(uid)
+            continue
+        keep[str(uid)] = exp_i
+    if removed:
+        _set_nft_subs(keep)
+        ids = _get_nftids()
+        _set_nftids([x for x in ids if x not in set(removed)])
+        LOGS.info("NFTIDS expired removed: %s", removed)
+    return removed
+
+
+def _add_nftid(user_id, *, days: int | None = None):
+    """
+    Add to NFTIDS. ``days``:
+      None → permanent (clear any timed expiry)
+      int  → access until now + days
+    """
     uid = int(user_id)
     ids = _get_nftids()
     if uid not in ids:
         ids.append(uid)
         _set_nftids(ids)
+    subs = _get_nft_subs()
+    key = str(uid)
+    if days is None:
+        subs.pop(key, None)
+    else:
+        d = max(1, int(days))
+        subs[key] = int(time.time()) + d * 86400
+    _set_nft_subs(subs)
     return ids
 
 
 def _rm_nftid(user_id):
     uid = int(user_id)
     ids = _get_nftids()
+    removed = False
     if uid in ids:
         ids = [x for x in ids if x != uid]
         _set_nftids(ids)
-        return ids, True
-    return ids, False
+        removed = True
+    subs = _get_nft_subs()
+    if str(uid) in subs:
+        subs.pop(str(uid), None)
+        _set_nft_subs(subs)
+        removed = True
+    return ids, removed
 
 
 def _nft_user_allowed(user_id):
@@ -302,7 +418,17 @@ def _nft_user_allowed(user_id):
         return True
     if OWNER_ID and uid == int(OWNER_ID):
         return True
+    _purge_expired_nft_subs()
     return uid in _get_nftids()
+
+
+def _nft_sub_expiry(user_id) -> int | None:
+    """Return expiry unix for timed sub, 0 for permanent, None if not listed."""
+    _purge_expired_nft_subs()
+    uid = int(user_id)
+    if uid not in _get_nftids():
+        return None
+    return int(_get_nft_subs().get(str(uid)) or 0)
 
 
 def _asst_nft_ok(event):
@@ -594,12 +720,34 @@ def _match_known_name(target, known_names):
     return fuzzy or target
 
 
+def _gram_ce_md(fallback: str = "TON") -> str:
+    """``addemoji gram`` — replaces the TON unit label on floor/quick-sell lines."""
+    return _emp_ce_md("gram", fallback)
+
+
+def _gram_ce_html(fallback: str = "TON") -> str:
+    return _emp_ce_html("gram", fallback)
+
+
+def _price_txt_with_gram_md(price_txt: str) -> str:
+    """``1.23 TON`` → ``1.23 {gram CE}``; ``9200 Stars`` → ``9200 {stars CE}``."""
+    txt = str(price_txt or "—").strip()
+    if re.search(r"(?i)\bTON\s*$", txt):
+        amount = re.sub(r"(?i)\s*TON\s*$", "", txt).strip() or "—"
+        return f"{_md_escape_inline(amount)} {_gram_ce_md('TON')}"
+    if re.search(r"(?i)\bStars?\s*$", txt):
+        amount = re.sub(r"(?i)\s*Stars?\s*$", "", txt).strip() or "—"
+        return f"{_md_escape_inline(amount)} {_emp_ce_md('stars', '⭐')}"
+    return _md_escape_inline(txt)
+
+
 def _floor_ton(value):
-    """Price + TON with a single space (no double-spacing)."""
+    """Price + gram/TON unit with a single space (no double-spacing)."""
     amount = _as_floor(value)
+    unit = _gram_ce_html("TON")
     if amount is None:
-        return "— TON"
-    return f"{_ton2(amount)} TON"
+        return f"— {unit}"
+    return f"{_ton2(amount)} {unit}"
 
 
 def _floor_price_code(value):
@@ -608,6 +756,55 @@ def _floor_price_code(value):
     if amount is None:
         return "—"
     return _ton2(amount)
+
+
+def _model_rarity_from_changes(tg_snap) -> Optional[int]:
+    """Model rarity per-mille from api.changes.tg snapshot (preferred source)."""
+    tg_model = (tg_snap or {}).get("model") or {}
+    for key in ("rarityPermille", "rarityPerMille", "rarity_permille"):
+        val = tg_model.get(key)
+        if val is None or val == "":
+            continue
+        try:
+            return int(val)
+        except Exception:
+            pm = _pct_to_permille(val)
+            if pm is not None:
+                return pm
+    return None
+
+
+def _model_rarity_tier(tg_snap) -> Optional[str]:
+    """Crafted tier phrase from Changes (rare / legendary / …)."""
+    tg_model = (tg_snap or {}).get("model") or {}
+    tier = tg_model.get("rarityTier") or tg_model.get("rarity_tier")
+    if tier is None or tier == "":
+        return None
+    text = str(tier).strip()
+    return text or None
+
+
+def _model_rarity_display(tg_snap, fallback_permille=None) -> str:
+    """
+    Display rarity for Model lines.
+
+    Numeric % when per-mille > 0; otherwise exact Changes ``rarityTier``
+    (crafted models like Guard Dog → legendary) instead of ``0%``.
+    """
+    pm = _model_rarity_from_changes(tg_snap)
+    if pm is None and fallback_permille is not None and fallback_permille != "":
+        try:
+            pm = int(fallback_permille)
+        except Exception:
+            pm = _pct_to_permille(fallback_permille)
+    tier = _model_rarity_tier(tg_snap)
+    if pm is not None and pm != 0:
+        return _rarity_pct(pm)
+    if tier:
+        return tier
+    if pm is None:
+        return "?"
+    return "?"
 
 
 def _gift_full_name(gift):
@@ -1077,48 +1274,27 @@ def _attr_rarity_permille(attr):
     return getattr(rarity, "permille", None)
 
 
-async def _fetch_unique_star_gift_attrs(tg_client, slug):
-    """
-    Resolve NFT attributes via MTProto payments.getUniqueStarGift.
-    This works even when t.me HTML scraping is blocked.
-    """
-    if tg_client is None:
-        return None, None, None, None, None
-
+def _star_gift_unique_attrs(gift):
+    """Extract model/backdrop/title from a StarGiftUnique (or similar)."""
     try:
-        from telethon.tl.functions.payments import (
-            GetUniqueStarGiftRequest,
-        )
         from telethon.tl.types import (
             StarGiftAttributeBackdrop,
             StarGiftAttributeModel,
             StarGiftUnique,
         )
-    except Exception as e:
-        LOGS.warning("Telethon gift imports failed: %s", e)
+    except Exception:
         return None, None, None, None, None
 
-    try:
-        result = await tg_client(
-            GetUniqueStarGiftRequest(slug=slug)
-        )
-    except Exception as e:
-        LOGS.warning(
-            "GetUniqueStarGift failed for %s: %s: %r",
-            slug,
-            type(e).__name__,
-            e,
-        )
+    if gift is None:
         return None, None, None, None, None
-
-    gift = getattr(result, "gift", None)
+    # payments.UniqueStarGift wraps .gift; webpage attr may pass StarGiftUnique
+    inner = getattr(gift, "gift", None)
+    if inner is not None and not isinstance(gift, StarGiftUnique):
+        gift = inner
     if not isinstance(gift, StarGiftUnique):
-        LOGS.warning(
-            "Unexpected unique gift type for %s: %r",
-            slug,
-            type(gift),
-        )
-        return None, None, None, None, None
+        # Duck-type: some layers still expose attributes/title
+        if not getattr(gift, "attributes", None):
+            return None, None, None, None, None
 
     model = backdrop = None
     model_rarity = backdrop_rarity = None
@@ -1132,6 +1308,84 @@ async def _fetch_unique_star_gift_attrs(tg_client, slug):
 
     collection = getattr(gift, "title", None)
     return model, backdrop, model_rarity, backdrop_rarity, collection
+
+
+async def _fetch_unique_star_gift_attrs(tg_client, slug):
+    """
+    Resolve NFT attributes via MTProto payments.getUniqueStarGift.
+    This works even when t.me HTML scraping is blocked.
+    Burned gifts raise STARGIFT_ALREADY_BURNED — callers should fall back.
+    """
+    if tg_client is None:
+        return None, None, None, None, None
+
+    try:
+        from telethon.tl.functions.payments import (
+            GetUniqueStarGiftRequest,
+        )
+    except Exception as e:
+        LOGS.warning("Telethon gift imports failed: %s", e)
+        return None, None, None, None, None
+
+    try:
+        result = await tg_client(
+            GetUniqueStarGiftRequest(slug=slug)
+        )
+    except Exception as e:
+        err = str(e).upper()
+        level = LOGS.debug if "STARGIFT_ALREADY_BURNED" in err or "BURNED" in err else LOGS.warning
+        level(
+            "GetUniqueStarGift failed for %s: %s: %r",
+            slug,
+            type(e).__name__,
+            e,
+        )
+        return None, None, None, None, None
+
+    gift = getattr(result, "gift", None)
+    model, backdrop, mr, br, title = _star_gift_unique_attrs(gift)
+    if not model and not backdrop and not title:
+        LOGS.warning(
+            "Unexpected unique gift type for %s: %r",
+            slug,
+            type(gift),
+        )
+    return model, backdrop, mr, br, title
+
+
+async def _fetch_nft_attrs_via_webpage(tg_client, slug):
+    """
+    Fallback for burned / unavailable unique gifts: messages.getWebPage on
+    https://t.me/nft/<slug> often still embeds WebPageAttributeUniqueStarGift.
+    """
+    if tg_client is None or not slug:
+        return None, None, None, None, None
+    try:
+        from telethon.tl.functions.messages import GetWebPageRequest
+        from telethon.tl.types import WebPageAttributeUniqueStarGift
+    except Exception as e:
+        LOGS.debug("GetWebPage import failed: %s", e)
+        return None, None, None, None, None
+
+    url = f"https://t.me/nft/{slug}"
+    try:
+        result = await tg_client(GetWebPageRequest(url=url, hash=0))
+    except Exception as e:
+        LOGS.debug("GetWebPage NFT failed for %s: %s", slug, e)
+        return None, None, None, None, None
+
+    webpage = getattr(result, "webpage", None) or result
+    attrs = getattr(webpage, "attributes", None) or []
+    for attr in attrs:
+        if isinstance(attr, WebPageAttributeUniqueStarGift):
+            return _star_gift_unique_attrs(getattr(attr, "gift", None))
+        # Duck-type older/newer constructors
+        gift = getattr(attr, "gift", None)
+        if gift is not None and getattr(gift, "attributes", None):
+            parsed = _star_gift_unique_attrs(gift)
+            if parsed[0] or parsed[1] or parsed[4]:
+                return parsed
+    return None, None, None, None, None
 
 
 async def _resolve_nft_gift(client, raw, tg_client=None):
@@ -1177,6 +1431,27 @@ async def _resolve_nft_gift(client, raw, tg_client=None):
             break
     if title:
         collection = title
+
+    # 1b) WebPage embed — works for many burned gifts
+    if not model or not backdrop:
+        for tg in tg_clients:
+            (
+                wm,
+                wb,
+                wmr,
+                wbr,
+                wtitle,
+            ) = await _fetch_nft_attrs_via_webpage(tg, slug)
+            model = model or wm
+            backdrop = backdrop or wb
+            if model_rarity is None:
+                model_rarity = wmr
+            if backdrop_rarity is None:
+                backdrop_rarity = wbr
+            if wtitle:
+                collection = wtitle
+            if model and backdrop:
+                break
 
     # 2) Telegram NFT page HTML fallback
     if not model or not backdrop:
@@ -1871,10 +2146,94 @@ def _star_usd_rate():
     return amount if amount > 0 else DEFAULT_STAR_USD
 
 
+async def _fetch_ton_usd(session: aiohttp.ClientSession) -> Optional[Decimal]:
+    try:
+        async with session.get(
+            "https://tonapi.io/v2/rates",
+            params={"tokens": "ton", "currencies": "usd"},
+        ) as resp:
+            if resp.status != 200:
+                return None
+            data = await resp.json(content_type=None)
+            return Decimal(str(data["rates"]["TON"]["prices"]["USD"]))
+    except Exception as e:
+        LOGS.warning("TON/USD rate fetch failed: %s", e)
+        return None
+
+
+async def _fetch_usdt_toman(session: aiohttp.ClientSession) -> Optional[Decimal]:
+    """USDT→Toman — tetherland first, then Bitpin / iran-market fallbacks."""
+    # 1) tetherland (primary)
+    try:
+        async with session.get("https://api.tetherland.com/currencies") as resp:
+            if resp.status == 200:
+                data = await resp.json(content_type=None)
+                return Decimal(
+                    str(data["data"]["currencies"]["USDT"]["price"])
+                )
+    except Exception as e:
+        LOGS.warning("USDT/Toman tetherland failed: %s", e)
+
+    # 2) Bitpin USDT_IRT
+    try:
+        async with session.get("https://api.bitpin.ir/v1/mkt/markets/") as resp:
+            if resp.status == 200:
+                data = await resp.json(content_type=None)
+                for row in data.get("results") or []:
+                    c1 = ((row.get("currency1") or {}).get("code") or "").upper()
+                    c2 = ((row.get("currency2") or {}).get("code") or "").upper()
+                    if c1 == "USDT" and c2 in ("IRT", "TMN", "IRR"):
+                        price = row.get("price")
+                        if price is None:
+                            info = row.get("price_info") or {}
+                            price = info.get("price")
+                        if price is not None:
+                            return Decimal(str(price))
+    except Exception as e:
+        LOGS.warning("USDT/Toman bitpin failed: %s", e)
+
+    # 3) iran-market popular.json (USDT_IRR ≈ toman)
+    try:
+        async with session.get(
+            "https://raw.githubusercontent.com/iran-market/"
+            "iran-market.github.io/main/data/popular.json"
+        ) as resp:
+            if resp.status == 200:
+                data = await resp.json(content_type=None)
+                for item in data.get("data") or []:
+                    if str(item.get("symbol") or "").upper() == "USDT_IRR":
+                        return Decimal(str(item["price"]))
+    except Exception as e:
+        LOGS.warning("USDT/Toman iran-market failed: %s", e)
+    return None
+
+
+async def _live_ton_usd() -> Decimal:
+    """TON/USD only (for ``.s`` / ``.ds`` — no Toman dependency)."""
+    now = time.monotonic()
+    cached = _RATE_CACHE.get("ton_usd")
+    if cached is not None and now - _RATE_CACHE["at"] < _RATE_CACHE_TTL:
+        return cached
+
+    timeout = aiohttp.ClientTimeout(total=12, connect=6)
+    async with aiohttp.ClientSession(timeout=timeout) as session:
+        ton_usd = await _fetch_ton_usd(session)
+
+    if ton_usd is None and cached is not None:
+        LOGS.warning("TON/USD live failed — using stale cache")
+        return cached
+    if ton_usd is None:
+        raise ValueError("Could not fetch live TON/USD rate.")
+
+    _RATE_CACHE["at"] = now
+    _RATE_CACHE["ton_usd"] = ton_usd
+    return ton_usd
+
+
 async def _live_ton_usdt_toman():
     """
-    Live TON/USD (tonapi) + USDT/Toman (tetherland).
-    Cached briefly to keep `{i}p` snappy.
+    Live TON/USD (tonapi) + USDT/Toman (tetherland → Bitpin → iran-market).
+    Cached briefly to keep `{i}p` snappy. Falls back to stale cache on failure.
     """
     now = time.monotonic()
     if (
@@ -1886,34 +2245,15 @@ async def _live_ton_usdt_toman():
 
     ton_usd = None
     usdt_toman = None
-    timeout = aiohttp.ClientTimeout(total=15, connect=8)
+    timeout = aiohttp.ClientTimeout(total=12, connect=6)
     async with aiohttp.ClientSession(timeout=timeout) as session:
-        try:
-            async with session.get(
-                "https://tonapi.io/v2/rates",
-                params={"tokens": "ton", "currencies": "usd"},
-            ) as resp:
-                if resp.status == 200:
-                    data = await resp.json(content_type=None)
-                    ton_usd = Decimal(
-                        str(data["rates"]["TON"]["prices"]["USD"])
-                    )
-        except Exception as e:
-            LOGS.warning("TON/USD rate fetch failed: %s", e)
+        ton_usd = await _fetch_ton_usd(session)
+        usdt_toman = await _fetch_usdt_toman(session)
 
-        try:
-            async with session.get(
-                "https://api.tetherland.com/currencies",
-            ) as resp:
-                if resp.status == 200:
-                    data = await resp.json(content_type=None)
-                    usdt_toman = Decimal(
-                        str(
-                            data["data"]["currencies"]["USDT"]["price"]
-                        )
-                    )
-        except Exception as e:
-            LOGS.warning("USDT/Toman rate fetch failed: %s", e)
+    if ton_usd is None:
+        ton_usd = _RATE_CACHE.get("ton_usd")
+    if usdt_toman is None:
+        usdt_toman = _RATE_CACHE.get("usdt_toman")
 
     if ton_usd is None or usdt_toman is None:
         raise ValueError("Could not fetch live TON / Toman rates.")
@@ -1960,7 +2300,118 @@ def _fmt_stars(amount):
     return f"{n}"
 
 
-async def _price_convert_message(amount, src, dst=None):
+def _fragment_stars_keep_ratio() -> Decimal:
+    """Fragment keeps 0.013 of every 0.015 Stars (drops 0.002 per 0.015)."""
+    return FRAGMENT_STARS_KEEP / FRAGMENT_STARS_BASE
+
+
+def _fragment_reduce_stars(stars) -> Decimal:
+    """Apply Fragment Stars haircut: amount * (0.013 / 0.015)."""
+    return Decimal(str(stars)) * _fragment_stars_keep_ratio()
+
+
+def _fragment_restore_stars(reduced_stars) -> Decimal:
+    """Undo Fragment haircut: reduced * (0.015 / 0.013)."""
+    return Decimal(str(reduced_stars)) / _fragment_stars_keep_ratio()
+
+
+def _stars_to_ton(stars, star_usd: Decimal, ton_usd: Decimal) -> Decimal:
+    """Convert a Stars sum to TON at the given USD/star rate."""
+    return (Decimal(str(stars)) * star_usd) / ton_usd
+
+
+def _ton_to_stars(tons, star_usd: Decimal, ton_usd: Decimal) -> Decimal:
+    """Convert TON to a Stars sum at the given USD/star rate."""
+    return (Decimal(str(tons)) * ton_usd) / star_usd
+
+
+async def _stars_listing_fee_message(listing_stars, *, fmt: str = "html") -> str:
+    """
+    ``.s 9200`` — listing Stars → net after 20% fee + Fragment TON.
+
+    1. Pure Stars = listing × 0.8
+    2. Fee line TON = pure Stars → TON at normal STAR_USD (0.015)
+    3. Fragment: reduce Stars by 0.013/0.015, then convert that sum → TON
+
+    ``fmt="md"`` — CustomMarkdown CE (inline ``s``, same as g sales output).
+    """
+    listing = Decimal(
+        Decimal(str(listing_stars)).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    )
+    if listing <= 0:
+        raise ValueError("Stars must be positive.")
+    ton_usd = await _live_ton_usd()
+    star_usd = _star_usd_rate()
+    pure = (listing * (Decimal("1") - NFT_STARS_FEE_RATE)).quantize(
+        Decimal("1"), rounding=ROUND_HALF_UP
+    )
+    ton_after_fee = _stars_to_ton(pure, star_usd, ton_usd)
+    # Fragment reduces the Stars amount first, then convert the sum to TON.
+    reduced = _fragment_reduce_stars(pure)
+    ton_fragment = _stars_to_ton(reduced, star_usd, ton_usd)
+    if fmt == "md":
+        star_e = _emp_ce_md("stars", "⭐")
+        gram = _gram_ce_md("TON")
+        return (
+            f"**Listing Price :** `{_fmt_stars(listing)}` {star_e}\n"
+            f"**- 20% Fee :** `{_fmt_stars(pure)}` {star_e}/"
+            f"`{_fmt_amount(ton_after_fee)}` {gram}\n"
+            f"**Fragment Convert :** `{_fmt_amount(ton_fragment)}` {gram}"
+        )
+    star_e = _emp_ce_html("stars", "⭐")
+    gram = _gram_ce_html("TON")
+    return (
+        f"<b>Listing Price :</b> <code>{_fmt_stars(listing)}</code> {star_e}\n"
+        f"<b>- 20% Fee :</b> <code>{_fmt_stars(pure)}</code> {star_e}/"
+        f"<code>{_fmt_amount(ton_after_fee)}</code> {gram}\n"
+        f"<b>Fragment Convert :</b> <code>{_fmt_amount(ton_fragment)}</code> {gram}"
+    )
+
+
+async def _desired_ton_listing_message(desired_ton, *, fmt: str = "html") -> str:
+    """
+    ``.ds 67`` — desired pure TON (after Fragment) → fair Stars listing.
+
+    1. Entry TON → Stars sum at normal rate (= Fragment-reduced Stars)
+    2. Restore 0.013→0.015 to get pure Stars; show pure Stars / TON@0.015
+    3. Gross up +20% fee for listing Stars
+
+    ``fmt="md"`` — CustomMarkdown CE (inline ``ds``, same as g sales output).
+    """
+    tons = Decimal(str(desired_ton))
+    if tons <= 0:
+        raise ValueError("TON must be positive.")
+    ton_usd = await _live_ton_usd()
+    star_usd = _star_usd_rate()
+    # TON is what remains after Fragment — invert: TON→reduced Stars→pure Stars.
+    reduced = _ton_to_stars(tons, star_usd, ton_usd)
+    pure_stars = _fragment_restore_stars(reduced).quantize(
+        Decimal("1"), rounding=ROUND_HALF_UP
+    )
+    ton_at_full = _stars_to_ton(pure_stars, star_usd, ton_usd)
+    listing = (pure_stars / (Decimal("1") - NFT_STARS_FEE_RATE)).quantize(
+        Decimal("1"), rounding=ROUND_HALF_UP
+    )
+    if fmt == "md":
+        star_e = _emp_ce_md("stars", "⭐")
+        gram = _gram_ce_md("TON")
+        return (
+            f"**Entry Price :** `{_fmt_amount(tons)}` {gram}\n"
+            f"**Fragment Convert :** `{_fmt_stars(pure_stars)}` {star_e}/"
+            f"`{_fmt_amount(ton_at_full)}` {gram}\n"
+            f"**+ 20% Fee :** `{_fmt_stars(listing)}` {star_e}"
+        )
+    star_e = _emp_ce_html("stars", "⭐")
+    gram = _gram_ce_html("TON")
+    return (
+        f"<b>Entry Price :</b> <code>{_fmt_amount(tons)}</code> {gram}\n"
+        f"<b>Fragment Convert :</b> <code>{_fmt_stars(pure_stars)}</code> {star_e}/"
+        f"<code>{_fmt_amount(ton_at_full)}</code> {gram}\n"
+        f"<b>+ 20% Fee :</b> <code>{_fmt_stars(listing)}</code> {star_e}"
+    )
+
+
+async def _price_convert_message(amount, src, dst=None, *, fmt: str = "html"):
     """
     Convert / price amount in ton, stars, usdt, or tomans (`t`).
 
@@ -1971,6 +2422,7 @@ async def _price_convert_message(amount, src, dst=None):
     - toman source (`.p 1000000 t ton|usdt|stars`): conversion only —
       no Tomans equivalent line in the output.
     Stars are rounded to whole numbers when shown as converted output.
+    ``fmt="md"`` — CustomMarkdown CE (inline ``p``, same as g sales output).
     """
     src = src.lower()
     show_convert = dst is not None
@@ -1982,15 +2434,38 @@ async def _price_convert_message(amount, src, dst=None):
     ton_usd, usdt_toman = await _live_ton_usdt_toman()
     star_usd = _star_usd_rate()
     ton_toman = ton_usd * usdt_toman
+    md = fmt == "md"
+    # TON unit uses addemoji ``gram`` (same as floors / .s / .ds) — not ``ton``.
+    if md:
+        price_e = _emp_ce_md("ex", "💱")
+        star_e = _emp_ce_md("stars", "⭐")
+        ton_e = _gram_ce_md("TON")
+        irt_e = _emp_ce_md("irt", "🇮🇷")
+        usdt_e = _emp_ce_md("usdt", "💲")
+        title = f"{price_e} **Price Convert**"
+    else:
+        price_e = _emp_ce_html("ex", "💱")
+        star_e = _emp_ce_html("stars", "⭐")
+        ton_e = _gram_ce_html("TON")
+        irt_e = _emp_ce_html("irt", "🇮🇷")
+        usdt_e = _emp_ce_html("usdt", "💲")
+        title = f"{price_e} <b>Price Convert</b>"
 
     def _value_block(irt, usdt, show_usdt=True):
+        if md:
+            if show_usdt:
+                return (
+                    f"{irt_e} **IRT:** `{_fmt_toman(irt)}` Tomans\n"
+                    f"{usdt_e} **USDT:** `{_fmt_usdt(usdt)}` $"
+                )
+            return f"{irt_e} **IRT:** `{_fmt_toman(irt)}` Tomans"
         if show_usdt:
             return (
-                f"🇮🇷 <b>IRT:</b> <code>{_fmt_toman(irt)}</code> Tomans\n"
-                f"💲 <b>USDT:</b> <code>{_fmt_usdt(usdt)}</code> $"
+                f"{irt_e} <b>IRT:</b> <code>{_fmt_toman(irt)}</code> Tomans\n"
+                f"{usdt_e} <b>USDT:</b> <code>{_fmt_usdt(usdt)}</code> $"
             )
         return (
-            f"🇮🇷 <b>IRT:</b> <code>{_fmt_toman(irt)}</code> Tomans"
+            f"{irt_e} <b>IRT:</b> <code>{_fmt_toman(irt)}</code> Tomans"
         )
 
     if src == "toman":
@@ -1998,52 +2473,90 @@ async def _price_convert_message(amount, src, dst=None):
             raise ValueError("Supported: t→ton/usdt/stars only.")
         usdt = amount / usdt_toman
         if dst == "usdt":
+            if md:
+                return (
+                    f"{title}\n\n"
+                    f"{irt_e} **{_fmt_toman(amount)} Tomans** → "
+                    f"{usdt_e} **{_fmt_usdt(usdt)} USDT**"
+                )
             return (
-                "💱 <b>Price Convert</b>\n\n"
-                f"🇮🇷 <b>{_fmt_toman(amount)} Tomans</b> → "
-                f"💲 <b>{_fmt_usdt(usdt)} USDT</b>"
+                f"{title}\n\n"
+                f"{irt_e} <b>{_fmt_toman(amount)} Tomans</b> → "
+                f"{usdt_e} <b>{_fmt_usdt(usdt)} USDT</b>"
             )
         if dst == "ton":
             tons = usdt / ton_usd
+            if md:
+                return (
+                    f"{title}\n\n"
+                    f"{irt_e} **{_fmt_toman(amount)} Tomans** → "
+                    f"{ton_e} **{_fmt_amount(tons)}**"
+                )
             return (
-                "💱 <b>Price Convert</b>\n\n"
-                f"🇮🇷 <b>{_fmt_toman(amount)} Tomans</b> → "
-                f"💎 <b>{_fmt_amount(tons)} TON</b>"
+                f"{title}\n\n"
+                f"{irt_e} <b>{_fmt_toman(amount)} Tomans</b> → "
+                f"{ton_e} <b>{_fmt_amount(tons)}</b>"
             )
         stars = usdt / star_usd
         stars_i = Decimal(
             stars.quantize(Decimal("1"), rounding=ROUND_HALF_UP)
         )
+        if md:
+            return (
+                f"{title}\n\n"
+                f"{irt_e} **{_fmt_toman(amount)} Tomans** → "
+                f"{star_e} **{_fmt_stars(stars_i)} Stars**"
+            )
         return (
-            "💱 <b>Price Convert</b>\n\n"
-            f"🇮🇷 <b>{_fmt_toman(amount)} Tomans</b> → "
-            f"⭐ <b>{_fmt_stars(stars_i)} Stars</b>"
+            f"{title}\n\n"
+            f"{irt_e} <b>{_fmt_toman(amount)} Tomans</b> → "
+            f"{star_e} <b>{_fmt_stars(stars_i)} Stars</b>"
         )
 
     if src == "ton":
         irt = amount * ton_toman
         usdt = amount * ton_usd
         if not show_convert:
+            if md:
+                return (
+                    f"{title}\n\n"
+                    f"{ton_e} **{_fmt_amount(amount)}**\n\n"
+                    f"{_value_block(irt, usdt)}"
+                )
             return (
-                "💱 <b>Price Convert</b>\n\n"
-                f"💎 <b>{_fmt_amount(amount)} TON</b>\n\n"
+                f"{title}\n\n"
+                f"{ton_e} <b>{_fmt_amount(amount)}</b>\n\n"
                 f"{_value_block(irt, usdt)}"
             )
         if dst == "usdt":
+            if md:
+                return (
+                    f"{title}\n\n"
+                    f"{ton_e} **{_fmt_amount(amount)}** → "
+                    f"{usdt_e} **{_fmt_usdt(usdt)} USDT**\n\n"
+                    f"{_value_block(irt, usdt)}"
+                )
             return (
-                "💱 <b>Price Convert</b>\n\n"
-                f"💎 <b>{_fmt_amount(amount)} TON</b> → "
-                f"💲 <b>{_fmt_usdt(usdt)} USDT</b>\n\n"
+                f"{title}\n\n"
+                f"{ton_e} <b>{_fmt_amount(amount)}</b> → "
+                f"{usdt_e} <b>{_fmt_usdt(usdt)} USDT</b>\n\n"
                 f"{_value_block(irt, usdt)}"
             )
         stars = (amount * ton_usd) / star_usd
         stars_i = Decimal(
             stars.quantize(Decimal("1"), rounding=ROUND_HALF_UP)
         )
+        if md:
+            return (
+                f"{title}\n\n"
+                f"{ton_e} **{_fmt_amount(amount)}** → "
+                f"{star_e} **{_fmt_stars(stars_i)} Stars**\n\n"
+                f"{_value_block(irt, usdt)}"
+            )
         return (
-            "💱 <b>Price Convert</b>\n\n"
-            f"💎 <b>{_fmt_amount(amount)} TON</b> → "
-            f"⭐ <b>{_fmt_stars(stars_i)} Stars</b>\n\n"
+            f"{title}\n\n"
+            f"{ton_e} <b>{_fmt_amount(amount)}</b> → "
+            f"{star_e} <b>{_fmt_stars(stars_i)} Stars</b>\n\n"
             f"{_value_block(irt, usdt)}"
         )
 
@@ -2054,23 +2567,43 @@ async def _price_convert_message(amount, src, dst=None):
         irt = stars_i * star_usd * usdt_toman
         usdt = stars_i * star_usd
         if not show_convert:
+            if md:
+                return (
+                    f"{title}\n\n"
+                    f"{star_e} **{_fmt_stars(stars_i)} Stars**\n\n"
+                    f"{_value_block(irt, usdt)}"
+                )
             return (
-                "💱 <b>Price Convert</b>\n\n"
-                f"⭐ <b>{_fmt_stars(stars_i)} Stars</b>\n\n"
+                f"{title}\n\n"
+                f"{star_e} <b>{_fmt_stars(stars_i)} Stars</b>\n\n"
                 f"{_value_block(irt, usdt)}"
             )
         if dst == "usdt":
+            if md:
+                return (
+                    f"{title}\n\n"
+                    f"{star_e} **{_fmt_stars(stars_i)} Stars** → "
+                    f"{usdt_e} **{_fmt_usdt(usdt)} USDT**\n\n"
+                    f"{_value_block(irt, usdt)}"
+                )
             return (
-                "💱 <b>Price Convert</b>\n\n"
-                f"⭐ <b>{_fmt_stars(stars_i)} Stars</b> → "
-                f"💲 <b>{_fmt_usdt(usdt)} USDT</b>\n\n"
+                f"{title}\n\n"
+                f"{star_e} <b>{_fmt_stars(stars_i)} Stars</b> → "
+                f"{usdt_e} <b>{_fmt_usdt(usdt)} USDT</b>\n\n"
                 f"{_value_block(irt, usdt)}"
             )
         tons = (stars_i * star_usd) / ton_usd
+        if md:
+            return (
+                f"{title}\n\n"
+                f"{star_e} **{_fmt_stars(stars_i)} Stars** → "
+                f"{ton_e} **{_fmt_amount(tons)}**\n\n"
+                f"{_value_block(irt, usdt)}"
+            )
         return (
-            "💱 <b>Price Convert</b>\n\n"
-            f"⭐ <b>{_fmt_stars(stars_i)} Stars</b> → "
-            f"💎 <b>{_fmt_amount(tons)} TON</b>\n\n"
+            f"{title}\n\n"
+            f"{star_e} <b>{_fmt_stars(stars_i)} Stars</b> → "
+            f"{ton_e} <b>{_fmt_amount(tons)}</b>\n\n"
             f"{_value_block(irt, usdt)}"
         )
 
@@ -2083,23 +2616,43 @@ async def _price_convert_message(amount, src, dst=None):
             stars.quantize(Decimal("1"), rounding=ROUND_HALF_UP)
         )
         if not show_convert:
+            if md:
+                return (
+                    f"{title}\n\n"
+                    f"{usdt_e} **{_fmt_usdt(amount)} USDT**\n\n"
+                    f"{_value_block(irt, usdt, show_usdt=False)}"
+                )
             return (
-                "💱 <b>Price Convert</b>\n\n"
-                f"💲 <b>{_fmt_usdt(amount)} USDT</b>\n\n"
+                f"{title}\n\n"
+                f"{usdt_e} <b>{_fmt_usdt(amount)} USDT</b>\n\n"
                 f"{_value_block(irt, usdt, show_usdt=False)}"
             )
         if dst == "ton":
+            if md:
+                return (
+                    f"{title}\n\n"
+                    f"{usdt_e} **{_fmt_usdt(amount)} USDT** → "
+                    f"{ton_e} **{_fmt_amount(tons)}**\n\n"
+                    f"{_value_block(irt, usdt, show_usdt=False)}"
+                )
             return (
-                "💱 <b>Price Convert</b>\n\n"
-                f"💲 <b>{_fmt_usdt(amount)} USDT</b> → "
-                f"💎 <b>{_fmt_amount(tons)} TON</b>\n\n"
+                f"{title}\n\n"
+                f"{usdt_e} <b>{_fmt_usdt(amount)} USDT</b> → "
+                f"{ton_e} <b>{_fmt_amount(tons)}</b>\n\n"
                 f"{_value_block(irt, usdt, show_usdt=False)}"
             )
         if dst == "stars":
+            if md:
+                return (
+                    f"{title}\n\n"
+                    f"{usdt_e} **{_fmt_usdt(amount)} USDT** → "
+                    f"{star_e} **{_fmt_stars(stars_i)} Stars**\n\n"
+                    f"{_value_block(irt, usdt, show_usdt=False)}"
+                )
             return (
-                "💱 <b>Price Convert</b>\n\n"
-                f"💲 <b>{_fmt_usdt(amount)} USDT</b> → "
-                f"⭐ <b>{_fmt_stars(stars_i)} Stars</b>\n\n"
+                f"{title}\n\n"
+                f"{usdt_e} <b>{_fmt_usdt(amount)} USDT</b> → "
+                f"{star_e} <b>{_fmt_stars(stars_i)} Stars</b>\n\n"
                 f"{_value_block(irt, usdt, show_usdt=False)}"
             )
         raise ValueError("Supported: usdt→ton/stars only.")
@@ -2997,7 +3550,7 @@ async def _artemis_ordertop_handler(event):
     status = None
     try:
         status = await event.eor(
-            "<b>Fetching top orders...</b>",
+            _loading_html("Fetching top orders..."),
             parse_mode="html",
         )
 
@@ -3072,7 +3625,7 @@ async def _artemis_order_book_handler(event):
     status = None
     try:
         status = await event.eor(
-            "<b>Fetching order book...</b>",
+            _loading_html("Fetching order book..."),
             parse_mode="html",
         )
 
@@ -3142,7 +3695,7 @@ async def artemis_orders(event):
     global ORDER_CACHE
     status = None
     try:
-        status = await event.eor("<b>Processing...</b>", parse_mode="html")
+        status = await event.eor(_loading_html("Processing..."), parse_mode="html")
 
         async def work(client):
             global ORDER_CACHE
@@ -3152,7 +3705,7 @@ async def artemis_orders(event):
             if not orders:
                 return None
             lines = [
-                f"📋 <b>Active Orders</b> ({len(orders)})",
+                f"{_emp_ce_html('order', '📋')} <b>Active Orders</b> ({len(orders)})",
                 "",
             ]
             for i, order in enumerate(orders, 1):
@@ -3160,7 +3713,7 @@ async def artemis_orders(event):
                 my_range = _order_range(order)
                 max_range = _order_range(top) if top else "—"
                 highest = _order_is_highest(order, top)
-                mark = " ✅" if highest else ""
+                mark = f" {_emp_ce_html('tick', '✅')}" if highest else ""
                 oid = order.get("id", "?")
                 total_qty = int(
                     order.get("totalQuantity")
@@ -3174,10 +3727,10 @@ async def artemis_orders(event):
                     qty_text = "—"
                 lines.append(
                     f"<b>{i}. {_order_label(order)}</b>\n"
-                    f"   💰 {my_range} TON{mark}\n"
-                    f"   📊 Max: {max_range} TON\n"
-                    f"   🔢 Qty: {qty_text}\n"
-                    f"   🆔 <code>{oid}</code>"
+                    f"   {_emp_ce_html('cash', '💰')} {my_range} {_gram_ce_html('TON')}{mark}\n"
+                    f"   {_emp_ce_html('qs', '📊')} Max: {max_range} {_gram_ce_html('TON')}\n"
+                    f"   {_emp_ce_html('qnt', '🔢')} Qty: {qty_text}\n"
+                    f"   {_emp_ce_html('id', '🆔')} <code>{oid}</code>"
                 )
                 lines.append("")
             return "\n".join(lines).rstrip()
@@ -4253,9 +4806,9 @@ async def artemis_orderupall(event):
     except ValueError as e:
         return await event.eor(f"❌ {e}", parse_mode="html")
     if status is None:
-        status = await event.eor("<b>Processing...</b>", parse_mode="html")
+        status = await event.eor(_loading_html("Processing..."), parse_mode="html")
     else:
-        status = await status.edit("<b>Processing...</b>", parse_mode="html")
+        status = await status.edit(_loading_html("Processing..."), parse_mode="html")
     try:
         async with ORDERUP_LOCK:
             async with MRKTClient(token=ARTEMIS_TOKEN) as client:
@@ -4376,9 +4929,9 @@ async def artemis_orderup(event):
         return await event.eor(f"Usage: <code>{_h('orderup')} N</code>", parse_mode="html")
     idx = int(raw_idx.strip())
     if status is None:
-        status = await event.eor("<b>Processing...</b>", parse_mode="html")
+        status = await event.eor(_loading_html("Processing..."), parse_mode="html")
     else:
-        status = await status.edit("<b>Processing...</b>", parse_mode="html")
+        status = await status.edit(_loading_html("Processing..."), parse_mode="html")
     try:
         order = await _get_cached_order(idx)
         if not order:
@@ -4464,9 +5017,9 @@ async def artemis_orderdelall(event):
     except ValueError as e:
         return await event.eor(f"❌ {e}", parse_mode="html")
     if status is None:
-        status = await event.eor("<b>Processing...</b>", parse_mode="html")
+        status = await event.eor(_loading_html("Processing..."), parse_mode="html")
     else:
-        status = await status.edit("<b>Processing...</b>", parse_mode="html")
+        status = await status.edit(_loading_html("Processing..."), parse_mode="html")
     try:
         async with ORDERUP_LOCK:
             async with MRKTClient(token=ARTEMIS_TOKEN) as client:
@@ -4532,9 +5085,9 @@ async def artemis_orderdel(event):
         return await event.eor(usage, parse_mode="html")
 
     if status is None:
-        status = await event.eor("<b>Processing...</b>", parse_mode="html")
+        status = await event.eor(_loading_html("Processing..."), parse_mode="html")
     else:
-        status = await status.edit("<b>Processing...</b>", parse_mode="html")
+        status = await status.edit(_loading_html("Processing..."), parse_mode="html")
     try:
         # Resolve all targets from the same snapshot so indexes stay stable.
         if not ORDER_CACHE:
@@ -4825,7 +5378,7 @@ async def artemis_ordernew(event):
 
     status = None
     try:
-        status = await event.eor("<b>Processing...</b>", parse_mode="html")
+        status = await event.eor(_loading_html("Processing..."), parse_mode="html")
 
         async def work(client):
             global ORDER_CACHE
@@ -4969,21 +5522,39 @@ async def _changes_api_json(path, session=None):
     """GET JSON from api.changes.tg. path must start with '/'."""
     url = f"{CHANGES_API}{path}"
     owns_session = session is None
+    # 404 = unknown / partial collection (e.g. typing "Resistance") — not an error.
     try:
         if owns_session:
             timeout = aiohttp.ClientTimeout(total=12, connect=6)
             session = aiohttp.ClientSession(timeout=timeout)
         async with session.get(url) as resp:
-            if resp.status != 200:
-                LOGS.info("changes.tg HTTP %s for %s", resp.status, url)
+            if resp.status == 200:
+                return await resp.json(content_type=None)
+            if resp.status == 404:
+                LOGS.debug("changes.tg HTTP 404 for %s", url)
                 return None
-            return await resp.json(content_type=None)
+            LOGS.debug("changes.tg HTTP %s for %s", resp.status, url)
     except Exception as e:
-        LOGS.warning("changes.tg fetch failed for %s: %s", url, e)
-        return None
+        LOGS.debug("changes.tg aiohttp failed for %s: %s", url, e)
     finally:
         if owns_session and session is not None:
             await session.close()
+    # Fallback: sync requests (some hosts break aiohttp TLS/DNS). Skip after 404.
+    try:
+        def _req():
+            r = requests.get(url, timeout=12)
+            if r.status_code == 200:
+                return r.json()
+            if r.status_code == 404:
+                LOGS.debug("changes.tg requests HTTP 404 for %s", url)
+                return None
+            LOGS.debug("changes.tg requests HTTP %s for %s", r.status_code, url)
+            return None
+
+        return await asyncio.to_thread(_req)
+    except Exception as e:
+        LOGS.debug("changes.tg requests failed for %s: %s", url, e)
+        return None
 
 
 def _changes_find_named(rows, target):
@@ -4997,6 +5568,564 @@ def _changes_find_named(rows, target):
         if name and _match_attr(name, target):
             return row
     return None
+
+
+def _can_use_custom_emoji(client=None) -> bool:
+    """
+    Prefer CE when bot/user can use it. Missing ``me`` must not block CE tags
+    when we already have a document id (Telegram strips them if disallowed).
+    """
+    try:
+        for who in (client, asst, heartless_bot):
+            if who is None:
+                continue
+            me = getattr(who, "me", None)
+            if me is None:
+                continue
+            if bool(getattr(me, "bot", False)):
+                return True
+            if bool(getattr(me, "premium", False)):
+                return True
+    except Exception:
+        pass
+    # Default allow — callers only emit CE when a document id exists.
+    return True
+
+
+# document_id → alt glyph (from GetCustomEmojiDocuments)
+_EMOJI_ALT_CACHE: dict[int, str] = {}
+
+
+def _ce_md(doc_id, fallback: str = "✨") -> str:
+    """CustomMarkdown `[alt](emoji/id)` for userbot messages (heartless_bot)."""
+    if not doc_id:
+        return fallback
+    try:
+        did = int(doc_id)
+        alt = _EMOJI_ALT_CACHE.get(did) or "✨"
+        return f"[{alt}](emoji/{did})"
+    except Exception:
+        try:
+            return cusmo(int(doc_id))
+        except Exception:
+            return fallback
+
+
+def _ce_html(doc_id, fallback: str = "✨") -> str:
+    """
+    ToxygenX Telethon HTML custom emoji:
+    ``<tg-emoji emoji-id="…">alt</tg-emoji>`` → MessageEntityCustomEmoji.
+    """
+    if not doc_id:
+        return html.escape(fallback)
+    try:
+        did = int(doc_id)
+        alt = html.escape(_EMOJI_ALT_CACHE.get(did) or "✨")
+        return f'<tg-emoji emoji-id="{did}">{alt}</tg-emoji>'
+    except Exception:
+        return html.escape(fallback)
+
+
+def _emp_doc_id(name: str):
+    """Resolve ``addemoji`` DB name → document id (``EMP`` key)."""
+    if not name:
+        return None
+    try:
+        from CythonX.dB.premium_db import list_emp
+
+        ok = list_emp() or {}
+    except Exception:
+        return None
+    raw = str(name).strip()
+    # Aliases: price-convert used to look up ``ton``; packs store TON as ``gram``.
+    aliases = {
+        "ton": ("ton", "gram"),
+        "💎": ("gram", "ton"),
+    }
+    candidates = aliases.get(raw.lower(), (raw,))
+    bucket = None
+    for cand in candidates:
+        bucket = ok.get(cand)
+        if not bucket:
+            low = str(cand).lower()
+            for k, v in ok.items():
+                if str(k).lower() == low and v:
+                    bucket = v
+                    break
+        if bucket:
+            break
+    if not bucket:
+        return None
+    try:
+        return int(random.choice(list(bucket)))
+    except Exception:
+        return None
+
+
+def _emp_ce_md(name: str, fallback: str = "✨") -> str:
+    """CustomMarkdown CE from ``addemoji`` name."""
+    return _ce_md(_emp_doc_id(name), fallback)
+
+
+def _emp_ce_html(name: str, fallback: str = "✨") -> str:
+    """HTML ``tg-emoji`` from ``addemoji`` name."""
+    return _ce_html(_emp_doc_id(name), fallback)
+
+
+def _loading_html(label: str = "Loading...") -> str:
+    """Prefix status lines with ``addemoji load``."""
+    return f'{_emp_ce_html("load", "⏳")} <b>{label}</b>'
+
+
+def _gift_kb_button(
+    label: str,
+    *,
+    emp: str | None = None,
+    data: bytes | None = None,
+    url: str | None = None,
+    switch_query: str | None = None,
+    same_peer: bool = True,
+):
+    """KeyboardInlineButton with optional EMP ``KeyboardButtonStyle.icon``."""
+    icon = None
+    if emp:
+        try:
+            raw = _emp_doc_id(emp)
+            if raw is not None:
+                icon = int(raw)
+        except Exception:
+            icon = None
+    style = (
+        KeyboardButtonStyle(bg_primary=True, icon=icon) if icon is not None else None
+    )
+    if data is not None:
+        typ = tl_types.InlineButtonTypeCallback(data=data)
+    elif url is not None:
+        typ = tl_types.InlineButtonTypeUrl(url=url)
+    elif switch_query is not None:
+        typ = tl_types.InlineButtonTypeSwitchInline(
+            query=switch_query, same_peer=same_peer,
+        )
+    else:
+        raise ValueError("gift kb button needs data, url, or switch_query")
+    return tl_types.KeyboardInlineButton(text=label, type=typ, style=style)
+
+
+def _market_emp_name(market: str) -> str:
+    """Map market key/label → ``addemoji`` name (mrkt/portal/tonnel/…)."""
+    m = re.sub(r"[^a-z0-9]+", "", (market or "").lower())
+    aliases = {
+        "mrkt": "mrkt",
+        "market": "mrkt",
+        "portal": "portal",
+        "portals": "portal",
+        "tonnel": "tonnel",
+        "tunnel": "tonnel",
+        "telegram": "telegram",
+        "tg": "telegram",
+        "getgems": "getgems",
+        "getgem": "getgems",
+    }
+    return aliases.get(m, m)
+
+
+def _market_ce_md(market: str, fallback: str = "💰") -> str:
+    return _emp_ce_md(_market_emp_name(market), fallback)
+
+
+def _market_ce_html(market: str, fallback: str = "💰") -> str:
+    return _emp_ce_html(_market_emp_name(market), fallback)
+
+
+def _gift_parse_mode(compact: bool = False):
+    """Gift panels use HTML so ToxygenX ``tg-emoji`` entities parse correctly."""
+    if compact and _can_use_custom_emoji():
+        return CustomMarkdown()
+    if compact:
+        return "md"
+    return "html"
+
+
+def _norm_emoji_key(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", (value or "").lower())
+
+
+
+def _lookup_emoji_id(mapping: dict, name: str):
+    if not mapping or not name:
+        return None
+    direct = mapping.get(name)
+    if direct:
+        return direct
+    key = _norm_emoji_key(name)
+    for k, v in mapping.items():
+        if _norm_emoji_key(k) == key:
+            return v
+    return None
+
+
+def _canonical_attr_name(pack: dict, kind: str, name: str) -> str:
+    """Resolve CDN-correct casing from emoji pack (e.g. breaker → Breaker)."""
+    raw = (name or "").strip()
+    if not raw:
+        return raw
+    mapping = {}
+    if kind == "model":
+        mapping = (pack or {}).get("models") or {}
+        for item in (pack or {}).get("models_list") or []:
+            n = item.get("name") if isinstance(item, dict) else None
+            if n:
+                mapping.setdefault(str(n), True)
+    elif kind == "backdrop":
+        mapping = (pack or {}).get("backdrops") or {}
+    key = _norm_emoji_key(raw)
+    for k in mapping:
+        if _norm_emoji_key(k) == key:
+            return str(k)
+    return _title_case_name(raw) if raw == raw.lower() else raw
+
+
+def _changes_cdn_png(collection: str, model: str = "Original") -> Optional[str]:
+    col = (collection or "").strip()
+    mod = (model or "Original").strip() or "Original"
+    if not col:
+        return None
+    return (
+        f"{CHANGES_CDN}/gifts/models/"
+        f"{_url_quote(col, safe='')}/png/{_url_quote(mod, safe='')}.png"
+    )
+
+
+def _inline_thumb(url: Optional[str], *, mime: str = "image/png"):
+    """Telegram InputWebDocument rejects webp — use image/png (or jpeg)."""
+    if not url:
+        return None
+    mime = (mime or "image/png").lower()
+    if mime not in ("image/png", "image/jpeg", "image/gif"):
+        mime = "image/png"
+    try:
+        return InputWebDocument(url, 0, mime, [])
+    except Exception:
+        return None
+
+
+def _inline_article_media(url: Optional[str], *, mime: str = "image/jpeg") -> dict:
+    """
+    Thumb kwargs for ``builder.article`` — same pattern as urltools / inlinestuff:
+    set both ``thumb`` and ``content`` to the same InputWebDocument.
+    """
+    doc = _inline_thumb(url, mime=mime)
+    if doc is None:
+        return {}
+    return {"thumb": doc, "content": doc}
+
+
+def _gift_inline_thumb_for_sess(sess: dict):
+    """
+    Collection → Original.png · model/NFT → model PNG from changes CDN.
+    Always image/png (no fragment webp).
+    """
+    pack = _sess_emoji_pack(sess)
+    col = (sess.get("collection") or "").strip()
+    if not col:
+        return None
+    model = sess.get("model")
+    if model:
+        model = _canonical_attr_name(pack, "model", model)
+        return _inline_thumb(_changes_cdn_png(col, model))
+    return _inline_thumb(_changes_cdn_png(col, "Original"))
+
+
+def _pack_has_emojis(pack: dict) -> bool:
+    if not isinstance(pack, dict):
+        return False
+    if pack.get("collection"):
+        return True
+    if pack.get("models_list"):
+        return True
+    if pack.get("models"):
+        return True
+    return False
+
+
+async def _fetch_emoji_pack(collection: str, *, force: bool = False) -> dict:
+    """
+    GET /emoji/{collection} (+ /gift fallback for collection id).
+
+    Document ids come from Changes ``customEmojiId`` fields (same IDs used on
+    KeyboardButtonStyle.icon). Successful packs are cached in memory only.
+    Empty / 404 (partial typing) is never cached.
+    """
+    empty = {
+        "collection": None,
+        "models": {},
+        "backdrops": {},
+        "models_list": [],
+        "emojisets": [],
+    }
+    col = (collection or "").strip()
+    if not col:
+        return empty
+    cache_key = _norm_emoji_key(col)
+
+    def _from_mem():
+        cached = _EMOJI_PACK_CACHE.get(cache_key)
+        if (
+            cached
+            and (time.monotonic() - float(cached.get("at") or 0)) < _EMOJI_PACK_TTL
+            and _pack_has_emojis(cached.get("pack") or {})
+        ):
+            return cached.get("pack") or empty
+        return None
+
+    if not force:
+        hit = _from_mem()
+        if hit is not None:
+            return hit
+
+    pack = dict(empty)
+    seg = _changes_path_segment(col)
+    emoji_data = None
+    try:
+        emoji_data = await _changes_api_json(f"/emoji/{seg}")
+        if isinstance(emoji_data, dict):
+            raw_col = emoji_data.get("originalCustomEmojiId")
+            if raw_col is not None:
+                try:
+                    pack["collection"] = str(int(raw_col))
+                except Exception:
+                    pack["collection"] = str(raw_col)
+            models = {}
+            models_list = []
+            for row in emoji_data.get("models") or []:
+                if not isinstance(row, dict):
+                    continue
+                name = row.get("name")
+                eid = row.get("customEmojiId")
+                if not name or eid is None:
+                    continue
+                try:
+                    eid_s = str(int(eid))
+                except Exception:
+                    eid_s = str(eid)
+                models[str(name)] = eid_s
+                models_list.append({"name": str(name), "id": eid_s})
+            backdrops = {}
+            for row in emoji_data.get("backdrops") or []:
+                if not isinstance(row, dict):
+                    continue
+                name = row.get("name")
+                eid = row.get("customEmojiId")
+                if not name or eid is None:
+                    continue
+                try:
+                    backdrops[str(name)] = str(int(eid))
+                except Exception:
+                    backdrops[str(name)] = str(eid)
+            pack["models"] = models
+            pack["backdrops"] = backdrops
+            pack["models_list"] = models_list
+            sets = []
+            for key in (
+                "modelsEmojisetName",
+                "modelsCraftedEmojisetName",
+            ):
+                val = emoji_data.get(key)
+                if val and str(val) not in sets:
+                    sets.append(str(val))
+            pack["emojisets"] = sets
+    except Exception as e:
+        LOGS.warning("emoji pack /emoji failed for %s: %s", col, e)
+
+    # /gift fallback only when /emoji returned JSON without a collection glyph.
+    # Skip on HTTP 404 (partial typing like "Resistance") — avoids noisy double-404.
+    if not pack.get("collection") and isinstance(emoji_data, dict):
+        try:
+            gdata = await _changes_api_json(f"/gift/{seg}")
+            gift = (gdata or {}).get("gift") if isinstance(gdata, dict) else None
+            if isinstance(gift, dict) and gift.get("customEmojiId") is not None:
+                try:
+                    pack["collection"] = str(int(gift["customEmojiId"]))
+                except Exception:
+                    pack["collection"] = str(gift["customEmojiId"])
+        except Exception as e:
+            LOGS.debug("emoji pack /gift fallback failed for %s: %s", col, e)
+
+    if _pack_has_emojis(pack):
+        _EMOJI_PACK_CACHE[cache_key] = {"at": time.monotonic(), "pack": pack}
+        return pack
+
+    # API miss (404 / partial name): fall back to last good mem pack.
+    hit = _from_mem()
+    if hit is not None:
+        return hit
+    LOGS.debug("emoji pack empty for %s (not cached)", col)
+    return pack
+
+
+_LOADED_EMOJISETS: set[str] = set()
+
+
+async def _load_emoji_stickersets(short_names: list) -> None:
+    """
+    Fetch (+ install on userbot) gift emoji stickersets so asst may emit
+    MessageEntityCustomEmoji / KeyboardButtonStyle.icon for those docs.
+    """
+    names = [str(n).strip() for n in (short_names or []) if n]
+    names = [n for n in names if n and n not in _LOADED_EMOJISETS]
+    if not names:
+        return
+    try:
+        from telethon.tl.functions.messages import (
+            GetStickerSetRequest,
+            UninstallStickerSetRequest,
+        )
+        from telethon.tl.types import InputStickerSetShortName
+    except Exception as e:
+        LOGS.debug("GetStickerSet import: %s", e)
+        return
+
+    def _input_set(name: str):
+        try:
+            return InputStickerSetShortName(short_name=name)
+        except TypeError:
+            return InputStickerSetShortName(name)
+
+    for name in names:
+        stickerset = _input_set(name)
+        # Fetch set metadata only — never InstallStickerSet (keeps packs out of
+        # the owner's saved emoji / sticker lists).
+        for client, tag in ((asst, "asst"), (heartless_bot, "userbot")):
+            if client is None:
+                continue
+            try:
+                await client(GetStickerSetRequest(stickerset=stickerset, hash=0))
+            except TypeError:
+                with contextlib.suppress(Exception):
+                    await client(GetStickerSetRequest(stickerset=stickerset))
+            except Exception as e:
+                LOGS.debug("%s GetStickerSet %s: %s", tag, name, e)
+        # Undo installs from older builds that polluted the emoji list.
+        if heartless_bot is not None:
+            with contextlib.suppress(Exception):
+                await heartless_bot(UninstallStickerSetRequest(stickerset=stickerset))
+        _LOADED_EMOJISETS.add(name)
+
+
+async def _warm_custom_emoji_docs(doc_ids: list) -> None:
+    """Fetch emoji docs on asst + userbot; cache alt glyphs."""
+    ids = []
+    seen = set()
+    for d in doc_ids or []:
+        try:
+            i = int(d)
+        except Exception:
+            continue
+        if i in seen:
+            continue
+        seen.add(i)
+        ids.append(i)
+    if not ids:
+        return
+    try:
+        from telethon.tl.functions.messages import GetCustomEmojiDocumentsRequest
+    except Exception as e:
+        LOGS.debug("GetCustomEmojiDocuments import: %s", e)
+        return
+
+    for client in (asst, heartless_bot):
+        if client is None:
+            continue
+        for i in range(0, len(ids), 100):
+            chunk = ids[i : i + 100]
+            try:
+                docs = await client(GetCustomEmojiDocumentsRequest(document_id=chunk))
+            except Exception as e:
+                LOGS.debug("warm custom emoji docs via %s: %s", client, e)
+                continue
+            for doc in docs or []:
+                try:
+                    did = int(getattr(doc, "id", 0) or 0)
+                except Exception:
+                    continue
+                if not did:
+                    continue
+                alt = "✨"
+                for attr in getattr(doc, "attributes", None) or []:
+                    a = getattr(attr, "alt", None)
+                    if a:
+                        alt = str(a)
+                        break
+                _EMOJI_ALT_CACHE[did] = alt
+
+
+async def _warm_emp_names(*names: str) -> None:
+    """Warm ``addemoji`` EMP document ids (same as g inline pack warm)."""
+    try:
+        from CythonX.dB.premium_db import list_emp
+
+        ok = list_emp() or {}
+    except Exception:
+        return
+    ids = []
+    for name in names:
+        raw = str(name or "").strip()
+        if not raw:
+            continue
+        bucket = ok.get(raw)
+        if not bucket:
+            low = raw.lower()
+            for k, v in ok.items():
+                if str(k).lower() == low and v:
+                    bucket = v
+                    break
+        if bucket:
+            ids.extend(bucket)
+    if ids:
+        await _warm_custom_emoji_docs(ids)
+
+
+def _price_tools_inline_pm():
+    """Same CE parse mode as g floor/sales inline output (CustomMarkdown)."""
+    if _can_use_custom_emoji():
+        return CustomMarkdown()
+    return "md"
+
+
+async def _attach_emoji_pack(sess: dict, *, warm: bool = True, force: bool = False) -> dict:
+    """Load emoji pack + stickersets into session; refetch if missing/empty."""
+    existing = sess.get("emoji_pack") if isinstance(sess.get("emoji_pack"), dict) else {}
+    if force or not _pack_has_emojis(existing):
+        try:
+            pack = await asyncio.wait_for(
+                _fetch_emoji_pack(sess.get("collection") or "", force=force),
+                timeout=10.0,
+            )
+        except Exception as e:
+            LOGS.warning("attach emoji pack: %s", e)
+            pack = existing or {
+                "collection": None,
+                "models": {},
+                "backdrops": {},
+                "models_list": [],
+                "emojisets": [],
+            }
+        sess["emoji_pack"] = pack
+    pack = sess.get("emoji_pack") or {}
+    if warm and _pack_has_emojis(pack):
+        # Stickersets first — required before Telegram accepts CE / button icons.
+        with contextlib.suppress(Exception):
+            await _load_emoji_stickersets(pack.get("emojisets") or [])
+        ids = []
+        if pack.get("collection"):
+            ids.append(pack["collection"])
+        # Warm only first page (+collection) — keep inline under Telegram timeout.
+        for item in (pack.get("models_list") or [])[:_MODELS_PAGE_SIZE]:
+            if item.get("id"):
+                ids.append(item["id"])
+        with contextlib.suppress(Exception):
+            await _warm_custom_emoji_docs(ids)
+    return sess
 
 
 async def _changes_gift_snapshot(collection, model=None, session=None):
@@ -5063,6 +6192,8 @@ async def _changes_gift_snapshot(collection, model=None, session=None):
                 model_data = {
                     "name": info.get("name"),
                     "rarityPermille": info.get("rarityPermille"),
+                    "rarityTier": info.get("rarityTier"),
+                    "crafted": info.get("crafted"),
                 }
                 model_name = info.get("name")
             else:
@@ -5070,7 +6201,13 @@ async def _changes_gift_snapshot(collection, model=None, session=None):
                 if row:
                     model_data = {
                         "name": row.get("name"),
-                        "rarityPermille": _pct_to_permille(row.get("rarity")),
+                        "rarityPermille": (
+                            row.get("rarityPermille")
+                            if row.get("rarityPermille") is not None
+                            else _pct_to_permille(row.get("rarity"))
+                        ),
+                        "rarityTier": row.get("rarityTier"),
+                        "crafted": row.get("crafted"),
                     }
                     model_name = row.get("name") or model
 
@@ -5424,14 +6561,13 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
         except Exception:
             models = []
         model_row = _find_named_row(models, ("modelName", "name"), model)
-        model_rarity = model_row.get("rarityPerMille")
+        # Prefer api.changes.tg rarity; MRKT / label only as fallback.
+        model_rarity = _model_rarity_from_changes(tg_snap)
+        if model_rarity is None:
+            model_rarity = model_row.get("rarityPerMille")
         if model_rarity is None:
             tg_model = (tg_snap or {}).get("model") or {}
-            model_rarity = (
-                tg_model.get("rarity_permille")
-                or tg_model.get("rarityPerMille")
-                or _rarity_from_label(tg_model.get("name"))
-            )
+            model_rarity = _rarity_from_label(tg_model.get("name"))
 
     if model and backdrop:
         try:
@@ -5464,38 +6600,49 @@ async def _build_gift_floor_only(client, collection, model=None, backdrop=None):
             .replace("[", "\\[")
         )
 
-    lines = [f"🎁 **Collection:** `{_md(collection)}`"]
+    emoji_pack = await _fetch_emoji_pack(collection)
+    col_e = _ce_md(emoji_pack.get("collection"), "🎁")
+    lines = [f"{col_e} **Collection:** `{_md(collection)}`"]
     if model:
-        rarity = _md(_rarity_pct(model_rarity))
+        rarity = _md(_model_rarity_display(tg_snap, model_rarity))
+        mod_e = _ce_md(
+            _lookup_emoji_id(emoji_pack.get("models") or {}, model), "🧩"
+        )
         lines.append(
-            f"🧩 **Model:** `{_md(model)}` (`{rarity}`)"
+            f"{mod_e} **Model:** `{_md(model)}` (`{rarity}`)"
         )
     if backdrop:
+        back_e = _ce_md(
+            _lookup_emoji_id(emoji_pack.get("backdrops") or {}, backdrop), "🎨"
+        )
         lines.append(
-            f"🎨 **Backdrop:** `{_md(backdrop)}` "
+            f"{back_e} **Backdrop:** `{_md(backdrop)}` "
             f"(`{_md(_rarity_pct(backdrop_rarity))}`)"
         )
     lines.append("")
+    gram = _gram_ce_md("TON")
     for label, value in _sat_floor_rows(sat_floors):
-        # Price in code, single space, then TON (no extra space inside code).
+        # Price in code, single space, then gram/TON unit.
+        m_e = _market_ce_md(label, "💰")
         lines.append(
-            f"💰 **{label}:** `{_md(_floor_price_code(value))}` TON"
+            f"{m_e} **{label}:** `{_md(_floor_price_code(value))}` {gram}"
         )
     lines.append("")
 
+    qs_e = _emp_ce_md("qs", "📊")
     quick_txt = _ton2(quick) if quick is not None else "—"
     if model and backdrop:
         lines.append(
-            f"📊 **Quick Sell Collection + Model + Backdrop:** "
-            f"`{_md(quick_txt)}` TON"
+            f"{qs_e} **Quick Sell Collection + Model + Backdrop:** "
+            f"`{_md(quick_txt)}` {gram}"
         )
     elif model:
         lines.append(
-            f"📊 **Quick Sell Collection + Model:** `{_md(quick_txt)}` TON"
+            f"{qs_e} **Quick Sell Collection + Model:** `{_md(quick_txt)}` {gram}"
         )
     else:
         lines.append(
-            f"📊 **Quick Sell Collection:** `{_md(quick_txt)}` TON"
+            f"{qs_e} **Quick Sell Collection:** `{_md(quick_txt)}` {gram}"
         )
 
     return "\n".join(lines)
@@ -5605,14 +6752,14 @@ async def _build_gift_info(
             models, ("modelName", "name"), model,
         )
 
-        if model_rarity is None:
+        # Prefer api.changes.tg (even over NFT/MRKT seed).
+        ch_rarity = _model_rarity_from_changes(tg_snap)
+        if ch_rarity is not None:
+            model_rarity = ch_rarity
+        elif model_rarity is None:
             model_rarity = model_row.get("rarityPerMille")
         if model_rarity is None and tg_model:
-            model_rarity = (
-                tg_model.get("rarity_permille")
-                or tg_model.get("rarityPerMille")
-                or _rarity_from_label(tg_model.get("name"))
-            )
+            model_rarity = _rarity_from_label(tg_model.get("name"))
 
         if backdrop:
             try:
@@ -5688,45 +6835,56 @@ async def _build_gift_info(
     def floor_block(title, values):
         lines = [title, ""]
         for label, value in values:
-            lines.append(f"   <b>{label}</b>: {_floor_ton(value)}")
+            m_e = _market_ce_html(label, "💰")
+            lines.append(f"   {m_e} <b>{label}</b>: {_floor_ton(value)}")
         lines.append("")
         return lines
 
+    emoji_pack = await _fetch_emoji_pack(collection)
+    col_e = _ce_html(emoji_pack.get("collection"), "🎁")
     lines = []
     if nft_url:
         lines.append(
-            f'🎁 <a href="{nft_url}"><b>NFT Info</b></a>'
+            f'{col_e} <a href="{nft_url}"><b>NFT Info</b></a>'
         )
     else:
-        lines.append("🎁 <b>NFT Info</b>")
+        lines.append(f"{col_e} <b>NFT Info</b>")
     lines.append("")
 
     lines.extend(
         floor_block(
-            f"🎁 <b>Collection:</b> {collection}",
+            f"{col_e} <b>Collection:</b> {html.escape(str(collection))}",
             _sat_floor_rows(sat_collection),
         )
     )
 
     if model:
+        mod_e = _ce_html(
+            _lookup_emoji_id(emoji_pack.get("models") or {}, model), "🧩"
+        )
         lines.extend(
             floor_block(
-                f"🧩 <b>Model:</b> {model} ({_rarity_pct(model_rarity)})",
+                f"{mod_e} <b>Model:</b> {html.escape(str(model))} "
+                f"({html.escape(_model_rarity_display(tg_snap, model_rarity))})",
                 _sat_floor_rows(sat_model),
             )
         )
 
         if backdrop:
+            back_e = _ce_html(
+                _lookup_emoji_id(emoji_pack.get("backdrops") or {}, backdrop),
+                "🎨",
+            )
             lines.extend(
                 floor_block(
-                    f"🎨 <b>Backdrop:</b> {backdrop} "
+                    f"{back_e} <b>Backdrop:</b> {html.escape(str(backdrop))} "
                     f"({_rarity_pct(backdrop_rarity)})",
                     _sat_floor_rows(sat_full),
                 )
             )
         else:
             lines.extend([
-                "🎨 Backdrop: ANY",
+                f"{_ce_html(None, '🎨')} Backdrop: ANY",
                 "",
             ])
 
@@ -5742,19 +6900,21 @@ async def _build_gift_info(
             _format_monochrome_block(mono_rows, highlight_backdrop=backdrop)
         )
 
+    qs_e = _emp_ce_html("qs", "📊")
+    gram = _gram_ce_html("TON")
     lines.append(
-        f"📊 <b>Quick Sell Collection:</b> "
-        f"{_ton2(quick_collection) if quick_collection is not None else '—'} TON"
+        f"{qs_e} <b>Quick Sell Collection:</b> "
+        f"{_ton2(quick_collection) if quick_collection is not None else '—'} {gram}"
     )
     if model:
         lines.append(
-            f"📊 <b>Quick Sell Collection + Model:</b> "
-            f"{_ton2(quick_coll_model) if quick_coll_model is not None else '—'} TON"
+            f"{qs_e} <b>Quick Sell Collection + Model:</b> "
+            f"{_ton2(quick_coll_model) if quick_coll_model is not None else '—'} {gram}"
         )
         if backdrop:
             lines.append(
-                f"📊 <b>Quick Sell Collection + Model + Backdrop:</b> "
-                f"{_ton2(quick_full) if quick_full is not None else '—'} TON"
+                f"{qs_e} <b>Quick Sell Collection + Model + Backdrop:</b> "
+                f"{_ton2(quick_full) if quick_full is not None else '—'} {gram}"
             )
     lines.append("")
 
@@ -6080,7 +7240,7 @@ async def artemis_balance(event):
     try:
         if status is None:
             status = await event.eor(
-                "<b>Fetching balance...</b>",
+                _loading_html("Fetching balance..."),
                 parse_mode="html",
             )
 
@@ -6100,8 +7260,8 @@ async def artemis_balance(event):
             )
         ton = Decimal(str(hard)) / Decimal("1000000000")
         return await status.edit(
-            f"💰 <b>MRKT Balance:</b> "
-            f"<code>{ton.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP):.2f}</code> TON",
+            f"{_emp_ce_html('balance', '💰')} <b>MRKT Balance:</b> "
+            f"<code>{ton.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP):.2f}</code> {_gram_ce_html('TON')}",
             parse_mode="html",
         )
     except ValueError as e:
@@ -6266,7 +7426,7 @@ async def artemis_nfts(event):
     status = None
     try:
         status = await event.eor(
-            "<b>Fetching listed NFTs...</b>",
+            _loading_html("Fetching listed NFTs..."),
             parse_mode="html",
         )
 
@@ -6426,6 +7586,12 @@ async def artemis_gift(event):
 # Inline `g` compact-floor picker sessions (answer fast; fetch on callback).
 _GIFT_INLINE_TTL = 30 * 60
 _GIFT_INLINE_SESSIONS: dict = {}
+# (user_id, normalized raw query) → session token — for ChosenInlineResult CE refresh
+_GIFT_INLINE_QUERY_INDEX: dict[tuple[int, str], str] = {}
+
+
+def _gift_inline_query_key(user_id: int, raw: str) -> tuple[int, str]:
+    return (int(user_id), re.sub(r"\s+", " ", (raw or "").strip().lower()))
 
 
 def _gift_inline_purge():
@@ -6437,6 +7603,11 @@ def _gift_inline_purge():
     ]
     for k in dead:
         _GIFT_INLINE_SESSIONS.pop(k, None)
+    if dead:
+        dead_set = set(dead)
+        for qk, tok in list(_GIFT_INLINE_QUERY_INDEX.items()):
+            if tok in dead_set:
+                _GIFT_INLINE_QUERY_INDEX.pop(qk, None)
 
 
 def _gift_inline_save(payload: dict) -> str:
@@ -6445,6 +7616,13 @@ def _gift_inline_save(payload: dict) -> str:
     row = dict(payload)
     row["at"] = time.monotonic()
     _GIFT_INLINE_SESSIONS[token] = row
+    try:
+        uid = int(row.get("owner_id") or 0)
+        raw = row.get("raw") or row.get("nft_raw") or ""
+        if uid and raw:
+            _GIFT_INLINE_QUERY_INDEX[_gift_inline_query_key(uid, raw)] = token
+    except Exception:
+        pass
     return token
 
 
@@ -6502,24 +7680,65 @@ def _gift_inline_nft_url(sess: dict) -> Optional[str]:
     return None
 
 
-def _gift_inline_info_lines(sess: dict) -> list[str]:
-    """Gift-style Collection / Model / Backdrop header lines."""
-    lines = [
-        f"🎁 **Collection:** `{_md_escape_inline(_title_case_name(sess.get('collection') or '?'))}`"
-    ]
+def _sess_emoji_pack(sess: dict) -> dict:
+    pack = sess.get("emoji_pack")
+    return pack if isinstance(pack, dict) else {}
+
+
+def _gift_inline_info_lines(sess: dict, *, fmt: str = "html") -> list[str]:
+    """
+    Collection / Model / Backdrop headers.
+
+    ``fmt="html"`` — ToxygenX ``<tg-emoji emoji-id>`` (hub / pickers).
+    ``fmt="md"`` — CustomMarkdown ``[alt](emoji/id)`` (floor/sales bodies).
+    """
+    pack = _sess_emoji_pack(sess)
+    col_raw = _title_case_name(sess.get("collection") or "?")
     model = sess.get("model")
+    backdrop = sess.get("backdrop")
+    mid = _lookup_emoji_id(pack.get("models") or {}, model) if model else None
+    bid = (
+        _lookup_emoji_id(pack.get("backdrops") or {}, backdrop) if backdrop else None
+    )
+    nft_url = _gift_inline_nft_url(sess) if model else None
+
+    if fmt == "md":
+        lines = [
+            f"{_ce_md(pack.get('collection'), '🎁')} **Collection:** "
+            f"`{_md_escape_inline(col_raw)}`"
+        ]
+        if model:
+            model_line = (
+                f"{_ce_md(mid, '🧩')} **Model:** "
+                f"`{_md_escape_inline(_title_case_name(model))}`"
+            )
+            if nft_url:
+                model_line += f" ([Link]({nft_url}))"
+            lines.append(model_line)
+        if backdrop:
+            lines.append(
+                f"{_ce_md(bid, '🎨')} **Backdrop:** "
+                f"`{_md_escape_inline(_title_case_name(backdrop))}`"
+            )
+        return lines
+
+    # HTML (default) — required for asst inline so CE is not left as bare ✨
+    lines = [
+        f"{_ce_html(pack.get('collection'), '🎁')} <b>Collection:</b> "
+        f"<code>{html.escape(col_raw)}</code>"
+    ]
     if model:
         model_line = (
-            f"🧩 **Model:** `{_md_escape_inline(_title_case_name(model))}`"
+            f"{_ce_html(mid, '🧩')} <b>Model:</b> "
+            f"<code>{html.escape(_title_case_name(model))}</code>"
         )
-        nft_url = _gift_inline_nft_url(sess)
         if nft_url:
-            model_line += f" ([Link]({nft_url}))"
+            model_line += f' (<a href="{html.escape(nft_url, quote=True)}">Link</a>)'
         lines.append(model_line)
-    backdrop = sess.get("backdrop")
     if backdrop:
         lines.append(
-            f"🎨 **Backdrop:** `{_md_escape_inline(_title_case_name(backdrop))}`"
+            f"{_ce_html(bid, '🎨')} <b>Backdrop:</b> "
+            f"<code>{html.escape(_title_case_name(backdrop))}</code>"
         )
     return lines
 
@@ -6530,6 +7749,11 @@ def _gift_inline_hub_text(sess: dict) -> str:
 
 def _gift_inline_floor_picker_text(sess: dict) -> str:
     return "\n".join(_gift_inline_info_lines(sess))
+
+
+def _gift_inline_pm():
+    """Inline gift panels always use HTML (ToxygenX tg-emoji)."""
+    return "html"
 
 
 def _button_copy(text: str, label: str = "📋 Copy"):
@@ -6585,7 +7809,7 @@ def _gift_inline_action_row(
         extra.append(
             Button.inline(
                 "🔄 Refresh",
-                data=f"gr:r:{owner_id}:{token}".encode(),
+                data=_gift_cb("gr:r", owner_id, token),
             )
         )
     copy_btn = _button_copy(copy_text) if copy_text else None
@@ -6594,7 +7818,7 @@ def _gift_inline_action_row(
     if extra:
         rows.append(extra)
     if show_back:
-        data = back_data or f"gf:b:{owner_id}:{token}".encode()
+        data = back_data or _gift_cb("gf:b", owner_id, token)
         rows.append([Button.inline("⬅️ Back", data=data)])
     return rows
 
@@ -6605,40 +7829,374 @@ def _gift_inline_hub_buttons(owner_id: int, token: str, raw: str, sess: dict | N
         [
             Button.inline(
                 "Floor Price 📉",
-                data=f"gu:s:{owner_id}:{token}:f".encode(),
+                data=_gift_cb("gu:s", owner_id, token, "f"),
             ),
             Button.inline(
                 "Gift Chart 📊",
-                data=f"gu:s:{owner_id}:{token}:c".encode(),
+                data=_gift_cb("gu:s", owner_id, token, "c"),
             ),
         ],
         [
             Button.inline(
                 "NFT Sales 🧾",
-                data=f"gu:s:{owner_id}:{token}:s".encode(),
+                data=_gift_cb("gu:s", owner_id, token, "s"),
             ),
             Button.inline(
                 "Listings 🏷️",
-                data=f"gu:s:{owner_id}:{token}:l".encode(),
+                data=_gift_cb("gu:s", owner_id, token, "l"),
             ),
         ],
     ]
+    # Collection-only: Models via bot DM (editInline still strips button icons).
+    if int(sess.get("depth") or 1) == 1 and not sess.get("nft_mode"):
+        rows.append(
+            [
+                Button.url(
+                    "Models",
+                    url=_gift_models_start_url(token),
+                )
+            ]
+        )
     if sess.get("nft_mode") or sess.get("slug") or _gift_inline_nft_url(sess):
         rows.append(
             [
                 Button.inline(
                     "Owner History 📜",
-                    data=f"gu:s:{owner_id}:{token}:h".encode(),
+                    data=_gift_cb("gu:s", owner_id, token, "h"),
                 )
             ]
         )
+    show_back = bool(sess.get("from_models"))
+    back_data = (
+        _gift_cb("gm:l", owner_id, token, int(sess.get("models_page") or 0))
+        if show_back
+        else None
+    )
     rows.extend(
         _gift_inline_action_row(
             raw,
-            show_back=False,
+            show_back=show_back,
             owner_id=owner_id,
             token=token,
+            back_data=back_data,
         )
+    )
+    return rows
+
+
+
+def _gift_cb(tag: str, *parts) -> bytes:
+    """
+    Encode gift button callback data.
+
+    Wire format: ``{tag}:{urlsafe_b64(part:part:…)}`` (Telegram max 64 bytes).
+    ``tag`` stays plain so ``@callback`` can route; owner/token/args are opaque.
+    """
+    raw = ":".join("" if p is None else str(p) for p in parts).encode("utf-8")
+    body = base64.urlsafe_b64encode(raw).rstrip(b"=")
+    data = f"{tag}:".encode("ascii") + body
+    if len(data) > 64:
+        LOGS.warning(
+            "gift cb exceeds 64 bytes tag=%s len=%s parts=%s",
+            tag,
+            len(data),
+            parts,
+        )
+    return data
+
+
+def _gift_cb_decode(payload: bytes) -> list[str]:
+    """Decode the b64 payload captured after ``tag:``."""
+    if isinstance(payload, str):
+        payload = payload.encode("ascii")
+    pad = b"=" * (-len(payload) % 4)
+    return base64.urlsafe_b64decode(payload + pad).decode("utf-8").split(":")
+
+
+def _gift_cb_parse(payload: bytes, *kinds: str):
+    """
+    Decode payload into typed fields.
+
+    ``kinds`` entries: ``"i"`` → int, ``"s"`` → str.
+    """
+    parts = _gift_cb_decode(payload)
+    if len(parts) != len(kinds):
+        raise ValueError(f"gift cb arity {len(parts)}!={len(kinds)}")
+    out = []
+    for part, kind in zip(parts, kinds):
+        if kind == "i":
+            out.append(int(part))
+        else:
+            out.append(part)
+    return out
+
+
+def _gift_models_start_url(token: str) -> str:
+    """Deep link so Models panel is a direct bot message (button icons work)."""
+    uname = getattr(getattr(asst, "me", None), "username", None) or "AssisXBot"
+    return f"https://t.me/{uname}?start=models_{token}"
+
+
+def _gift_models_panel_text(sess: dict) -> str:
+    """Hub lines + short Models header (CE lives on button icons, not in text)."""
+    lines = _gift_inline_info_lines(sess)
+    lines.append("")
+    lines.append("<b>Pick a model</b>")
+    return "\n".join(lines)
+
+
+async def handle_gift_models_start(event, args: str) -> bool:
+    """
+    Legacy ``/start models_<token>`` → Models panel in bot DM.
+
+    Prefer inline Models callback. Still consumed so start.py skips welcome.
+    NFTIDS-only; others get no reply.
+    """
+    raw = (args or "").strip()
+    if not raw.lower().startswith("models"):
+        return False
+    # Always consume this deep-link so start.py does not send a welcome.
+    if not _nft_user_allowed(event.sender_id):
+        LOGS.info(
+            "gift models start denied (not NFTIDS) user=%s",
+            event.sender_id,
+        )
+        return True
+    token = ""
+    if raw.lower().startswith("models_"):
+        token = raw[7:].strip()
+    elif raw.lower().startswith("models-"):
+        token = raw[7:].strip()
+    if not token:
+        # Bare start=models — no session; stay silent for privacy.
+        return True
+    sess = _gift_inline_load(token)
+    if not sess:
+        return True
+    try:
+        owner_id = int(sess.get("owner_id") or 0)
+    except Exception:
+        owner_id = 0
+    if owner_id and owner_id != int(event.sender_id):
+        return True
+    if int(sess.get("depth") or 1) != 1 or sess.get("nft_mode"):
+        return True
+    try:
+        await _attach_emoji_pack(
+            sess, force=not _pack_has_emojis(_sess_emoji_pack(sess)),
+        )
+    except Exception as e:
+        LOGS.warning("models start emoji pack: %s", e)
+    pack = _sess_emoji_pack(sess)
+    if not (pack.get("models_list") or []):
+        try:
+            await _ensure_artemis_token()
+            async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+                names = await _list_collection_model_names(
+                    client, sess.get("collection")
+                )
+            sess["model_names"] = list(names or [])
+        except Exception as e:
+            LOGS.debug("models start MRKT fallback: %s", e)
+            sess["model_names"] = []
+    sess["view"] = "models"
+    sess["from_models"] = False
+    sess["models_page"] = 0
+    sess["at"] = time.monotonic()
+    if not owner_id:
+        sess["owner_id"] = int(event.sender_id)
+        owner_id = int(event.sender_id)
+    _GIFT_INLINE_SESSIONS[token] = sess
+    page_ids = []
+    for item in (pack.get("models_list") or [])[:_MODELS_PAGE_SIZE]:
+        if item.get("id"):
+            page_ids.append(item["id"])
+    with contextlib.suppress(Exception):
+        await _load_emoji_stickersets(pack.get("emojisets") or [])
+    with contextlib.suppress(Exception):
+        await _warm_custom_emoji_docs(page_ids)
+    text = _gift_models_panel_text(sess)
+    buttons = _gift_models_buttons(sess, owner_id, token, 0)
+    await _gift_send_direct_icon_panel(event, text, buttons)
+    return True
+
+
+def _model_button(label: str, data: bytes, emoji_id=None):
+    """
+    Callback button with custom-emoji icon::
+
+        KeyboardInlineButton(
+            text=...,
+            type=InlineButtonTypeCallback(data=...),
+            style=KeyboardButtonStyle(bg_primary=True, icon=document_id),
+        )
+
+    ``emoji_id`` is Changes ``customEmojiId`` from the in-memory emoji pack.
+    """
+    icon = None
+    if emoji_id is not None and emoji_id != "":
+        try:
+            icon = int(str(emoji_id).strip())
+        except Exception:
+            icon = None
+        if icon is not None and icon <= 0:
+            icon = None
+    if icon is not None:
+        style = KeyboardButtonStyle(bg_primary=True, icon=icon)
+    else:
+        style = None
+    return tl_types.KeyboardInlineButton(
+        text=label,
+        type=tl_types.InlineButtonTypeCallback(data=data),
+        style=style,
+    )
+
+
+async def _gift_send_direct_icon_panel(event, text: str, buttons: list):
+    """Send Models panel as a direct bot message so button icons render."""
+    if asst is None:
+        return False
+    peer = None
+    try:
+        peer = await event.get_input_chat()
+    except Exception:
+        peer = None
+    if peer is None:
+        try:
+            peer = await asst.get_input_entity(int(event.sender_id))
+        except Exception as e:
+            LOGS.debug("gift Models direct peer: %s", e)
+            return False
+    try:
+        await asst.send_message(
+            peer,
+            text,
+            buttons=buttons,
+            parse_mode="html",
+            link_preview=False,
+        )
+        return True
+    except Exception as e:
+        LOGS.debug("gift Models SendMessage failed: %s", e)
+        return False
+
+
+async def _gift_edit_icon_panel(event, text: str, buttons: list, *, sess=None) -> bool:
+    """Edit bot-owned Models DM panel, keeping ``KeyboardButtonStyle.icon``."""
+    if asst is None:
+        return False
+    from telethon.errors import MessageNotModifiedError
+    from telethon.tl.types import (
+        InputBotInlineMessageID,
+        InputBotInlineMessageID64,
+    )
+
+    msg_id = getattr(getattr(event, "query", None), "msg_id", None)
+    if msg_id is None:
+        return False
+    # Inline edits still strip KeyboardButtonStyle.icon — DM/start panel only.
+    if isinstance(msg_id, (InputBotInlineMessageID, InputBotInlineMessageID64)):
+        return False
+    try:
+        peer = await event.get_input_chat()
+        await asst.edit_message(
+            peer,
+            int(msg_id),
+            text,
+            buttons=buttons,
+            parse_mode="html",
+            link_preview=False,
+        )
+        return True
+    except MessageNotModifiedError:
+        return True
+    except Exception as e:
+        if "not modified" in str(e).lower():
+            return True
+        LOGS.debug("gift Models edit_message failed: %s", e)
+        return False
+
+
+
+def _gift_model_icon_id(pack: dict, item: dict, name: str):
+    """Resolve customEmojiId for a model row (list id → models map → None)."""
+    for raw in (
+        (item or {}).get("id"),
+        (item or {}).get("customEmojiId"),
+        (pack.get("models") or {}).get(name),
+        _lookup_emoji_id(pack.get("models") or {}, name),
+    ):
+        if raw is None or raw == "":
+            continue
+        try:
+            icon = int(str(raw).strip())
+        except Exception:
+            continue
+        if icon > 0:
+            return icon
+    return None
+
+
+def _gift_models_buttons(sess: dict, owner_id: int, token: str, page: int = 0):
+    pack = _sess_emoji_pack(sess)
+    models = list(pack.get("models_list") or [])
+    if not models and pack.get("models"):
+        models = [
+            {"name": n, "id": i} for n, i in (pack.get("models") or {}).items()
+        ]
+    if not models:
+        models = [{"name": n, "id": None} for n in (sess.get("model_names") or [])]
+    total = len(models)
+    last_page = max(0, (total - 1) // _MODELS_PAGE_SIZE) if total else 0
+    page = max(0, min(int(page), last_page))
+    sess["models_page"] = page
+    start = page * _MODELS_PAGE_SIZE
+    chunk = models[start : start + _MODELS_PAGE_SIZE]
+    rows = []
+    for i in range(0, len(chunk), 2):
+        row = []
+        for j, item in enumerate(chunk[i : i + 2]):
+            idx = start + i + j
+            name = str(item.get("name") or f"#{idx}")
+            label = name if len(name) <= 28 else name[:27] + "…"
+            data = _gift_cb("gm:m", owner_id, token, idx)
+            row.append(
+                _model_button(label, data, _gift_model_icon_id(pack, item, name))
+            )
+        rows.append(row)
+    if not rows:
+        rows.append(
+            [_model_button("No models found", _gift_cb("gm:n", owner_id, token))]
+        )
+    nav = []
+    if page > 0:
+        nav.append(
+            _model_button(
+                "⬅️ Previous",
+                _gift_cb("gm:l", owner_id, token, page - 1),
+            )
+        )
+    nav.append(
+        _model_button(
+            f"{page + 1}/{last_page + 1}",
+            _gift_cb("gm:n", owner_id, token),
+        )
+    )
+    if page < last_page:
+        nav.append(
+            _model_button(
+                "Next ➡️",
+                _gift_cb("gm:l", owner_id, token, page + 1),
+            )
+        )
+    rows.append(nav)
+    rows.append(
+        [
+            _model_button(
+                "⬅️ Back",
+                _gift_cb("gu:h", owner_id, token),
+            )
+        ]
     )
     return rows
 
@@ -6656,14 +8214,16 @@ _GIFT_SALES_MARKETS = (
 def _gift_inline_sales_picker_text(sess: dict) -> str:
     lines = _gift_inline_info_lines(sess)
     lines.append("")
-    lines.append("🧾 **Choose one for 10 latest sales**")
+    sale_e = _emp_ce_html("sale", "🧾")
+    lines.append(f"{sale_e} <b>Choose one for 10 latest sales</b>")
     return "\n".join(lines)
 
 
 def _gift_inline_listings_picker_text(sess: dict) -> str:
     lines = _gift_inline_info_lines(sess)
     lines.append("")
-    lines.append("🏷️ **Choose one for 10 latest listings**")
+    list_e = _emp_ce_html("listing", "🏷️")
+    lines.append(f"{list_e} <b>Choose one for 10 latest listings</b>")
     return "\n".join(lines)
 
 
@@ -6680,7 +8240,7 @@ def _gift_inline_market_picker_buttons(
     for i, (key, label) in enumerate(_GIFT_SALES_MARKETS):
         btn = Button.inline(
             label,
-            data=f"{prefix}:{owner_id}:{token}:{key}".encode(),
+            data=_gift_cb(prefix, owner_id, token, key),
         )
         if i < 3:
             row1.append(btn)
@@ -6705,7 +8265,7 @@ def _gift_inline_sales_picker_buttons(sess: dict, owner_id: int, token: str):
     return _gift_inline_market_picker_buttons(
         sess, owner_id, token,
         prefix="gs:m",
-        back_data=f"gu:h:{owner_id}:{token}".encode(),
+        back_data=_gift_cb("gu:h", owner_id, token),
     )
 
 
@@ -6713,7 +8273,7 @@ def _gift_inline_listings_picker_buttons(sess: dict, owner_id: int, token: str):
     return _gift_inline_market_picker_buttons(
         sess, owner_id, token,
         prefix="gl:m",
-        back_data=f"gu:h:{owner_id}:{token}".encode(),
+        back_data=_gift_cb("gu:h", owner_id, token),
     )
 
 
@@ -6723,7 +8283,7 @@ def _gift_inline_sales_result_buttons(sess: dict, owner_id: int, token: str):
         show_back=True,
         owner_id=owner_id,
         token=token,
-        back_data=f"gs:b:{owner_id}:{token}".encode(),
+        back_data=_gift_cb("gs:b", owner_id, token),
         show_refresh=True,
     )
 
@@ -6734,7 +8294,7 @@ def _gift_inline_listings_result_buttons(sess: dict, owner_id: int, token: str):
         show_back=True,
         owner_id=owner_id,
         token=token,
-        back_data=f"gl:b:{owner_id}:{token}".encode(),
+        back_data=_gift_cb("gl:b", owner_id, token),
         show_refresh=True,
     )
 
@@ -6744,14 +8304,14 @@ def _gift_inline_floor_picker_buttons(sess: dict, owner_id: int, token: str):
     row = [
         Button.inline(
             "Collection Floor" if depth == 1 else "Collection",
-            data=f"gf:f:{owner_id}:{token}:c".encode(),
+            data=_gift_cb("gf:f", owner_id, token, "c"),
         )
     ]
     if depth >= 2:
         row.append(
             Button.inline(
                 "C+Model",
-                data=f"gf:f:{owner_id}:{token}:cm".encode(),
+                data=_gift_cb("gf:f", owner_id, token, "cm"),
             )
         )
     buttons = [row]
@@ -6760,7 +8320,7 @@ def _gift_inline_floor_picker_buttons(sess: dict, owner_id: int, token: str):
             [
                 Button.inline(
                     "C+M+Backdrop",
-                    data=f"gf:f:{owner_id}:{token}:cmb".encode(),
+                    data=_gift_cb("gf:f", owner_id, token, "cmb"),
                 )
             ]
         )
@@ -6771,7 +8331,7 @@ def _gift_inline_floor_picker_buttons(sess: dict, owner_id: int, token: str):
             show_back=True,
             owner_id=owner_id,
             token=token,
-            back_data=f"gu:h:{owner_id}:{token}".encode(),
+            back_data=_gift_cb("gu:h", owner_id, token),
         )
     )
     return buttons
@@ -6847,18 +8407,18 @@ def _gift_inline_parse_raw(raw: str):
 async def _inline_nft_denied(event):
     article = await event.builder.article(
         title="❌ Not authorized",
-        description="Ask the owner to .add your ID",
+        description="Subscribe via @AssisXBot /pay",
         text=(
             "❌ You are not on the NFT allow-list.\n"
-            "Ask the owner to `.add <your id>`."
+            "Purchase via /pay or t.me/AssisXBot?start=pay"
         ),
     )
     try:
         return await event.answer(
             [article],
             cache_time=5,
-            switch_pm="Request access",
-            switch_pm_param="start",
+            switch_pm="Open /pay to subscribe",
+            switch_pm_param="pay",
         )
     except Exception as e:
         if "query id is invalid" in str(e).lower():
@@ -6890,17 +8450,27 @@ def _blank_media_file():
     return bio
 
 
-async def _gift_inline_edit(event, text: str, buttons, *, parse_mode="md"):
+async def _gift_inline_edit(event, text: str, buttons, *, parse_mode=None):
+    # Hub/pickers: HTML + tg-emoji. Floor/chart bodies may still pass "md".
+    if parse_mode is None:
+        parse_mode = _gift_inline_pm()
+    elif parse_mode == "md" and _can_use_custom_emoji():
+        parse_mode = CustomMarkdown()
     try:
         from telethon.errors import MessageNotModifiedError
-        from telethon.tl.types import InputBotInlineMessageID
+        from telethon.tl.types import (
+            InputBotInlineMessageID,
+            InputBotInlineMessageID64,
+        )
     except Exception:
         MessageNotModifiedError = Exception  # noqa: N806
         InputBotInlineMessageID = type(None)  # noqa: N806
+        InputBotInlineMessageID64 = type(None)  # noqa: N806
 
     try:
         is_inline = isinstance(
-            getattr(event.query, "msg_id", None), InputBotInlineMessageID
+            getattr(event.query, "msg_id", None),
+            (InputBotInlineMessageID, InputBotInlineMessageID64),
         )
     except Exception:
         is_inline = False
@@ -6975,25 +8545,19 @@ async def artemis_gift_inline(event):
 
     if not raw:
         article = await event.builder.article(
-            title="🎁 Gift floors & charts",
-            description="g Collection, Model, Backdrop | NFT link",
+            title="🎁 NFT Info Commands",
+            description="@AssisXBot g Collection · Model · Backdrop",
             text=(
-                "**Gift floors & charts**\n\n"
-                "`g Liberty Figure`\n"
-                "`g Liberty Figure, Fire Opal`\n"
-                "`g Liberty Figure, Fire Opal, Black`\n"
-                "`g https://t.me/nft/LibertyFigure-214445`\n\n"
-                "Then pick **Floor Price 📉** or **Gift Chart 📊**."
+                "**NFT Info Commands**\n\n"
+                "`@AssisXBot g Liberty Figure`\n"
+                "`@AssisXBot g Liberty Figure, Fire Opal`\n"
+                "`@AssisXBot g Liberty Figure, Fire Opal, Black`\n"
+                "`@AssisXBot g https://t.me/nft/LibertyFigure-214445`\n\n"
+                "Then pick a button"
             ),
-            buttons=[
-                [
-                    Button.switch_inline(
-                        "Try Liberty Figure",
-                        query="g Liberty Figure",
-                        same_peer=True,
-                    )
-                ]
-            ],
+            **_inline_article_media(
+                "https://cdn.dbimg.app/3X0OOZEC.jpg", mime="image/jpeg",
+            ),
         )
         return await _gift_inline_answer(event, [article], cache_time=5)
 
@@ -7025,7 +8589,7 @@ async def artemis_gift_inline(event):
         try:
             coll, mod, back = await asyncio.wait_for(
                 _gift_inline_resolve_nft_fast(parsed.get("nft_raw") or raw),
-                timeout=4.0,
+                timeout=8.0,
             )
             if coll:
                 parsed["collection"] = coll
@@ -7063,55 +8627,140 @@ async def artemis_gift_inline(event):
             "resolved": bool(parsed.get("resolved")),
             "view": "hub",
             "last_mode": None,
+            "from_models": False,
         }
     )
     sess = _GIFT_INLINE_SESSIONS[token]
+    try:
+        await _attach_emoji_pack(sess, force=True)
+    except Exception as e:
+        LOGS.warning("Inline g emoji pack skipped: %s", e)
+
+    # Canonicalize model/backdrop casing for CDN thumbs + display.
+    pack = _sess_emoji_pack(sess)
+    # Partial typing ("Resistance") → empty pack / 404. Don't ship a fake hub.
+    if (
+        not sess.get("nft_mode")
+        and int(sess.get("depth") or 1) == 1
+        and not _pack_has_emojis(pack)
+        and not sess.get("model")
+    ):
+        col = sess.get("collection") or raw
+        tip = await event.builder.article(
+            title=f"⏳ {col}…",
+            description="Keep typing the full collection name",
+            text=(
+                f"⏳ Keep typing the full collection name.\n"
+                f"<code>{html.escape(str(col))}</code>"
+            ),
+            parse_mode="html",
+        )
+        return await _gift_inline_answer(event, [tip], cache_time=0)
+    if not pack.get("collection"):
+        LOGS.debug(
+            "Inline g missing collection emoji for %r pack_models=%s",
+            sess.get("collection"),
+            len(pack.get("models_list") or []),
+        )
+    if sess.get("model"):
+        sess["model"] = _canonical_attr_name(pack, "model", sess["model"])
+    if sess.get("backdrop"):
+        sess["backdrop"] = _canonical_attr_name(pack, "backdrop", sess["backdrop"])
+
     title = _gift_inline_title(sess)
     desc_parts = [sess.get("collection") or "Gift"]
     if sess.get("model"):
         desc_parts.append(sess["model"])
     if sess.get("backdrop"):
         desc_parts.append(sess["backdrop"])
-    article = await event.builder.article(
-        title=f"🎁 {title}",
+
+    # Thumbs: collection Original.png · model/NFT → model PNG (image/png only)
+    thumb = None
+    try:
+        thumb = _gift_inline_thumb_for_sess(sess)
+    except Exception as e:
+        LOGS.debug("Inline g thumb skipped: %s", e)
+
+    title_emoji = "🎁"
+    if sess.get("model"):
+        mid = _lookup_emoji_id(pack.get("models") or {}, sess["model"])
+        title_emoji = "🧩" if mid else "🎁"
+
+    hub_text = _gift_inline_hub_text(sess)
+    article_kwargs = dict(
+        title=f"{title_emoji} {title}",
         description=" · ".join(desc_parts[:3]),
-        text=_gift_inline_hub_text(sess),
-        parse_mode="md",
+        text=hub_text,
+        parse_mode=_gift_inline_pm(),
         link_preview=False,
         buttons=_gift_inline_hub_buttons(
             owner_id, token, sess.get("raw") or "", sess,
         ),
     )
-    return await _gift_inline_answer(event, [article], cache_time=0)
+    if thumb is not None:
+        article_kwargs["thumb"] = thumb
+        article_kwargs["content"] = thumb
+    try:
+        article = await event.builder.article(**article_kwargs)
+        return await _gift_inline_answer(event, [article], cache_time=0)
+    except Exception as e:
+        # Retry without thumb on mime/webdocument errors.
+        if "webdocument" in str(e).lower() or "mime" in str(e).lower():
+            LOGS.warning("Inline g thumb rejected, retrying plain: %s", e)
+            article_kwargs.pop("thumb", None)
+            article_kwargs.pop("content", None)
+            article = await event.builder.article(**article_kwargs)
+            return await _gift_inline_answer(event, [article], cache_time=0)
+        raise
 
 
 async def _gift_inline_resolve_nft_fast(raw: str):
     """
     Fast NFT → collection/model/backdrop for inline answer.
-    Prefers GetUniqueStarGift; falls back to t.me HTML. No MRKT.
+
+    Runs GetUniqueStarGift + GetWebPage + t.me HTML in parallel so burned
+    gifts (STARGIFT_ALREADY_BURNED) still resolve model/backdrop.
     """
     parsed = _parse_nft_link(raw)
     if not parsed:
         return None, None, None
     slug, short_slug, _number = parsed
     collection, _, _ = _resolve_collection_from_slug(short_slug)
-    model = backdrop = None
-    title = None
-    try:
-        model, backdrop, _mr, _br, title = await _fetch_unique_star_gift_attrs(
-            heartless_bot, slug,
-        )
-    except Exception as e:
-        LOGS.debug("Inline NFT MTProto resolve failed: %s", e)
+
+    async def _mtproto():
+        return await _fetch_unique_star_gift_attrs(heartless_bot, slug)
+
+    async def _webpage():
+        return await _fetch_nft_attrs_via_webpage(heartless_bot, slug)
+
+    async def _html():
+        return await _fetch_telegram_nft_attrs(slug)
+
+    results = await asyncio.gather(
+        _mtproto(), _webpage(), _html(), return_exceptions=True,
+    )
+    model = backdrop = title = None
+    for res in results:
+        if isinstance(res, Exception) or not res:
+            continue
+        m, b, _mr, _br, t = res
+        if t and not title:
+            title = t
+        if m and not model:
+            model = m
+        if b and not backdrop:
+            backdrop = b
+        if model and backdrop:
+            break
     if title:
         collection = title
-    if not model or not backdrop:
-        try:
-            hm, hb, *_rest = await _fetch_telegram_nft_attrs(slug)
-            model = model or hm
-            backdrop = backdrop or hb
-        except Exception as e:
-            LOGS.debug("Inline NFT HTML resolve failed: %s", e)
+    LOGS.info(
+        "inline NFT resolve slug=%s collection=%s model=%s backdrop=%s",
+        slug,
+        collection,
+        model,
+        backdrop,
+    )
     return collection, model, backdrop
 
 
@@ -7195,14 +8844,16 @@ def _gift_inline_mode_filter(sess: dict, mode: str):
     return coll, mod, back
 
 
-@callback(re.compile(rb"^gu:s:(\d+):([A-Za-z0-9_-]{6,16}):([fcslh])$"))
+@callback(re.compile(rb"^gu:s:([A-Za-z0-9_-]+)$"))
 async def artemis_gift_inline_hub_select_cb(event):
     """Stage 1 → Floor / Chart / Sales / Listings / Owner History."""
     try:
-        owner_id = int(event.data_match.group(1))
-        token = event.data_match.group(2).decode()
-        choice = event.data_match.group(3).decode()
+        owner_id, token, choice = _gift_cb_parse(
+            event.data_match.group(1), "i", "s", "s"
+        )
     except Exception:
+        return await event.answer("Invalid request.", alert=True)
+    if choice not in ("f", "c", "s", "l", "h"):
         return await event.answer("Invalid request.", alert=True)
 
     if int(event.sender_id) != owner_id:
@@ -7236,9 +8887,9 @@ async def artemis_gift_inline_hub_select_cb(event):
         text = sess.get("transfer_history_md") or (
             "📜 **Owner History**\n\nNo History Found -_-"
         )
-        # Prepend collection/model header
+        # Prepend collection/model header (md — body is markdown)
         text = "\n".join(
-            [*_gift_inline_info_lines(sess), "", text]
+            [*_gift_inline_info_lines(sess, fmt="md"), "", text]
         )
         sess["view"] = "history_out"
         sess["at"] = time.monotonic()
@@ -7251,7 +8902,7 @@ async def artemis_gift_inline_hub_select_cb(event):
                 show_back=True,
                 owner_id=owner_id,
                 token=token,
-                back_data=f"gu:h:{owner_id}:{token}".encode(),
+                back_data=_gift_cb("gu:h", owner_id, token),
                 show_refresh=True,
             ),
             parse_mode="md",
@@ -7270,7 +8921,7 @@ async def artemis_gift_inline_hub_select_cb(event):
             event,
             _gift_inline_floor_picker_text(sess),
             _gift_inline_floor_picker_buttons(sess, owner_id, token),
-            parse_mode="md",
+            parse_mode="html",
         )
 
     if choice == "s":
@@ -7291,7 +8942,7 @@ async def artemis_gift_inline_hub_select_cb(event):
             event,
             _gift_inline_sales_picker_text(sess),
             _gift_inline_sales_picker_buttons(sess, owner_id, token),
-            parse_mode="md",
+            parse_mode="html",
         )
 
     if choice == "l":
@@ -7312,7 +8963,7 @@ async def artemis_gift_inline_hub_select_cb(event):
             event,
             _gift_inline_listings_picker_text(sess),
             _gift_inline_listings_picker_buttons(sess, owner_id, token),
-            parse_mode="md",
+            parse_mode="html",
         )
 
     # Gift Chart path — open giftcharts stage under the same hub token.
@@ -7328,6 +8979,7 @@ async def artemis_gift_inline_hub_select_cb(event):
         return await event.answer("Could not resolve collection.", alert=True)
 
     has_model = bool(model_q)
+    # From Models: never open collection-only chart when a model is set.
     gc_token = gc._save_session(
         {
             "gift_q": gift_q,
@@ -7343,6 +8995,8 @@ async def artemis_gift_inline_hub_select_cb(event):
             "hub_token": token,
             "hub_owner": owner_id,
             "chart_stage": "root",
+            "emoji_pack": sess.get("emoji_pack") or {},
+            "from_models": bool(sess.get("from_models")),
         }
     )
     sess["gc_token"] = gc_token
@@ -7362,12 +9016,11 @@ async def artemis_gift_inline_hub_select_cb(event):
     return await _gift_inline_edit(event, text, buttons, parse_mode="md")
 
 
-@callback(re.compile(rb"^gu:h:(\d+):([A-Za-z0-9_-]{6,16})$"))
+@callback(re.compile(rb"^gu:h:([A-Za-z0-9_-]+)$"))
 async def artemis_gift_inline_hub_cb(event):
     """Back to stage-1 Floor/Chart hub."""
     try:
-        owner_id = int(event.data_match.group(1))
-        token = event.data_match.group(2).decode()
+        owner_id, token = _gift_cb_parse(event.data_match.group(1), "i", "s")
     except Exception:
         return await event.answer("Invalid request.", alert=True)
 
@@ -7378,6 +9031,14 @@ async def artemis_gift_inline_hub_cb(event):
     if not sess:
         return await event.answer("Session expired — search again with g …", alert=True)
 
+    # Back from Models browser → collection hub.
+    if sess.get("view") == "models":
+        sess["model"] = None
+        sess["backdrop"] = None
+        sess["depth"] = 1
+        sess["from_models"] = False
+        sess["raw"] = sess.get("collection") or sess.get("raw") or ""
+    # else: keep from_models / model when returning from Sales/Listings/etc.
     sess["view"] = "hub"
     sess["last_mode"] = None
     sess["at"] = time.monotonic()
@@ -7389,17 +9050,147 @@ async def artemis_gift_inline_hub_cb(event):
         _gift_inline_hub_buttons(
             owner_id, token, sess.get("raw") or "", sess,
         ),
-        parse_mode="md",
     )
 
 
-@callback(re.compile(rb"^gf:f:(\d+):([A-Za-z0-9_-]{6,16}):(c|cm|cmb)$"))
+@callback(re.compile(rb"^gm:n:([A-Za-z0-9_-]+)$"))
+async def artemis_gift_models_noop_cb(event):
+    return await event.answer(cache_time=0)
+
+
+@callback(re.compile(rb"^gm:l:([A-Za-z0-9_-]+)$"))
+async def artemis_gift_models_list_cb(event):
+    """Open / paginate Models in place (inline edit with button icons)."""
+    try:
+        owner_id, token, page = _gift_cb_parse(
+            event.data_match.group(1), "i", "s", "i"
+        )
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    with contextlib.suppress(Exception):
+        await event.answer()
+
+    try:
+        await _attach_emoji_pack(
+            sess,
+            force=not _pack_has_emojis(_sess_emoji_pack(sess)),
+            warm=False,
+        )
+    except Exception as e:
+        LOGS.debug("models emoji pack: %s", e)
+
+    pack = _sess_emoji_pack(sess)
+    if not (pack.get("models_list") or pack.get("models")):
+        try:
+            await _ensure_artemis_token()
+            async with MRKTClient(token=ARTEMIS_TOKEN) as client:
+                names = await _list_collection_model_names(
+                    client, sess.get("collection")
+                )
+            sess["model_names"] = list(names or [])
+        except Exception as e:
+            LOGS.debug("models MRKT fallback: %s", e)
+            sess["model_names"] = []
+
+    sess["view"] = "models"
+    sess["from_models"] = False
+    if int(sess.get("depth") or 1) > 1 and not sess.get("nft_mode"):
+        sess["model"] = None
+        sess["backdrop"] = None
+        sess["depth"] = 1
+        sess["raw"] = sess.get("collection") or sess.get("raw") or ""
+    sess["models_page"] = page
+    sess["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = sess
+
+    page_ids = []
+    start_i = page * _MODELS_PAGE_SIZE
+    for item in (pack.get("models_list") or [])[start_i : start_i + _MODELS_PAGE_SIZE]:
+        if item.get("id"):
+            page_ids.append(item["id"])
+    if not page_ids:
+        for _name, eid in list((pack.get("models") or {}).items())[
+            start_i : start_i + _MODELS_PAGE_SIZE
+        ]:
+            page_ids.append(eid)
+    with contextlib.suppress(Exception):
+        await _load_emoji_stickersets(pack.get("emojisets") or [])
+    with contextlib.suppress(Exception):
+        await _warm_custom_emoji_docs(page_ids)
+
+    buttons = _gift_models_buttons(sess, owner_id, token, page)
+    panel_text = _gift_models_panel_text(sess)
+    if await _gift_edit_icon_panel(event, panel_text, buttons, sess=sess):
+        return
+    return await _gift_inline_edit(event, panel_text, buttons)
+
+
+@callback(re.compile(rb"^gm:m:([A-Za-z0-9_-]+)$"))
+async def artemis_gift_models_pick_cb(event):
+    """Model button → collection+model hub (Floor/Chart kept; no collection-only options)."""
+    try:
+        owner_id, token, idx = _gift_cb_parse(
+            event.data_match.group(1), "i", "s", "i"
+        )
+    except Exception:
+        return await event.answer("Invalid request.", alert=True)
+
+    if int(event.sender_id) != owner_id:
+        return await event.answer("This panel belongs to another user.", alert=True)
+
+    sess = _gift_inline_load(token)
+    if not sess:
+        return await event.answer("Session expired — search again with g …", alert=True)
+
+    pack = _sess_emoji_pack(sess)
+    models = list(pack.get("models_list") or [])
+    if not models:
+        models = [
+            {"name": n, "id": None} for n in (sess.get("model_names") or [])
+        ]
+    if idx < 0 or idx >= len(models):
+        return await event.answer("Model not found.", alert=True)
+
+    model_name = str(models[idx].get("name") or "").strip()
+    if not model_name:
+        return await event.answer("Model not found.", alert=True)
+
+    col = sess.get("collection") or ""
+    sess["model"] = model_name
+    sess["backdrop"] = None
+    sess["depth"] = 2
+    sess["raw"] = f"{col}, {model_name}" if col else model_name
+    sess["from_models"] = True
+    sess["view"] = "hub"
+    sess["at"] = time.monotonic()
+    _GIFT_INLINE_SESSIONS[token] = sess
+    await event.answer(model_name[:40])
+    return await _gift_inline_edit(
+        event,
+        _gift_inline_hub_text(sess),
+        _gift_inline_hub_buttons(
+            owner_id, token, sess.get("raw") or "", sess,
+        ),
+    )
+
+
+@callback(re.compile(rb"^gf:f:([A-Za-z0-9_-]+)$"))
 async def artemis_gift_inline_floor_cb(event):
     try:
-        owner_id = int(event.data_match.group(1))
-        token = event.data_match.group(2).decode()
-        mode = event.data_match.group(3).decode()
+        owner_id, token, mode = _gift_cb_parse(
+            event.data_match.group(1), "i", "s", "s"
+        )
     except Exception:
+        return await event.answer("Invalid request.", alert=True)
+    if mode not in ("c", "cm", "cmb"):
         return await event.answer("Invalid request.", alert=True)
 
     if int(event.sender_id) != owner_id:
@@ -7447,19 +9238,18 @@ async def artemis_gift_inline_floor_cb(event):
         show_back=True,
         owner_id=owner_id,
         token=token,
-        back_data=f"gf:b:{owner_id}:{token}".encode(),
+        back_data=_gift_cb("gf:b", owner_id, token),
         show_refresh=True,
         copy_text=_floor_copy_text(message),
     )
     return await _gift_inline_edit(event, message, buttons, parse_mode="md")
 
 
-@callback(re.compile(rb"^gf:b:(\d+):([A-Za-z0-9_-]{6,16})$"))
+@callback(re.compile(rb"^gf:b:([A-Za-z0-9_-]+)$"))
 async def artemis_gift_inline_back_cb(event):
     """Floor output → floor picker (stage 2)."""
     try:
-        owner_id = int(event.data_match.group(1))
-        token = event.data_match.group(2).decode()
+        owner_id, token = _gift_cb_parse(event.data_match.group(1), "i", "s")
     except Exception:
         return await event.answer("Invalid request.", alert=True)
 
@@ -7479,22 +9269,24 @@ async def artemis_gift_inline_back_cb(event):
         event,
         _gift_inline_floor_picker_text(sess),
         _gift_inline_floor_picker_buttons(sess, owner_id, token),
-        parse_mode="md",
+        parse_mode="html",
     )
 
 
 @callback(
     re.compile(
-        rb"^gs:m:(\d+):([A-Za-z0-9_-]{6,16}):(mrkt|portals|tonnel|telegram|getgems)$"
+        rb"^gs:m:([A-Za-z0-9_-]+)$"
     )
 )
 async def artemis_gift_inline_sales_market_cb(event):
     """NFT Sales market → 10 latest sales (Satellite miniapp)."""
     try:
-        owner_id = int(event.data_match.group(1))
-        token = event.data_match.group(2).decode()
-        market_key = event.data_match.group(3).decode()
+        owner_id, token, market_key = _gift_cb_parse(
+            event.data_match.group(1), "i", "s", "s"
+        )
     except Exception:
+        return await event.answer("Invalid request.", alert=True)
+    if market_key not in dict(_GIFT_SALES_MARKETS):
         return await event.answer("Invalid request.", alert=True)
 
     if int(event.sender_id) != owner_id:
@@ -7520,12 +9312,14 @@ async def artemis_gift_inline_sales_market_cb(event):
         sales = await sat._latest_sales_for_market(
             coll, market_key, mod, back, limit=10,
         )
+        sale_e = _emp_ce_md("sale", "🧾")
+        mkt_e = _market_ce_md(market_key, "🏪")
         lines = [
-            "🧾 **NFT Sales**",
+            f"{sale_e} **NFT Sales**",
             "",
-            *_gift_inline_info_lines(sess),
+            *_gift_inline_info_lines(sess, fmt="md"),
             "",
-            f"🏪 **10 Latest {label} Sales**",
+            f"{mkt_e} **10 Latest {label} Sales**",
             "",
         ]
         if not sales:
@@ -7544,7 +9338,7 @@ async def artemis_gift_inline_sales_market_cb(event):
                 else:
                     link = f"`{_md_escape_inline(title)}`"
                 lines.append(
-                    f"**{i}. {link} · {_md_escape_inline(price_txt)} · "
+                    f"**{i}. {link} · {_price_txt_with_gram_md(price_txt)} · "
                     f"{_md_escape_inline(when)}**"
                 )
         text = "\n".join(lines)
@@ -7564,12 +9358,11 @@ async def artemis_gift_inline_sales_market_cb(event):
     )
 
 
-@callback(re.compile(rb"^gs:b:(\d+):([A-Za-z0-9_-]{6,16})$"))
+@callback(re.compile(rb"^gs:b:([A-Za-z0-9_-]+)$"))
 async def artemis_gift_inline_sales_back_cb(event):
     """Sales result → sales market picker."""
     try:
-        owner_id = int(event.data_match.group(1))
-        token = event.data_match.group(2).decode()
+        owner_id, token = _gift_cb_parse(event.data_match.group(1), "i", "s")
     except Exception:
         return await event.answer("Invalid request.", alert=True)
 
@@ -7588,7 +9381,7 @@ async def artemis_gift_inline_sales_back_cb(event):
         event,
         _gift_inline_sales_picker_text(sess),
         _gift_inline_sales_picker_buttons(sess, owner_id, token),
-        parse_mode="md",
+        parse_mode="html",
     )
 
 
@@ -7602,12 +9395,14 @@ async def _gift_inline_build_listings_text(sess: dict, market_key: str) -> str:
     listings = await sat._latest_listings_for_market(
         coll, market_key, mod, back, limit=10,
     )
+    list_e = _emp_ce_md("listing", "🏷️")
+    mkt_e = _market_ce_md(market_key, "🏪")
     lines = [
-        "🏷️ **Listings**",
+        f"{list_e} **Listings**",
         "",
-        *_gift_inline_info_lines(sess),
+        *_gift_inline_info_lines(sess, fmt="md"),
         "",
-        f"🏪 **10 Latest {label} Listings**",
+        f"{mkt_e} **10 Latest {label} Listings**",
         "",
     ]
     mkey = sat._norm_market_key(market_key)
@@ -7631,13 +9426,13 @@ async def _gift_inline_build_listings_text(sess: dict, market_key: str) -> str:
             buy_url = row.get("buy_url")
             if mkey in buy_markets and buy_url:
                 link = f"{link} ([{_md_escape_inline('buy')}]({buy_url}))"
-            parts = [f"**{i}. {link} · {_md_escape_inline(price_txt)}**"]
+            parts = [f"**{i}. {link} · {_price_txt_with_gram_md(price_txt)}**"]
             # Telegram / Getgems have no listing time in Satellite — omit the dash.
             if mkey not in no_time_markets:
                 when = sat._fmt_sold_at(row.get("listed_at"))
                 if when:
                     parts[0] = (
-                        f"**{i}. {link} · {_md_escape_inline(price_txt)} · "
+                        f"**{i}. {link} · {_price_txt_with_gram_md(price_txt)} · "
                         f"{_md_escape_inline(when)}**"
                     )
             lines.append(parts[0])
@@ -7646,16 +9441,18 @@ async def _gift_inline_build_listings_text(sess: dict, market_key: str) -> str:
 
 @callback(
     re.compile(
-        rb"^gl:m:(\d+):([A-Za-z0-9_-]{6,16}):(mrkt|portals|tonnel|telegram|getgems)$"
+        rb"^gl:m:([A-Za-z0-9_-]+)$"
     )
 )
 async def artemis_gift_inline_listings_market_cb(event):
     """Listings market → 10 latest transferable listings (skip premarket)."""
     try:
-        owner_id = int(event.data_match.group(1))
-        token = event.data_match.group(2).decode()
-        market_key = event.data_match.group(3).decode()
+        owner_id, token, market_key = _gift_cb_parse(
+            event.data_match.group(1), "i", "s", "s"
+        )
     except Exception:
+        return await event.answer("Invalid request.", alert=True)
+    if market_key not in dict(_GIFT_SALES_MARKETS):
         return await event.answer("Invalid request.", alert=True)
 
     if int(event.sender_id) != owner_id:
@@ -7688,12 +9485,11 @@ async def artemis_gift_inline_listings_market_cb(event):
     )
 
 
-@callback(re.compile(rb"^gl:b:(\d+):([A-Za-z0-9_-]{6,16})$"))
+@callback(re.compile(rb"^gl:b:([A-Za-z0-9_-]+)$"))
 async def artemis_gift_inline_listings_back_cb(event):
     """Listings result → listings market picker."""
     try:
-        owner_id = int(event.data_match.group(1))
-        token = event.data_match.group(2).decode()
+        owner_id, token = _gift_cb_parse(event.data_match.group(1), "i", "s")
     except Exception:
         return await event.answer("Invalid request.", alert=True)
 
@@ -7712,16 +9508,15 @@ async def artemis_gift_inline_listings_back_cb(event):
         event,
         _gift_inline_listings_picker_text(sess),
         _gift_inline_listings_picker_buttons(sess, owner_id, token),
-        parse_mode="md",
+        parse_mode="html",
     )
 
 
-@callback(re.compile(rb"^gr:r:(\d+):([A-Za-z0-9_-]{6,16})$"))
+@callback(re.compile(rb"^gr:r:([A-Za-z0-9_-]+)$"))
 async def artemis_gift_inline_refresh_cb(event):
     """Re-fetch the active floor / sales / listings / chart panel."""
     try:
-        owner_id = int(event.data_match.group(1))
-        token = event.data_match.group(2).decode()
+        owner_id, token = _gift_cb_parse(event.data_match.group(1), "i", "s")
     except Exception:
         return await event.answer("Invalid request.", alert=True)
 
@@ -7755,7 +9550,7 @@ async def artemis_gift_inline_refresh_cb(event):
                     show_back=True,
                     owner_id=owner_id,
                     token=token,
-                    back_data=f"gf:b:{owner_id}:{token}".encode(),
+                    back_data=_gift_cb("gf:b", owner_id, token),
                     show_refresh=True,
                     copy_text=_floor_copy_text(message),
                 ),
@@ -7773,12 +9568,14 @@ async def artemis_gift_inline_refresh_cb(event):
             sales = await sat._latest_sales_for_market(
                 coll, market_key, mod, back, limit=10,
             )
+            sale_e = _emp_ce_md("sale", "🧾")
+            mkt_e = _market_ce_md(market_key, "🏪")
             lines = [
-                "🧾 **NFT Sales**",
+                f"{sale_e} **NFT Sales**",
                 "",
-                *_gift_inline_info_lines(sess),
+                *_gift_inline_info_lines(sess, fmt="md"),
                 "",
-                f"🏪 **10 Latest {label} Sales**",
+                f"{mkt_e} **10 Latest {label} Sales**",
                 "",
             ]
             if not sales:
@@ -7797,7 +9594,7 @@ async def artemis_gift_inline_refresh_cb(event):
                     else:
                         link = f"`{_md_escape_inline(title)}`"
                     lines.append(
-                        f"**{i}. {link} · {_md_escape_inline(price_txt)} · "
+                        f"**{i}. {link} · {_price_txt_with_gram_md(price_txt)} · "
                         f"{_md_escape_inline(when)}**"
                     )
             sess["at"] = time.monotonic()
@@ -7828,7 +9625,9 @@ async def artemis_gift_inline_refresh_cb(event):
             text = sess.get("transfer_history_md") or (
                 "📜 **Owner History**\n\nNo History Found -_-"
             )
-            text = "\n".join([*_gift_inline_info_lines(sess), "", text])
+            text = "\n".join(
+                [*_gift_inline_info_lines(sess, fmt="md"), "", text]
+            )
             sess["at"] = time.monotonic()
             _GIFT_INLINE_SESSIONS[token] = sess
             return await _gift_inline_edit(
@@ -7839,7 +9638,7 @@ async def artemis_gift_inline_refresh_cb(event):
                     show_back=True,
                     owner_id=owner_id,
                     token=token,
-                    back_data=f"gu:h:{owner_id}:{token}".encode(),
+                    back_data=_gift_cb("gu:h", owner_id, token),
                     show_refresh=True,
                 ),
                 parse_mode="md",
@@ -7869,7 +9668,7 @@ async def artemis_gift_inline_refresh_cb(event):
                 _gift_inline_hub_buttons(
                     owner_id, token, sess.get("raw") or "", sess,
                 ),
-                parse_mode="md",
+                parse_mode="html",
             )
     except Exception as e:
         LOGS.warning("Inline g refresh failed: %s", e)
@@ -7913,6 +9712,20 @@ async def artemis_price_asst(event):
     if not _asst_nft_ok(event):
         return
     await _artemis_price_handler(event)
+
+
+@asst_cmd(pattern=r"s(?:\s+(.+))?$", func=lambda e: e.is_private)
+async def artemis_stars_fee_asst(event):
+    if not _asst_nft_ok(event):
+        return
+    await _artemis_stars_fee_handler(event)
+
+
+@asst_cmd(pattern=r"ds(?:\s+(.+))?$", func=lambda e: e.is_private)
+async def artemis_desired_ton_asst(event):
+    if not _asst_nft_ok(event):
+        return
+    await _artemis_desired_ton_handler(event)
 
 
 @asst_cmd(pattern=r"ordertop(?:\s+(.+))?$", func=lambda e: e.is_private)
@@ -8007,7 +9820,7 @@ async def _artemis_gift_handler(event):
     status = None
     try:
         status = await event.eor(
-            "<b>Fetching floor...</b>" if compact else "<b>Fetching NFT Info...</b>",
+            _loading_html("Fetching floor...") if compact else _loading_html("Fetching NFT Info..."),
             parse_mode="html",
         )
 
@@ -8065,9 +9878,15 @@ async def _artemis_gift_handler(event):
             return message
 
         message, status = await _with_mrkt(event, status, work)
+        if compact and _can_use_custom_emoji():
+            pm = CustomMarkdown()
+        elif compact:
+            pm = "md"
+        else:
+            pm = "html"
         return await status.edit(
             message,
-            parse_mode="md" if compact else "html",
+            parse_mode=pm,
             link_preview=False,
         )
 
@@ -8119,7 +9938,7 @@ async def _artemis_price_handler(event):
     if amount <= 0:
         return await event.eor("❌ Amount must be positive.", parse_mode="html")
 
-    status = await event.eor("<b>Converting...</b>", parse_mode="html")
+    status = await event.eor(_loading_html("Converting..."), parse_mode="html")
     try:
         message = await _price_convert_message(amount, src, dst)
         return await status.edit(message, parse_mode="html")
@@ -8138,6 +9957,270 @@ async def artemis_price(event):
     await _artemis_price_handler(event)
 
 
+async def _artemis_stars_fee_handler(event):
+    """``.s 9200`` — Stars listing net of 20% fee + Fragment TON."""
+    raw = (event.pattern_match.group(1) or "").strip()
+    usage = (
+        "❌ <b>Usage:</b> "
+        f"<code>{_h('s')} 9200</code>"
+    )
+    if not raw:
+        return await event.eor(usage, parse_mode="html")
+    try:
+        amount = Decimal(str(raw).replace(",", ""))
+    except Exception:
+        return await event.eor(usage, parse_mode="html")
+    if amount <= 0:
+        return await event.eor("❌ Stars must be positive.", parse_mode="html")
+
+    status = await event.eor(_loading_html("Calculating..."), parse_mode="html")
+    try:
+        message = await _stars_listing_fee_message(amount)
+        return await status.edit(message, parse_mode="html")
+    except ValueError as e:
+        return await status.edit(f"❌ {e}", parse_mode="html")
+    except Exception as e:
+        LOGS.exception("Artemis .s failed: %s", e)
+        return await status.edit(
+            f"❌ <b>Failed.</b>\n\n<code>{html.escape(str(e))}</code>",
+            parse_mode="html",
+        )
+
+
+async def _artemis_desired_ton_handler(event):
+    """``.ds 67`` — desired pure TON → fair Stars listing."""
+    raw = (event.pattern_match.group(1) or "").strip()
+    usage = (
+        "❌ <b>Usage:</b> "
+        f"<code>{_h('ds')} 67</code>"
+    )
+    if not raw:
+        return await event.eor(usage, parse_mode="html")
+    try:
+        amount = Decimal(str(raw).replace(",", ""))
+    except Exception:
+        return await event.eor(usage, parse_mode="html")
+    if amount <= 0:
+        return await event.eor("❌ TON must be positive.", parse_mode="html")
+
+    status = await event.eor(_loading_html("Calculating..."), parse_mode="html")
+    try:
+        message = await _desired_ton_listing_message(amount)
+        return await status.edit(message, parse_mode="html")
+    except ValueError as e:
+        return await status.edit(f"❌ {e}", parse_mode="html")
+    except Exception as e:
+        LOGS.exception("Artemis .ds failed: %s", e)
+        return await status.edit(
+            f"❌ <b>Failed.</b>\n\n<code>{html.escape(str(e))}</code>",
+            parse_mode="html",
+        )
+
+
+@heartless_cmd(owner_only=True, pattern=r"s(?:\s+(.+))?$")
+async def artemis_stars_fee(event):
+    await _artemis_stars_fee_handler(event)
+
+
+@heartless_cmd(owner_only=True, pattern=r"ds(?:\s+(.+))?$")
+async def artemis_desired_ton(event):
+    await _artemis_desired_ton_handler(event)
+
+
+@in_pattern(r"(?i)^p(?:\s+([\s\S]+))?$", owner=False)
+async def artemis_price_inline(event):
+    """Inline ``p`` — HTML ``tg-emoji`` like g hub panel."""
+    if not _nft_user_allowed(event.sender_id):
+        return await _inline_nft_denied(event)
+
+    raw = ""
+    try:
+        raw = (event.pattern_match.group(1) or "").strip()
+    except Exception:
+        raw = ""
+
+    with contextlib.suppress(Exception):
+        await _warm_emp_names("ex", "stars", "gram", "irt", "usdt")
+    pm = _gift_inline_pm()  # html — same as g hub CE
+    ex_e = _emp_ce_html("ex", "💱")
+    usage = (
+        f"{ex_e} <b>Price Convert</b>\n\n"
+        "<code>@AssisXBot p 50 ton</code>\n"
+        "<code>@AssisXBot p 1000 stars ton</code>\n"
+        "<code>@AssisXBot p 5 usdt stars</code>\n"
+        "<code>@AssisXBot p 1000000 t ton</code>"
+    )
+    if not raw:
+        article = await event.builder.article(
+            title="💱 Price Convert (p)",
+            description="@AssisXBot p 50 ton stars",
+            text=usage,
+            parse_mode=pm,
+            link_preview=False,
+        )
+        return await _gift_inline_answer(event, [article], cache_time=10)
+
+    try:
+        amount, src, dst = _parse_price_query(raw)
+        if amount <= 0:
+            raise ValueError("Amount must be positive.")
+        message = await _price_convert_message(amount, src, dst, fmt="html")
+        title = "💱 Price Convert"
+        desc = raw[:64]
+    except ValueError as e:
+        err = html.escape(str(e)) if str(e) else ""
+        message = f"❌ {err}\n\n{usage}" if err else usage
+        if "Supported" not in str(e) and "positive" not in str(e).lower():
+            message = f"❌ Invalid query.\n\n{usage}"
+        title = "❌ Price Convert"
+        desc = "Check usage"
+    except Exception as e:
+        LOGS.exception("Inline p failed: %s", e)
+        message = (
+            f"❌ <b>Conversion failed.</b>\n\n"
+            f"<code>{html.escape(str(e))}</code>"
+        )
+        title = "❌ Price Convert"
+        desc = "Failed"
+
+    article = await event.builder.article(
+        title=title,
+        description=desc,
+        text=message,
+        parse_mode=pm,
+        link_preview=False,
+    )
+    return await _gift_inline_answer(event, [article], cache_time=5)
+
+
+@in_pattern(r"(?i)^s(?:\s+([\s\S]+))?$", owner=False)
+async def artemis_stars_fee_inline(event):
+    """Inline ``s`` — HTML ``tg-emoji`` like g hub panel."""
+    if not _nft_user_allowed(event.sender_id):
+        return await _inline_nft_denied(event)
+
+    raw = ""
+    try:
+        raw = (event.pattern_match.group(1) or "").strip()
+    except Exception:
+        raw = ""
+
+    with contextlib.suppress(Exception):
+        await _warm_emp_names("stars", "gram")
+    pm = _gift_inline_pm()
+    star_e = _emp_ce_html("stars", "⭐")
+    gram = _gram_ce_html("TON")
+    usage = (
+        f"{star_e} <b>Stars Fee</b>\n\n"
+        "<code>@AssisXBot s 9200</code>\n\n"
+        f"Listing → −20% fee → Fragment {gram}"
+    )
+    if not raw:
+        article = await event.builder.article(
+            title="⭐ Stars Fee (s)",
+            description="@AssisXBot s 9200",
+            text=usage,
+            parse_mode=pm,
+            link_preview=False,
+        )
+        return await _gift_inline_answer(event, [article], cache_time=10)
+
+    try:
+        amount = Decimal(str(raw).replace(",", ""))
+        if amount <= 0:
+            raise ValueError("Stars must be positive.")
+        message = await _stars_listing_fee_message(amount, fmt="html")
+        title = "⭐ Stars Fee"
+        desc = f"{_fmt_stars(amount)} Stars"
+    except Exception as e:
+        if isinstance(e, ValueError) and "positive" in str(e).lower():
+            message = f"❌ {html.escape(str(e))}"
+        else:
+            try:
+                Decimal(str(raw).replace(",", ""))
+                LOGS.exception("Inline s failed: %s", e)
+                message = (
+                    f"❌ <b>Failed.</b>\n\n<code>{html.escape(str(e))}</code>"
+                )
+            except Exception:
+                message = f"❌ Invalid amount.\n\n{usage}"
+        title = "❌ Stars Fee"
+        desc = "Check usage"
+
+    article = await event.builder.article(
+        title=title,
+        description=desc,
+        text=message,
+        parse_mode=pm,
+        link_preview=False,
+    )
+    return await _gift_inline_answer(event, [article], cache_time=5)
+
+
+@in_pattern(r"(?i)^ds(?:\s+([\s\S]+))?$", owner=False)
+async def artemis_desired_ton_inline(event):
+    """Inline ``ds`` — HTML ``tg-emoji`` like g hub panel."""
+    if not _nft_user_allowed(event.sender_id):
+        return await _inline_nft_denied(event)
+
+    raw = ""
+    try:
+        raw = (event.pattern_match.group(1) or "").strip()
+    except Exception:
+        raw = ""
+
+    with contextlib.suppress(Exception):
+        await _warm_emp_names("stars", "gram")
+    pm = _gift_inline_pm()
+    star_e = _emp_ce_html("stars", "⭐")
+    gram = _gram_ce_html("TON")
+    usage = (
+        f"{gram} <b>Desired TON → Listing</b>\n\n"
+        "<code>@AssisXBot ds 67</code>\n\n"
+        f"Entry {gram} → Fragment → listing {star_e}"
+    )
+    if not raw:
+        article = await event.builder.article(
+            title="💎 Desired TON (ds)",
+            description="@AssisXBot ds 67",
+            text=usage,
+            parse_mode=pm,
+            link_preview=False,
+        )
+        return await _gift_inline_answer(event, [article], cache_time=10)
+
+    try:
+        amount = Decimal(str(raw).replace(",", ""))
+        if amount <= 0:
+            raise ValueError("TON must be positive.")
+        message = await _desired_ton_listing_message(amount, fmt="html")
+        title = "💎 Desired TON"
+        desc = f"{_fmt_amount(amount)} TON"
+    except Exception as e:
+        if isinstance(e, ValueError) and "positive" in str(e).lower():
+            message = f"❌ {html.escape(str(e))}"
+        else:
+            try:
+                Decimal(str(raw).replace(",", ""))
+                LOGS.exception("Inline ds failed: %s", e)
+                message = (
+                    f"❌ <b>Failed.</b>\n\n<code>{html.escape(str(e))}</code>"
+                )
+            except Exception:
+                message = f"❌ Invalid amount.\n\n{usage}"
+        title = "❌ Desired TON"
+        desc = "Check usage"
+
+    article = await event.builder.article(
+        title=title,
+        description=desc,
+        text=message,
+        parse_mode=pm,
+        link_preview=False,
+    )
+    return await _gift_inline_answer(event, [article], cache_time=5)
+
+
 @heartless_cmd(owner_only=True, pattern=r"add(?:\s+(.+))?$")
 async def artemis_add_nftid(event):
     """Append a Telegram user (id or username) to the assistant allow-list."""
@@ -8145,20 +10228,39 @@ async def artemis_add_nftid(event):
     if not raw:
         return await event.eor(
             "❌ <b>Usage:</b> "
-            f"<code>{_h('add')} USER_ID</code> or "
-            f"<code>{_h('add')} @username</code>",
+            f"<code>{_h('add')} @user</code> · "
+            f"<code>{_h('add')} ID</code> · "
+            f"<code>{_h('add')} @user 30</code>",
             parse_mode="html",
         )
 
+    parts = raw.split()
+    days = None
+    if len(parts) >= 2 and parts[-1].isdigit():
+        days = int(parts[-1])
+        if days < 1:
+            return await event.eor("❌ Days must be ≥ 1.", parse_mode="html")
+        user_raw = " ".join(parts[:-1]).strip()
+    else:
+        user_raw = raw
+
     try:
-        entity = await _resolve_tg_user(event, raw)
+        entity = await _resolve_tg_user(event, user_raw)
     except ValueError as e:
         return await event.eor(f"❌ {e}", parse_mode="html")
 
-    _add_nftid(entity.id)
+    _add_nftid(entity.id, days=days)
     link = _user_profile_link(entity)
+    if days:
+        until = datetime.fromtimestamp(
+            int(time.time()) + days * 86400, tz=timezone.utc
+        ).strftime("%Y-%m-%d %H:%M UTC")
+        return await event.eor(
+            f"<b>{link} added for {days}d</b>\nExpires: <code>{until}</code>",
+            parse_mode="html",
+        )
     return await event.eor(
-        f"<b>{link} added to database</b>",
+        f"<b>{link} added to database</b> (permanent)",
         parse_mode="html",
     )
 
@@ -8191,6 +10293,453 @@ async def artemis_rm_nftid(event):
         f"<b>{link} removed from database</b>",
         parse_mode="html",
     )
+
+
+# ============================================================
+# /pay — Stars (250) + TON (2.79 + unique) → NFTIDS 30 days
+# udB: TON_WALLET, TONAPI_KEY, PAY_STARS, PAY_TON, PAY_TIMEOUT
+# ============================================================
+
+_PAY_STARS_DEFAULT = 250
+_PAY_TON_DEFAULT = 2.79
+_PAY_DAYS = 30
+_PAY_TIMEOUT_DEFAULT = 600  # seconds
+_PAY_PAYLOAD = b"artemis_nft_sub_30d"
+_TONAPI_BASE = "https://tonapi.io/v2"
+
+_pay_stars_pending: set[int] = set()
+_pay_ton_pending: dict[int, dict] = {}  # uid → {amount, expires, base}
+_pay_seen_tx: set[str] = set()
+
+
+def _pay_stars_amount() -> int:
+    try:
+        return max(1, int(udB.get_key("PAY_STARS") or _PAY_STARS_DEFAULT))
+    except Exception:
+        return _PAY_STARS_DEFAULT
+
+
+def _pay_ton_base() -> float:
+    try:
+        return float(udB.get_key("PAY_TON") or _PAY_TON_DEFAULT)
+    except Exception:
+        return _PAY_TON_DEFAULT
+
+
+def _pay_timeout_sec() -> int:
+    try:
+        return max(60, int(udB.get_key("PAY_TIMEOUT") or _PAY_TIMEOUT_DEFAULT))
+    except Exception:
+        return _PAY_TIMEOUT_DEFAULT
+
+
+def _pay_ton_wallet() -> str | None:
+    w = udB.get_key("TON_WALLET") or udB.get_key("TON_WALLET_ADDRESS")
+    return str(w).strip() if w else None
+
+
+def _pay_tonapi_key() -> str | None:
+    k = udB.get_key("TONAPI_KEY")
+    return str(k).strip() if k else None
+
+
+def _pay_log_chat():
+    return udB.get_key("LOG_CHANNEL") or LOG_CHAT_ID or OWNER_ID
+
+
+def _pay_stars_invoice(stars: int) -> InputMediaInvoice:
+    price = LabeledPrice(label=f"{stars} Stars", amount=stars)
+    invoice = Invoice(
+        currency="XTR",
+        prices=[price],
+        name_requested=False,
+        phone_requested=False,
+        email_requested=False,
+        shipping_address_requested=False,
+        flexible=False,
+        phone_to_provider=False,
+        email_to_provider=False,
+    )
+    return InputMediaInvoice(
+        title="Heartless NFT Access",
+        description=f"{_PAY_DAYS}-day access to Artemis NFT tools",
+        invoice=invoice,
+        payload=_PAY_PAYLOAD,
+        provider="",
+        provider_data=DataJSON("{}"),
+        start_param="pay",
+    )
+
+
+async def send_pay_menu(event):
+    """Public entry for /pay and /start pay."""
+    stars = _pay_stars_amount()
+    ton = _pay_ton_base()
+    uid = event.sender_id
+    _purge_expired_nft_subs()
+    exp = _nft_sub_expiry(uid)
+    status = ""
+    if exp is not None:
+        if exp > 0:
+            until = datetime.fromtimestamp(exp, tz=timezone.utc).strftime(
+                "%Y-%m-%d %H:%M UTC"
+            )
+            status = f"\n\n✅ You already have access until <code>{until}</code>."
+        else:
+            status = "\n\n✅ You already have permanent access."
+
+    text = (
+        f"<b>Heartless NFT Access</b>\n\n"
+        f"Unlock assistant NFT commands &amp; inline tools for "
+        f"<b>{_PAY_DAYS} days</b>.\n\n"
+        f"⭐ <b>Stars:</b> <code>{stars}</code>\n"
+        f"💎 <b>TON:</b> <code>{ton}</code> (+ unique micro-amount)\n"
+        f"{status}"
+    )
+    buttons = [
+        [Button.inline(f"Pay {stars} ⭐", data="paystars")],
+        [Button.inline(f"Pay ~{ton} TON", data="payton")],
+    ]
+    await event.respond(text, buttons=buttons, parse_mode="html")
+
+
+@asst_cmd(pattern=r"pay$", func=lambda e: e.is_private)
+async def asst_pay_cmd(event):
+    await send_pay_menu(event)
+
+
+@callback("paystars")
+async def cb_pay_stars(event):
+    stars = _pay_stars_amount()
+    _pay_stars_pending.add(int(event.sender_id))
+    await event.answer()
+    try:
+        await event.edit(
+            f"⭐ Pay <b>{stars} Stars</b> for {_PAY_DAYS}-day NFT access.\n"
+            f"Tap the invoice below.",
+            parse_mode="html",
+            buttons=None,
+        )
+    except Exception:
+        pass
+    await asst.send_message(
+        event.chat_id,
+        file=_pay_stars_invoice(stars),
+        message=f"Pay {stars} ⭐ for {_PAY_DAYS}-day access:",
+    )
+
+
+@callback("payton")
+async def cb_pay_ton(event):
+    wallet = _pay_ton_wallet()
+    api_key = _pay_tonapi_key()
+    if not wallet or not api_key:
+        return await event.answer(
+            "TON payments not configured (TON_WALLET / TONAPI_KEY).",
+            alert=True,
+        )
+    uid = int(event.sender_id)
+    if uid in _pay_ton_pending:
+        return await event.answer("You already have a pending TON payment.", alert=True)
+
+    base = _pay_ton_base()
+    unique_suffix = ((uid % 1000) + int(time.time()) % 1000) / 1e6
+    unique_amount = round(base + unique_suffix, 6)
+    timeout = _pay_timeout_sec()
+    expires = int(time.time()) + timeout
+    _pay_ton_pending[uid] = {
+        "amount": unique_amount,
+        "expires": expires,
+        "base": base,
+    }
+    ton_link = f"ton://transfer/{wallet}?amount={int(unique_amount * 1e9)}"
+    await event.answer()
+    try:
+        await event.edit(
+            f"💎 <b>TON payment</b>\n\n"
+            f"Base: <code>{base}</code> TON\n"
+            f"Pay exactly: <code>{unique_amount}</code> TON\n"
+            f"⏱ Timeout: <b>{timeout // 60} min</b>\n\n"
+            f"⚠️ Send the exact unique amount.",
+            buttons=[[Button.url("Pay with TON", ton_link)]],
+            parse_mode="html",
+        )
+    except Exception:
+        await asst.send_message(
+            event.chat_id,
+            f"💎 Pay exactly <code>{unique_amount}</code> TON",
+            buttons=[[Button.url("Pay with TON", ton_link)]],
+            parse_mode="html",
+        )
+    asyncio.create_task(_watch_ton_payment(uid, unique_amount, base))
+
+
+async def _grant_paid_access(uid: int, method: str, detail: str = ""):
+    _add_nftid(uid, days=_PAY_DAYS)
+    until = datetime.fromtimestamp(
+        int(time.time()) + _PAY_DAYS * 86400, tz=timezone.utc
+    ).strftime("%Y-%m-%d %H:%M UTC")
+    user_text = (
+        f"✅ <b>Payment confirmed</b> ({html.escape(method)})\n"
+        f"NFT access granted for <b>{_PAY_DAYS} days</b>.\n"
+        f"Expires: <code>{until}</code>"
+    )
+    if detail:
+        user_text += f"\n{detail}"
+    try:
+        await asst.send_message(uid, user_text, parse_mode="html")
+    except Exception as e:
+        LOGS.warning("pay notify user failed: %s", e)
+
+    log_chat = _pay_log_chat()
+    if log_chat:
+        try:
+            ent = await asst.get_entity(uid)
+            name = html.escape(get_display_name(ent) or str(uid))
+            await asst.send_message(
+                log_chat,
+                f"✅ <b>NFT sub</b> {method}\n"
+                f"User: <a href=\"tg://user?id={uid}\">{name}</a> "
+                f"(<code>{uid}</code>)\n"
+                f"Until: <code>{until}</code>\n"
+                f"{detail}",
+                parse_mode="html",
+            )
+        except Exception as e:
+            LOGS.warning("pay log failed: %s", e)
+
+
+@asst.on(events.Raw(UpdateBotPrecheckoutQuery))
+async def _pay_precheckout(event: UpdateBotPrecheckoutQuery):
+    try:
+        payload = event.payload or b""
+        if payload != _PAY_PAYLOAD:
+            return
+        await asst(
+            functions.messages.SetBotPrecheckoutResultsRequest(
+                query_id=event.query_id,
+                success=True,
+                error=None,
+            )
+        )
+    except Exception as e:
+        LOGS.exception("pay precheckout: %s", e)
+
+
+@asst.on(events.Raw(tl_types.UpdateNewMessage))
+async def _pay_stars_received(event):
+    msg = getattr(event, "message", None)
+    if not msg or not isinstance(getattr(msg, "action", None), MessageActionPaymentSentMe):
+        return
+    payment: MessageActionPaymentSentMe = msg.action
+    if (payment.payload or b"") != _PAY_PAYLOAD:
+        return
+    try:
+        uid = int(msg.peer_id.user_id)
+    except Exception:
+        return
+    _pay_stars_pending.discard(uid)
+    stars = payment.total_amount or _pay_stars_amount()
+    await _grant_paid_access(uid, "Stars", f"Amount: <code>{stars}</code> ⭐")
+
+
+async def _ton_fetch_transactions(address: str, limit: int = 20) -> list:
+    key = _pay_tonapi_key()
+    if not key:
+        return []
+    url = f"{_TONAPI_BASE}/blockchain/accounts/{address}/transactions?limit={limit}"
+    headers = {"Authorization": f"Bearer {key}"}
+    try:
+        timeout = aiohttp.ClientTimeout(total=20)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.get(url, headers=headers) as resp:
+                if resp.status != 200:
+                    LOGS.warning("tonapi tx status=%s", resp.status)
+                    return []
+                data = await resp.json()
+                return data.get("transactions") or []
+    except Exception as e:
+        LOGS.warning("tonapi fetch: %s", e)
+        return []
+
+
+async def _watch_ton_payment(uid: int, expected_amount: float, base_amount: float):
+    wallet = _pay_ton_wallet()
+    timeout = _pay_timeout_sec()
+    deadline = time.time() + timeout
+    try:
+        while time.time() < deadline:
+            if uid not in _pay_ton_pending:
+                return
+            txs = await _ton_fetch_transactions(wallet, limit=25)
+            for tx in txs:
+                tx_hash = str(tx.get("hash") or "")
+                if tx_hash and tx_hash in _pay_seen_tx:
+                    continue
+                in_msg = tx.get("in_msg") or {}
+                raw_val = in_msg.get("value")
+                if raw_val is None:
+                    continue
+                try:
+                    value = int(raw_val) / 1e9
+                except Exception:
+                    continue
+                if not tx.get("success"):
+                    continue
+                if abs(value - expected_amount) >= 1e-9:
+                    continue
+                if tx_hash:
+                    _pay_seen_tx.add(tx_hash)
+                    if len(_pay_seen_tx) > 500:
+                        _pay_seen_tx.clear()
+                _pay_ton_pending.pop(uid, None)
+                sender = (in_msg.get("source") or {}).get("address", "?")
+                detail = (
+                    f"Amount: <code>{value}</code> TON\n"
+                    f"Tx: <code>{html.escape(tx_hash or 'N/A')}</code>\n"
+                    f"From: <code>{html.escape(str(sender))}</code>"
+                )
+                await _grant_paid_access(uid, "TON", detail)
+                return
+            await asyncio.sleep(5)
+    except Exception as e:
+        LOGS.exception("watch ton pay: %s", e)
+    finally:
+        if uid in _pay_ton_pending:
+            _pay_ton_pending.pop(uid, None)
+            try:
+                await asst.send_message(
+                    uid,
+                    f"⏰ TON payment timed out after {timeout // 60} minutes. "
+                    f"Use /pay to try again.",
+                )
+            except Exception:
+                pass
+
+
+async def _gift_refresh_inline_ce(msg_id, sess: dict, token: str, user_id: int) -> bool:
+    """
+    Re-edit an already-sent inline gift message so CE + button icons render.
+
+    Initial SetInlineBotResults often shows plain alts; the first edit (same as
+    tapping any hub button) activates MessageEntityCustomEmoji / style.icon in
+    private, groups, and supergroups when the bot owner has Premium.
+    """
+    if asst is None or msg_id is None or not sess:
+        return False
+    try:
+        await _attach_emoji_pack(
+            sess, force=not _pack_has_emojis(_sess_emoji_pack(sess)),
+        )
+    except Exception as e:
+        LOGS.debug("refresh inline CE pack: %s", e)
+    pack = _sess_emoji_pack(sess)
+    if sess.get("model"):
+        sess["model"] = _canonical_attr_name(pack, "model", sess["model"])
+    if sess.get("backdrop"):
+        sess["backdrop"] = _canonical_attr_name(pack, "backdrop", sess["backdrop"])
+    text = _gift_inline_hub_text(sess)
+    buttons = _gift_inline_hub_buttons(
+        user_id, token, sess.get("raw") or "", sess,
+    )
+    try:
+        await asst.edit_message(
+            msg_id,
+            text,
+            buttons=buttons,
+            parse_mode="html",
+            link_preview=False,
+        )
+        return True
+    except Exception as e:
+        # Force a visible change if Telegram treats content as unmodified.
+        if "not modified" in str(e).lower():
+            with contextlib.suppress(Exception):
+                await asst.edit_message(
+                    msg_id,
+                    text + "\u200b",
+                    buttons=buttons,
+                    parse_mode="html",
+                    link_preview=False,
+                )
+                return True
+        LOGS.warning("refresh inline CE edit failed: %s", e)
+        return False
+
+
+@asst.on(events.Raw(tl_types.UpdateBotInlineSend))
+async def artemis_gift_inline_chosen(update):
+    """
+    On pick of ``g …``, immediately re-edit the sent inline message so custom
+    emoji (text + button icons) appear without requiring a manual button tap.
+
+    Needs BotFather ``/setinlinefeedback`` enabled (msg_id / inline_message_id).
+    """
+    try:
+        query = (getattr(update, "query", None) or "").strip()
+        user_id = int(getattr(update, "user_id", 0) or 0)
+        msg_id = getattr(update, "msg_id", None)
+    except Exception:
+        return
+    if not user_id or not query:
+        return
+    m = re.match(r"(?i)^g(?:\s+([\s\S]+))?$", query)
+    if not m:
+        return
+    raw = (m.group(1) or "").strip()
+    if not raw:
+        return
+    if msg_id is None:
+        LOGS.warning(
+            "gift chosen-inline missing msg_id for user=%s — enable "
+            "BotFather /setinlinefeedback so CE can refresh on send",
+            user_id,
+        )
+        return
+
+    token = _GIFT_INLINE_QUERY_INDEX.get(_gift_inline_query_key(user_id, raw))
+    sess = _gift_inline_load(token) if token else None
+    if not sess:
+        try:
+            parsed = _gift_inline_parse_raw(raw)
+        except Exception:
+            return
+        token = _gift_inline_save(
+            {
+                **parsed,
+                "owner_id": user_id,
+                "resolved": bool(parsed.get("resolved")),
+                "view": "hub",
+                "last_mode": None,
+                "from_models": False,
+            }
+        )
+        sess = _GIFT_INLINE_SESSIONS[token]
+        if sess.get("nft_mode"):
+            try:
+                coll, mod, back = await asyncio.wait_for(
+                    _gift_inline_resolve_nft_fast(sess.get("nft_raw") or raw),
+                    timeout=8.0,
+                )
+                if coll:
+                    sess["collection"] = coll
+                if mod:
+                    sess["model"] = mod
+                    sess["depth"] = max(int(sess.get("depth") or 1), 2)
+                if back:
+                    sess["backdrop"] = back
+                    sess["depth"] = max(int(sess.get("depth") or 1), 3)
+                if mod and back:
+                    sess["resolved"] = True
+            except Exception as e:
+                LOGS.debug("chosen inline NFT resolve: %s", e)
+
+    ok = await _gift_refresh_inline_ce(msg_id, sess, token, user_id)
+    if ok:
+        sess["inline_msg_id"] = msg_id
+        sess["at"] = time.monotonic()
+        _GIFT_INLINE_SESSIONS[token] = sess
+
 
 
 # Resume autotop after plugin load when DB flag is enabled.
