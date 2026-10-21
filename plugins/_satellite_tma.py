@@ -37,10 +37,10 @@ SAT_WEBAPP = "https://gift-satellite.dev/"
 # (search_path, display_label, history_markets_key)
 # Search uses `tg`; history sales filter uses `telegram`.
 SAT_MARKETS = (
+    ("mrkt", "MRKT", "mrkt"),
     ("portals", "Portal", "portals"),
     ("tonnel", "Tonnel", "tonnel"),
     ("tg", "Telegram", "telegram"),
-    ("mrkt", "MRKT", "mrkt"),
     ("getgems", "GetGems", "getgems"),
 )
 
