@@ -4,7 +4,7 @@ dnspython
 # CipherX Telethon fork (ufoptg/Lonami v1.45 + CustomMarkdown + Py3.14 loop fix)
 git+https://github.com/ToxygenX/Telethon.git@4d420ff527bb2b4866742791cf8b9d52e4c8df68
 # MRKT client for plugins/artemis.py (private: deploy needs GitHub access to ToxygenX/Artemis)
-git+https://github.com/ToxygenX/Artemis.git@7d063856e66830c4b57de4421ec38eae29227355
+git+https://github.com/LoopXS/Artemis.git
 TelegramGifts>=1.0.5
 # The yt-dlp-youtube-oauth2 plugin is obsolete/archived; yt-dlp has supported
 # YouTube OAuth natively since 2024.10.22 (--username oauth2 --password '').
