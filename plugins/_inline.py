@@ -14,7 +14,7 @@ from CythonX.dB._core import HELP, LIST
 from CythonX.fns.helper import gen_chlog, time_formatter  # updater
 from CythonX.fns.misc import split_list
 from CythonX.version import __version__ as UltVer
-from CythonX.version import heartless_version
+from CythonX.version import ultroid_version
 
 from . import (
     HNDLR,
@@ -26,7 +26,6 @@ from . import (
     inline_pic,
     split_list,
     start_time,
-    time_formatter,
     udB,
 )
 from ._help import _main_help_menu
@@ -78,30 +77,28 @@ SUP_BUTTONS = [
 # --------------------BUTTONS--------------------#
 
 
-@in_pattern(owner=True, func=lambda x: not x.text)
+@in_pattern(owner=False, func=lambda x: not (getattr(x, "text", None) or "").strip())
 async def inline_alive(o):
-    TLINK = inline_pic() or "https://graph.org/file/5eee0c3b21849601906ea.mp4"
-    WEB0 = InputWebDocument(
-        "https://graph.org/file/5eee0c3b21849601906ea.mp4", 0, "video/mp4", []
-    )
-    RES = [
-        await o.builder.document(
-            type="gif",
-            text=ALIVEMSG,
-            include_media=True,
-            buttons=SUP_BUTTONS,
-            title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
-            description="℘ he/she (or anything you like; I don't care)",
-            file=inline_pic(),
-            # url=TLINK,
-            # thumb=WEB0,
-            # content=InputWebDocument(TLINK, 0, "image/jpg", []),
+    """Empty / whitespace query → portal (owner only)."""
+    from CythonX._misc import owner_and_sudos
+
+    RES = []
+    if o.sender_id in owner_and_sudos():
+        RES.append(
+            await o.builder.document(
+                type="gif",
+                text=ALIVEMSG,
+                include_media=True,
+                buttons=SUP_BUTTONS,
+                title="𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
+                description="℘ he/she (or anything you like; I don't care)",
+                file=inline_pic(),
+            )
         )
-    ]
     await o.answer(
         RES,
         private=True,
-        cache_time=300,
+        cache_time=30,
         switch_pm="👨🏻‍💻: 𝒂𝒔𝒔𝒊𝒔𝒕𝒂𝒏𝒕 𝒐𝒇 𝒉𝒆𝒂𝒓𝒕𝒍𝒆𝒔𝒔",
         switch_pm_param="start",
     )
@@ -199,9 +196,7 @@ async def help_func(ult):
 
 @callback(re.compile("uplugin_(.*)"), owner=True)
 async def uptd_plugin(event):
-    # Plugin names may themselves contain "_" (e.g. "asst_cmd"), so only
-    # split off the leading category ("Official"/"Addons"/"VCBot").
-    key, file = event.data_match.group(1).decode("utf-8").split("_", 1)
+    key, file = event.data_match.group(1).decode("utf-8").split("_")
     index = None
     if "|" in file:
         file, index = file.split("|")
@@ -218,7 +213,7 @@ async def uptd_plugin(event):
                 help_ += HNDLR + d
                 help_ += "\n"
     if not help_:
-        help_ = f"{file} Has No Detailed Help!"
+        help_ = f"{file} has no Detailed Help!"
     help_ += "\n✘ @DarkPentester"
     buttons = []
     if inline_pic():
@@ -290,14 +285,14 @@ async def _(event):
     start = datetime.now()
     end = datetime.now()
     ms = (end - start).microseconds
-    pin = f"🌋Pɪɴɢ = {ms} microseconds"
+    pin = f"🌋 Pɪɴɢ = {ms} microseconds"
     await event.answer(pin, cache_time=0, alert=True)
 
 
 @callback(data="upp", owner=True)
 async def _(event):
     uptime = time_formatter((time.time() - start_time) * 1000)
-    pin = f"✵Uᴘᴛɪᴍᴇ = {uptime}"
+    pin = f"✵ Uᴘᴛɪᴍᴇ = {uptime}"
     await event.answer(pin, cache_time=0, alert=True)
 
 
@@ -454,7 +449,10 @@ async def ibuild(e):
             LOGS.exception(er)
     result = [
         await builder.article(
-            "• Ⲏⲉⲁʀⲧⳑⲉⲋⲋ Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ •", text=txt, link_preview=False, buttons=btn
+            "• Ⲏⲉⲁʀⲧⳑⲉⲋⲋ Ⲉⲭⲥⳑυⲋⲓⳳⲉ Ⲃⲟⲧ •",
+            text=txt,
+            link_preview=False,
+            buttons=btn,
         )
     ]
     await e.answer(result)
