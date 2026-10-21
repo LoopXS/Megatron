@@ -14,7 +14,7 @@ from CythonX.dB._core import HELP, LIST
 from CythonX.fns.helper import gen_chlog, time_formatter  # updater
 from CythonX.fns.misc import split_list
 from CythonX.version import __version__ as UltVer
-from CythonX.version import ultroid_version
+from CythonX.version import heartless_version
 
 from . import (
     HNDLR,
