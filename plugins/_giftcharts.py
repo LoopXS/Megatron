@@ -23,9 +23,15 @@ from PIL import Image, ImageDraw, ImageFont
 from telethon import Button, TelegramClient, functions, utils
 from telethon.errors import MessageNotModifiedError
 from telethon.sessions import StringSession
+from telethon.tl.custom.message import CustomMarkdown
 from telethon.tl.types import InputBotInlineMessageID
 
 from . import LOGS, asst, callback, heartless_cmd, in_pattern, udB
+
+
+def _chart_pm():
+    """CustomMarkdown so ``[alt](emoji/id)`` / addemoji CE render on chart panels."""
+    return CustomMarkdown()
 
 # ---------------------------------------------------------------------------
 # Config
@@ -45,10 +51,17 @@ GC_FIELD = "gramPrice"
 # Collection charts support 7d; model charts do not — we derive 7d from 1m.
 INTERVALS = ("24h", "3d", "7d", "1m", "3m", "6m", "1y", "all")
 MODEL_NATIVE_TF = {"24h", "3d", "1m", "3m", "6m", "1y", "all"}
+# Heatmap UI intervals match gift charts; API maps 7d→1w, all→1y.
+# API currency enum is only ``gram`` | ``usd`` (not ton).
+HEATMAP_FIELD = "marketCap"
+HEATMAP_CURRENCY = "gram"
+HEATMAP_LIMIT = 200
+HEATMAP_TF_API = {"7d": "1w", "all": "1y"}
 
 AUTH_TTL = 45 * 60
 SESSION_TTL = 30 * 60
 HTTP_TIMEOUT = aiohttp.ClientTimeout(total=25, connect=10)
+HEATMAP_HTTP_TIMEOUT = aiohttp.ClientTimeout(total=90, connect=15)
 
 _AUTH_LOCK = asyncio.Lock()
 _AUTH_CACHE: dict[str, Any] = {"token": None, "at": 0.0}
@@ -56,6 +69,8 @@ _TG_LOCK = asyncio.Lock()
 
 # token -> {gift, model, model_id, image, owner_id, at}
 _SESSIONS: dict[str, dict[str, Any]] = {}
+# token -> heatmap session
+_HEAT_SESSIONS: dict[str, dict[str, Any]] = {}
 
 
 # ---------------------------------------------------------------------------
@@ -127,17 +142,16 @@ def _nft_allowed(user_id) -> bool:
 async def _inline_denied(event):
     article = await event.builder.article(
         title="❌ Not authorized",
-        description="Ask the owner to .add your ID",
+        description="Purchase subscription from @AssisXBot",
         text=(
-            f"**{BRAND_FULL}**\n\n"
             "❌ You are not on the NFT allow-list.\n"
-            "Ask the owner to `.add <your id>`."
+            "Purchase subscription from @AssisXBot"
         ),
     )
     return await event.answer(
         [article],
         cache_time=5,
-        switch_pm="Request access",
+        switch_pm="Purchase subscription",
         switch_pm_param="start",
     )
 
@@ -317,7 +331,10 @@ def _tf_label(tf: str) -> str:
     """Display label: 24H / 3D / 7D / 1M / 1Y / All (API values stay lowercase)."""
     if tf == "all":
         return "All"
-    return "".join(ch.upper() if ch in "dhmy" else ch for ch in (tf or ""))
+    # Heatmap uses 1w; show as 7D to match chart button style.
+    if tf == "1w":
+        return "7D"
+    return "".join(ch.upper() if ch in "dhmyw" else ch for ch in (tf or ""))
 
 
 def _md_escape(text: Any) -> str:
@@ -334,7 +351,7 @@ def _md_escape(text: Any) -> str:
 # GiftCharts auth + HTTP
 # ---------------------------------------------------------------------------
 
-async def _mint_tma_token() -> str:
+async def _mint_tma_token(start_param: str = "app") -> str:
     """Request Mini App initData via SESSIONMRKT (same creds as Artemis)."""
     api_id, api_hash, session = _api_id(), _api_hash(), _session_str()
     if not api_id or not api_hash:
@@ -353,7 +370,7 @@ async def _mint_tma_token() -> str:
                 functions.messages.RequestMainWebViewRequest(
                     peer=utils.get_input_peer(bot),
                     bot=utils.get_input_user(bot),
-                    start_param="app",
+                    start_param=start_param or "app",
                     platform="android",
                 )
             )
@@ -378,19 +395,32 @@ async def _mint_tma_token() -> str:
     return auth
 
 
-async def _get_auth(force: bool = False) -> str:
+async def _get_auth(force: bool = False, *, start_param: str = "app") -> str:
+    cache_key = f"token:{start_param or 'app'}"
+    at_key = f"at:{start_param or 'app'}"
     async with _AUTH_LOCK:
         now = time.monotonic()
-        token = _AUTH_CACHE.get("token")
+        token = _AUTH_CACHE.get(cache_key)
         if (
             not force
             and token
-            and now - float(_AUTH_CACHE.get("at") or 0) < AUTH_TTL
+            and now - float(_AUTH_CACHE.get(at_key) or 0) < AUTH_TTL
         ):
             return token
-        token = await _mint_tma_token()
-        _AUTH_CACHE["token"] = token
-        _AUTH_CACHE["at"] = now
+        # Back-compat: older cache used bare "token"/"at" for app.
+        if (
+            not force
+            and (start_param or "app") == "app"
+            and _AUTH_CACHE.get("token")
+            and now - float(_AUTH_CACHE.get("at") or 0) < AUTH_TTL
+        ):
+            return _AUTH_CACHE["token"]
+        token = await _mint_tma_token(start_param=start_param or "app")
+        _AUTH_CACHE[cache_key] = token
+        _AUTH_CACHE[at_key] = now
+        if (start_param or "app") == "app":
+            _AUTH_CACHE["token"] = token
+            _AUTH_CACHE["at"] = now
         return token
 
 
@@ -837,25 +867,45 @@ def _interval_buttons(
     return rows
 
 
-def _picker_text(sess: dict) -> str:
+def _chart_header_lines(sess: dict, *, include_model: bool = True) -> list[str]:
+    """Collection/Model headers — CustomMarkdown CE (chart panels use parse_mode md)."""
     gift = sess.get("gift") or sess.get("gift_q") or "?"
     model = sess.get("model") or sess.get("model_q")
-    lines = [f"🎁 **Collection:** `{_md_escape(gift)}`"]
-    if model:
-        lines.append(f"🧩 **Model:** `{_md_escape(model)}`")
-    return "\n".join(lines)
+    pack = sess.get("emoji_pack") if isinstance(sess.get("emoji_pack"), dict) else {}
+    col_e, mod_e = "🎁", "🧩"
+    try:
+        from plugins.artemis import (  # lazy — artemis imports this module
+            _ce_md,
+            _lookup_emoji_id,
+        )
+
+        col_e = _ce_md(pack.get("collection"), "🎁")
+        if model:
+            mod_e = _ce_md(
+                _lookup_emoji_id(pack.get("models") or {}, model), "🧩"
+            )
+    except Exception:
+        pass
+    lines = [f"{col_e} **Collection:** `{_md_escape(gift)}`"]
+    if include_model and model:
+        lines.append(f"{mod_e} **Model:** `{_md_escape(model)}`")
+    return lines
+
+
+def _picker_text(sess: dict) -> str:
+    return "\n".join(_chart_header_lines(sess, include_model=True))
 
 
 def _intervals_text(sess: dict, mode: str) -> str:
-    gift = sess.get("gift") or sess.get("gift_q") or "?"
-    model = sess.get("model") or sess.get("model_q")
-    lines = [f"🎁 **Collection:** `{_md_escape(gift)}`"]
-    if mode == "model" and model:
-        lines.append(f"🧩 **Model:** `{_md_escape(model)}`")
-    return "\n".join(lines)
+    include_model = mode == "model"
+    return "\n".join(_chart_header_lines(sess, include_model=include_model))
 
 
-def _caption(bundle: dict[str, Any]) -> str:
+def _caption(
+    bundle: dict[str, Any],
+    *,
+    emoji_pack: dict | None = None,
+) -> str:
     points = _sanitize_chart_points(bundle.get("points") or [])
     if not points:
         return "📈 **Chart**\n_No chart points._"
@@ -874,16 +924,36 @@ def _caption(bundle: dict[str, Any]) -> str:
     title = _md_escape(bundle["title"])
     tf = _tf_label(bundle["timeframe"])
     price = _md_escape(_fmt_price(last))
+    # Collection CE + addemoji names (timeline/price/mrktcap/init/supply/upg/burn)
+    col_e = "📈"
+    tl_e, pr_e, mc_e = "⏱", "💰", "🧢"
+    in_e, su_e, up_e, bu_e = "🌟", "✅", "🆙", "🔥"
+    try:
+        from plugins.artemis import _ce_md, _emp_ce_md
+
+        pack = emoji_pack if isinstance(emoji_pack, dict) else {}
+        col_e = _ce_md(pack.get("collection"), "📈")
+        tl_e = _emp_ce_md("timeline", "⏱")
+        pr_e = _emp_ce_md("price", "💰")
+        mc_e = _emp_ce_md("mrktcap", "🧢")
+        in_e = _emp_ce_md("init", "🌟")
+        su_e = _emp_ce_md("supply", "✅")
+        cur_e = _emp_ce_md("sup", "⏰")
+        gram = _emp_ce_md("gram", "TON")
+        up_e = _emp_ce_md("upg", "🆙")
+        bu_e = _emp_ce_md("burn", "🔥")
+    except Exception:
+        cur_e, gram = "⏰", "TON"
     return (
-        f"📈 **{title}**\n"
-        f"⏱ **{tf} Baseline Chart**\n"
-        f"💰 **{price} TON**  `({_md_escape(ch)})`\n"
-        f"🧢 **Market Cap** : `{_md_escape(_fmt_mcap(bundle.get('market_cap')))}`\n"
-        f"🌟 **Initial Price** : `{_md_escape(init_price)}`\n"
-        f"✅ **Initial Supply** : `{_md_escape(_fmt_int(bundle.get('init_supply')))}`\n"
-        f"⏰ **Current Supply** : `{_md_escape(_fmt_int(bundle.get('current_supply')))}`\n"
-        f"🆙 **Upgraded** : `{_md_escape(_fmt_int(bundle.get('upgraded')))}`\n"
-        f"🔥 **Burned** : `{_md_escape(_fmt_int(bundle.get('burned')))}`"
+        f"{col_e} **{title}**\n"
+        f"{tl_e} **{tf} Baseline Chart**\n"
+        f"{pr_e} **{price} {gram}**  `({_md_escape(ch)})`\n"
+        f"{mc_e} **Market Cap** : `{_md_escape(_fmt_mcap(bundle.get('market_cap')))}`\n"
+        f"{in_e} **Initial Price** : `{_md_escape(init_price)}`\n"
+        f"{su_e} **Initial Supply** : `{_md_escape(_fmt_int(bundle.get('init_supply')))}`\n"
+        f"{cur_e} **Current Supply** : `{_md_escape(_fmt_int(bundle.get('current_supply')))}`\n"
+        f"{up_e} **Upgraded** : `{_md_escape(_fmt_int(bundle.get('upgraded')))}`\n"
+        f"{bu_e} **Burned** : `{_md_escape(_fmt_int(bundle.get('burned')))}`"
     )
 
 
@@ -914,7 +984,7 @@ async def _edit_panel(event, text: str, buttons: list):
         await event.edit(
             text,
             buttons=buttons,
-            parse_mode="md",
+            parse_mode=_chart_pm(),
             link_preview=False,
             file=None,
         )
@@ -933,7 +1003,7 @@ async def _edit_panel(event, text: str, buttons: list):
             text,
             file=_blank_media_file(),
             buttons=buttons,
-            parse_mode="md",
+            parse_mode=_chart_pm(),
             link_preview=False,
         )
         return
@@ -957,7 +1027,7 @@ async def _edit_panel(event, text: str, buttons: list):
         await event.respond(
             text,
             buttons=buttons,
-            parse_mode="md",
+            parse_mode=_chart_pm(),
             link_preview=False,
         )
 
@@ -992,7 +1062,30 @@ async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token:
     buttons = _interval_buttons(
         token, owner_id, bundle["timeframe"], show_back=show_back,
     )
-    caption = _caption(bundle)
+    pack = sess.get("emoji_pack") if isinstance(sess.get("emoji_pack"), dict) else {}
+    if not pack.get("collection"):
+        # Prefer hub session pack when chart was opened from inline g
+        hub_token = sess.get("hub_token")
+        if hub_token:
+            try:
+                from . import artemis as art
+
+                hub = art._gift_inline_load(hub_token)
+                if hub and isinstance(hub.get("emoji_pack"), dict):
+                    pack = hub["emoji_pack"]
+            except Exception:
+                pass
+        if not pack.get("collection"):
+            try:
+                from . import artemis as art
+
+                gift_name = sess.get("gift") or sess.get("gift_q") or bundle.get("title")
+                pack = await art._fetch_emoji_pack(str(gift_name or ""))
+                sess["emoji_pack"] = pack
+                _SESSIONS[token] = sess
+            except Exception:
+                pack = pack or {}
+    caption = _caption(bundle, emoji_pack=pack)
     file = io.BytesIO(png)
     file.name = "giftcharts.png"
     try:
@@ -1000,7 +1093,7 @@ async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token:
             caption,
             file=file,
             buttons=buttons,
-            parse_mode="md",
+            parse_mode=_chart_pm(),
             link_preview=False,
         )
         return
@@ -1027,7 +1120,7 @@ async def _deliver_chart(event, bundle: dict[str, Any], *, owner_id: int, token:
             file,
             caption=caption,
             buttons=buttons,
-            parse_mode="md",
+            parse_mode=_chart_pm(),
             link_preview=False,
             reply_to=getattr(event, "message_id", None),
         )
@@ -1184,7 +1277,7 @@ async def giftcharts_back_cb(event):
             art._gift_inline_hub_buttons(
                 hub_owner, hub_token, hub.get("raw") or "", hub,
             ),
-            parse_mode="md",
+            parse_mode=_chart_pm(),
         )
 
     return await event.answer("Nothing to go back to.", alert=True)
@@ -1299,14 +1392,24 @@ async def giftcharts_cmd(event):
         file = io.BytesIO(png)
         file.name = "giftcharts.png"
         await status.delete()
+        pack = sess.get("emoji_pack") if isinstance(sess.get("emoji_pack"), dict) else {}
+        if not pack.get("collection"):
+            try:
+                from . import artemis as art
+
+                pack = await art._fetch_emoji_pack(str(gift_q or ""))
+                sess["emoji_pack"] = pack
+                _SESSIONS[token] = sess
+            except Exception:
+                pack = {}
         await event.client.send_file(
             event.chat_id,
             file,
-            caption=_caption(bundle),
+            caption=_caption(bundle, emoji_pack=pack),
             buttons=_interval_buttons(
                 token, owner_id, "24h", show_back=bool(model_q),
             ),
-            parse_mode="md",
+            parse_mode=_chart_pm(),
             link_preview=False,
             reply_to=event.reply_to_msg_id,
         )
@@ -1316,3 +1419,281 @@ async def giftcharts_cmd(event):
             f"❌ <b>GiftCharts failed.</b>\n\n<code>{html.escape(str(exc))}</code>",
             parse_mode="html",
         )
+
+
+# ---------------------------------------------------------------------------
+# NFT Heatmap (inline ``a``) — GiftCharts /v1/heatmap/image
+# ---------------------------------------------------------------------------
+
+def _purge_heat_sessions() -> None:
+    now = time.monotonic()
+    dead = [
+        k for k, v in _HEAT_SESSIONS.items()
+        if now - float(v.get("at") or 0) > SESSION_TTL
+    ]
+    for k in dead:
+        _HEAT_SESSIONS.pop(k, None)
+
+
+def _heat_session_new(owner_id: int, timeframe: str = "24h") -> str:
+    _purge_heat_sessions()
+    token = secrets.token_urlsafe(9)
+    tf = timeframe if timeframe in INTERVALS else "24h"
+    _HEAT_SESSIONS[token] = {
+        "owner_id": int(owner_id),
+        "timeframe": tf,
+        "field": HEATMAP_FIELD,
+        "currency": HEATMAP_CURRENCY,
+        "at": time.monotonic(),
+    }
+    return token
+
+
+def _heat_session_get(token: str) -> Optional[dict]:
+    _purge_heat_sessions()
+    row = _HEAT_SESSIONS.get(token)
+    if not row:
+        return None
+    row["at"] = time.monotonic()
+    return row
+
+
+def _heatmap_api_tf(timeframe: str) -> str:
+    """Map chart-style interval → GiftCharts heatmap timeRange."""
+    tf = timeframe if timeframe in INTERVALS else "24h"
+    return HEATMAP_TF_API.get(tf, tf)
+
+
+def _heatmap_params(timeframe: str) -> dict[str, Any]:
+    return {
+        "field": HEATMAP_FIELD,
+        "currency": HEATMAP_CURRENCY,  # gram | usd only
+        "timeRange": _heatmap_api_tf(timeframe),
+        "limit": HEATMAP_LIMIT,
+        "colorMode": "default",
+        "shape": "default",
+    }
+
+
+async def _fetch_heatmap_image(timeframe: str = "24h") -> bytes:
+    """Download rendered heatmap PNG from GiftCharts (startapp=heatmap)."""
+    params = _heatmap_params(timeframe)
+    token = await _get_auth(start_param="heatmap")
+    headers = {
+        "Authorization": f"tma {token}",
+        "Accept": "image/png,image/*,*/*",
+        "User-Agent": "Heartless-GiftCharts/1.0",
+    }
+    url = f"{GC_API}/v1/heatmap/image"
+    async with aiohttp.ClientSession(timeout=HEATMAP_HTTP_TIMEOUT) as session:
+        async with session.get(url, headers=headers, params=params) as resp:
+            if resp.status == 401:
+                token = await _get_auth(force=True, start_param="heatmap")
+                headers["Authorization"] = f"tma {token}"
+                async with session.get(url, headers=headers, params=params) as resp2:
+                    if resp2.status >= 400:
+                        text = await resp2.text()
+                        raise RuntimeError(
+                            f"Heatmap HTTP {resp2.status}: {text[:240]}"
+                        )
+                    data = await resp2.read()
+            elif resp.status >= 400:
+                text = await resp.text()
+                raise RuntimeError(f"Heatmap HTTP {resp.status}: {text[:240]}")
+            else:
+                data = await resp.read()
+    if not data or len(data) < 100:
+        raise RuntimeError("Heatmap image was empty.")
+    return data
+
+
+def _heatmap_chooser_text() -> str:
+    return "🔥 **NFT Heatmap**\n⏩ **Choose Timeline**"
+
+
+def _heatmap_caption(timeframe: str) -> str:
+    tf = _tf_label(timeframe)
+    return f"🔥 **NFT Heatmap**\n⏱ **{tf}** · Market Cap"
+
+
+def _heatmap_buttons(
+    token: str,
+    owner_id: int,
+    active: Optional[str] = None,
+) -> list:
+    """Chart-style interval rows + Search again / Share only."""
+    rows: list = []
+    chunk: list = []
+    for tf in INTERVALS:
+        mark = "• " if active and tf == active else ""
+        chunk.append(
+            Button.inline(
+                f"{mark}{_tf_label(tf)}",
+                data=f"gh:t:{owner_id}:{token}:{tf}".encode(),
+            )
+        )
+        if len(chunk) == 4:
+            rows.append(chunk)
+            chunk = []
+    if chunk:
+        rows.append(chunk)
+    rows.append(
+        [
+            Button.switch_inline("🔎 Search again", query="a", same_peer=True),
+            Button.switch_inline("🔗 Share", query="a", same_peer=False),
+        ]
+    )
+    return rows
+
+
+async def _deliver_heatmap(
+    event,
+    *,
+    owner_id: int,
+    token: str,
+    timeframe: str,
+    png: bytes,
+):
+    sess = _heat_session_get(token) or {}
+    sess["timeframe"] = timeframe
+    sess["owner_id"] = int(owner_id)
+    sess["at"] = time.monotonic()
+    _HEAT_SESSIONS[token] = sess
+    caption = _heatmap_caption(timeframe)
+    buttons = _heatmap_buttons(token, owner_id, timeframe)
+    file = io.BytesIO(png)
+    file.name = "heatmap.png"
+    try:
+        await event.edit(
+            caption,
+            file=file,
+            buttons=buttons,
+            parse_mode=_chart_pm(),
+            link_preview=False,
+        )
+        return
+    except MessageNotModifiedError:
+        with contextlib.suppress(Exception):
+            await event.answer()
+        return
+    except Exception as exc:
+        LOGS.debug("Heatmap edit failed: %s", exc)
+    if _is_inline_callback(event):
+        with contextlib.suppress(Exception):
+            await event.answer(
+                "Couldn't update heatmap. Search again with a.",
+                alert=True,
+            )
+        return
+    try:
+        await event.client.send_file(
+            event.chat_id,
+            file,
+            caption=caption,
+            buttons=buttons,
+            parse_mode=_chart_pm(),
+            link_preview=False,
+            reply_to=getattr(event, "message_id", None),
+        )
+    except Exception as exc:
+        LOGS.warning("Heatmap send failed: %s", exc)
+        with contextlib.suppress(Exception):
+            await event.answer("Couldn't send heatmap.", alert=True)
+
+
+def _heatmap_inline_media() -> dict:
+    """Inline switch thumb for ``@AssisXBot a`` (thumb+content like urltools)."""
+    try:
+        from plugins.artemis import _inline_article_media
+
+        return _inline_article_media(
+            "https://cdn.dbimg.app/pyQWD5gj.jpg", mime="image/jpeg",
+        )
+    except Exception:
+        try:
+            from telethon.tl.types import InputWebDocument
+
+            doc = InputWebDocument(
+                "https://cdn.dbimg.app/pyQWD5gj.jpg", 0, "image/jpeg", [],
+            )
+            return {"thumb": doc, "content": doc}
+        except Exception:
+            return {}
+
+
+@in_pattern(r"(?i)^a\s*$", owner=False)
+async def giftcharts_heatmap_inline(event):
+    """Inline `a` (no args) → timeline chooser panel (no image yet)."""
+    if not _nft_allowed(event.sender_id):
+        return await _inline_denied(event)
+
+    owner_id = int(event.sender_id)
+    token = _heat_session_new(owner_id, "24h")
+    kwargs = dict(
+        title="🔥 NFT Heatmap",
+        description="@AssisXBot a",
+        text=_heatmap_chooser_text(),
+        buttons=_heatmap_buttons(token, owner_id, active=None),
+        **_heatmap_inline_media(),
+    )
+    article = await event.builder.article(**kwargs)
+    try:
+        return await event.answer([article], cache_time=5)
+    except Exception:
+        return
+
+
+@in_pattern(r"(?i)^a\s+\S", owner=False)
+async def giftcharts_heatmap_inline_noargs(event):
+    """Reject `a …` args — heatmap is chooser-only."""
+    if not _nft_allowed(event.sender_id):
+        return await _inline_denied(event)
+    kwargs = dict(
+        title="🔥 NFT Heatmap",
+        description="No args — type just a",
+        text=(
+            "**NFT Heatmap Command**\n\n"
+            "`@AssisXBot a`\n\n"
+            "Then pick a button"
+        ),
+        **_heatmap_inline_media(),
+    )
+    article = await event.builder.article(**kwargs)
+    try:
+        return await event.answer([article], cache_time=10)
+    except Exception:
+        return
+
+
+@callback(re.compile(rb"^gh:t:(\d+):([A-Za-z0-9_-]{6,16}):([0-9a-z]+)$"))
+async def giftcharts_heatmap_tf_cb(event):
+    async def _ack(text: str = None, *, alert: bool = False):
+        with contextlib.suppress(Exception):
+            if text is None:
+                await event.answer()
+            else:
+                await event.answer(text, alert=alert)
+
+    try:
+        owner_id = int(event.data_match.group(1))
+        token = event.data_match.group(2).decode()
+        timeframe = event.data_match.group(3).decode()
+    except Exception:
+        return await _ack("Invalid request.", alert=True)
+    if int(event.sender_id) != owner_id:
+        return await _ack("This panel belongs to another user.", alert=True)
+    if timeframe not in INTERVALS:
+        return await _ack("Unknown interval.", alert=True)
+    sess = _heat_session_get(token)
+    if not sess:
+        return await _ack("Session expired — search again with a.", alert=True)
+    # Ack immediately so Telegram doesn't expire the query id.
+    await _ack(f"Loading {_tf_label(timeframe)}…")
+    try:
+        png = await _fetch_heatmap_image(timeframe)
+    except Exception as exc:
+        LOGS.warning("Heatmap tf fetch failed: %s", exc)
+        return await _ack(str(exc)[:160], alert=True)
+    return await _deliver_heatmap(
+        event, owner_id=owner_id, token=token, timeframe=timeframe, png=png,
+    )
