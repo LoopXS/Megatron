@@ -55,7 +55,12 @@ class Loader:
                 modl = func(plugin)
             except ModuleNotFoundError as er:
                 modl = None
-                self._logger.error(f"{plugin}: '{er.name}' not installed!")
+                # er.name is the missing top-level module (e.g. plugin
+                # plugins.artemis failed because package ``artemis`` missing).
+                self._logger.error(
+                    f"{plugin}: missing dependency '{er.name}' "
+                    f"(install it / add to requirements.txt). {er}"
+                )
                 continue
             except Exception as exc:
                 modl = None
