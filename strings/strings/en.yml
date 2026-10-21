@@ -1087,7 +1087,7 @@ setduration_done: "Done — the displayed duration is now `{0}`.\n`Note:` Telegr
 
 # wspr (secret messages)
 wspr_6: "🚫 This secret message is not for you. Your attempt has been logged."
-wspr_7: "👁 Rᴇᴀᴅᴇʀs"
+wspr_7: "👁 Rᴇᴀᴅᴇʀs •"
 wspr_8: "No one has opened this secret message yet."
 wspr_9: "👁 **Readers of your secret message**"
 wspr_10: "\n…and {0} more."
