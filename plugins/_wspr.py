@@ -334,7 +334,7 @@ def _buttons(key):
             Button.inline("• Rᥱᥲɗ 𐌑ᥱssᥲgᥱ", data=f"read_{key}"),
             Button.inline(get_string("wspr_7"), data=f"readers_{key}"),
         ],
-        [Button.inline("𑀥ᥱᥣᥱᴛᥱ 𐌑ᥱssᥲgᥱ •", data=f"del_{key}")],
+        [Button.inline("𑀥ᥱᥣᥱᴛᥱ 𐌑ᥱssᥲgᥱ", data=f"del_{key}")],
     ]
 
 
