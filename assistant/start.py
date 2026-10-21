@@ -70,6 +70,12 @@ async def closet(lol):
 @asst_cmd(pattern="start( (.*)|$)", forwards=False, func=lambda x: not x.is_group)
 async def heartless(event):
     args = event.pattern_match.group(1).strip()
+    # Gift Models deep-link (NFTIDS only; silent for everyone else).
+    if args.lower().startswith("models"):
+        from plugins.artemis import handle_gift_models_start
+
+        await handle_gift_models_start(event, args)
+        return
     keym = KeyManager("BOT_USERS", cast=list)
     if not keym.contains(event.sender_id) and event.sender_id not in owner_and_sudos():
         keym.add(event.sender_id)
@@ -147,6 +153,10 @@ async def heartless(event):
             from plugins.artemis import send_pay_menu
 
             await send_pay_menu(event)
+        elif args.lower().startswith("models"):
+            from plugins.artemis import handle_gift_models_start
+
+            await handle_gift_models_start(event, args)
         elif args:
             await get_stored_file(event, args)
         else:
