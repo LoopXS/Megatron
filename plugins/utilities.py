@@ -24,8 +24,12 @@
 • `{i}rmbg <reply to pic>`
     Remove background from that picture.
 
-• `{i}telegraph <reply to media/text>`
-    Upload media/text to telegraph.
+• `{i}graph <reply to media/text>`
+    Text → Telegraph page.
+    Media → dbimg.app via docs curl (DB `DBIMG_KEY`).
+    `{i}graph` — no password, no expiry
+    `{i}graph <password>` — password, no expiry
+    `{i}graph <password> 1d|1w|1m|3m` — password + expiry
 
 • `{i}json <reply to msg>`
     Get the json encoding of the message.
@@ -47,6 +51,7 @@
 """
 
 import calendar
+import contextlib
 import html
 import io
 import mimetypes
@@ -549,80 +554,394 @@ async def abs_rmbg(event):
     await xx.delete()
 
 
-def _telegraph_upload(path):
-    """Upload a file to Telegraph and return the hosted URL.
 
-    The Telegraph upload endpoint has been observed to respond with
-    either a list of ``{"src": ...}`` dicts or a bare list of path
-    strings.  The deprecated ``telegraph.upload_file`` helper only
-    understands the former and crashes on the latter with
-    ``'str' object has no attribute 'get'``, so the upload is
-    performed directly here and both response shapes are handled.
+_DBIMG_BASE = "https://dbimg.app"
+_DBIMG_UPLOAD = f"{_DBIMG_BASE}/api/upload"
+# User-facing tokens → API expiresIn (docs: 1d / 1w / 1mo / 3mo)
+_GRAPH_EXPIRE_MAP = {
+    "1d": "1d",
+    "1w": "1w",
+    "1m": "1mo",
+    "1mo": "1mo",
+    "3m": "3mo",
+    "3mo": "3mo",
+}
+
+
+def _graph_guess_mime(path: str) -> str:
+    mime = mimetypes.MimeTypes().guess_type(path)[0]
+    if mime:
+        return mime
+    ext = os.path.splitext(path)[1].lower()
+    return {
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".gif": "image/gif",
+        ".webp": "image/webp",
+        ".mp4": "video/mp4",
+        ".webm": "video/webm",
+        ".mov": "video/quicktime",
+        ".mp3": "audio/mpeg",
+        ".wav": "audio/wav",
+        ".ogg": "audio/ogg",
+    }.get(ext, "application/octet-stream")
+
+
+async def _graph_prepare_dbimg(path: str, media_kind: str) -> str:
     """
-    mimetype = mimetypes.MimeTypes().guess_type(path)[0]
-    with open(path, "rb") as f:
-        response = requests.post(
-            "https://telegra.ph/upload",
-            files=[("file", (os.path.basename(path), f, mimetype))],
-        ).json()
+    Light prep for dbimg (supports video/audio/gif natively).
+    Only convert Telegram stickers / .tgs; keep original media otherwise.
+    """
+    kind = (media_kind or "").lower()
+    lower = path.lower()
 
-    if isinstance(response, list) and response:
-        item = response[0]
-        src = item.get("src") if isinstance(item, dict) else item
-        if src:
-            return f"https://graph.org{src}"
-    return None
+    if kind.endswith("animated") or lower.endswith(".tgs"):
+        out = f"{path}.gif"
+        await bash(f"lottie_convert.py '{path}' '{out}'")
+        with contextlib.suppress(Exception):
+            os.remove(path)
+        if os.path.isfile(out) and os.path.getsize(out) > 0:
+            return out
+        return path
+
+    return path
 
 
-@heartless_cmd(pattern="telegraph( (.*)|$)", assistant=True, manager=True)
+def _graph_parse_media_args(raw: str) -> tuple[str | None, str | None]:
+    """
+    Parse `.graph` media args → (password|None, user_expiry|None).
+
+    User expiry tokens: ``1d`` / ``1w`` / ``1m`` / ``3m``
+    (mapped to API ``1d`` / ``1w`` / ``1mo`` / ``3mo`` at upload).
+    """
+    parts = (raw or "").split()
+    if not parts:
+        return None, None
+    if len(parts) == 1:
+        token = parts[0]
+        if token.lower() in _GRAPH_EXPIRE_MAP:
+            return None, token.lower()
+        return token, None
+    password = parts[0]
+    expires = parts[1].lower()
+    if expires not in _GRAPH_EXPIRE_MAP:
+        raise ValueError(
+            f"Invalid expiry `{parts[1]}`. Use: 1d / 1w / 1m / 3m"
+        )
+    if len(parts) > 2:
+        raise ValueError("Too many args. Usage: `.graph [password] [1d|1w|1m|3m]`")
+    return password, expires
+
+
+def _dbimg_abs(url: str | None) -> str:
+    if not url:
+        return ""
+    text = str(url).strip()
+    if text.startswith("http://") or text.startswith("https://"):
+        return text
+    if not text.startswith("/"):
+        text = "/" + text
+    return _DBIMG_BASE + text
+
+
+def _dbimg_api_key() -> str:
+    """DB ``DBIMG_KEY`` (or ``DBIMG``) — value like ``dbimg_xxxxx``."""
+    key = (
+        udB.get_key("DBIMG_KEY")
+        or udB.get_key("DBIMG")
+        or udB.get_key("DBIMG_API")
+        or ""
+    )
+    text = str(key).strip()
+    if text.lower().startswith("bearer "):
+        text = text[7:].strip()
+    return text
+
+
+def _dbimg_upload_sync(
+    path: str,
+    *,
+    password: str | None = None,
+    expires_in: str | None = None,
+) -> dict:
+    """
+    Docs-style upload via ``curl`` (no Python HTTP / Cloudflare scraper):
+
+      curl -X POST https://dbimg.app/api/upload \\
+        -H "Authorization: Bearer dbimg_xxxxx" \\
+        -F "file=@photo.jpg" \\
+        [-F "password=…" ] [-F "expiresIn=1d|1w|1mo|3mo"]
+    """
+    import shutil
+    import subprocess
+
+    api_key = _dbimg_api_key()
+    if not api_key:
+        raise RuntimeError(
+            "Set DB key `DBIMG_KEY` to your dbimg API token "
+            "(https://dbimg.app → dashboard → API keys)."
+        )
+    if not shutil.which("curl"):
+        raise RuntimeError("`curl` is required for dbimg uploads.")
+
+    mime = _graph_guess_mime(path)
+    raw_name = os.path.basename(path) or "upload.bin"
+    # Keep curl -F filename safe (no ; " \)
+    safe = "".join(c if c.isalnum() or c in "._-" else "_" for c in raw_name)
+    name = safe or "upload.bin"
+    abs_path = os.path.abspath(path)
+    # Map user 1m/3m → API 1mo/3mo (docs expiresIn values)
+    api_expires = None
+    if expires_in:
+        api_expires = _GRAPH_EXPIRE_MAP.get(expires_in.lower(), expires_in)
+
+    # Exact docs shape: Authorization Bearer + multipart -F file=@…
+    file_arg = f"file=@{abs_path};filename={name};type={mime}"
+    cmd = [
+        "curl",
+        "-sS",
+        "-L",
+        "-m",
+        "120",
+        "-X",
+        "POST",
+        _DBIMG_UPLOAD,
+        "-H",
+        f"Authorization: Bearer {api_key}",
+        "-F",
+        file_arg,
+    ]
+    if password:
+        cmd.extend(["-F", f"password={password}"])
+    if api_expires:
+        cmd.extend(["-F", f"expiresIn={api_expires}"])
+
+    last_err = None
+    for attempt in range(3):
+        try:
+            proc = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=130,
+                check=False,
+            )
+        except subprocess.TimeoutExpired:
+            last_err = "curl timed out"
+            time.sleep(1.2 * (attempt + 1))
+            continue
+        except Exception as exc:
+            last_err = str(exc)
+            time.sleep(1.2 * (attempt + 1))
+            continue
+
+        body = (proc.stdout or "").strip()
+        if proc.returncode != 0 and not body:
+            last_err = (proc.stderr or f"curl exit {proc.returncode}")[:200]
+            time.sleep(1.2 * (attempt + 1))
+            continue
+        if (
+            "Just a moment" in body
+            or "cf-browser-verification" in body
+            or "challenge-platform" in body
+        ):
+            last_err = "Cloudflare challenge HTML"
+            time.sleep(1.5 * (attempt + 1))
+            continue
+        try:
+            payload = json_parser(body)
+        except Exception:
+            last_err = f"bad JSON: {body[:180]}"
+            time.sleep(1.0)
+            continue
+        if not isinstance(payload, dict):
+            last_err = f"unexpected response: {body[:180]}"
+            continue
+        if payload.get("error") or payload.get("message"):
+            err = payload.get("error") or payload.get("message")
+            # Auth / validation — don't retry
+            if any(
+                x in str(err).lower()
+                for x in ("api key", "unauthorized", "invalid", "required")
+            ):
+                raise RuntimeError(f"dbimg: {err}")
+            last_err = str(err)
+            time.sleep(1.0)
+            continue
+        if not (
+            payload.get("shortId")
+            or payload.get("mediaUrl")
+            or payload.get("directUrl")
+            or payload.get("shareUrl")
+        ):
+            last_err = f"missing urls: {body[:180]}"
+            continue
+        return payload
+
+    raise RuntimeError(f"dbimg upload failed: {last_err}")
+
+
+async def _dbimg_upload(
+    path: str,
+    *,
+    password: str | None = None,
+    expires_in: str | None = None,
+) -> dict:
+    return await asyncio.to_thread(
+        _dbimg_upload_sync,
+        path,
+        password=password,
+        expires_in=expires_in,
+    )
+
+
+def _dbimg_format_result(
+    payload: dict,
+    *,
+    password: str | None,
+    expires_in: str | None,
+) -> str:
+    """
+    Docs response → user message.
+
+    Public: ``mediaUrl`` / ``directUrl`` (+ CDN).
+    Passworded: share page only. Always include ``deletionUrl`` when present.
+    """
+    short = payload.get("shortId") or ""
+    has_password = bool(password) or bool(payload.get("hasPassword"))
+
+    media_url = _dbimg_abs(
+        payload.get("mediaUrl")
+        or payload.get("directUrl")
+        or payload.get("url")
+    )
+    if (
+        not has_password
+        and media_url.startswith(_DBIMG_BASE + "/image/")
+        and short
+    ):
+        ext = os.path.splitext(media_url)[1] or ".jpg"
+        media_url = f"https://cdn.dbimg.app/{short}{ext}"
+
+    share_url = _dbimg_abs(payload.get("shareUrl")) or (
+        f"{_DBIMG_BASE}/{short}" if short else ""
+    )
+    delete_url = _dbimg_abs(
+        payload.get("deletionUrl") or payload.get("deleteUrl")
+    )
+
+    view_url = media_url or share_url
+    if not view_url:
+        raise RuntimeError(f"dbimg response missing URL: {payload!r}"[:200])
+
+    lines = [f"Uploaded to [dbimg]({view_url}) !"]
+    if not has_password and share_url and share_url != view_url:
+        lines.append(f"Share: [page]({share_url})")
+    if delete_url:
+        lines.append(f"Delete: [link]({delete_url})")
+    else:
+        lines.append("Delete: _not provided by API_")
+    if password:
+        lines.append(f"Password: `{password}`")
+    # Show user-facing expiry (1m/3m), not API 1mo/3mo
+    if expires_in:
+        lines.append(f"Expires: `{expires_in}`")
+    elif payload.get("expiresAt"):
+        lines.append(f"Expires: `{payload.get('expiresAt')}`")
+    return "\n".join(lines)
+
+
+@heartless_cmd(pattern="(graph|telegraph)( (.*)|$)", assistant=True, manager=True)
 async def telegraphcmd(event):
+    """Text → Telegraph page; media → dbimg.app (password / expiry optional)."""
     xx = await event.eor(get_pstring("com_1", "load"))
-    match = event.pattern_match.group(1).strip() or "Heartless"
+    raw_args = (
+        event.pattern_match.group(3) or event.pattern_match.group(2) or ""
+    ).strip()
     reply = await event.get_reply_message()
     if not reply:
         return await xx.eor("`Reply to Message.`")
+
+    # Text → classic Telegraph page (title from args or Heartless).
     if not reply.media and reply.message:
+        title = raw_args or "Heartless"
         content = reply.message
-    else:
-        getit = await reply.download_media()
-        dar = mediainfo(reply.media)
-        if dar == "sticker":
-            file = f"{getit}.png"
-            Image.open(getit).save(file)
+        makeit = Telegraph.create_page(
+            title=title,
+            content=[{"tag": "p", "children": [content]}],
+        )
+        return await xx.eor(
+            f"Pasted to Telegraph : [Telegraph]({makeit['url']})",
+            link_preview=False,
+        )
+
+    getit = await reply.download_media()
+    if not getit:
+        return await xx.eor("`Couldn't download media.`")
+    dar = mediainfo(reply.media) or ""
+
+    # Text-like documents → Telegraph paste (title from args).
+    text_exts = (".txt", ".md", ".html", ".json", ".py", ".csv", ".log")
+    if getit.lower().endswith(text_exts) or (
+        "document" in dar.lower()
+        and not any(
+            getit.lower().endswith(x)
+            for x in (
+                ".png", ".jpg", ".jpeg", ".gif", ".webp", ".mp4", ".webm",
+                ".mov", ".mp3", ".wav", ".ogg", ".mkv", ".avi",
+            )
+        )
+    ):
+        try:
+            content = pathlib.Path(getit).read_text(
+                encoding="utf-8", errors="ignore"
+            )
+        except Exception:
+            with contextlib.suppress(Exception):
+                os.remove(getit)
+            return await xx.eor("`Unsupported file for Telegraph text paste.`")
+        with contextlib.suppress(Exception):
             os.remove(getit)
-            getit = file
-        elif dar.endswith("animated"):
-            file = f"{getit}.gif"
-            await bash(f"lottie_convert.py '{getit}' {file}")
+        title = raw_args or "Heartless"
+        makeit = Telegraph.create_page(
+            title=title,
+            content=[{"tag": "p", "children": [content]}],
+        )
+        return await xx.eor(
+            f"Pasted to Telegraph : [Telegraph]({makeit['url']})",
+            link_preview=False,
+        )
+
+    try:
+        password, expires_in = _graph_parse_media_args(raw_args)
+    except ValueError as e:
+        with contextlib.suppress(Exception):
             os.remove(getit)
-            getit = file
-        if "document" not in dar:
-            try:
-                nn = _telegraph_upload(getit)
-                amsg = (
-                    f"Uploaded to [Telegraph]({nn}) !"
-                    if nn
-                    else "`Failed to upload to Telegraph`"
-                )
-            except Exception as e:
-                amsg = f"Error : {e}"
+        return await xx.eor(f"`{e}`")
+
+    try:
+        getit = await _graph_prepare_dbimg(getit, dar)
+    except Exception as e:
+        with contextlib.suppress(Exception):
             os.remove(getit)
-            return await xx.eor(amsg)
-        content = pathlib.Path(getit).read_text()
+        return await xx.eor(f"`Couldn't prepare media: {e}`")
+
+    try:
+        payload = await _dbimg_upload(
+            getit, password=password, expires_in=expires_in
+        )
+        msg = _dbimg_format_result(
+            payload, password=password, expires_in=expires_in
+        )
+    except Exception as e:
+        LOGS.warning("dbimg upload failed: %s", e)
+        with contextlib.suppress(Exception):
+            os.remove(getit)
+        return await xx.eor(f"`Failed to upload:` `{e}`")
+    with contextlib.suppress(Exception):
         os.remove(getit)
-    #makeit = Telegraph.create_page(title=match, content=[content])
-    makeit = Telegraph.create_page(
-    title=match,
-    content=[
-        {
-            "tag": "p",
-            "children": [content]
-        }
-    ]
-    )
-    await xx.eor(
-        f"Pasted to Telegraph : [Telegraph]({makeit['url']})", link_preview=False
-    )
+    return await xx.eor(msg, link_preview=True)
 
 
 @heartless_cmd(pattern="json( (.*)|$)", assistant=True, manager=True)
