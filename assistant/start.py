@@ -89,6 +89,11 @@ async def heartless(event):
     if event.sender_id not in SUDO_M.fullsudos:
         me = inline_mention(heartless_bot.me)
         mention = inline_mention(event.sender)
+        if args == "pay":
+            from plugins.artemis import send_pay_menu
+
+            await send_pay_menu(event)
+            return
         if args and args != "set":
             await get_stored_file(event, args)
         if not udB.get_key("STARTMSG"):
@@ -138,6 +143,10 @@ async def heartless(event):
                 "Choose from the below options -",
                 buttons=_settings,
             )
+        elif args == "pay":
+            from plugins.artemis import send_pay_menu
+
+            await send_pay_menu(event)
         elif args:
             await get_stored_file(event, args)
         else:
