@@ -1,4 +1,5 @@
 .env
+.seetg_creds.json
 *.session-journal
 *.session
 build
@@ -15,7 +16,7 @@ test*
 *.log
 target/npmlist.json
 package-lock.json
-heartless.json
+ultroid.json
 resources/extras/thumbnail.jpg
 boba.py
 server.py
