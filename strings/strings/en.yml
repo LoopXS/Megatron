@@ -151,6 +151,21 @@ wspr_2: "Secret Message Deleted!"
 wspr_3: "Add some id or username too"
 wspr_4: "User {} Not Found\nSearch Again"
 wspr_5: "Yᴏu ᴀrᴇ nᴏᴛ ᴀllᴏwᴇd ᴛᴏ dᴏ ᴛhis 😒"
+wspr_6: "🚫 This secret message is not for you. Your attempt has been logged."
+wspr_7: "👁 Rᴇᴀᴅᴇʀs •"
+wspr_8: "No one has opened this secret message yet."
+wspr_9: "👁 **Readers of your secret message**"
+wspr_10: "\n…and {0} more."
+wspr_11: "The message is too long to show in a popup, so it was sent to your private chat."
+wspr_12: "**Recipients:**"
+wspr_13: "**Reads:** {0}"
+wspr_14: "⚠️ unauthorized"
+wspr_15: "Too many recipients — the maximum is {0}."
+wspr_16: "Add the secret message after the recipients, e.g. `.wspr @a,@b Hello`."
+wspr_17: "✅ recipient"
+wspr_18: "✅ Read by {0}"
+wspr_19: "👁 Readers ({0})"
+
 
 # afk
 afk_1: "**No Longer Afk**\n\nWas away for ~ `{}`"
@@ -383,6 +398,16 @@ schdl_2: "`Incorrect Format`"
 srch_1: "`Search for whom? Give me a user name!!`"
 srch_2: "`No such user found...`"
 srch_3: "`Song not found...`"
+
+# setduration (fake display duration)
+setduration_1: "Reply to an audio, voice note, video, video note or GIF with this command."
+setduration_2: "That file is not playable media whose duration can be changed."
+setduration_3: "Invalid duration. Use seconds (`90`) or `[H:]M:S` (`1:30`, `1:02:03`), up to 7 days."
+setduration_4: "Fetching the replied file..."
+setduration_5: "Downloading the file..."
+setduration_6: "Uploading with the new duration..."
+setduration_7: "Failed to re-upload the file with the new duration."
+setduration_done: "Done — the displayed duration is now `{0}`.\n`Note:` Telegram shows the real duration once the file is played."
 
 # snip
 snip_1: "Give word to set as snip and reply to a message."
@@ -1045,58 +1070,3 @@ help_exclusive: |
 
   • `{i}xmas`
       Christmas art animation
-
-
-# assistant (owner tools)
-help_assistant: " -\n\n• `{i}ask <text>`\n    Ask the assistant a question, or just send plain text in DM.\n\n• `{i}img <prompt>`\n    Generate an image from a prompt.\n\n• `{i}imgfind <query>`\n    Find and send an image for a query.\n\n• `{i}run <command>`\n    Run a host command.\n\n• `{i}memory`\n    List saved facts. Use `{i}memory forget <id>` to drop one.\n\n• `{i}aiconfig`\n    Show or set the assistant configuration.\n\n• `{i}ai on` | `{i}ai off`\n    Enable or disable the assistant.\n\n• `{i}reset`\n    Clear this conversation's history.\n\n• `{i}help_ai`\n    Show this help.\n"
-assistant_disabled: "✖️ The assistant is off. Use `/ai on` to enable it."
-assistant_not_configured: "✖️ The assistant is not configured. Set AI_API_KEY and AI_MODEL."
-assistant_brain_error: "✖️ The assistant could not reach its model: {value}"
-assistant_thinking: "🧠 Thinking..."
-assistant_tool_running: "🔧 Running {name}..."
-assistant_confirm_prompt: "⚠️ The assistant wants to run:\n\n`{cmd}`\n\nApprove this command?"
-assistant_confirm_button: "✅ Approve"
-assistant_cancel_button: "✖️ Cancel"
-assistant_confirm_expired: "⌛ This confirmation expired ({when}). The command was not run."
-assistant_declined: "✖️ Cancelled. The command was not run."
-assistant_budget: "⌛ I stopped after {n} steps to stay within the turn budget."
-assistant_shell_timeout: "⌛ The command timed out after {n} seconds."
-assistant_output_spilled: "📄 Output was too large to send, so it was saved to {value}."
-assistant_sudo_refused: "✖️ Refused to run a sudo command:\n\n`{cmd}`\n\nSet AI_ALLOW_SUDO to allow it."
-assistant_memory_list: "🧠 Saved memories ({count}):\n{value}"
-assistant_memory_empty: "🧠 You have no saved memories yet."
-assistant_memory_added: "🧠 Remembered {id}: {value}"
-assistant_memory_forgotten: "🗑 Forgot {id}."
-assistant_memory_unknown: "✖️ No memory with id {id}."
-assistant_config_shown: "⚙️ Assistant configuration:\n\n{value}"
-assistant_config_updated: "✅ Updated {name} to {value}."
-assistant_enabled: "✅ The assistant is now {value}."
-assistant_reset: "🧹 Conversation history cleared."
-
-
-# setduration (fake display duration)
-setduration_1: "Reply to an audio, voice note, video, video note or GIF with this command."
-setduration_2: "That file is not playable media whose duration can be changed."
-setduration_3: "Invalid duration. Use seconds (`90`) or `[H:]M:S` (`1:30`, `1:02:03`), up to 7 days."
-setduration_4: "Fetching the replied file..."
-setduration_5: "Downloading the file..."
-setduration_6: "Uploading with the new duration..."
-setduration_7: "Failed to re-upload the file with the new duration."
-setduration_done: "Done — the displayed duration is now `{0}`.\n`Note:` Telegram shows the real duration once the file is played."
-
-
-# wspr (secret messages)
-wspr_6: "🚫 This secret message is not for you. Your attempt has been logged."
-wspr_7: "👁 Rᴇᴀᴅᴇʀs •"
-wspr_8: "No one has opened this secret message yet."
-wspr_9: "👁 **Readers of your secret message**"
-wspr_10: "\n…and {0} more."
-wspr_11: "The message is too long to show in a popup, so it was sent to your private chat."
-wspr_12: "**Recipients:**"
-wspr_13: "**Reads:** {0}"
-wspr_14: "⚠️ unauthorized"
-wspr_15: "Too many recipients — the maximum is {0}."
-wspr_16: "Add the secret message after the recipients, e.g. `.wspr @a,@b Hello`."
-wspr_17: "✅ recipient"
-wspr_18: "✅ Read by {0}"
-wspr_19: "👁 Readers ({0})"
