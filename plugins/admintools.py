@@ -488,7 +488,7 @@ def _callback_text(value):
 async def prmte(ult):
     xx = await ult.eor(get_pstring("com_1", "load"))
     if ult.is_private:
-        return await xx.edit("`Use this in group/channel.`")
+        return await xx.edit(get_string("adm_private"))
     user, rank = await get_uinfo(ult)
     rank = rank or "Admin"
     if not user:
@@ -513,12 +513,14 @@ async def prmte(ult):
     try:
         username = getattr(getattr(asst, "me", None), "username", None)
         if not username:
-            raise RuntimeError("assistant bot is not configured")
+            PANELS.remove(panel.key)
+            return await xx.edit(get_string("pro_21"))
         results = await ult.client.inline_query(
             username, f"promote {panel.key}"
         )
         if not results:
-            raise RuntimeError(get_string("pro_9"))
+            PANELS.remove(panel.key)
+            return await xx.edit(get_string("pro_9"))
         await results[0].click(
             ult.chat_id,
             reply_to=ult.reply_to_msg_id,
@@ -551,7 +553,7 @@ async def promote_inline(event):
         return await event.answer(
             [
                 await event.builder.article(
-                    title="Panel expired",
+                    title=get_string("pro_18"),
                     description=text,
                     text=text,
                 )
@@ -559,8 +561,8 @@ async def promote_inline(event):
             cache_time=0,
         )
     article = await event.builder.article(
-        title=f"Promote {panel.user_name}"[:32],
-        description=f"Admin rights in {panel.chat_title}"[:100],
+        title=get_string("pro_19").format(panel.user_name)[:32],
+        description=get_string("pro_20").format(panel.chat_title)[:100],
         text=panel.text(),
         buttons=panel.buttons(),
     )
@@ -582,7 +584,9 @@ async def promote_callback(event):
             await apply_promotion(heartless_bot, panel)
         except Exception as ex:
             LOGS.exception(ex)
-            return await event.answer(f"`{str(ex)[:180]}`", alert=True)
+            return await event.answer(
+                get_string("pro_17").format(str(ex)[:180]), alert=True
+            )
         PANELS.remove(key)
         labels = ", ".join(panel.selected_labels()) or "None"
         text = get_string("pro_5").format(
@@ -622,7 +626,7 @@ async def promote_callback(event):
 async def dmote(ult):
     xx = await ult.eor(get_pstring("com_1", "load"))
     if ult.is_private:
-        return await xx.edit("`Use this in group/channel.`")
+        return await xx.edit(get_string("adm_private"))
     user, _rank = await get_uinfo(ult)
     if not user:
         return await xx.edit(get_string("de_1"))
@@ -630,7 +634,7 @@ async def dmote(ult):
         await remove_admin_rights(ult.client, ult.chat, user.id)
         await eod(xx, get_string("de_2").format(inline_mention(user), ult.chat.title))
     except Exception as ex:
-        return await xx.edit(f"`{ex}`")
+        return await xx.edit(get_string("adm_error").format(ex))
 
 
 @heartless_cmd(
@@ -701,7 +705,7 @@ async def kck(ult):
     if "kickme" in ult.text:
         return
     if ult.is_private:
-        return await ult.eor("`Use this in Group/Channel.`", time=5)
+        return await ult.eor(get_string("adm_private"), time=5)
     xx = await ult.eor(get_pstring("com_1", "load"))
     something = await get_uinfo(ult)
     if not something:
@@ -720,7 +724,7 @@ async def kck(ult):
         return await xx.edit(get_string("kick_1"))
     except Exception as e:
         LOGS.exception(e)
-        return await xx.edit(f"`{e}`")
+        return await xx.edit(get_string("adm_error").format(e))
     text = get_string("kick_4").format(
         inline_mention(user), inline_mention(await ult.get_sender()), ult.chat.title
     )
@@ -738,7 +742,7 @@ async def kck(ult):
 )
 async def tkicki(e):
     if e.is_private:
-        return await e.eor("`Use this in group/channel.`", time=5)
+        return await e.eor(get_string("adm_private"), time=5)
     huh = e.text.split()
     inputt = None
     try:
@@ -757,7 +761,7 @@ async def tkicki(e):
         userid = await e.client.parse_id(inputt)
         user = await e.client.get_entity(userid)
     except Exception as ex:
-        return await eor(e, f"`{ex}`")
+        return await eor(e, get_string("adm_error").format(ex))
     if user is None:
         return await e.eor(get_string("adm_1"), time=10)
     if user.id in DEVLIST:
@@ -775,7 +779,7 @@ async def tkicki(e):
             time=15,
         )
     except Exception as m:
-        return await e.eor(str(m))
+        return await e.eor(get_string("adm_error").format(m))
 
 
 @heartless_cmd(pattern="pin$", manager=True, require="pin_messages", fullsudo=True)
@@ -786,15 +790,15 @@ async def pin(msg):
     if me is None:
         return await eor(msg, get_string("pin_1"))
     if me.is_private or not me.message_link:
-        text = "`Pinned.`"
+        text = get_string("pin_2")
     else:
-        text = f"Pinned [This Message]({me.message_link}) !"
+        text = get_string("pin_3").format(me.message_link)
     try:
         await msg.client.pin_message(msg.chat_id, me.id, notify=False)
     except BadRequestError:
         return await eor(msg, get_string("adm_2"))
     except Exception as e:
-        return await eor(msg, f"**ERROR:**`{e}`")
+        return await eor(msg, get_string("adm_error").format(e))
     await eor(msg, text)
 
 
@@ -819,8 +823,8 @@ async def unp(ult):
     except BadRequestError:
         return await xx.edit(get_string("adm_2"))
     except Exception as e:
-        return await xx.edit(f"**ERROR:**`{e}`")
-    await xx.edit("`Unpinned!`")
+        return await xx.edit(get_string("adm_error").format(e))
+    await xx.edit(get_string("unpin_2"))
 
 
 @heartless_cmd(
@@ -833,18 +837,18 @@ async def unp(ult):
 async def pin_message(ult):
     match = ult.pattern_match.group(1).strip()
     if not ult.is_reply:
-        return await ult.eor("`Reply to message..`", time=6)
+        return await ult.eor(get_string("tpin_1"), time=6)
     if not match:
-        return await ult.eor("`Please provide time..`", time=8)
+        return await ult.eor(get_string("tpin_2"), time=8)
     msg = await ult.eor(get_pstring("com_1", "load"))
     msg_id = ult.reply_to_msg_id
     try:
         until = ban_time(match)
         seconds = max(0, until - int(time.time()))
         await ult.client.pin_message(ult.chat_id, msg_id)
-        await msg.eor(f"`pinned for` `{match}`", time=8)
+        await msg.eor(get_string("tpin_3").format(match), time=8)
     except Exception as er:
-        return await msg.edit(str(er))
+        return await msg.edit(get_string("adm_error").format(er))
     await asyncio.sleep(seconds)
     try:
         await ult.client.unpin_message(ult.chat_id, msg_id)
@@ -860,7 +864,7 @@ async def fastpurger(purg):
         try:
             limit = int(match)
         except ValueError:
-            return await eor(purg, get_string("com_3"), time=5)
+            return await eor(purg, get_string("purge_4"), time=5)
     if not getattr(purg.client, "_bot", False) and (
         match
         or (purg.is_reply and (purg.is_private or isinstance(purg.chat, types.Chat)))
@@ -881,7 +885,7 @@ async def fastpurger(purg):
         if ids:
             await purg.client.delete_messages(purg.chat_id, ids)
             deleted += len(ids)
-        return await eor(purg, f"Purged {deleted} Messages! ", time=5)
+        return await eor(purg, get_string("purge_2").format(deleted), time=5)
     if not purg.reply_to_msg_id:
         return await eor(purg, get_string("purge_1"), time=10)
     try:
@@ -892,8 +896,8 @@ async def fastpurger(purg):
         )
     except Exception as er:
         LOGS.info(er)
-        return await purg.eor(f"`{er}`", time=5)
-    await purg.eor("__Fast purge complete!__", time=5)
+        return await purg.eor(get_string("adm_error").format(er), time=5)
+    await purg.eor(get_string("purge_3"), time=5)
 
 
 @heartless_cmd(
@@ -905,7 +909,7 @@ async def fastpurgerme(purg):
         try:
             nnt = int(num)
         except BaseException:
-            await eor(purg, get_string("com_3"), time=5)
+            await eor(purg, get_string("purge_4"), time=5)
             return
         ids = []
         async for mm in purg.client.iter_messages(
@@ -916,14 +920,10 @@ async def fastpurgerme(purg):
         ):
             ids.append(mm.id)
         mp = await delete_message_ids(purg.client, purg.chat_id, ids)
-        await eor(purg, f"Purged {mp} Messages!", time=5)
+        await eor(purg, get_string("purge_2").format(mp), time=5)
         return
     elif not purg.reply_to_msg_id:
-        return await eod(
-            purg,
-            "`Reply to a message to purge from or use it like ``purgeme <num>`",
-            time=10,
-        )
+        return await eod(purg, get_string("purgeme_1"), time=10)
     chat = await purg.get_input_chat()
     ids = []
     async for msg in purg.client.iter_messages(
@@ -934,10 +934,7 @@ async def fastpurgerme(purg):
     ):
         ids.append(msg.id)
     deleted = await delete_message_ids(purg.client, chat, ids)
-    await purg.eor(
-        "__Fast purge complete!__\n**Purged** `" + str(deleted) + "` **messages.**",
-        time=5,
-    )
+    await purg.eor(get_string("purgeme_3").format(deleted), time=5)
 
 
 @heartless_cmd(
@@ -974,11 +971,11 @@ async def _(e):
             await e.client.delete_messages(e.chat_id, ids)
             deleted += len(ids)
         await e.eor(
-            get_string("purgeall_2").format(name) + f" (`{deleted}`)",
+            get_string("purgeall_2").format(name, deleted),
             time=5,
         )
     except Exception as er:
-        return await e.eor(str(er), time=5)
+        return await e.eor(get_string("adm_error").format(er), time=5)
 
 
 @heartless_cmd(pattern="pinned", manager=True, groups_only=True)
@@ -1018,7 +1015,7 @@ async def mypurge(event):
                 ids.clear()
     if ids:
         await heartless_bot.delete_messages(chat_id, ids)
-    await eod(event, "All your messages have been deleted from this group.", time=3)
+    await eod(event, get_string("mypurge_1"), time=3)
 
 @heartless_cmd(
     pattern="listpinned$",
@@ -1039,7 +1036,7 @@ async def get_all_pinned(event):
             t = " ".join(i.message.split()[:4])
             txt = html.escape(f"{t}....")
         else:
-            txt = "Go to message."
+            txt = get_string("listpin_4")
         c += 1
         if linkable:
             a += f"{c}. <a href=https://t.me/c/{chat_id}/{i.id}>{txt}</a>\n"
@@ -1049,9 +1046,9 @@ async def get_all_pinned(event):
     if c == 0:
         return await eor(x, get_string("listpin_1"), time=5)
     if c == 1:
-        m = f"<b>The pinned message in {chat_name}:</b>\n\n"
+        m = get_string("listpin_2").format(chat_name)
     else:
-        m = f"<b>List of pinned message(s) in {chat_name}:</b>\n\n"
+        m = get_string("listpin_3").format(chat_name)
 
     await x.edit(m + a, parse_mode="html")
 
@@ -1063,7 +1060,7 @@ async def get_all_pinned(event):
 async def autodelte(ult):
     match = ult.pattern_match.group(1).strip()
     if not match or match not in ["24h", "7d", "1m", "off"]:
-        return await ult.eor("`Please Use in Proper Format..`", time=5)
+        return await ult.eor(get_string("autodelete_1"), time=5)
     if match == "24h":
         tt = 3600 * 24
     elif match == "7d":
@@ -1076,10 +1073,8 @@ async def autodelte(ult):
         peer = await ult.client.get_input_entity(ult.chat_id)
         await ult.client(SetHistoryTTLRequest(peer, period=tt))
     except ChatNotModifiedError:
-        return await ult.eor(
-            f"Auto Delete Setting is Already same to `{match}`", time=5
-        )
-    await ult.eor(f"Auto Delete Status Changed to `{match}` !")
+        return await ult.eor(get_string("autodelete_2").format(match), time=5)
+    await ult.eor(get_string("autodelete_3").format(match))
 
 
 @heartless_cmd(
@@ -1091,15 +1086,15 @@ async def autodelte(ult):
 async def kickall_cmd(ult):
     """Kick all non-admin members from the group."""
     if ult.is_private:
-        return await ult.eor("`Use this In a Group.`", time=5)
+        return await ult.eor(get_string("kickall_1"), time=5)
     match = ult.pattern_match.group(1).strip()
     confirm = match.lower() == "confirm"
     if not confirm:
         return await ult.eor(
-            f"`Are you sure? This will kick all Non-Admin members!\nUse` `{HNDLR}kickall confirm` `to proceed.`",
+            get_string("kickall_2").format(HNDLR),
             time=10,
         )
-    xx = await ult.eor("`Starting KickAll...`")
+    xx = await ult.eor(get_string("kickall_3"))
     kicked = 0
     failed = 0
     async for member in ult.client.iter_participants(ult.chat_id):
@@ -1124,6 +1119,4 @@ async def kickall_cmd(ult):
             await asyncio.sleep(0.2)
         except Exception:
             failed += 1
-    await xx.edit(
-        f"**KickAll Done!**\n**Kicked:** `{kicked}`\n**Failed:** `{failed}`"
-    )
+    await xx.edit(get_string("kickall_4").format(kicked, failed))

@@ -58,46 +58,86 @@ userlogs_4: "Your Asst Bot Cant Send Messages in Tag Log Chat.\nAdd it to Get Yo
 userlogs_5: "Left `{}`"
 
 # admintools
-adm_1: "`I couldn't get who he is!`"
-adm_2: "`Hmm.. Guess I have no rights here!`"
-adm_3: "`Provide a Time too..`"
-pro_1: "`Reply to a user to promote him!`"
-pro_2: "{} `is now an admin in {} with title {}.`"
-pro_3: "**Admin Permissions**\n\n**User:** {}\n**Chat:** `{}`\n**Title:** `{}`\n**Selected:** `{}/{}`\n\nTap a permission to toggle it, then tap **Confirm**."
-pro_4: "`Select at least one permission.`"
-pro_5: "✅ {} `is now an admin in` `{}` `with title` `{}`.\n**Permissions:** {}"
-pro_6: "`This panel has expired. Run .promote again.`"
-pro_7: "`Could not open the permission panel: {}`"
-pro_8: "`The assistant bot's inline mode is disabled.`"
-pro_9: "`The assistant bot did not return a permission panel.`"
-pro_13: "`Promoted successfully.`"
-pro_14: "`All permissions selected.`"
-pro_15: "`Unknown permission.`"
-pro_16: "`Permission updated.`"
-de_1: "`Reply to a user to demote him!`"
-de_2: "{} `is no longer an admin in {}`"
-ban_1: "`Reply to a user or give username to ban him!`"
-ban_2: " `Sorry, but I can't Ban my Developer 😂`"
-ban_3: "`I don't have the right to ban a user.`"
-ban_4: "{} **was banned by** {} **in** `{}`"
-ban_5: "\n**Reason**: `{}`"
-tban_1: "`Reply to someone or give its id...`"
-tban_2: "`Successfully Banned` {} `in {} for {}`"
-unban_1: "`Reply to a user or give username to unban him!`"
-unban_2: "`I don't have the right to unban a user.`"
-unban_3: "{} **was unbanned by** {} **in** `{}`"
-kick_1: "`I don't have the right to kick a user.`"
-kick_2: " `Sorry, but I can't Kick my Developer`😂"
-kick_3: "`I Cant kick him ever...`"
-kick_4: "{} **was kicked by** {} **in** `{}`"
-pin_1: "`Reply to a message to pin it!`"
-pinned_1: "No Pinned Message Found!"
-pinned_2: "Pinned Message in Current chat is [here]({})."
-unpin_1: "Either reply to a message, or, use `{}unpin all`"
-listpin_1: "There is no message pinned in this group!"
-purge_1: "`Reply to a message to purge from.`"
-purgeall_1: "`Reply to someone's msg to delete.`"
-purgeall_2: "Successfully Purged All Messages from {}"
+# Shared responses
+adm_1: "⚠️ I couldn't find that user."
+adm_2: "⚠️ I don't have permission to do that here."
+adm_3: "⚠️ Please provide a duration, for example `10m`."
+adm_private: "⚠️ Use this command in a group or channel."
+adm_error: "⚠️ Something went wrong: {}"
+
+# Promote and demote
+pro_1: "⚠️ Reply to a user, or provide a username or ID, to promote them."
+pro_2: "{} is now an admin in **{}** with the title `{}`."
+pro_3: "**👑 Admin Permissions**\n\n**User:** {}\n**Chat:** `{}`\n**Title:** `{}`\n**Selected:** `{}/{}`\n\nTap a permission to toggle it, then tap **Confirm**."
+pro_4: "⚠️ Select at least one permission."
+pro_5: "✅ {} is now an admin in **{}** with the title `{}`.\n**Permissions:** {}"
+pro_6: "⚠️ This panel has expired. Run `.promote` again."
+pro_7: "⚠️ Could not open the permission panel: {}"
+pro_8: "⚠️ The assistant bot's inline mode is disabled."
+pro_9: "⚠️ The assistant bot did not return a permission panel."
+pro_13: "✅ Promotion complete."
+pro_14: "✅ All permissions selected."
+pro_15: "⚠️ Unknown permission."
+pro_16: "✅ Permission updated."
+pro_17: "⚠️ Could not apply the promotion: {}"
+pro_18: "Panel expired"
+pro_19: "Promote {}"
+pro_20: "Admin rights in {}"
+pro_21: "⚠️ The assistant bot is not configured."
+de_1: "⚠️ Reply to a user, or provide a username or ID, to demote them."
+de_2: "✅ {} is no longer an admin in **{}**."
+
+# Moderation
+ban_1: "⚠️ Reply to a user, or provide a username or ID, to ban them."
+ban_2: "⚠️ I can't ban my developer."
+ban_3: "⚠️ I don't have permission to ban users."
+ban_4: "✅ {} was banned by {} in **{}**."
+ban_5: "\n**Reason:** {}"
+tban_1: "⚠️ Reply to a user, or provide a username or ID."
+tban_2: "✅ {} was temporarily banned in **{}** for `{}`."
+unban_1: "⚠️ Reply to a user, or provide a username or ID, to unban them."
+unban_2: "⚠️ I don't have permission to unban users."
+unban_3: "✅ {} was unbanned by {} in **{}**."
+kick_1: "⚠️ I don't have permission to kick users."
+kick_2: "⚠️ I can't kick my developer."
+kick_3: "⚠️ I can't kick that user."
+kick_4: "✅ {} was kicked by {} from **{}**."
+
+# Pins
+pin_1: "⚠️ Reply to a message to pin it."
+pin_2: "✅ Message pinned."
+pin_3: "✅ Pinned [this message]({})."
+pinned_1: "ℹ️ No pinned message was found in this chat."
+pinned_2: "ℹ️ The pinned message in this chat is [here]({})."
+unpin_1: "⚠️ Reply to a message to unpin it, or use `{}unpin all`."
+unpin_2: "✅ Message unpinned."
+tpin_1: "⚠️ Reply to a message to pin it temporarily."
+tpin_2: "⚠️ Please provide a duration, for example `10m`."
+tpin_3: "✅ Pinned for `{}`."
+listpin_1: "ℹ️ No pinned messages were found in this chat."
+listpin_2: "📌 <b>The pinned message in {}:</b>\n\n"
+listpin_3: "📌 <b>Pinned messages in {}:</b>\n\n"
+listpin_4: "Go to message."
+
+# Cleanup
+purge_1: "⚠️ Reply to a message to purge from, or provide a count, for example `30`."
+purge_2: "✅ Purged `{}` messages."
+purge_3: "✅ Fast purge complete."
+purge_4: "⚠️ Please provide a valid number."
+purgeme_1: "⚠️ Reply to a message to purge from, or use `.purgeme <count>`."
+purgeme_3: "✅ Fast purge complete.\n**Purged:** `{}` messages."
+purgeall_1: "⚠️ Reply to a user's message to purge their messages."
+purgeall_2: "✅ Purged all messages from {} (`{}`)."
+mypurge_1: "✅ Deleted all your messages in this chat."
+
+# Chat settings
+autodelete_1: "⚠️ Use `.autodelete` with `24h`, `7d`, `1m`, or `off`."
+autodelete_2: "ℹ️ Auto-delete is already set to `{}`."
+autodelete_3: "✅ Auto-delete set to `{}`."
+kickall_1: "⚠️ Use this command in a group."
+kickall_2: "⚠️ This will kick every non-admin member.\nUse `{}kickall confirm` to proceed."
+kickall_3: "ℹ️ Starting KickAll..."
+kickall_4: "✅ KickAll complete.\n**Kicked:** `{}`\n**Failed:** `{}`"
 
 # antiflood
 antiflood_1: "`Antiflood Settings Disabled`"
@@ -625,7 +665,42 @@ vcbot_22: "`Cleaned All Queues In Chat`"
 # Help Menus
 
 cmda: "✘ Commands Available"
-help_admintools: "-\n\n• `.promote <reply to user/userid/username> [title]`\n    Open the inline permission panel; add `-f` to pre-select every right.\n• `.demote`\n    Promote/Demote the user in the chat.\n\n• `.ban <reply to user/userid/username> <reason>`\n• `.unban`\n    Ban/Unban the user from the chat.\n\n• `.kick <reply to user/userid/username> <reason>`\n    Kick the user from the chat.\n\n• `.pin <reply to message>`\n    Pin the message in the chat\n• `.tpin <time> <temp pin message>`\n• `.unpin (all) <reply to message>`\n    Unpin the messages in the chat.\n\n• `.pinned`\n   Get pinned message in the current chat.\n• `.listpinned`\n   Get all pinned messages in current chat\n\n• `.autodelete <24h/7d/1m/off>`\n   Enable Auto Delete Messages in Chat.\n\n• `.purge <reply to message>`\n    Purge all messages from the replied message.\n\n• `.purgeme <reply to message>`\n    Purge Only your messages from the replied message.\n\n• `.purgeall`\n    Delete all msgs of replied user.\n\n• `.mypurge`\n    Delete all your msgs .\n"
+help_admintools: |-
+
+
+  🛡️ **Admin Tools**
+
+  **Roles**
+  • `.promote <user> [title]` — Open the admin-rights panel.
+  • `.promote <user> -f [title]` — Open it with every right selected.
+  • `.demote <user>` — Remove administrator rights.
+
+  **Moderation**
+  • `.ban <user> [reason]` — Ban a user.
+  • `.unban <user>` — Unban a user.
+  • `.kick <user> [reason]` — Remove a user from the chat.
+  • `.tban <duration> <user>` — Ban a user temporarily.
+
+  **Pins**
+  • `.pin` — Pin the message you reply to.
+  • `.tpin <duration>` — Pin the message temporarily.
+  • `.unpin [all]` — Unpin the replied message or all pinned messages.
+  • `.pinned` — Show the current pinned message.
+  • `.listpinned` — List all pinned messages.
+
+  **Cleanup**
+  • `.purge <count>` — Delete the latest messages.
+  • `.purgeme <count>` — Delete only your latest messages.
+  • `.purgeall` — Reply to a user to delete all their messages.
+  • `.mypurge` — Delete all your messages in this chat.
+
+  **Chat Settings**
+  • `.autodelete <24h|7d|1m|off>` — Set the auto-delete timer.
+  • `.kickall confirm` — Remove every non-admin member.
+
+  **Notes**
+  • `<user>` can be a mention, reply, username, or ID.
+  • `<duration>` supports `s`, `m`, `h`, and `d`, for example `30m` or `2h`.
 help_afk: " -\n\n• `{i}afk <optional reason>`\n    AFK means away from keyboard,\n    After this is activated, if someone tags or messages you, he/she would get an automated reply from the bot.\n\n    (Note : Set a media file in afk messages by replying to any media with `{i}afk <reason>`).\n\n"
 help_antiflood: " -\n\n• `{i}setflood <integer>`\n    Set flood limit in a chat.\n\n• `{i}remflood`\n    Remove flood limit from a chat.\n\n• `{i}getflood`\n    Get flood limit of a chat.\n"
 help_asstcmd: " -\n\n•`{i}addcmd <new cmd> <reply>`\n   It will set new cmd for your assistant bot with that reply message.\n\n•`{i}remcmd <cmd name>`\n   It will remove your cmd.\n\n•`{i}listcmd`\n   To Get list of all your custom cmd.\n"
