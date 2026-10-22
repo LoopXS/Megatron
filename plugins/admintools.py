@@ -3,10 +3,18 @@ from . import get_help
 __doc__ = get_help("help_admintools")
 
 import asyncio
+import re
+import secrets
+import time
 
-from telethon.errors import BadRequestError
+from telethon import Button
+from telethon.errors import (
+    BadRequestError,
+    BotInlineDisabledError,
+    BotResponseTimeoutError,
+)
 from telethon.errors.rpcerrorlist import ChatNotModifiedError, UserIdInvalidError
-from telethon.tl.functions.channels import EditAdminRequest, GetFullChannelRequest
+from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import GetFullChatRequest, SetHistoryTTLRequest
 from telethon.tl.types import InputMessagesFilterPinned
 from telethon.utils import get_display_name
@@ -15,7 +23,311 @@ from CythonX.dB import DEVLIST
 from CythonX.fns.admins import ban_time
 from CythonX.fns.info import get_uinfo
 
-from . import HNDLR, LOGS, eod, eor, get_string, get_pstring, inline_mention, types, heartless_cmd
+from . import (
+    HNDLR,
+    LOGS,
+    asst,
+    callback,
+    eod,
+    eor,
+    get_pstring,
+    get_string,
+    heartless_bot,
+    heartless_cmd,
+    in_pattern,
+    inline_mention,
+    types,
+)
+
+
+# ---------------------------------------------------------------------------
+# Promote permission panel
+# ---------------------------------------------------------------------------
+
+PANEL_TTL = 15 * 60
+MAX_PANELS = 200
+PANEL_CALLBACK = "pmt"
+CHECK = "✓ "
+BASIC_PERMISSIONS = (("is_admin", "Administrator"),)
+BROADCAST_PERMISSIONS = (
+    ("post_messages", "Post Messages"),
+    ("edit_messages", "Edit Messages"),
+    ("change_info", "Change Info"),
+    ("delete_messages", "Delete Messages"),
+    ("invite_users", "Invite Users"),
+    ("pin_messages", "Pin Messages"),
+    ("add_admins", "Add Admins"),
+    ("anonymous", "Remain Anonymous"),
+)
+MEGAGROUP_PERMISSIONS = (
+    ("change_info", "Change Info"),
+    ("delete_messages", "Delete Messages"),
+    ("ban_users", "Ban Users"),
+    ("invite_users", "Invite Users"),
+    ("pin_messages", "Pin Messages"),
+    ("add_admins", "Add Admins"),
+    ("anonymous", "Remain Anonymous"),
+    ("manage_call", "Manage Calls"),
+)
+DEFAULT_PERMISSIONS = frozenset(
+    {
+        "invite_users",
+        "ban_users",
+        "delete_messages",
+        "pin_messages",
+        "manage_call",
+    }
+)
+
+
+def permissions_for_chat(chat):
+    """Return the admin rights the panel can offer for *chat*.
+
+    Telegram only supports an all-or-nothing ``is_admin`` flag for small
+    groups, while broadcast channels and megagroups have different sets of
+    meaningful rights.
+    """
+    if isinstance(chat, types.Chat):
+        return BASIC_PERMISSIONS
+    if isinstance(chat, types.Channel) and getattr(chat, "broadcast", False):
+        return BROADCAST_PERMISSIONS
+    return MEGAGROUP_PERMISSIONS
+
+
+def default_selected(permissions):
+    """The selection that reproduces the previous ``.promote`` defaults."""
+    keys = {key for key, _label in permissions}
+    if keys == {"is_admin"}:
+        return {"is_admin"}
+    return set(DEFAULT_PERMISSIONS) & keys
+
+
+class PromotePanel:
+    """One in-flight permission panel and its current selection."""
+
+    __slots__ = (
+        "key",
+        "chat_id",
+        "chat_title",
+        "user_id",
+        "user_name",
+        "user_username",
+        "rank",
+        "permissions",
+        "selected",
+        "creator_id",
+        "created",
+    )
+
+    def __init__(
+        self,
+        key,
+        chat_id,
+        chat_title,
+        user_id,
+        user_name,
+        user_username,
+        rank,
+        permissions,
+        selected=None,
+        creator_id=None,
+        created=None,
+    ):
+        self.key = key
+        self.chat_id = int(chat_id)
+        self.chat_title = chat_title or str(chat_id)
+        self.user_id = int(user_id)
+        self.user_name = user_name or f"User {user_id}"
+        self.user_username = user_username
+        self.rank = rank or "Admin"
+        self.permissions = tuple(permissions)
+        self.selected = (
+            default_selected(self.permissions) if selected is None else set(selected)
+        )
+        self.creator_id = creator_id
+        self.created = time.time() if created is None else created
+
+    @property
+    def is_basic(self):
+        return self.permissions == BASIC_PERMISSIONS
+
+    def has_permission(self, key):
+        return any(key == permission for permission, _label in self.permissions)
+
+    def toggle(self, key):
+        """Toggle *key* and return whether it is now selected."""
+        if not self.has_permission(key):
+            return None
+        if key in self.selected:
+            self.selected.remove(key)
+            return False
+        self.selected.add(key)
+        return True
+
+    def select_all(self):
+        self.selected = {key for key, _label in self.permissions}
+
+    def promote_kwargs(self):
+        """Exactly the checked rights, in a form accepted by ``edit_admin``."""
+        if self.is_basic:
+            return {"is_admin": True}
+        return {key: key in self.selected for key, _label in self.permissions}
+
+    def selected_labels(self):
+        return [
+            label for key, label in self.permissions if key in self.selected
+        ]
+
+    def mention(self):
+        return inline_mention(
+            types.User(
+                id=self.user_id,
+                first_name=self.user_name,
+                username=self.user_username,
+            )
+        )
+
+    def text(self):
+        return get_string("pro_3").format(
+            self.mention(),
+            self.chat_title,
+            self.rank,
+            len(self.selected),
+            len(self.permissions),
+        )
+
+    def buttons(self):
+        rows = []
+        row = []
+        for key, label in self.permissions:
+            text = f"{CHECK}{label}" if key in self.selected else label
+            row.append(
+                Button.inline(
+                    text, data=f"{PANEL_CALLBACK}:{self.key}:{key}"
+                )
+            )
+            if len(row) == 2:
+                rows.append(row)
+                row = []
+        if row:
+            rows.append(row)
+        rows.append(
+            [
+                Button.inline(
+                    "Full Access", data=f"{PANEL_CALLBACK}:{self.key}:f"
+                ),
+                Button.inline("Confirm", data=f"{PANEL_CALLBACK}:{self.key}:c"),
+            ]
+        )
+        return rows
+
+
+class PromotePanelStore:
+    """Bounded, self-expiring store of permission panels."""
+
+    def __init__(
+        self,
+        ttl=PANEL_TTL,
+        max_entries=MAX_PANELS,
+        clock=time.time,
+    ):
+        self.ttl = ttl
+        self.max_entries = max_entries
+        self._clock = clock
+        self._items = {}
+
+    def _expired(self, panel, now):
+        return self.ttl is not None and now - panel.created > self.ttl
+
+    def _prune(self, now):
+        for key in [k for k, v in self._items.items() if self._expired(v, now)]:
+            self._items.pop(key, None)
+        while len(self._items) > self.max_entries:
+            oldest = min(self._items.values(), key=lambda panel: panel.created)
+            self._items.pop(oldest.key, None)
+
+    def add(
+        self,
+        chat_id,
+        chat_title,
+        user_id,
+        user_name,
+        user_username,
+        rank,
+        permissions,
+        creator_id=None,
+        select_all=False,
+        selected=None,
+        key=None,
+    ):
+        now = self._clock()
+        key = key or secrets.token_hex(6)
+        panel = PromotePanel(
+            key=key,
+            chat_id=chat_id,
+            chat_title=chat_title,
+            user_id=user_id,
+            user_name=user_name,
+            user_username=user_username,
+            rank=rank,
+            permissions=permissions,
+            selected=selected,
+            creator_id=creator_id,
+            created=now,
+        )
+        if select_all:
+            panel.select_all()
+        self._items[key] = panel
+        self._prune(now)
+        return panel
+
+    def get(self, key):
+        panel = self._items.get(key)
+        if panel is None:
+            return None
+        now = self._clock()
+        if self._expired(panel, now):
+            self._items.pop(key, None)
+            return None
+        return panel
+
+    def remove(self, key):
+        return self._items.pop(key, None) is not None
+
+
+PANELS = PromotePanelStore()
+
+
+def create_panel(chat, user, rank, creator_id, select_all=False):
+    """Create a panel for *user* in *chat* and register it in :data:`PANELS`."""
+    return PANELS.add(
+        chat_id=chat.id,
+        chat_title=get_display_name(chat) or str(chat.id),
+        user_id=user.id,
+        user_name=get_display_name(user) or f"User {user.id}",
+        user_username=getattr(user, "username", None),
+        rank=rank or "Admin",
+        permissions=permissions_for_chat(chat),
+        creator_id=creator_id,
+        select_all=select_all,
+    )
+
+
+async def apply_promotion(client, panel):
+    """Promote the panel's target with exactly the selected rights."""
+    kwargs = panel.promote_kwargs()
+    return await client.edit_admin(
+        panel.chat_id,
+        panel.user_id,
+        title=panel.rank,
+        **kwargs,
+    )
+
+
+def _callback_text(value):
+    if isinstance(value, (bytes, bytearray)):
+        return value.decode("UTF-8", "replace")
+    return str(value)
 
 
 @heartless_cmd(
@@ -29,36 +341,119 @@ async def prmte(ult):
     xx = await ult.eor(get_pstring("com_1", "load"))
     user, rank = await get_uinfo(ult)
     rank = rank or "Admin"
-    FullRight = False
     if not user:
         return await xx.edit(get_string("pro_1"))
+
+    full_access = False
     if rank.split()[0] == "-f":
         try:
             rank = rank.split(maxsplit=1)[1]
         except IndexError:
             rank = "Admin"
-        FullRight = True
+        full_access = True
+
+    panel = create_panel(
+        ult.chat,
+        user,
+        rank,
+        ult.sender_id,
+        select_all=full_access,
+    )
+
     try:
-        if FullRight:
-            await ult.client(
-                EditAdminRequest(ult.chat_id, user.id, ult.chat.admin_rights, rank)
-            )
-        else:
-            await ult.client.edit_admin(
-                ult.chat_id,
-                user.id,
-                invite_users=True,
-                ban_users=True,
-                delete_messages=True,
-                pin_messages=True,
-                manage_call=True,
-                title=rank,
-            )
-        await eod(
-            xx, get_string("pro_2").format(inline_mention(user), ult.chat.title, rank)
+        username = getattr(getattr(asst, "me", None), "username", None)
+        if not username:
+            raise RuntimeError("assistant bot is not configured")
+        results = await ult.client.inline_query(
+            username, f"promote {panel.key}"
         )
+        if not results:
+            raise RuntimeError(get_string("pro_9"))
+        await results[0].click(
+            ult.chat_id,
+            reply_to=ult.reply_to_msg_id,
+            hide_via=False,
+        )
+    except BotResponseTimeoutError:
+        PANELS.remove(panel.key)
+        return await xx.edit(get_string("pro_7").format("assistant timed out"))
+    except BotInlineDisabledError:
+        PANELS.remove(panel.key)
+        return await xx.edit(get_string("pro_8"))
     except Exception as ex:
-        return await xx.edit(f"`{ex}`")
+        PANELS.remove(panel.key)
+        LOGS.exception(ex)
+        return await xx.edit(get_string("pro_7").format(str(ex)))
+
+    try:
+        await xx.delete()
+    except Exception as ex:
+        LOGS.exception(ex)
+
+
+@in_pattern("promote", owner=True)
+async def promote_inline(event):
+    parts = event.text.split(maxsplit=1)
+    key = parts[1].strip() if len(parts) > 1 else ""
+    panel = PANELS.get(key)
+    if panel is None:
+        text = get_string("pro_6")
+        return await event.answer(
+            [
+                await event.builder.article(
+                    title="Panel expired",
+                    description=text,
+                    text=text,
+                )
+            ],
+            cache_time=0,
+        )
+    article = await event.builder.article(
+        title=f"Promote {panel.user_name}"[:32],
+        description=f"Admin rights in {panel.chat_title}"[:100],
+        text=panel.text(),
+        buttons=panel.buttons(),
+    )
+    await event.answer([article], cache_time=0)
+
+
+@callback(re.compile(r"^pmt:([0-9a-f]+):([a-z_]+)$"), owner=True)
+async def promote_callback(event):
+    key = _callback_text(event.pattern_match.group(1))
+    action = _callback_text(event.pattern_match.group(2))
+    panel = PANELS.get(key)
+    if panel is None:
+        return await event.answer(get_string("pro_6"), alert=True)
+
+    if action == "c":
+        if not panel.selected:
+            return await event.answer(get_string("pro_4"), alert=True)
+        try:
+            await apply_promotion(heartless_bot, panel)
+        except Exception as ex:
+            LOGS.exception(ex)
+            return await event.answer(f"`{str(ex)[:180]}`", alert=True)
+        PANELS.remove(key)
+        labels = ", ".join(panel.selected_labels()) or "None"
+        text = get_string("pro_5").format(
+            panel.mention(), panel.chat_title, panel.rank, labels
+        )
+        await event.answer(get_string("pro_13"))
+        return await event.edit(text)
+
+    if action == "f":
+        panel.select_all()
+        await event.answer(get_string("pro_14"))
+        return await event.edit(panel.text(), buttons=panel.buttons())
+
+    if not panel.has_permission(action):
+        return await event.answer(get_string("pro_15"), alert=True)
+
+    added = panel.toggle(action)
+    await event.answer(
+        get_string("pro_16") if added is not None else get_string("pro_15")
+    )
+    return await event.edit(panel.text(), buttons=panel.buttons())
 
 
 @heartless_cmd(
