@@ -3,8 +3,11 @@ from . import get_help
 __doc__ = get_help("help_admintools")
 
 import asyncio
+import html
+import inspect
 import re
 import secrets
+import struct
 import time
 
 from telethon import Button
@@ -14,7 +17,7 @@ from telethon.errors import (
     BotResponseTimeoutError,
 )
 from telethon.errors.rpcerrorlist import ChatNotModifiedError, UserIdInvalidError
-from telethon.tl.functions.channels import GetFullChannelRequest
+from telethon.tl.functions.channels import EditAdminRequest, GetFullChannelRequest
 from telethon.tl.functions.messages import GetFullChatRequest, SetHistoryTTLRequest
 from telethon.tl.types import InputMessagesFilterPinned
 from telethon.utils import get_display_name
@@ -58,6 +61,9 @@ BROADCAST_PERMISSIONS = (
     ("pin_messages", "Pin Messages"),
     ("add_admins", "Add Admins"),
     ("anonymous", "Remain Anonymous"),
+    ("manage_ranks", "Edit Member Tags"),
+    ("manage_stories", "Manage Stories"),
+    ("manage_welcome_messages", "Manage Welcome Messages"),
 )
 MEGAGROUP_PERMISSIONS = (
     ("change_info", "Change Info"),
@@ -68,6 +74,9 @@ MEGAGROUP_PERMISSIONS = (
     ("add_admins", "Add Admins"),
     ("anonymous", "Remain Anonymous"),
     ("manage_call", "Manage Calls"),
+    ("manage_ranks", "Edit Member Tags"),
+    ("manage_stories", "Manage Stories"),
+    ("manage_welcome_messages", "Manage Welcome Messages"),
 )
 DEFAULT_PERMISSIONS = frozenset(
     {
@@ -78,6 +87,108 @@ DEFAULT_PERMISSIONS = frozenset(
         "manage_call",
     }
 )
+
+# Telegram exposes "Manage Stories" as three separate flags.  A single panel
+# button therefore maps to all three TL rights.
+PERMISSION_FLAGS = {
+    "manage_stories": ("post_stories", "edit_stories", "delete_stories"),
+}
+
+# Bit positions from the chatAdminRights TL constructor.  Keeping the mapping
+# here lets newer rights work even with an older Telethon build.
+RIGHTS_BITS = {
+    "change_info": 0,
+    "post_messages": 1,
+    "edit_messages": 2,
+    "delete_messages": 3,
+    "ban_users": 4,
+    "invite_users": 5,
+    "pin_messages": 7,
+    "add_admins": 9,
+    "anonymous": 10,
+    "manage_call": 11,
+    "other": 12,
+    "manage_topics": 13,
+    "post_stories": 14,
+    "edit_stories": 15,
+    "delete_stories": 16,
+    "manage_direct_messages": 17,
+    "manage_ranks": 18,
+    "manage_linked_peers": 19,
+    "manage_welcome_messages": 20,
+}
+
+
+def _chat_admin_right_fields():
+    """Fields supported by the installed Telethon ``ChatAdminRights``."""
+    fields = getattr(types.ChatAdminRights, "__static_attributes__", ())
+    if fields:
+        return frozenset(fields)
+    try:
+        return frozenset(
+            inspect.signature(types.ChatAdminRights.__init__).parameters
+        ) - {"self"}
+    except (TypeError, ValueError):
+        return frozenset(RIGHTS_BITS)
+
+
+ADMIN_RIGHT_FIELDS = _chat_admin_right_fields()
+
+
+class CompatAdminRights:
+    """Serialize chatAdminRights flags unknown to the installed Telethon.
+
+    Telegram's constructor is a flags-only field, so the wire format is
+    simply the constructor id followed by the bitmask.  This keeps newer
+    rights usable on older Telethon builds instead of silently dropping them.
+    """
+
+    CONSTRUCTOR_ID = getattr(
+        types.ChatAdminRights, "CONSTRUCTOR_ID", 0x5FB224D5
+    )
+    SUBCLASS_OF_ID = getattr(
+        types.ChatAdminRights, "SUBCLASS_OF_ID", 2252195780
+    )
+
+    def __init__(self, values):
+        unknown = set(values) - set(RIGHTS_BITS)
+        if unknown:
+            raise ValueError(f"Unknown admin rights: {', '.join(sorted(unknown))}")
+        self.values = {key: bool(value) for key, value in values.items()}
+
+    def _bytes(self):
+        flags = 0
+        for key, value in self.values.items():
+            if value:
+                flags |= 1 << RIGHTS_BITS[key]
+        return struct.pack("<I", self.CONSTRUCTOR_ID) + struct.pack("<I", flags)
+
+    def to_dict(self):
+        return {key: value for key, value in self.values.items() if value}
+
+    def __repr__(self):
+        return f"CompatAdminRights({self.values!r})"
+
+
+def permission_fields(key):
+    """TL fields controlled by one panel permission button."""
+    return PERMISSION_FLAGS.get(key, (key,))
+
+
+def build_admin_rights(values):
+    """Build the exact ``ChatAdminRights`` object for *values*.
+
+    Uses Telethon's generated type when it knows every flag, otherwise falls
+    back to a wire-compatible flags object (needed for manage_ranks and
+    manage_welcome_messages on older Telethon releases).
+    """
+    unknown = set(values) - set(RIGHTS_BITS)
+    if unknown:
+        raise ValueError(f"Unknown admin rights: {', '.join(sorted(unknown))}")
+    clean = {key: bool(value) for key, value in values.items()}
+    if set(clean) <= ADMIN_RIGHT_FIELDS:
+        return types.ChatAdminRights(**clean)
+    return CompatAdminRights(clean)
 
 
 def permissions_for_chat(chat):
@@ -139,7 +250,8 @@ class PromotePanel:
         self.user_id = int(user_id)
         self.user_name = user_name or f"User {user_id}"
         self.user_username = user_username
-        self.rank = rank or "Admin"
+        # Telegram rejects admin ranks longer than 16 characters.
+        self.rank = (rank or "Admin").strip()[:16] or "Admin"
         self.permissions = tuple(permissions)
         self.selected = (
             default_selected(self.permissions) if selected is None else set(selected)
@@ -168,10 +280,15 @@ class PromotePanel:
         self.selected = {key for key, _label in self.permissions}
 
     def promote_kwargs(self):
-        """Exactly the checked rights, in a form accepted by ``edit_admin``."""
+        """Exactly the checked rights, expanded to ChatAdminRights flags."""
         if self.is_basic:
             return {"is_admin": True}
-        return {key: key in self.selected for key, _label in self.permissions}
+        rights = {}
+        for key, _label in self.permissions:
+            checked = key in self.selected
+            for field in permission_fields(key):
+                rights[field] = checked
+        return rights
 
     def selected_labels(self):
         return [
@@ -315,13 +432,44 @@ def create_panel(chat, user, rank, creator_id, select_all=False):
 
 async def apply_promotion(client, panel):
     """Promote the panel's target with exactly the selected rights."""
-    kwargs = panel.promote_kwargs()
-    return await client.edit_admin(
-        panel.chat_id,
-        panel.user_id,
-        title=panel.rank,
-        **kwargs,
+    if panel.is_basic:
+        return await client.edit_admin(
+            panel.chat_id,
+            panel.user_id,
+            is_admin=True,
+            title=panel.rank,
+        )
+    rights = build_admin_rights(panel.promote_kwargs())
+    channel = await client.get_input_entity(panel.chat_id)
+    user = await client.get_input_entity(panel.user_id)
+    return await client(
+        EditAdminRequest(channel, user, rights, rank=panel.rank)
     )
+
+
+async def remove_admin_rights(client, chat, user_id):
+    """Remove every administrator right, including newer TL flags."""
+    if isinstance(chat, types.Chat):
+        return await client.edit_admin(chat.id, user_id, is_admin=False)
+
+    rights = build_admin_rights({})
+    channel = await client.get_input_entity(chat.id)
+    user = await client.get_input_entity(user_id)
+    return await client(EditAdminRequest(channel, user, rights, rank=""))
+
+
+async def delete_message_ids(client, chat_id, ids, batch_size=100):
+    """Delete *ids* in server-sized batches and return the deleted count."""
+    if isinstance(ids, range):
+        for start in range(ids.start, ids.stop, batch_size):
+            stop = min(start + batch_size, ids.stop)
+            await client.delete_messages(chat_id, list(range(start, stop)))
+        return len(ids)
+
+    ids = list(ids)
+    for start in range(0, len(ids), batch_size):
+        await client.delete_messages(chat_id, ids[start:start + batch_size])
+    return len(ids)
 
 
 def _callback_text(value):
@@ -339,6 +487,8 @@ def _callback_text(value):
 )
 async def prmte(ult):
     xx = await ult.eor(get_pstring("com_1", "load"))
+    if ult.is_private:
+        return await xx.edit("`Use this in group/channel.`")
     user, rank = await get_uinfo(ult)
     rank = rank or "Admin"
     if not user:
@@ -442,8 +592,14 @@ async def promote_callback(event):
         return await event.edit(text)
 
     if action == "f":
+        all_keys = {key for key, _label in panel.permissions}
+        already_all = panel.selected == all_keys
         panel.select_all()
         await event.answer(get_string("pro_14"))
+        if already_all:
+            # Avoid Telegram's MessageNotModifiedError when everything is
+            # already selected, but still keep the answer responsive.
+            return
         return await event.edit(panel.text(), buttons=panel.buttons())
 
     if not panel.has_permission(action):
@@ -465,22 +621,13 @@ async def promote_callback(event):
 )
 async def dmote(ult):
     xx = await ult.eor(get_pstring("com_1", "load"))
-    user, rank = await get_uinfo(ult)
-    if not rank:
-        rank = "Not Admin"
+    if ult.is_private:
+        return await xx.edit("`Use this in group/channel.`")
+    user, _rank = await get_uinfo(ult)
     if not user:
         return await xx.edit(get_string("de_1"))
     try:
-        await ult.client.edit_admin(
-            ult.chat_id,
-            user.id,
-            invite_users=None,
-            ban_users=None,
-            delete_messages=None,
-            pin_messages=None,
-            manage_call=None,
-            title=rank,
-        )
+        await remove_admin_rights(ult.client, ult.chat, user.id)
         await eod(xx, get_string("de_2").format(inline_mention(user), ult.chat.title))
     except Exception as ex:
         return await xx.edit(f"`{ex}`")
@@ -525,18 +672,16 @@ async def bban(ult):
 )
 async def uunban(ult):
     xx = await ult.eor(get_pstring("com_1", "load"))
-    if ult.text[1:].startswith("unbanall"):
-        return
     something = await get_uinfo(ult)
     if not something:
-        return
+        return await xx.delete()
     user, reason = something
     if not user:
         return await xx.edit(get_string("unban_1"))
     try:
         await ult.client.edit_permissions(ult.chat_id, user.id, view_messages=True)
     except UserIdInvalidError:
-        return await eod(ult, get_string("adm_1"))
+        return await xx.edit(get_string("adm_1"))
     except BadRequestError:
         return await xx.edit(get_string("adm_2"))
     sender = inline_mention(await ult.get_sender())
@@ -557,17 +702,16 @@ async def kck(ult):
         return
     if ult.is_private:
         return await ult.eor("`Use this in Group/Channel.`", time=5)
-    ml = ult.text.split(" ", maxsplit=1)[0]
     xx = await ult.eor(get_pstring("com_1", "load"))
     something = await get_uinfo(ult)
     if not something:
-        return
+        return await xx.delete()
     user, reason = something
     if not user:
         return await xx.edit(get_string("adm_1"))
     if user.id in DEVLIST:
         return await xx.edit(get_string("kick_2"))
-    if getattr(user, "is_self", False):
+    if user.id == getattr(ult.client, "uid", None):
         return await xx.edit(get_string("kick_3"))
     try:
         await ult.client.kick_participant(ult.chat_id, user.id)
@@ -576,7 +720,7 @@ async def kck(ult):
         return await xx.edit(get_string("kick_1"))
     except Exception as e:
         LOGS.exception(e)
-        return
+        return await xx.edit(f"`{e}`")
     text = get_string("kick_4").format(
         inline_mention(user), inline_mention(await ult.get_sender()), ult.chat.title
     )
@@ -593,6 +737,8 @@ async def kck(ult):
     fullsudo=True,
 )
 async def tkicki(e):
+    if e.is_private:
+        return await e.eor("`Use this in group/channel.`", time=5)
     huh = e.text.split()
     inputt = None
     try:
@@ -603,14 +749,21 @@ async def tkicki(e):
         inputt = huh[2]
     except IndexError:
         if e.reply_to_msg_id:
-            inputt = (await e.get_reply_message()).sender_id
+            reply = await e.get_reply_message()
+            inputt = reply.sender_id if reply else None
     if not inputt:
         return await e.eor(get_string("tban_1"))
-    userid = await e.client.parse_id(inputt)
     try:
+        userid = await e.client.parse_id(inputt)
         user = await e.client.get_entity(userid)
     except Exception as ex:
         return await eor(e, f"`{ex}`")
+    if user is None:
+        return await e.eor(get_string("adm_1"), time=10)
+    if user.id in DEVLIST:
+        return await e.eor(get_string("ban_2"), time=10)
+    if user.id == getattr(e.client, "uid", None):
+        return await e.eor(get_string("kick_3"), time=10)
     try:
         bun = ban_time(tme)
         await e.client.edit_permissions(
@@ -630,7 +783,9 @@ async def pin(msg):
     if not msg.is_reply:
         return await eor(msg, get_string("pin_1"))
     me = await msg.get_reply_message()
-    if me.is_private:
+    if me is None:
+        return await eor(msg, get_string("pin_1"))
+    if me.is_private or not me.message_link:
         text = "`Pinned.`"
     else:
         text = f"Pinned [This Message]({me.message_link}) !"
@@ -651,11 +806,13 @@ async def pin(msg):
 )
 async def unp(ult):
     xx = await ult.eor(get_pstring("com_1", "load"))
-    ch = (ult.pattern_match.group(1).strip()).strip()
+    ch = ult.pattern_match.group(1).strip()
     msg = None
-    if ult.is_reply:
+    if ch == "all":
+        msg = None
+    elif ult.is_reply:
         msg = ult.reply_to_msg_id
-    elif ch != "all":
+    else:
         return await xx.edit(get_string("unpin_1").format(HNDLR))
     try:
         await ult.client.unpin_message(ult.chat_id, msg)
@@ -682,12 +839,13 @@ async def pin_message(ult):
     msg = await ult.eor(get_pstring("com_1", "load"))
     msg_id = ult.reply_to_msg_id
     try:
-        time = ban_time(match)
+        until = ban_time(match)
+        seconds = max(0, until - int(time.time()))
         await ult.client.pin_message(ult.chat_id, msg_id)
-        await msg.eor(f"`pinned for time` `{time}`", time=8)
+        await msg.eor(f"`pinned for` `{match}`", time=8)
     except Exception as er:
         return await msg.edit(str(er))
-    await asyncio.sleep(time)
+    await asyncio.sleep(seconds)
     try:
         await ult.client.unpin_message(ult.chat_id, msg_id)
     except Exception as er:
@@ -697,39 +855,50 @@ async def pin_message(ult):
 @heartless_cmd(pattern="purge( (.*)|$)", manager=True, require="delete_messages")
 async def fastpurger(purg):
     match = purg.pattern_match.group(1).strip()
-    try:
-        ABC = purg.text[6]
-    except IndexError:
-        ABC = None
-    if ABC and purg.text[6] in ["m", "a"]:
-        return
-    if not purg._client._bot and (
-        (match)
+    limit = None
+    if match:
+        try:
+            limit = int(match)
+        except ValueError:
+            return await eor(purg, get_string("com_3"), time=5)
+    if not getattr(purg.client, "_bot", False) and (
+        match
         or (purg.is_reply and (purg.is_private or isinstance(purg.chat, types.Chat)))
     ):
-        p = 0
+        deleted = 0
+        ids = []
         async for msg in purg.client.iter_messages(
             purg.chat_id,
-            limit=int(match) if match else None,
+            limit=limit,
             min_id=purg.reply_to_msg_id if purg.is_reply else None,
+            max_id=purg.id - 1,
         ):
-            await msg.delete()
-            p += 0
-        return await eor(purg, f"Purged {p} Messages! ", time=5)
+            ids.append(msg.id)
+            if len(ids) >= 100:
+                await purg.client.delete_messages(purg.chat_id, ids)
+                deleted += len(ids)
+                ids.clear()
+        if ids:
+            await purg.client.delete_messages(purg.chat_id, ids)
+            deleted += len(ids)
+        return await eor(purg, f"Purged {deleted} Messages! ", time=5)
     if not purg.reply_to_msg_id:
         return await eor(purg, get_string("purge_1"), time=10)
     try:
-        await purg.client.delete_messages(
-            purg.chat_id, list(range(purg.reply_to_msg_id, purg.id))
+        await delete_message_ids(
+            purg.client,
+            purg.chat_id,
+            range(purg.reply_to_msg_id, purg.id),
         )
-
     except Exception as er:
         LOGS.info(er)
+        return await purg.eor(f"`{er}`", time=5)
     await purg.eor("__Fast purge complete!__", time=5)
 
 
 @heartless_cmd(
     pattern="purgeme( (.*)|$)",
+    admins_only=True,
 )
 async def fastpurgerme(purg):
     if num := purg.pattern_match.group(1).strip():
@@ -738,12 +907,15 @@ async def fastpurgerme(purg):
         except BaseException:
             await eor(purg, get_string("com_3"), time=5)
             return
-        mp = 0
+        ids = []
         async for mm in purg.client.iter_messages(
-            purg.chat_id, limit=nnt, from_user="me"
+            purg.chat_id,
+            limit=nnt,
+            from_user="me",
+            max_id=purg.id - 1,
         ):
-            await mm.delete()
-            mp += 1
+            ids.append(mm.id)
+        mp = await delete_message_ids(purg.client, purg.chat_id, ids)
         await eor(purg, f"Purged {mp} Messages!", time=5)
         return
     elif not purg.reply_to_msg_id:
@@ -753,23 +925,26 @@ async def fastpurgerme(purg):
             time=10,
         )
     chat = await purg.get_input_chat()
-    msgs = []
+    ids = []
     async for msg in purg.client.iter_messages(
         chat,
         from_user="me",
         min_id=purg.reply_to_msg_id,
+        max_id=purg.id - 1,
     ):
-        msgs.append(msg)
-    if msgs:
-        await purg.client.delete_messages(chat, msgs)
+        ids.append(msg.id)
+    deleted = await delete_message_ids(purg.client, chat, ids)
     await purg.eor(
-        "__Fast purge complete!__\n**Purged** `" + str(len(msgs)) + "` **messages.**",
+        "__Fast purge complete!__\n**Purged** `" + str(deleted) + "` **messages.**",
         time=5,
     )
 
 
 @heartless_cmd(
     pattern="purgeall$",
+    manager=True,
+    require="delete_messages",
+    fullsudo=True,
 )
 async def _(e):
     if not e.is_reply:
@@ -779,10 +954,29 @@ async def _(e):
         )
 
     msg = await e.get_reply_message()
-    name = msg.sender
+    if msg is None:
+        return await eod(e, get_string("purgeall_1"))
+    name = get_display_name(msg.sender) or str(msg.sender_id)
     try:
-        await e.client.delete_messages(e.chat_id, from_user=msg.sender_id)
-        await e.eor(get_string("purgeall_2").format(name.first_name), time=5)
+        deleted = 0
+        ids = []
+        async for target in e.client.iter_messages(
+            e.chat_id,
+            from_user=msg.sender_id,
+            max_id=e.id - 1,
+        ):
+            ids.append(target.id)
+            if len(ids) >= 100:
+                await e.client.delete_messages(e.chat_id, ids)
+                deleted += len(ids)
+                ids.clear()
+        if ids:
+            await e.client.delete_messages(e.chat_id, ids)
+            deleted += len(ids)
+        await e.eor(
+            get_string("purgeall_2").format(name) + f" (`{deleted}`)",
+            time=5,
+        )
     except Exception as er:
         return await e.eor(str(er), time=5)
 
@@ -793,7 +987,8 @@ async def djshsh(event):
     if isinstance(chat, types.Chat):
         FChat = await event.client(GetFullChatRequest(chat.id))
     elif isinstance(chat, types.Channel):
-        FChat = await event.client(GetFullChannelRequest(chat.id))
+        channel = await event.client.get_input_entity(chat.id)
+        FChat = await event.client(GetFullChannelRequest(channel))
     else:
         return
     msg_id = FChat.full_chat.pinned_msg_id
@@ -802,16 +997,27 @@ async def djshsh(event):
     msg = await event.client.get_messages(chat.id, ids=msg_id)
     if msg:
         await event.eor(get_string("pinned_2").format(msg.message_link))
+    else:
+        await event.eor(get_string("pinned_1"))
 
 
 @heartless_cmd(
     pattern="mypurge$",
+    admins_only=True,
 )
 async def mypurge(event):
     chat_id = event.chat_id
-    async for message in heartless_bot.iter_messages(chat_id):
+    ids = []
+    async for message in heartless_bot.iter_messages(
+        chat_id, max_id=event.id - 1
+    ):
         if message.sender_id == event.sender_id:
-            await message.delete()
+            ids.append(message.id)
+            if len(ids) >= 100:
+                await heartless_bot.delete_messages(chat_id, ids)
+                ids.clear()
+    if ids:
+        await heartless_bot.delete_messages(chat_id, ids)
     await eod(event, "All your messages have been deleted from this group.", time=3)
 
 @heartless_cmd(
@@ -819,28 +1025,33 @@ async def mypurge(event):
 )
 async def get_all_pinned(event):
     x = await event.eor(get_pstring("com_1", "load"))
-    chat_id = (str(event.chat_id)).replace("-100", "")
-    chat_name = get_display_name(event.chat)
+    chat_id = str(event.chat_id)
+    if chat_id.startswith("-100"):
+        chat_id = chat_id[4:]
+    linkable = isinstance(event.chat, types.Channel)
+    chat_name = html.escape(get_display_name(event.chat) or str(event.chat_id))
     a = ""
-    c = 1
+    c = 0
     async for i in event.client.iter_messages(
         event.chat_id, filter=InputMessagesFilterPinned
     ):
         if i.message:
             t = " ".join(i.message.split()[:4])
-            txt = f"{t}...."
+            txt = html.escape(f"{t}....")
         else:
             txt = "Go to message."
-        a += f"{c}. <a href=https://t.me/c/{chat_id}/{i.id}>{txt}</a>\n"
         c += 1
+        if linkable:
+            a += f"{c}. <a href=https://t.me/c/{chat_id}/{i.id}>{txt}</a>\n"
+        else:
+            a += f"{c}. {txt}\n"
 
+    if c == 0:
+        return await eor(x, get_string("listpin_1"), time=5)
     if c == 1:
         m = f"<b>The pinned message in {chat_name}:</b>\n\n"
     else:
         m = f"<b>List of pinned message(s) in {chat_name}:</b>\n\n"
-
-    if not a:
-        return await eor(x, get_string("listpin_1"), time=5)
 
     await x.edit(m + a, parse_mode="html")
 
@@ -862,7 +1073,8 @@ async def autodelte(ult):
     else:
         tt = 0
     try:
-        await ult.client(SetHistoryTTLRequest(ult.chat_id, period=tt))
+        peer = await ult.client.get_input_entity(ult.chat_id)
+        await ult.client(SetHistoryTTLRequest(peer, period=tt))
     except ChatNotModifiedError:
         return await ult.eor(
             f"Auto Delete Setting is Already same to `{match}`", time=5
@@ -891,12 +1103,25 @@ async def kickall_cmd(ult):
     kicked = 0
     failed = 0
     async for member in ult.client.iter_participants(ult.chat_id):
-        if member.bot or getattr(member.participant, "admin_rights", None) or getattr(member.participant, "creator", False):
+        participant = getattr(member, "participant", None)
+        if (
+            getattr(member, "bot", False)
+            or member.id == getattr(ult.client, "uid", None)
+            or getattr(participant, "admin_rights", None)
+            or getattr(participant, "creator", False)
+            or isinstance(
+                participant,
+                (
+                    types.ChatParticipantCreator,
+                    types.ChannelParticipantCreator,
+                ),
+            )
+        ):
             continue
         try:
             await ult.client.kick_participant(ult.chat_id, member.id)
             kicked += 1
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.2)
         except Exception:
             failed += 1
     await xx.edit(
